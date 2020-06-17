@@ -9,7 +9,6 @@ export default function TrafficAnalysis(ac) {
   const [switchDeviceType, setswitchDeviceType] = useState("combined");
   // eslint-disable-next-line
   const [netwanalysis, setnetwanalysis] = useState([]);
-  console.log("TrafficAnalysis -> netwanalysis", netwanalysis);
   const [errorMessage, seterrorMessage] = useState(null);
 
   const APIbody2 = {

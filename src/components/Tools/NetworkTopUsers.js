@@ -22,7 +22,6 @@ export default function NetworkTopUsers(ac) {
     e.preventDefault();
     settrigger(trigger + 1);
     if (trigger > 3) {
-      console.log("trigger > 3");
       settrigger(0);
       seterrorMessage(null);
     }

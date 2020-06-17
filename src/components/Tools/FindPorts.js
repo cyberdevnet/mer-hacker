@@ -4,11 +4,9 @@ import "../../styles/FindPorts.css";
 export default function NetworkTopUsers(ac) {
   const [showtable, setshowtable] = useState(false);
   const [showError, setshowError] = useState(false);
-  console.log("NetworkTopUsers -> showError", showError);
   const [triggerMAC, settriggerMAC] = useState(0);
   const [triggerIP, settriggerIP] = useState(0);
   const [findPort, setfindPort] = useState([]);
-  console.log("NetworkTopUsers -> findPort", findPort);
   const [findPortTable, setfindPortTable] = useState([]);
   const [errorMessageMAC, seterrorMessageMAC] = useState(null);
   const [errorMessageIP, seterrorMessageIP] = useState(null);

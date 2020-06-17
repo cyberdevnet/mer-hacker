@@ -1,0 +1,75 @@
+#page-inner-tool-templates {
+  width: 100%;
+  margin: -35px 20px 10px 0px;
+  background-color: transparent;
+  padding: 15px 30px;
+  min-height: 1200px;
+}
+
+.sub-title-tools {
+  padding: 0px 0 8px;
+  font-weight: bold;
+}
+
+.btn.btn-default.dropdown-toggle-tools {
+  margin-bottom: 15px;
+}
+
+.number .h3-dashboard {
+  font-size: 18px;
+  color: #676767;
+}
+
+.btn-primary {
+  float: right;
+  font-size: 15px;
+  /* margin-top: 15px; */
+  /* margin-bottom: -6px; */
+  /* margin-right: 10px; */
+}
+
+/* .btn-primary {
+  float: right;
+  font-size: 17px;
+} */
+
+.option-tools-disabled {
+  pointer-events: none;
+  cursor: none;
+}
+
+.spinner {
+  margin: 0 auto;
+}
+
+.panel-title-description {
+  padding-top: 5px;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 14px;
+  color: inherit;
+}
+
+/* .css-10nd86i {
+  position: relative;
+  box-sizing: border-box;
+  width: 179px;
+  float: left;
+  margin-right: 10px;
+} */
+
+.p-2-tools_template {
+  float: left;
+  margin-right: 10px;
+}
+
+.alert-danger {
+  margin: 15px;
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+}
+
+.glyphicon {
+  margin-right: 10px;
+}

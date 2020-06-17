@@ -1,0 +1,26 @@
+#page-inner-main-templates {
+  width: 100%;
+  margin: -35px 20px 10px 0px;
+  background-color: transparent;
+  /* padding: 15px 30px; */
+  min-height: 1200px;
+}
+
+.sub-title-tools {
+  padding: 0px 0 8px;
+  font-weight: bold;
+}
+
+.btn.btn-default.dropdown-toggle-tools {
+  margin-bottom: 15px;
+}
+
+.number .h3-dashboard {
+  font-size: 18px;
+  color: #676767;
+}
+
+.option-tools-disabled {
+  pointer-events: none;
+  cursor: none;
+}

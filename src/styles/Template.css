@@ -1,0 +1,72 @@
+.css-1uccc91-singleValue {
+  color: #ababab;
+}
+
+.foo__single-value.css-1uccc91-singleValue {
+  color: #ababab;
+}
+
+a {
+  cursor: pointer;
+}
+
+.select-organization {
+  padding: 0 0 0 15px;
+  margin: 0 0 7px;
+  color: #bdbebf;
+  font-size: 11px;
+  font-weight: 200;
+}
+.select-organization p {
+  font-size: 13px;
+  line-height: 25px;
+  padding-top: 20px;
+}
+.select-network {
+  padding: 0 0 0 15px;
+  margin: 0 0 7px;
+  color: #bdbebf;
+  font-size: 11px;
+  font-weight: 200;
+}
+.select-network p {
+  font-size: 13px;
+  line-height: 25px;
+  padding-top: 20px;
+}
+
+.i-organization {
+  position: relative;
+  color: #333;
+  font-size: 21px;
+  font-weight: 500;
+  margin: 11px;
+  display: inline-block;
+  padding: 11px;
+  text-transform: uppercase;
+  cursor: default;
+  font-family: "Open Sans", sans-serif;
+}
+
+.foo__control.css-yk16xz-control {
+  background-color: hsl(0, 0%, 24%);
+}
+
+.css-10nd86i {
+  position: relative;
+  box-sizing: border-box;
+  width: 256px;
+  /* float: left; */
+  margin-right: 10px;
+  margin-bottom: 12px;
+  color: #333;
+}
+.css-10nd86i.active-menu {
+  color: #333 !important;
+}
+
+.css-1aya2g8 {
+  margin-left: 3px;
+  background-color: hsla(0, 0%, 98%, 0);
+  border-color: hsla(0, 0%, 80%, 0.16);
+}

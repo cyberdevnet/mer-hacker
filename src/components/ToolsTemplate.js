@@ -18,6 +18,7 @@ export default function ToolsTemplate(ac) {
     4: false,
     5: false,
     6: false,
+    7: false,
   });
 
   const shutAllTools = () => {
@@ -36,6 +37,8 @@ export default function ToolsTemplate(ac) {
       setswitchAllTools({ 5: true });
     } else if (selectedValue === "6") {
       setswitchAllTools({ 6: true });
+    } else if (selectedValue === "7") {
+      setswitchAllTools({ 7: true });
     }
   };
 
@@ -131,6 +134,7 @@ export default function ToolsTemplate(ac) {
                     <option value="4">Network Top Users Report</option>
                     <option value="5">Find Port</option>
                     <option value="6">Network Analysis</option>
+                    <option value="7">Backup & Restore</option>
                   </optgroup>
                 </select>
               </div>

@@ -29,6 +29,31 @@ export default function Dashboard(ac) {
     ],
   });
 
+  const [chartModel, setchartModel] = useState({
+    options: {
+      plotOptions: {
+        bar: {
+          distributed: true,
+        },
+      },
+      chart: {
+        id: "basic-bar",
+      },
+      xaxis: {
+        categories: ["Firewalls", "Switches", "Access Points"],
+      },
+      fill: {
+        colors: ["#FABE28", "#ef4040", "#1ABC9C"],
+      },
+    },
+    series: [
+      {
+        name: "Models",
+        data: [],
+      },
+    ],
+  });
+
   const APIbody = {
     "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
     organizationId: `${ac.dc.organizationID}`,
@@ -75,7 +100,6 @@ export default function Dashboard(ac) {
               AlertingObj.push(DEVICEOBJ[x]);
             }
           }
-          console.log("callDeviceStatus -> OfflineObj", OfflineObj);
 
           setchart({
             ...chart,
@@ -99,6 +123,37 @@ export default function Dashboard(ac) {
     callDeviceStatus();
 
     // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    let ModelObj = {};
+    for (var x = 0; x < ac.dc.deviceList.length; x++) {
+      ModelObj[x] = ac.dc.deviceList[x].model;
+    }
+    const MODELOBJ = Object.values(ModelObj);
+    let Firewalls = [];
+    let Switches = [];
+    let AccessPoint = [];
+    for (var x = 0; x < ac.dc.deviceList.length; x++) {
+      if (MODELOBJ[x].startsWith("MX")) {
+        Firewalls.push(MODELOBJ[x]);
+      } else if (MODELOBJ[x].startsWith("MS")) {
+        Switches.push(MODELOBJ[x]);
+      } else if (MODELOBJ[x].startsWith("MR")) {
+        AccessPoint.push(MODELOBJ[x]);
+      }
+    }
+
+    setchartModel({
+      ...chartModel,
+      series: [
+        ...chartModel.series[0].data,
+        {
+          name: "Devices",
+          data: [Firewalls.length, Switches.length, AccessPoint.length],
+        },
+      ],
+    });
   }, []);
 
   return (
@@ -151,7 +206,7 @@ export default function Dashboard(ac) {
             <div className="panel panel-primary">
               <div className="number">
                 <h3 className="h3-dashboard">{ac.dc.totalDevices}</h3>
-                <small>Total Devices</small>
+                <small>Total Network Devices</small>
               </div>
               <div className="icon">
                 <i className="fa fa-server fa-5x yellow"></i>
@@ -219,6 +274,16 @@ export default function Dashboard(ac) {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div className="row">
+        <div className="mixed-chart">
+          <Chart
+            options={chartModel.options}
+            series={chartModel.series}
+            type="bar"
+            width="500"
+          />
         </div>
       </div>
 

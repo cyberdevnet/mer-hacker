@@ -5,6 +5,7 @@ import GetAllOrganizationSubnets from "./GetAllOrganizationSubnets";
 import NetworkTopUsers from "./NetworkTopUsers";
 import FindPorts from "./FindPorts";
 import TrafficAnalysis from "./TrafficAnalysis";
+import BackupRestore from "./BackupRestore";
 import "../../styles/MainTools.css";
 
 export default function MainTools(ac) {
@@ -37,6 +38,11 @@ export default function MainTools(ac) {
       )}
       {ac.ts.switchAllTools[6] ? (
         <TrafficAnalysis dc={ac.dc} ts={ac.ts} />
+      ) : (
+        <div></div>
+      )}
+      {ac.ts.switchAllTools[7] ? (
+        <BackupRestore dc={ac.dc} ts={ac.ts} />
       ) : (
         <div></div>
       )}

@@ -13,22 +13,22 @@ export default function BackupRestore(ac) {
   // io.origins("*:*");
 
   const url = "ws://http://127.0.0.1:5000/";
-  // let socket = null;
+  let socket = null;
 
-  let socket = io("http://127.0.0.1:5000");
-  socket.on("connect", function () {
-    console.log("connected");
-    socket.emit("client_connected", { data: "testsend" });
-  });
-  socket.on("update", function (data) {
-    console.log(data);
-  });
+  // let socket = io("http://127.0.0.1:5000");
+  // socket.on("connect", function () {
+  //   console.log("connected");
+  //   socket.emit("client_connected", { data: "testsend" });
+  // });
+  // socket.on("update", function (data) {
+  //   console.log(data);
+  // });
 
-  socket.on("retrieve_active_users", () => {
-    if (errorMessage === null) {
-      socket.emit("activate_user", { username: errorMessage });
-    }
-  });
+  // socket.on("retrieve_active_users", () => {
+  //   if (errorMessage === null) {
+  //     socket.emit("activate_user", { username: errorMessage });
+  //   }
+  // });
 
   // socket.on("any event", function (msg) {
   //   console.log(msg);

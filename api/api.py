@@ -16,19 +16,19 @@ import eventlet
 app = Flask(__name__)
 # app.debug = True
 # eventlet.monkey_patch()
-socketio = SocketIO(app, cors_allowed_origins="*")
+# socketio = SocketIO(app, cors_allowed_origins="*")
 CORS(app)
 app.config['SECRET_KEY'] = 'meraki'
 
 
-@socketio.on('connect')
-def on_connect():
-    print('user connected')
-    retrieve_active_users()
+# @socketio.on('connect')
+# def on_connect():
+#     print('user connected')
+#     retrieve_active_users()
 
 
-def retrieve_active_users():
-    emit('retrieve_active_users', broadcast=True)
+# def retrieve_active_users():
+#     emit('retrieve_active_users', broadcast=True)
 
 # logging.basicConfig(filename='debug_log.log', level=logging.DEBUG)
 
@@ -278,12 +278,12 @@ def backup_restore():
 
 # wsgi.server(eventlet.listen(('', 5000)), app)
 # socket.run(app)
-# app.run(host='127.0.0.1', port=5000, debug=True)
+app.run(host='127.0.0.1', port=5000, debug=True)
 
 
 # if __name__ == '__main__':
 #     main()
 
 # if __name__ == '__main__':
-socketio.run(app, host='127.0.0.1', port=5000)
-socketio.emit('update', {'data': "test"})
+# socketio.run(app, host='127.0.0.1', port=5000)
+# socketio.emit('update', {'data': "test"})

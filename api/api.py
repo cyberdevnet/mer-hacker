@@ -2,17 +2,33 @@ import time
 import requests
 import json
 from flask import Flask, request, jsonify, abort
+from flask_socketio import SocketIO, send, emit
 from werkzeug.exceptions import BadRequest
 import meraki
 import find_ports
 import top_report
+from backup_restore.backup_organization import meraki_backup_organization
 import logging
-
+from flask_cors import CORS
+from eventlet import wsgi
+import eventlet
 
 app = Flask(__name__)
-
+# app.debug = True
+# eventlet.monkey_patch()
+socketio = SocketIO(app, cors_allowed_origins="*")
+CORS(app)
 app.config['SECRET_KEY'] = 'meraki'
 
+
+@socketio.on('connect')
+def on_connect():
+    print('user connected')
+    retrieve_active_users()
+
+
+def retrieve_active_users():
+    emit('retrieve_active_users', broadcast=True)
 
 # logging.basicConfig(filename='debug_log.log', level=logging.DEBUG)
 
@@ -234,10 +250,40 @@ def traffic_analysis():
         # return jsonify(message="Traffic Analysis with Hostname Visibility must be enabled on this network to retrieve traffic data."), 400
 
 
-def main():
+@ app.route('/backup_restore/', methods=['GET', 'POST'])
+def backup_restore():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json()
+            NET_ID = data['NET_ID']
+            ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
+            ARG_ORGNAME = data['ARG_ORGNAME']
+            SERIAL_NUM = data['SERIAL_NUM']
+            ARG_ORGID = data['ARG_ORGID']
 
-    app.run(host='127.0.0.1', port=5000, debug=True)
+            return {'backup': meraki_backup_organization.backup_restore(ARG_ORGID, NET_ID, ARG_APIKEY, SERIAL_NUM, ARG_ORGNAME)}
+        else:
+
+            return {'backup': 'backup'}
+    except meraki.APIError as err:
+        error = (err.message['errors'])
+        response = app.response_class(response=json.dumps(error),
+                                      status=400,
+                                      mimetype='application/json')
+        return response
 
 
-if __name__ == '__main__':
-    main()
+# def main():
+
+# wsgi.server(eventlet.listen(('', 5000)), app)
+# socket.run(app)
+# app.run(host='127.0.0.1', port=5000, debug=True)
+
+
+# if __name__ == '__main__':
+#     main()
+
+# if __name__ == '__main__':
+socketio.run(app, host='127.0.0.1', port=5000)
+socketio.emit('update', {'data': "test"})

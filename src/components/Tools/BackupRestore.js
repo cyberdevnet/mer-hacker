@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Select from "react-select";
+import { LazyLog } from "react-lazylog";
+import io from "socket.io-client";
 import "../../styles/BackupRestore.css";
 
 export default function BackupRestore(ac) {
@@ -7,6 +9,30 @@ export default function BackupRestore(ac) {
   // eslint-disable-next-line
   const [netwanalysis, setnetwanalysis] = useState([]);
   const [errorMessage, seterrorMessage] = useState(null);
+
+  // io.origins("*:*");
+
+  const url = "ws://http://127.0.0.1:5000/";
+  // let socket = null;
+
+  let socket = io("http://127.0.0.1:5000");
+  socket.on("connect", function () {
+    console.log("connected");
+    socket.emit("client_connected", { data: "testsend" });
+  });
+  socket.on("update", function (data) {
+    console.log(data);
+  });
+
+  socket.on("retrieve_active_users", () => {
+    if (errorMessage === null) {
+      socket.emit("activate_user", { username: errorMessage });
+    }
+  });
+
+  // socket.on("any event", function (msg) {
+  //   console.log(msg);
+  // });
 
   const ORGANIZATIONS = ac.dc.organizationList.map((opt, index) => ({
     label: opt.name,
@@ -55,7 +81,11 @@ export default function BackupRestore(ac) {
 
   const APIbody2 = {
     "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
+    "X-CSRFToken": "frollo",
+    ARG_ORGNAME: `${ac.dc.organization}`,
+    SERIAL_NUM: `${ac.dc.SNtopUsers}`,
     NET_ID: `${ac.dc.networkID}`,
+    ARG_ORGID: `${ac.dc.organizationID}`,
   };
 
   const handleTopUsers = (e) => {
@@ -75,69 +105,78 @@ export default function BackupRestore(ac) {
     }
 
     async function APIcall() {
-      if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
-        if (trigger < 4) {
-          try {
-            ac.dc.setloadingButton(true);
+      // if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
+      // if (trigger < 4) {
+      // try {
+      // ac.dc.setloadingButton(true);
 
-            fetch("/traffic_analysis/", {
-              method: ["POST"],
-              cache: "no-cache",
-              headers: {
-                content_type: "application/json",
-              },
-              body: JSON.stringify(APIbody2),
-            }).then((response) => {
-              return response.json;
-            });
+      fetch("/backup_restore/", {
+        method: ["POST"],
+        cache: "no-cache",
+        headers: {
+          content_type: "application/json",
+        },
+        body: JSON.stringify(APIbody2),
+      }).then((response) => {
+        return response.json;
+      });
 
-            fetch("/traffic_analysis/")
-              .then((res) => {
-                if (!res.ok) {
-                  throw res;
-                }
-                return res.json();
-              })
-
-              .then((data) => {})
-
-              .catch((err) => {
-                err.json().then((errorMessage) => {
-                  seterrorMessage(
-                    <div className="form-input-error-msg alert alert-danger">
-                      <span className="glyphicon glyphicon-exclamation-sign"></span>
-                      {errorMessage}
-                    </div>
-                  );
-                });
-                ac.dc.setloadingButton(false);
-              });
-          } catch (err) {
-            if (err) {
-              console.log("This is the error:", err);
-              ac.dc.setalert(true);
-              ac.dc.setloadingButton(false);
-            }
+      fetch("/backup_restore/", {
+        method: ["POST"],
+        cache: "no-cache",
+        headers: {
+          content_type: "application/json",
+        },
+        body: JSON.stringify(APIbody2),
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw res;
           }
-        } else {
-          ac.dc.setloadingButton(false);
-          ac.dc.setalert(true);
+          return res.json();
+        })
 
-          seterrorMessage(
-            <div
-              className="form-input-error-msg alert alert-danger"
-              style={{ margin: "10px" }}
-            >
-              <span className="glyphicon glyphicon-exclamation-sign"></span>
-              No data was found in the selected time range.
-            </div>
-          );
-        }
-      } else {
-        ac.dc.setswitchAlertModal(true);
-        ac.dc.setAlertModalError("Please set Organization and Network.");
-        ac.dc.setswitchToolsTemplate(false);
-      }
+        .then((backup) => {
+          console.log("APIcall -> dataGET", backup);
+        })
+
+        .catch((err) => {
+          err.json().then((errorMessage) => {
+            seterrorMessage(
+              <div className="form-input-error-msg alert alert-danger">
+                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                {errorMessage}
+              </div>
+            );
+          });
+          // ac.dc.setloadingButton(false);
+        });
+      // } catch (err) {
+      //   if (err) {
+      //     console.log("This is the error:", err);
+      //     ac.dc.setalert(true);
+      //     // ac.dc.setloadingButton(false);
+      //   }
+      // }
+      // } else {
+      //   // ac.dc.setloadingButton(false);
+      //   ac.dc.setalert(true);
+
+      //   seterrorMessage(
+      //     <div
+      //       className="form-input-error-msg alert alert-danger"
+      //       style={{ margin: "10px" }}
+      //     >
+      //       <span className="glyphicon glyphicon-exclamation-sign"></span>
+      //       No data was found in the selected time range.
+      //     </div>
+      //   );
+      // }
+      // } else {
+      //   ac.dc.setswitchAlertModal(true);
+      //   ac.dc.setAlertModalError("Please set Organization and Network.");
+      //   ac.dc.setswitchToolsTemplate(false);
+      // }
     }
     APIcall();
     return () => {
@@ -229,7 +268,38 @@ export default function BackupRestore(ac) {
       </div>
       <div className="row">
         <div className="col-xs-12">
-          <div className="panel panel-default"></div>
+          <div className="panel panel-default">
+            <button
+              style={{ marginBottom: 8, background: "#eee" }}
+              onClick={() =>
+                socket &&
+                socket.send(
+                  JSON.stringify({
+                    message:
+                      "[taskcluster 2018-11-14 21:08:32.452Z] Worker Group: us-east-1",
+                  })
+                )
+              }
+            >
+              ping
+            </button>
+            <div style={{ height: 200, width: 902 }}>
+              <LazyLog
+                enableSearch
+                url={url}
+                websocket
+                websocketOptions={{
+                  onOpen: (e, sock) => {
+                    socket = sock;
+                    sock.send(
+                      JSON.stringify({ message: "Socket has been opened!" })
+                    );
+                  },
+                  formatMessage: (e) => JSON.parse(e).message,
+                }}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

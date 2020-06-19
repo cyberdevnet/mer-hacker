@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import myLogs from "../DebugsLogs/debug.log";
+import { LazyLog } from "react-lazylog";
 import "../styles/LiveLog.css";
 
 export default function LiveLog(ac) {
@@ -47,6 +48,8 @@ export default function LiveLog(ac) {
   // // once a second
   // setInterval(updateScroll, 1000);
 
+  const url = "../DebugsLogs/debug.log";
+
   return (
     <div>
       <button
@@ -58,7 +61,9 @@ export default function LiveLog(ac) {
       >
         Logs
       </button>
-
+      {/* <div style={{ height: 500, width: 902 }}>
+        <LazyLog extraLines={1} enableSearch url={url} caseInsensitive />
+      </div> */}
       <div className="modal fade" id="myModal">
         <div className="modal-dialog modal-xl">
           <div className="modal-content-log">

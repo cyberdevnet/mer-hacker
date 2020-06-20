@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import myLogs from "../DebugsLogs/debug.log";
+// import myLogs from "/home/cyberdevnet/mer-hacker-dev/src/DebugsLogs/debug.log";
 import { LazyLog } from "react-lazylog";
 import "../styles/LiveLog.css";
 
@@ -13,26 +13,59 @@ export default function LiveLog(ac) {
       return;
     }
     async function APICallLog() {
-      try {
-        fetch(myLogs)
-          .then((response) => {
-            return response.text();
-          })
-          .then((data) => {
-            document.getElementById("log").innerHTML = data;
-          })
-          .then(() => {
-            var logBody = document.getElementById("log");
-            logBody.scrollTop = logBody.scrollHeight;
-          });
-      } catch (err) {
-        if (err) {
-          console.log(err);
-          ac.dc.setalert(true);
-        }
-      }
+
+
+      // try {
+      //   fetch("/stream")
+      //     .then((response) => {
+      //       console.log('response', response);
+
+      //       return response.text();
+      //     })
+      //     .then((data) => {
+      //       console.log('data', data);
+
+      //       document.getElementById("log").innerHTML = data;
+      //     })
+      //     .then(() => {
+      //       var logBody = document.getElementById("log");
+      //       logBody.scrollTop = logBody.scrollHeight;
+      //     });
+      // } catch (err) {
+      //   if (err) {
+      //     console.log(err);
+      //     ac.dc.setalert(true);
+      //   }
+      // }
+
+
+
+
+
+
+      // try {
+      //   fetch(myLogs)
+      //     .then((response) => {
+      //       return response.text();
+      //     })
+      //     .then((data) => {
+      //       document.getElementById("log").innerHTML = data;
+      //     })
+      //     .then(() => {
+      //       var logBody = document.getElementById("log");
+      //       logBody.scrollTop = logBody.scrollHeight;
+      //     });
+      // } catch (err) {
+      //   if (err) {
+      //     console.log(err);
+      //     ac.dc.setalert(true);
+      //   }
+      // }
     }
     APICallLog();
+    // setup interval to fetch logs
+    // const intervalTimer = setInterval(APICallLog, 1000);
+    // return () => clearInterval(intervalTimer);
     // eslint-disable-next-line
   }, [trigger]);
 

@@ -10,6 +10,8 @@ export default function LoginAPI(ac) {
 
   const isFirstTryLogin = useRef(true);
 
+
+
   // useEffect(() => {
   //   if (isFirstTryLogin.current) {
   //     isFirstTryLogin.current = false;
@@ -71,6 +73,7 @@ export default function LoginAPI(ac) {
   // };
 
   return (
+
     <div style={hideLogin} className="container register">
       <div className="row">
         <div className="col-md-3 register-left">
@@ -103,6 +106,7 @@ export default function LoginAPI(ac) {
                   </form>
                 </div>
                 <div className="col-md-6">
+
                   <form>
                     <div className="form-group">
                       <input

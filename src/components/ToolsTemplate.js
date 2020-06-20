@@ -19,6 +19,7 @@ export default function ToolsTemplate(ac) {
     5: false,
     6: false,
     7: false,
+    8: false,
   });
 
   const shutAllTools = () => {

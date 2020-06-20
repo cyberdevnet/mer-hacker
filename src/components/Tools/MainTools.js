@@ -14,38 +14,38 @@ export default function MainTools(ac) {
       {ac.ts.switchAllTools[1] ? (
         <GetAllDevicesIP dc={ac.dc} ts={ac.ts} />
       ) : (
-        <div></div>
-      )}
+          <div></div>
+        )}
       {ac.ts.switchAllTools[2] ? (
         <GetAllSubnets dc={ac.dc} ts={ac.ts} />
       ) : (
-        <div></div>
-      )}
+          <div></div>
+        )}
       {ac.ts.switchAllTools[3] ? (
         <GetAllOrganizationSubnets dc={ac.dc} ts={ac.ts} />
       ) : (
-        <div></div>
-      )}
+          <div></div>
+        )}
       {ac.ts.switchAllTools[4] ? (
         <NetworkTopUsers dc={ac.dc} ts={ac.ts} />
       ) : (
-        <div></div>
-      )}
+          <div></div>
+        )}
       {ac.ts.switchAllTools[5] ? (
         <FindPorts dc={ac.dc} ts={ac.ts} />
       ) : (
-        <div></div>
-      )}
+          <div></div>
+        )}
       {ac.ts.switchAllTools[6] ? (
         <TrafficAnalysis dc={ac.dc} ts={ac.ts} />
       ) : (
-        <div></div>
-      )}
+          <div></div>
+        )}
       {ac.ts.switchAllTools[7] ? (
         <BackupRestore dc={ac.dc} ts={ac.ts} />
       ) : (
-        <div></div>
-      )}
+          <div></div>
+        )}
     </div>
   );
 }

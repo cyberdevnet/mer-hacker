@@ -7,3 +7,11 @@
   color: #333;
   float: left;
 }
+
+.CodeMirror.cm-s-material {
+  height: auto;
+}
+
+.CodeMirror-scroll {
+  max-height: 750px;
+}

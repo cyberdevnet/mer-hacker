@@ -91,13 +91,13 @@ export default function Dashboard(ac) {
           let OnlineObj = [];
           let OfflineObj = [];
           let AlertingObj = [];
-          for (var x = 0; x < deviceStatus.deviceStatus.length; x++) {
-            if (DEVICEOBJ[x] === "online") {
-              OnlineObj.push(DEVICEOBJ[x]);
-            } else if (DEVICEOBJ[x] === "offline") {
-              OfflineObj.push(DEVICEOBJ[x]);
-            } else if (DEVICEOBJ[x] === "alerting") {
-              AlertingObj.push(DEVICEOBJ[x]);
+          for (var y = 0; y < deviceStatus.deviceStatus.length; y++) {
+            if (DEVICEOBJ[y] === "online") {
+              OnlineObj.push(DEVICEOBJ[y]);
+            } else if (DEVICEOBJ[y] === "offline") {
+              OfflineObj.push(DEVICEOBJ[y]);
+            } else if (DEVICEOBJ[y] === "alerting") {
+              AlertingObj.push(DEVICEOBJ[y]);
             }
           }
 
@@ -134,13 +134,13 @@ export default function Dashboard(ac) {
     let Firewalls = [];
     let Switches = [];
     let AccessPoint = [];
-    for (var x = 0; x < ac.dc.deviceList.length; x++) {
-      if (MODELOBJ[x].startsWith("MX")) {
-        Firewalls.push(MODELOBJ[x]);
-      } else if (MODELOBJ[x].startsWith("MS")) {
-        Switches.push(MODELOBJ[x]);
-      } else if (MODELOBJ[x].startsWith("MR")) {
-        AccessPoint.push(MODELOBJ[x]);
+    for (var z = 0; z < ac.dc.deviceList.length; z++) {
+      if (MODELOBJ[z].startsWith("MX")) {
+        Firewalls.push(MODELOBJ[z]);
+      } else if (MODELOBJ[z].startsWith("MS")) {
+        Switches.push(MODELOBJ[z]);
+      } else if (MODELOBJ[z].startsWith("MR")) {
+        AccessPoint.push(MODELOBJ[z]);
       }
     }
 
@@ -154,6 +154,7 @@ export default function Dashboard(ac) {
         },
       ],
     });
+    // eslint-disable-next-line
   }, []);
 
   return (

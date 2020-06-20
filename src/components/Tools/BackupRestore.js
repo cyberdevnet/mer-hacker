@@ -1,38 +1,36 @@
+
 import React, { useEffect, useState, useRef } from "react";
 import Select from "react-select";
 import { LazyLog } from "react-lazylog";
 import io from "socket.io-client";
+
+
+
+import meraki_restore_organization from '../../BackupRestoreScript/meraki_restore_organization.py'
 import "../../styles/BackupRestore.css";
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/material.css';
+
+import { UnControlled as CodeMirror } from 'react-codemirror2'
+require('codemirror/mode/xml/xml');
+require('codemirror/mode/python/python');
+
 
 export default function BackupRestore(ac) {
   const [trigger, settrigger] = useState(0);
+  const [triggerFile, settriggerFile] = useState(0);
   // eslint-disable-next-line
   const [netwanalysis, setnetwanalysis] = useState([]);
   const [errorMessage, seterrorMessage] = useState(null);
+  const [script, setscript] = useState([])
+  const [showscript, setshowscript] = useState(false)
 
-  // io.origins("*:*");
 
-  const url = "ws://http://127.0.0.1:5000/";
-  let socket = null;
+  // const url = "ws://172.19.85.214:5000/";
+  // let socket = null;
 
-  // let socket = io("http://127.0.0.1:5000");
-  // socket.on("connect", function () {
-  //   console.log("connected");
-  //   socket.emit("client_connected", { data: "testsend" });
-  // });
-  // socket.on("update", function (data) {
-  //   console.log(data);
-  // });
 
-  // socket.on("retrieve_active_users", () => {
-  //   if (errorMessage === null) {
-  //     socket.emit("activate_user", { username: errorMessage });
-  //   }
-  // });
 
-  // socket.on("any event", function (msg) {
-  //   console.log(msg);
-  // });
 
   const ORGANIZATIONS = ac.dc.organizationList.map((opt, index) => ({
     label: opt.name,
@@ -97,6 +95,15 @@ export default function BackupRestore(ac) {
     }
   };
 
+  const handleRestoreFile = (e) => {
+    e.preventDefault();
+    settriggerFile(triggerFile + 1);
+    if (triggerFile > 3) {
+      settriggerFile(0);
+    }
+
+  };
+
   const isFirstRun = useRef(true);
   useEffect(() => {
     if (isFirstRun.current) {
@@ -119,16 +126,8 @@ export default function BackupRestore(ac) {
         body: JSON.stringify(APIbody2),
       }).then((response) => {
         return response.json;
-      });
-
-      fetch("/backup_restore/", {
-        method: ["POST"],
-        cache: "no-cache",
-        headers: {
-          content_type: "application/json",
-        },
-        body: JSON.stringify(APIbody2),
       })
+
         .then((res) => {
           if (!res.ok) {
             throw res;
@@ -136,21 +135,22 @@ export default function BackupRestore(ac) {
           return res.json();
         })
 
-        .then((backup) => {
-          console.log("APIcall -> dataGET", backup);
-        })
+      // .then((backup) => {
+      //   console.log("APIcall -> dataGET", backup);
+      // })
 
-        .catch((err) => {
-          err.json().then((errorMessage) => {
-            seterrorMessage(
-              <div className="form-input-error-msg alert alert-danger">
-                <span className="glyphicon glyphicon-exclamation-sign"></span>
-                {errorMessage}
-              </div>
-            );
-          });
-          // ac.dc.setloadingButton(false);
-        });
+      // .catch((err) => {
+      //   console.log("APIcall -> err", err.json());
+      // err.json().then((errorMessage) => {
+      // seterrorMessage(
+      //   <div className="form-input-error-msg alert alert-danger">
+      //     <span className="glyphicon glyphicon-exclamation-sign"></span>
+      //     {errorMessage}
+      //   </div>
+      // );
+      // });
+      // ac.dc.setloadingButton(false);
+      // });
       // } catch (err) {
       //   if (err) {
       //     console.log("This is the error:", err);
@@ -186,6 +186,46 @@ export default function BackupRestore(ac) {
     // eslint-disable-next-line
   }, [trigger]);
 
+
+
+  const isFirstRunFile = useRef(true);
+  useEffect(() => {
+    if (isFirstRunFile.current) {
+      isFirstRunFile.current = false;
+      return;
+    }
+
+    async function OpenFile() {
+      // if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
+      // if (trigger < 4) {
+      // try {
+      // ac.dc.setloadingButton(true);
+
+
+
+      // fetch(meraki_restore_organization)
+      //   .then(response => { return response.text() })
+
+      //   .then((data) => {
+      //     setscript(data)
+
+      //   })
+      //   .then(() => {
+      //     setshowscript(true)
+      //   })
+
+
+
+
+    }
+    OpenFile();
+    return () => {
+      ac.dc.setalert(false);
+      seterrorMessage(null);
+    };
+    // eslint-disable-next-line
+  }, [triggerFile]);
+
   return (
     <div id="page-inner-main-templates">
       <div className="row">
@@ -211,6 +251,7 @@ export default function BackupRestore(ac) {
                       This is script gets the top 10 heaviest bandwidth users of
                       an MX security appliance for the last 10, 30 and 60
                       minutes.
+                      {/* <div id="file" ></div> */}
                     </div>
                   </div>
                 </div>
@@ -262,6 +303,21 @@ export default function BackupRestore(ac) {
                 {ac.dc.loadingButton && <span>Loading Data</span>}
                 {!ac.dc.loadingButton && <span>RUN</span>}
               </button>
+              <button
+                id="openRestore"
+                className="btn btn-primary"
+                onClick={!ac.dc.loadingButton ? handleRestoreFile : null}
+                disabled={ac.dc.loadingButton}
+              >
+                {ac.dc.loadingButton && (
+                  <i
+                    className="fa fa-refresh fa-spin"
+                    style={{ marginRight: "5px" }}
+                  />
+                )}
+                {ac.dc.loadingButton && <span>Loading Data</span>}
+                {!ac.dc.loadingButton && <span>OpenFile</span>}
+              </button>
             </div>
           </div>
         </div>
@@ -269,7 +325,25 @@ export default function BackupRestore(ac) {
       <div className="row">
         <div className="col-xs-12">
           <div className="panel panel-default">
-            <button
+            {/* {showscript ? (
+              <div className="panel-body">
+
+                <CodeMirror
+                  value={script}
+                  options={{
+                    mode: 'python',
+                    theme: 'material',
+                    lineNumbers: true,
+                  }}
+                  onChange={(editor, data, value) => {
+                  }}
+                />
+              </div>
+            ) : (
+                <div></div>
+              )} */}
+
+            {/* <button
               style={{ marginBottom: 8, background: "#eee" }}
               onClick={() =>
                 socket &&
@@ -298,7 +372,7 @@ export default function BackupRestore(ac) {
                   formatMessage: (e) => JSON.parse(e).message,
                 }}
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

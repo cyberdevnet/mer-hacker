@@ -23,6 +23,15 @@
 .btn-primary {
   float: right;
   font-size: 15px;
+  margin-left: 10px;
+  /* margin-top: 15px; */
+  /* margin-bottom: -6px; */
+  /* margin-right: 10px; */
+}
+.btn-danger {
+  float: right;
+  font-size: 15px;
+  margin-left: 10px;
   /* margin-top: 15px; */
   /* margin-bottom: -6px; */
   /* margin-right: 10px; */

@@ -8,13 +8,14 @@ import meraki
 import find_ports
 import top_report
 from backup_restore import meraki_backup_organization
+from backup_restore import meraki_restore_organization
 import logging
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 
 
 app = Flask(__name__)
-app.debug = True
+# app.debug = True
 CORS(app)
 app.config['SECRET_KEY'] = 'meraki'
 
@@ -246,8 +247,8 @@ def traffic_analysis():
 
 
 
-@ app.route('/backup_restore/', methods=['GET', 'POST'])
-def backup_restore():
+@ app.route('/run_backup/', methods=['GET', 'POST'])
+def run_backup():
     try:
         if request.method == 'POST':
             global data
@@ -270,12 +271,36 @@ def backup_restore():
         return response
 
 
+@ app.route('/run_restore/', methods=['GET', 'POST'])
+def run_restore():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json()
+            NET_ID = data['NET_ID']
+            ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
+            ARG_ORGNAME = data['ARG_ORGNAME']
+            SERIAL_NUM = data['SERIAL_NUM']
+            ARG_ORGID = data['ARG_ORGID']
+
+            return {'backup': meraki_restore_organization.restore_organization(ARG_ORGID, NET_ID, ARG_APIKEY, SERIAL_NUM, ARG_ORGNAME)}
+        else:
+
+            return {'backup': 'backup'}
+    except meraki.APIError as err:
+        error = (err.message['errors'])
+        response = app.response_class(response=json.dumps(error),
+                                      status=400,
+                                      mimetype='application/json')
+        return response
+
+
 
 
 
 if __name__ == '__main__':
     
-    app.run(host='172.19.85.214', port=5000, debug=True)
+    app.run(host='172.19.85.214', port=5000)
 
 
 

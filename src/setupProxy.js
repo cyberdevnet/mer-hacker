@@ -72,7 +72,14 @@ module.exports = function (app) {
     })
   );
   app.use(
-    "/backup_restore/",
+    "/run_backup/",
+    createProxyMiddleware({
+      target: "http://172.19.85.214:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/run_restore/",
     createProxyMiddleware({
       target: "http://172.19.85.214:5000",
       changeOrigin: true,

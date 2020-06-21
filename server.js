@@ -5,11 +5,11 @@ var cors = require('cors');
 
 app.use(cors())
 
-app.use("/http-server", express.static(__dirname + '/http-server'));
+app.use("/api/backup_restore/", express.static(__dirname + '/api/backup_restore/'));
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './http-server/')
+        cb(null, './api/backup_restore/')
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname)

@@ -11,38 +11,25 @@ import "ace-builds/src-noconflict/theme-monokai";
 const fs = require('browserify-fs');
 
 export default function BackupRestore(ac) {
-  const [trigger, settrigger] = useState(0);
+  const [loadingButtonBackup, setloadingButtonBackup] = useState(0);
+  const [loadingButtonRestore, setloadingButtonRestore] = useState(0);
+  const [displayButtons, setdisplayButtons] = useState({ display: 'none' });
+  const [triggerBackup, settriggerBackup] = useState(0);
   const [triggerFile, settriggerFile] = useState(0);
+  const [triggerRestore, settriggerRestore] = useState(0);
   // eslint-disable-next-line
-  const [netwanalysis, setnetwanalysis] = useState([]);
   const [errorMessage, seterrorMessage] = useState(null);
   const [script, setscript] = useState([])
   const [showscript, setshowscript] = useState(false)
-  const [selectedFile, setselectedFile] = useState(null)
 
-  console.log('selectedFile', selectedFile)
-
-  const downloadScript = () => {
-    const element = document.createElement("a");
-    const file = new Blob([script], { type: 'text/plain' });
-    element.href = URL.createObjectURL(file);
-    element.download = "meraki_restore_organization.py";
-    document.body.appendChild(element); // Required for this to work in FireFox
-    element.click();
-  }
-
-
-  const uploadScript = () => {
-    const data = new FormData()
-    const file = new Blob([script], { type: 'text/plain' });
-    data.append('file', file, 'meraki_restore_organization.py')
-
-    axios.post("http://127.0.0.1:3001/upload", data, { // receive two parameter endpoint url ,form data 
-    })
-      .then(res => { // then print response status
-        console.log(res.statusText)
-      })
-  }
+  const APIbody2 = {
+    "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
+    "X-CSRFToken": "frollo",
+    ARG_ORGNAME: `${ac.dc.organization}`,
+    SERIAL_NUM: `${ac.dc.SNtopUsers}`,
+    NET_ID: `${ac.dc.networkID}`,
+    ARG_ORGID: `${ac.dc.organizationID}`,
+  };
 
 
   const ORGANIZATIONS = ac.dc.organizationList.map((opt, index) => ({
@@ -80,23 +67,16 @@ export default function BackupRestore(ac) {
     ac.dc.setdevice(opt.label);
   };
 
-  const APIbody2 = {
-    "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
-    "X-CSRFToken": "frollo",
-    ARG_ORGNAME: `${ac.dc.organization}`,
-    SERIAL_NUM: `${ac.dc.SNtopUsers}`,
-    NET_ID: `${ac.dc.networkID}`,
-    ARG_ORGID: `${ac.dc.organizationID}`,
-  };
 
-  const handleTopUsers = (e) => {
+
+  const handleBackup = (e) => {
     e.stopPropagation()
     setshowscript(false)
     setscript([])
     // e.preventDefault();
-    settrigger(trigger + 1);
-    if (trigger > 3) {
-      settrigger(0);
+    settriggerBackup(triggerBackup + 1);
+    if (triggerBackup > 3) {
+      settriggerBackup(0);
       seterrorMessage(null);
     }
   };
@@ -111,6 +91,27 @@ export default function BackupRestore(ac) {
 
   };
 
+
+  const HandleRestore = (e) => {
+    e.preventDefault();
+    settriggerRestore(triggerRestore + 1);
+    if (triggerRestore > 3) {
+      settriggerFile(0);
+    }
+
+  };
+
+  const downloadScript = () => {
+    const element = document.createElement("a");
+    const file = new Blob([script], { type: 'text/plain' });
+    element.href = URL.createObjectURL(file);
+    element.download = "meraki_restore_organization.py";
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+  }
+
+
+
   const isFirstRun = useRef(true);
   useEffect(() => {
     if (isFirstRun.current) {
@@ -118,12 +119,12 @@ export default function BackupRestore(ac) {
       return;
     }
 
-    async function APIcall() {
+    async function Backup() {
       if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
 
-        ac.dc.setloadingButton(true);
+        setloadingButtonBackup(true);
 
-        fetch("/backup_restore/", {
+        fetch("/run_backup/", {
           method: ["POST"],
           cache: "no-cache",
           headers: {
@@ -134,11 +135,12 @@ export default function BackupRestore(ac) {
 
           .then((res) => res.json())
           .then(() => {
-            ac.dc.setloadingButton(false);
+            setloadingButtonBackup(false);
+            setdisplayButtons({ display: 'inline-block' })
           })
 
           .catch((err) => {
-            console.log("APIcall -> err", err.json());
+            console.log("Backup -> err", err());
             err.json().then((errorMessage) => {
               seterrorMessage(
                 <div className="form-input-error-msg alert alert-danger">
@@ -147,6 +149,8 @@ export default function BackupRestore(ac) {
                 </div>
               );
             });
+            setloadingButtonBackup(false);
+
           });
       } else {
         ac.dc.setswitchAlertModal(true);
@@ -154,13 +158,13 @@ export default function BackupRestore(ac) {
         ac.dc.setswitchToolsTemplate(false);
       }
     }
-    APIcall();
+    Backup();
     return () => {
       ac.dc.setalert(false);
       seterrorMessage(null);
     };
     // eslint-disable-next-line
-  }, [trigger]);
+  }, [triggerBackup]);
 
 
 
@@ -171,15 +175,8 @@ export default function BackupRestore(ac) {
       return;
     }
     async function OpenFile() {
-      // if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
-      // if (trigger < 4) {
-      // try {
-      // ac.dc.setloadingButton(true);
 
-
-
-
-      fetch('http://127.0.0.1:3001/http-server/meraki_restore_organization.py')
+      fetch('http://127.0.0.1:3001/api/backup_restore/meraki_restore_organization.py')
         .then(response => { return response.text() })
         .then((data) => {
           setscript(data)
@@ -187,10 +184,6 @@ export default function BackupRestore(ac) {
         .then(() => {
           setshowscript(true)
         })
-
-
-
-
 
         .catch((err) => {
           console.log("APIcall -> err", err.json());
@@ -202,12 +195,7 @@ export default function BackupRestore(ac) {
               </div>
             );
           });
-          ac.dc.setloadingButton(false);
         });
-
-
-
-
 
     }
     OpenFile();
@@ -218,6 +206,59 @@ export default function BackupRestore(ac) {
     };
     // eslint-disable-next-line
   }, [triggerFile]);
+
+
+
+  const isFirstRunRestore = useRef(true);
+  useEffect(() => {
+    if (isFirstRunRestore.current) {
+      isFirstRunRestore.current = false;
+      return;
+    }
+    async function Restore() {
+      setloadingButtonRestore(true);
+
+      const data = new FormData()
+      const file = new Blob([script], { type: 'text/plain' });
+      data.append('file', file, 'meraki_restore_organization.py')
+
+      axios.post("http://127.0.0.1:3001/upload", data, { // receive two parameter endpoint url ,form data 
+      })
+        .then(() => {
+          fetch("/run_restore/", {
+            method: ["POST"],
+            cache: "no-cache",
+            headers: {
+              content_type: "application/json",
+            },
+            body: JSON.stringify(APIbody2),
+          })
+        })
+        .then(() => {
+          setloadingButtonRestore(false)
+        })
+
+        .catch((err) => {
+          console.log("APIcall -> err", err.json());
+          err.json().then((errorMessage) => {
+            seterrorMessage(
+              <div className="form-input-error-msg alert alert-danger">
+                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                {errorMessage}
+              </div>
+            );
+          });
+          setloadingButtonRestore(false);
+        });
+    }
+    Restore();
+    return () => {
+      setshowscript(false)
+      ac.dc.setalert(false);
+      seterrorMessage(null);
+    };
+    // eslint-disable-next-line
+  }, [triggerRestore]);
 
   return (
     <div id="page-inner-main-templates">
@@ -281,35 +322,50 @@ export default function BackupRestore(ac) {
                 type='button'
                 id="runButton"
                 className="btn btn-primary"
-                onClick={(e) => !ac.dc.loadingButton ? handleTopUsers(e) : null}
-                disabled={ac.dc.loadingButton}
+                onClick={(e) => !loadingButtonBackup ? handleBackup(e) : null}
+                disabled={loadingButtonBackup}
               >
-                {ac.dc.loadingButton && (
+                {loadingButtonBackup && (
                   <i
                     className="fa fa-refresh fa-spin"
                     style={{ marginRight: "5px" }}
                   />
                 )}
-                {ac.dc.loadingButton && <span>Loading Data</span>}
-                {!ac.dc.loadingButton && <span>RUN</span>}
+                {loadingButtonBackup && <span>Loading Data</span>}
+                {!loadingButtonBackup && <span>Run Backup</span>}
               </button>
               <button
-                id="openRestore"
+                style={displayButtons}
+                id="openscript"
                 className="btn btn-primary"
-                onClick={!ac.dc.loadingButton ? handleRestoreFile : null}
-                disabled={ac.dc.loadingButton}
+                onClick={handleRestoreFile}
               >
-                {ac.dc.loadingButton && (
+                Show Script
+              </button>
+              <button
+                style={displayButtons}
+                id="downloadscript"
+                className="btn btn-primary"
+                onClick={downloadScript}
+              >
+                Download Script
+              </button>
+              <button
+                style={displayButtons}
+                id="restore"
+                className="btn btn-danger"
+                onClick={!loadingButtonRestore ? HandleRestore : null}
+                disabled={loadingButtonRestore}
+              >
+                {loadingButtonRestore && (
                   <i
                     className="fa fa-refresh fa-spin"
                     style={{ marginRight: "5px" }}
                   />
                 )}
-                {ac.dc.loadingButton && <span>Loading Data</span>}
-                {!ac.dc.loadingButton && <span>OpenFile</span>}
+                {loadingButtonRestore && <span>Loading Data</span>}
+                {!loadingButtonRestore && <span>Restore</span>}
               </button>
-              <button className="btn btn-primary" onClick={downloadScript}>Download Script</button>
-              <button className="btn btn-primary" onClick={uploadScript}>Upload Script</button>
             </div>
           </div>
         </div>
@@ -319,8 +375,6 @@ export default function BackupRestore(ac) {
           <div className="panel panel-default">
             {showscript ? (
               <div className="panel-body">
-
-
                 <AceEditor
                   value={script}
                   // ref="aceEditor"
@@ -341,7 +395,7 @@ export default function BackupRestore(ac) {
                     enableLiveAutocompletion: true,
                     enableSnippets: true,
                     showLineNumbers: true,
-                    tabSize: 2,
+                    tabSize: 4,
                   }}
                   commands={[
                     {

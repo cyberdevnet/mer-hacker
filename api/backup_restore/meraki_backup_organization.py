@@ -224,7 +224,7 @@ def write_mydevices(file,meraki,networkid):
 def backup_organization(ARG_ORGID, NET_ID, ARG_APIKEY, SERIAL_NUM, ARG_ORGNAME):
     meraki = MerakiSdkClient(ARG_APIKEY)
 
-    with open("/home/cyberdevnet/mer-hacker-dev/src/BackupRestoreScript/meraki_restore_organization.py", 'w') as file:
+    with open("/home/cyberdevnet/mer-hacker-dev/http-server/meraki_restore_organization.py", 'w') as file:
     # with open(os.path.join(os.path.dirname(__file__),'meraki_restore_organization.py'), 'w') as file:
         write_restore_header(file)
 

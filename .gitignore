@@ -23,3 +23,7 @@ __pychache__
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+#variuos files to ignore
+
+meraki_restore_organization.py

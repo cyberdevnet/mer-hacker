@@ -3,18 +3,12 @@ import React, { useEffect, useState, useRef } from "react";
 import Select from "react-select";
 import { LazyLog } from "react-lazylog";
 import io from "socket.io-client";
-
-
-
-import meraki_restore_organization from '../../BackupRestoreScript/meraki_restore_organization.py'
 import "../../styles/BackupRestore.css";
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/material.css';
-
-import { UnControlled as CodeMirror } from 'react-codemirror2'
-require('codemirror/mode/xml/xml');
-require('codemirror/mode/python/python');
-
+import axios from 'axios';
+import AceEditor from "react-ace";
+import "ace-builds/src-noconflict/mode-python";
+import "ace-builds/src-noconflict/theme-monokai";
+const fs = require('browserify-fs');
 
 export default function BackupRestore(ac) {
   const [trigger, settrigger] = useState(0);
@@ -24,12 +18,31 @@ export default function BackupRestore(ac) {
   const [errorMessage, seterrorMessage] = useState(null);
   const [script, setscript] = useState([])
   const [showscript, setshowscript] = useState(false)
+  const [selectedFile, setselectedFile] = useState(null)
+
+  console.log('selectedFile', selectedFile)
+
+  const downloadScript = () => {
+    const element = document.createElement("a");
+    const file = new Blob([script], { type: 'text/plain' });
+    element.href = URL.createObjectURL(file);
+    element.download = "meraki_restore_organization.py";
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+  }
 
 
-  // const url = "ws://172.19.85.214:5000/";
-  // let socket = null;
+  const uploadScript = () => {
+    const data = new FormData()
+    const file = new Blob([script], { type: 'text/plain' });
+    data.append('file', file, 'meraki_restore_organization.py')
 
-
+    axios.post("http://127.0.0.1:3001/upload", data, { // receive two parameter endpoint url ,form data 
+    })
+      .then(res => { // then print response status
+        console.log(res.statusText)
+      })
+  }
 
 
   const ORGANIZATIONS = ac.dc.organizationList.map((opt, index) => ({
@@ -54,27 +67,17 @@ export default function BackupRestore(ac) {
     ac.dc.setorganization(opt.label);
     ac.dc.setorganizationID(opt.id);
     ac.dc.setnetwork("Networks");
-    // routeNetwork();
-    // ac.dc.setclassOrganization("");
     ac.dc.setisOrgSelected(true);
   };
 
   const HandleNetwork = (opt) => {
     ac.dc.setnetwork(opt.label);
     ac.dc.setnetworkID(opt.id);
-    // routeToolsTemplate();
-    // ac.dc.setclassNetwork("");
     ac.dc.setisNetSelected(true);
-    // ac.dc.settriggerTopReports(ac.dc.triggerTopReports + 1);
   };
 
   const HandleDevices = (opt) => {
     ac.dc.setdevice(opt.label);
-    // ac.dc.setnetworkID(opt.id);
-    // routeToolsTemplate();
-    // ac.dc.setclassNetwork("");
-    // ac.dc.setisNetSelected(true);
-    // ac.dc.settriggerTopReports(ac.dc.triggerTopReports + 1);
   };
 
   const APIbody2 = {
@@ -87,13 +90,17 @@ export default function BackupRestore(ac) {
   };
 
   const handleTopUsers = (e) => {
-    e.preventDefault();
+    e.stopPropagation()
+    setshowscript(false)
+    setscript([])
+    // e.preventDefault();
     settrigger(trigger + 1);
     if (trigger > 3) {
       settrigger(0);
       seterrorMessage(null);
     }
   };
+
 
   const handleRestoreFile = (e) => {
     e.preventDefault();
@@ -112,71 +119,40 @@ export default function BackupRestore(ac) {
     }
 
     async function APIcall() {
-      // if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
-      // if (trigger < 4) {
-      // try {
-      // ac.dc.setloadingButton(true);
+      if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
 
-      fetch("/backup_restore/", {
-        method: ["POST"],
-        cache: "no-cache",
-        headers: {
-          content_type: "application/json",
-        },
-        body: JSON.stringify(APIbody2),
-      }).then((response) => {
-        return response.json;
-      })
+        ac.dc.setloadingButton(true);
 
-        .then((res) => {
-          if (!res.ok) {
-            throw res;
-          }
-          return res.json();
+        fetch("/backup_restore/", {
+          method: ["POST"],
+          cache: "no-cache",
+          headers: {
+            content_type: "application/json",
+          },
+          body: JSON.stringify(APIbody2),
         })
 
-      // .then((backup) => {
-      //   console.log("APIcall -> dataGET", backup);
-      // })
+          .then((res) => res.json())
+          .then(() => {
+            ac.dc.setloadingButton(false);
+          })
 
-      // .catch((err) => {
-      //   console.log("APIcall -> err", err.json());
-      // err.json().then((errorMessage) => {
-      // seterrorMessage(
-      //   <div className="form-input-error-msg alert alert-danger">
-      //     <span className="glyphicon glyphicon-exclamation-sign"></span>
-      //     {errorMessage}
-      //   </div>
-      // );
-      // });
-      // ac.dc.setloadingButton(false);
-      // });
-      // } catch (err) {
-      //   if (err) {
-      //     console.log("This is the error:", err);
-      //     ac.dc.setalert(true);
-      //     // ac.dc.setloadingButton(false);
-      //   }
-      // }
-      // } else {
-      //   // ac.dc.setloadingButton(false);
-      //   ac.dc.setalert(true);
-
-      //   seterrorMessage(
-      //     <div
-      //       className="form-input-error-msg alert alert-danger"
-      //       style={{ margin: "10px" }}
-      //     >
-      //       <span className="glyphicon glyphicon-exclamation-sign"></span>
-      //       No data was found in the selected time range.
-      //     </div>
-      //   );
-      // }
-      // } else {
-      //   ac.dc.setswitchAlertModal(true);
-      //   ac.dc.setAlertModalError("Please set Organization and Network.");
-      //   ac.dc.setswitchToolsTemplate(false);
-      // }
+          .catch((err) => {
+            console.log("APIcall -> err", err.json());
+            err.json().then((errorMessage) => {
+              seterrorMessage(
+                <div className="form-input-error-msg alert alert-danger">
+                  <span className="glyphicon glyphicon-exclamation-sign"></span>
+                  {errorMessage}
+                </div>
+              );
+            });
+          });
+      } else {
+        ac.dc.setswitchAlertModal(true);
+        ac.dc.setAlertModalError("Please set Organization and Network.");
+        ac.dc.setswitchToolsTemplate(false);
+      }
     }
     APIcall();
     return () => {
@@ -194,7 +170,6 @@ export default function BackupRestore(ac) {
       isFirstRunFile.current = false;
       return;
     }
-
     async function OpenFile() {
       // if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
       // if (trigger < 4) {
@@ -203,16 +178,33 @@ export default function BackupRestore(ac) {
 
 
 
-      // fetch(meraki_restore_organization)
-      //   .then(response => { return response.text() })
 
-      //   .then((data) => {
-      //     setscript(data)
+      fetch('http://127.0.0.1:3001/http-server/meraki_restore_organization.py')
+        .then(response => { return response.text() })
+        .then((data) => {
+          setscript(data)
+        })
+        .then(() => {
+          setshowscript(true)
+        })
 
-      //   })
-      //   .then(() => {
-      //     setshowscript(true)
-      //   })
+
+
+
+
+        .catch((err) => {
+          console.log("APIcall -> err", err.json());
+          err.json().then((errorMessage) => {
+            seterrorMessage(
+              <div className="form-input-error-msg alert alert-danger">
+                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                {errorMessage}
+              </div>
+            );
+          });
+          ac.dc.setloadingButton(false);
+        });
+
 
 
 
@@ -220,6 +212,7 @@ export default function BackupRestore(ac) {
     }
     OpenFile();
     return () => {
+      setshowscript(false)
       ac.dc.setalert(false);
       seterrorMessage(null);
     };
@@ -251,7 +244,6 @@ export default function BackupRestore(ac) {
                       This is script gets the top 10 heaviest bandwidth users of
                       an MX security appliance for the last 10, 30 and 60
                       minutes.
-                      {/* <div id="file" ></div> */}
                     </div>
                   </div>
                 </div>
@@ -265,14 +257,12 @@ export default function BackupRestore(ac) {
                     placeholder={ac.dc.organization}
                     onChange={HandleOrganization}
                     className="select-backup-restore"
-                    //   onClick={routeOrganization}
                     classNamePrefix="backup-restore"
                   />
                   <Select
                     options={NETWORKS}
                     placeholder={ac.dc.network}
                     onChange={HandleNetwork}
-                    //   onClick={routeNetwork}
                     className="select-backup-restore"
                     classNamePrefix="backup-restore"
                   />
@@ -280,7 +270,6 @@ export default function BackupRestore(ac) {
                     options={DEVICES}
                     placeholder="Devices"
                     onChange={HandleDevices}
-                    //   onClick={routeNetwork}
                     className="select-backup-restore"
                     classNamePrefix="backup-restore"
                   />
@@ -289,9 +278,10 @@ export default function BackupRestore(ac) {
 
               <div>{errorMessage && <span>{errorMessage}</span>}</div>
               <button
+                type='button'
                 id="runButton"
                 className="btn btn-primary"
-                onClick={!ac.dc.loadingButton ? handleTopUsers : null}
+                onClick={(e) => !ac.dc.loadingButton ? handleTopUsers(e) : null}
                 disabled={ac.dc.loadingButton}
               >
                 {ac.dc.loadingButton && (
@@ -318,6 +308,8 @@ export default function BackupRestore(ac) {
                 {ac.dc.loadingButton && <span>Loading Data</span>}
                 {!ac.dc.loadingButton && <span>OpenFile</span>}
               </button>
+              <button className="btn btn-primary" onClick={downloadScript}>Download Script</button>
+              <button className="btn btn-primary" onClick={uploadScript}>Upload Script</button>
             </div>
           </div>
         </div>
@@ -325,54 +317,45 @@ export default function BackupRestore(ac) {
       <div className="row">
         <div className="col-xs-12">
           <div className="panel panel-default">
-            {/* {showscript ? (
+            {showscript ? (
               <div className="panel-body">
 
-                <CodeMirror
+
+                <AceEditor
                   value={script}
-                  options={{
-                    mode: 'python',
-                    theme: 'material',
-                    lineNumbers: true,
+                  // ref="aceEditor"
+                  mode="python"
+                  theme="monokai"
+                  onChange={value => setscript(value)}
+                  name="ace-editor"
+                  id="ace-editor"
+                  width='auto'
+                  height='750px'
+                  fontSize={14}
+                  showPrintMargin={true}
+                  showGutter={true}
+                  highlightActiveLine={true}
+                  editorProps={{ $blockScrolling: true }}
+                  setOptions={{
+                    enableBasicAutocompletion: true,
+                    enableLiveAutocompletion: true,
+                    enableSnippets: true,
+                    showLineNumbers: true,
+                    tabSize: 2,
                   }}
-                  onChange={(editor, data, value) => {
-                  }}
-                />
+                  commands={[
+                    {
+                      name: 'run',
+                      bindKey: { win: 'Ctrl-s', mac: 'Command-s' },
+                      exec: (value) => { setscript(value) }
+                    }
+                  ]}
+                />,
+
               </div>
             ) : (
                 <div></div>
-              )} */}
-
-            {/* <button
-              style={{ marginBottom: 8, background: "#eee" }}
-              onClick={() =>
-                socket &&
-                socket.send(
-                  JSON.stringify({
-                    message:
-                      "[taskcluster 2018-11-14 21:08:32.452Z] Worker Group: us-east-1",
-                  })
-                )
-              }
-            >
-              ping
-            </button>
-            <div style={{ height: 200, width: 902 }}>
-              <LazyLog
-                enableSearch
-                url={url}
-                websocket
-                websocketOptions={{
-                  onOpen: (e, sock) => {
-                    socket = sock;
-                    sock.send(
-                      JSON.stringify({ message: "Socket has been opened!" })
-                    );
-                  },
-                  formatMessage: (e) => JSON.parse(e).message,
-                }}
-              />
-            </div> */}
+              )}
           </div>
         </div>
       </div>

@@ -15,3 +15,8 @@
 .CodeMirror-scroll {
   max-height: 750px;
 }
+
+.ace_editor.ace-monokai.ace_dark {
+  width: 800px;
+  height: 750px;
+}

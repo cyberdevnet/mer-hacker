@@ -71,14 +71,18 @@ export default function NetworkTopUsers(ac) {
               }),
             })
               .then((response) => response.json())
-              .then((data) => setfindPort(data.data))
+              .then((data) => {
+                if (data.error) {
+                  ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+                    <span className="glyphicon glyphicon-exclamation-sign"></span>
+                    {data.error[0]}
+                  </div>)
+                } else {
+                  setfindPort(data.data)
+                }
+              })
               .then(() => setshowtable(true))
               .then(() => ac.dc.setloadingButton(false))
-              .catch((err) => {
-                ac.dc.setalert(true);
-                console.log("this is the err: ", err);
-                ac.dc.setloadingButton(false);
-              });
           } else {
             seterrorMessageMAC(
               <div className="form-input-error-msg alert alert-danger">
@@ -339,8 +343,8 @@ export default function NetworkTopUsers(ac) {
                 </div>
               </div>
             ) : (
-              <div></div>
-            )}
+                <div></div>
+              )}
 
             {showtable ? (
               <div className="panel-body">
@@ -373,8 +377,8 @@ export default function NetworkTopUsers(ac) {
                 </div>
               </div>
             ) : (
-              <div></div>
-            )}
+                <div></div>
+              )}
           </div>
         </div>
       </div>

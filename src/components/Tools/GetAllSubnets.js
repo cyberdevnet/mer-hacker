@@ -34,33 +34,35 @@ export default function GetAllSubnets(ac) {
         });
         fetch("/vlans")
           .then((res) => res.json())
-          .then((vlans) => {
-            ac.dc.setvlanList(vlans.vlans);
+          .then((data) => {
+            if (data.error) {
+              ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                {data.error[0]}
+              </div>)
+            } else {
+              ac.dc.setvlanList(data.vlans);
 
-            let row = [];
-            // eslint-disable-next-line
-            vlans.vlans.map((item) => {
-              var rowModel = [
-                {
-                  Subnet: item.subnet,
-                  VlanID: item.id,
-                  VlanName: item.name,
-                  MX_IP: item.applianceIp,
-                  DNS: item.dnsNameservers,
-                },
-              ];
-              row.push(...rowModel);
-              setmapRows(row);
-            });
+              let row = [];
+              // eslint-disable-next-line
+              data.vlans.map((item) => {
+                var rowModel = [
+                  {
+                    Subnet: item.subnet,
+                    VlanID: item.id,
+                    VlanName: item.name,
+                    MX_IP: item.applianceIp,
+                    DNS: item.dnsNameservers,
+                  },
+                ];
+                row.push(...rowModel);
+                setmapRows(row);
+              });
+            }
           })
-
           .then(() => setloading(false))
           .then(() => setshowtable(true))
-          .catch((err) => {
-            ac.dc.setalert(true);
-            console.log("this is the err: ", err);
-            ac.dc.setloadingButton(false);
-          });
+
       } else {
         ac.dc.setswitchAlertModal(true);
         ac.dc.setAlertModalError("Please set Organization and Network.");
@@ -70,6 +72,7 @@ export default function GetAllSubnets(ac) {
 
     APIcall();
     return () => {
+      ac.dc.setflashMessages([])
       ac.dc.setvlanList([]);
       setmapRows([]);
       setshowtable(false);
@@ -197,8 +200,8 @@ export default function GetAllSubnets(ac) {
                 />
               </div>
             ) : (
-              <div></div>
-            )}
+                <div></div>
+              )}
           </div>
         </div>
       </div>

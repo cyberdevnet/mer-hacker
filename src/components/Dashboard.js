@@ -79,43 +79,54 @@ export default function Dashboard(ac) {
       });
       fetch("/device_status")
         .then((res) => res.json())
-        .then((deviceStatus) => {
-          ac.dc.setdeviceStatusList(deviceStatus.deviceStatus);
-          ac.dc.settotaldeviceStatusList(deviceStatus.deviceStatus.length);
 
-          let DeviceStatusobjects = {};
-          for (var x = 0; x < deviceStatus.deviceStatus.length; x++) {
-            DeviceStatusobjects[x] = deviceStatus.deviceStatus[x].status;
-          }
-          const DEVICEOBJ = Object.values(DeviceStatusobjects);
-          let OnlineObj = [];
-          let OfflineObj = [];
-          let AlertingObj = [];
-          for (var y = 0; y < deviceStatus.deviceStatus.length; y++) {
-            if (DEVICEOBJ[y] === "online") {
-              OnlineObj.push(DEVICEOBJ[y]);
-            } else if (DEVICEOBJ[y] === "offline") {
-              OfflineObj.push(DEVICEOBJ[y]);
-            } else if (DEVICEOBJ[y] === "alerting") {
-              AlertingObj.push(DEVICEOBJ[y]);
+
+        .then((data) => {
+          if (data.error) {
+            ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+              <span className="glyphicon glyphicon-exclamation-sign"></span>
+              {data.error[0]}
+            </div>)
+          } else {
+
+            ac.dc.setdeviceStatusList(data.deviceStatus);
+            ac.dc.settotaldeviceStatusList(data.deviceStatus.length);
+
+            let DeviceStatusobjects = {};
+            for (var x = 0; x < data.deviceStatus.length; x++) {
+              DeviceStatusobjects[x] = data.deviceStatus[x].status;
             }
+            const DEVICEOBJ = Object.values(DeviceStatusobjects);
+            let OnlineObj = [];
+            let OfflineObj = [];
+            let AlertingObj = [];
+            for (var y = 0; y < data.deviceStatus.length; y++) {
+              if (DEVICEOBJ[y] === "online") {
+                OnlineObj.push(DEVICEOBJ[y]);
+              } else if (DEVICEOBJ[y] === "offline") {
+                OfflineObj.push(DEVICEOBJ[y]);
+              } else if (DEVICEOBJ[y] === "alerting") {
+                AlertingObj.push(DEVICEOBJ[y]);
+              }
+            }
+
+            setchart({
+              ...chart,
+              series: [
+                ...chart.series[0].data,
+                {
+                  name: "Devices",
+                  data: [AlertingObj.length, OfflineObj.length, OnlineObj.length],
+                },
+              ],
+            });
+
+
           }
 
-          setchart({
-            ...chart,
-            series: [
-              ...chart.series[0].data,
-              {
-                name: "Devices",
-                data: [AlertingObj.length, OfflineObj.length, OnlineObj.length],
-              },
-            ],
-          });
+
+
         })
-        .catch((err) => {
-          ac.dc.setalert(true);
-          console.log("this is the error: ", err);
-        });
       return () => {
         ac.dc.setalert(false);
       };
@@ -159,6 +170,7 @@ export default function Dashboard(ac) {
 
   return (
     <div id="page-inner">
+      <div>{ac.dc.flashMessages && <span>{ac.dc.flashMessages}</span>}</div>
       <div className="row">
         <div className="col-md-3 col-sm-12 col-xs-12">
           <div className="board">

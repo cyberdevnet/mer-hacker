@@ -60,73 +60,81 @@ export default function NetworkTopUsers(ac) {
               body: JSON.stringify(APIbody2),
             })
               .then((res) => res.json())
-              .then((reports) => {
-                ac.dc.setreports(reports.reports);
+              .then((data) => {
+                if (data.error) {
+                  ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+                    <span className="glyphicon glyphicon-exclamation-sign"></span>
+                    {data.error[0]}
+                  </div>)
+                } else {
+                  ac.dc.setreports(data.reports);
 
-                let R_obj1 = {};
-                for (var x = 0; x < reports.reports.length; x++) {
-                  R_obj1[x] = reports.reports[x];
+                  let R_obj1 = {};
+                  for (var x = 0; x < data.reports.length; x++) {
+                    R_obj1[x] = data.reports[x];
+                  }
+                  const ROW1 = R_obj1[0];
+                  const ROW2 = R_obj1[1];
+                  const ROW3 = R_obj1[2];
+
+                  let R1 = [];
+                  // eslint-disable-next-line
+                  ROW1.map((item) => {
+                    var rowModel = [
+                      {
+                        TotalusagekB: item[0],
+                        DownloadkB: item[1],
+                        UploadkB: item[2],
+                        Description: item[3],
+                        DHCPhostname: item[4],
+                        MACaddress: item[5],
+                        IPaddress: item[6],
+                        VLAN: item[7],
+                      },
+                    ];
+                    R1.push(...rowModel);
+                    setmapROW1(R1);
+                  });
+
+                  let R2 = [];
+                  // eslint-disable-next-line
+                  ROW2.map((item) => {
+                    var rowModel = [
+                      {
+                        TotalusagekB: item[0],
+                        DownloadkB: item[1],
+                        UploadkB: item[2],
+                        Description: item[3],
+                        DHCPhostname: item[4],
+                        MACaddress: item[5],
+                        IPaddress: item[6],
+                        VLAN: item[7],
+                      },
+                    ];
+                    R2.push(...rowModel);
+                    setmapROW2(R2);
+                  });
+
+                  let R3 = [];
+                  // eslint-disable-next-line
+                  ROW3.map((item) => {
+                    var rowModel = [
+                      {
+                        TotalusagekB: item[0],
+                        DownloadkB: item[1],
+                        UploadkB: item[2],
+                        Description: item[3],
+                        DHCPhostname: item[4],
+                        MACaddress: item[5],
+                        IPaddress: item[6],
+                        VLAN: item[7],
+                      },
+                    ];
+                    R3.push(...rowModel);
+                    setmapROW3(R3);
+                  });
                 }
-                const ROW1 = R_obj1[0];
-                const ROW2 = R_obj1[1];
-                const ROW3 = R_obj1[2];
 
-                let R1 = [];
-                // eslint-disable-next-line
-                ROW1.map((item) => {
-                  var rowModel = [
-                    {
-                      TotalusagekB: item[0],
-                      DownloadkB: item[1],
-                      UploadkB: item[2],
-                      Description: item[3],
-                      DHCPhostname: item[4],
-                      MACaddress: item[5],
-                      IPaddress: item[6],
-                      VLAN: item[7],
-                    },
-                  ];
-                  R1.push(...rowModel);
-                  setmapROW1(R1);
-                });
-
-                let R2 = [];
-                // eslint-disable-next-line
-                ROW2.map((item) => {
-                  var rowModel = [
-                    {
-                      TotalusagekB: item[0],
-                      DownloadkB: item[1],
-                      UploadkB: item[2],
-                      Description: item[3],
-                      DHCPhostname: item[4],
-                      MACaddress: item[5],
-                      IPaddress: item[6],
-                      VLAN: item[7],
-                    },
-                  ];
-                  R2.push(...rowModel);
-                  setmapROW2(R2);
-                });
-
-                let R3 = [];
-                // eslint-disable-next-line
-                ROW3.map((item) => {
-                  var rowModel = [
-                    {
-                      TotalusagekB: item[0],
-                      DownloadkB: item[1],
-                      UploadkB: item[2],
-                      Description: item[3],
-                      DHCPhostname: item[4],
-                      MACaddress: item[5],
-                      IPaddress: item[6],
-                      VLAN: item[7],
-                    },
-                  ];
-                  R3.push(...rowModel);
-                  setmapROW3(R3);
-                });
               })
               .then(() => {
                 if (
@@ -458,8 +466,8 @@ export default function NetworkTopUsers(ac) {
                 </div>
               </div>
             ) : (
-              <div></div>
-            )}
+                <div></div>
+              )}
           </div>
         </div>
       </div>

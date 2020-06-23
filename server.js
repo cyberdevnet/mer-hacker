@@ -5,7 +5,25 @@ var cors = require('cors');
 
 app.use(cors())
 
+const pino = require('pino');
+const expressPino = require('express-pino-logger');
+
+const logger = pino({ level: process.env.LOG_LEVEL || 'info' });
+const expressLogger = expressPino({ logger });
+
+app.use(expressLogger);
+
+
 app.use("/api/backup_restore/", express.static(__dirname + '/api/backup_restore/'));
+
+app.get("/api/backup_restore/", function (req, res) {
+
+    express.static(__dirname + '/api/backup_restore/')(req, res)
+    // logger.info('get Request: ', req);
+    // logger.info('get Request: ', res);
+
+});
+
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -32,8 +50,17 @@ app.post('/upload', function (req, res) {
 
 });
 
-app.listen(3001, function () {
+// app.listen(3001, function () {
 
-    console.log('App running on port 3001');
+//     console.log('App running on port 3001');
 
+// });
+const HOST = "localhost";
+const PORT = process.env.PORT || 3001;
+
+var server = app.listen(PORT, HOST, function () {
+    var host = server.address().address;
+    var port = server.address().port;
+    logger.info('Server running on port %d', PORT);
+    console.log('App listening at http://%s:%s', host, port);
 });

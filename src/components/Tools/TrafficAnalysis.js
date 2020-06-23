@@ -9,7 +9,7 @@ export default function TrafficAnalysis(ac) {
   const [switchDeviceType, setswitchDeviceType] = useState("combined");
   // eslint-disable-next-line
   const [netwanalysis, setnetwanalysis] = useState([]);
-  const [errorMessage, seterrorMessage] = useState(null);
+  // const [errorMessage, seterrorMessage] = useState(null);
 
   const APIbody2 = {
     "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
@@ -53,7 +53,7 @@ export default function TrafficAnalysis(ac) {
     settrigger(trigger + 1);
     if (trigger > 3) {
       settrigger(0);
-      seterrorMessage(null);
+      ac.dc.setflashMessages(null);
     }
   };
 
@@ -83,67 +83,58 @@ export default function TrafficAnalysis(ac) {
 
             fetch("/traffic_analysis/")
               .then((res) => {
-                if (!res.ok) {
-                  throw res;
-                }
                 return res.json();
               })
 
               .then((data) => {
-                setnetwanalysis(data.analysis);
-
-                let R_obj1 = {};
-                for (var x = 0; x < data.analysis.length; x++) {
-                  R_obj1[x] = data.analysis[x];
-                }
-
-                const ROW1 = Object.values(R_obj1);
-
-                let R1 = [];
-                // eslint-disable-next-line
-                ROW1.map((item) => {
-                  var rowModel = [
-                    {
-                      application: item.application,
-                      destination: item.destination,
-                      protocol: item.protocol,
-                      port: item.port,
-                      sent: item.sent,
-                      recv: item.recv,
-                      flows: item.flows,
-                      activeTime: item.activeTime,
-                      numClients: item.numClients,
-                    },
-                  ];
-                  R1.push(...rowModel);
-                  setmapROW1(R1);
-                });
-              })
-              //   .then(() => {
-              //     if (mapROW1.length === 0) {
-              //       settrigger(trigger + 1);
-              //     }
-              //   })
-              .then(() => {
-                if (mapROW1.length > 0) {
+                if (data.error) {
+                  ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+                    <span className="glyphicon glyphicon-exclamation-sign"></span>
+                    {data.error[0]}
+                  </div>)
                   ac.dc.setloadingButton(false);
+                  setshowtable(false);
+                } else {
+                  setnetwanalysis(data.analysis);
+
+                  let R_obj1 = {};
+                  for (var x = 0; x < data.analysis.length; x++) {
+                    R_obj1[x] = data.analysis[x];
+                  }
+
+                  const ROW1 = Object.values(R_obj1);
+
+                  let R1 = [];
+                  // eslint-disable-next-line
+                  ROW1.map((item) => {
+                    var rowModel = [
+                      {
+                        application: item.application,
+                        destination: item.destination,
+                        protocol: item.protocol,
+                        port: item.port,
+                        sent: item.sent,
+                        recv: item.recv,
+                        flows: item.flows,
+                        activeTime: item.activeTime,
+                        numClients: item.numClients,
+                      },
+                    ];
+                    R1.push(...rowModel);
+                    setmapROW1(R1);
+                  });
                 }
               })
+              // .then(() => {
+              //   if (mapROW1.length > 0) {
+              //     ac.dc.setloadingButton(false);
+
+              //   }
+              // })
               .then(() => {
                 setshowtable(true);
                 ac.dc.setloadingButton(false);
               })
-              .catch((err) => {
-                err.json().then((errorMessage) => {
-                  seterrorMessage(
-                    <div className="form-input-error-msg alert alert-danger">
-                      <span className="glyphicon glyphicon-exclamation-sign"></span>
-                      {errorMessage}
-                    </div>
-                  );
-                });
-                ac.dc.setloadingButton(false);
-              });
           } catch (err) {
             if (err) {
               console.log("This is the error:", err);
@@ -154,16 +145,6 @@ export default function TrafficAnalysis(ac) {
         } else {
           ac.dc.setloadingButton(false);
           ac.dc.setalert(true);
-
-          seterrorMessage(
-            <div
-              className="form-input-error-msg alert alert-danger"
-              style={{ margin: "10px" }}
-            >
-              <span className="glyphicon glyphicon-exclamation-sign"></span>
-              No data was found in the selected time range.
-            </div>
-          );
         }
       } else {
         ac.dc.setswitchAlertModal(true);
@@ -177,7 +158,7 @@ export default function TrafficAnalysis(ac) {
       setmapROW1([]);
       setshowtable(false);
       ac.dc.setalert(false);
-      seterrorMessage(null);
+      ac.dc.setflashMessages(null);
     };
     // eslint-disable-next-line
   }, [trigger]);
@@ -315,7 +296,7 @@ export default function TrafficAnalysis(ac) {
                 </div>
               </form>
 
-              <div>{errorMessage && <span>{errorMessage}</span>}</div>
+              {/* <div>{errorMessage && <span>{errorMessage}</span>}</div> */}
               <button
                 id="runButton"
                 className="btn btn-primary"
@@ -355,8 +336,8 @@ export default function TrafficAnalysis(ac) {
                 </div>
               </div>
             ) : (
-              <div></div>
-            )}
+                <div></div>
+              )}
           </div>
         </div>
       </div>

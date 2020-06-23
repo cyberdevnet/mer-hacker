@@ -58,6 +58,7 @@ export default function ToolsTemplate(ac) {
 
   return (
     <div id="page-inner-tool-templates">
+      <div>{ac.dc.flashMessages && <span>{ac.dc.flashMessages}</span>}</div>
       <div className="row">
         <div className="col-md-3 col-sm-12 col-xs-12">
           <div className="board">

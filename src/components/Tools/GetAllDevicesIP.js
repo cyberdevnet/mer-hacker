@@ -37,34 +37,39 @@ export default function GetAllDevicesIP(ac) {
         });
         fetch("/devices")
           .then((res) => res.json())
-          .then((client) => {
-            ac.dc.setclientList(client.devices);
+          .then((data) => {
+            if (data.error) {
+              ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                {data.error[0]}
+              </div>)
+            } else {
+              ac.dc.setclientList(data.devices);
 
-            let row = [];
-            // eslint-disable-next-line
-            client.devices.map((item) => {
-              var rowModel = [
-                {
-                  Description: item.name,
-                  Model: item.model,
-                  LAN_IP_address: item.lanIp,
-                  MAC_address: item.mac,
-                  WAN_1_IP: item.wan1Ip,
-                  WAN_2_IP: item.wan2Ip,
-                  Serial: item.serial,
-                },
-              ];
-              row.push(...rowModel);
-              setmapRows(row);
-            });
+              let row = [];
+              // eslint-disable-next-line
+              data.devices.map((item) => {
+                var rowModel = [
+                  {
+                    Description: item.name,
+                    Model: item.model,
+                    LAN_IP_address: item.lanIp,
+                    MAC_address: item.mac,
+                    WAN_1_IP: item.wan1Ip,
+                    WAN_2_IP: item.wan2Ip,
+                    Serial: item.serial,
+                  },
+                ];
+                row.push(...rowModel);
+                setmapRows(row);
+              });
+            }
+
           })
           .then(() => setloading(false))
           .then(() => setshowtable(true))
-          .catch((err) => {
-            ac.dc.setalert(true);
-            console.log("this is the err: ", err);
-            ac.dc.setloadingButton(false);
-          });
+          .then(() => setloading(false))
+
       } else {
         ac.dc.setswitchAlertModal(true);
         ac.dc.setAlertModalError("Please set Organization and Network.");
@@ -211,8 +216,8 @@ export default function GetAllDevicesIP(ac) {
                 />
               </div>
             ) : (
-              <div></div>
-            )}
+                <div></div>
+              )}
           </div>
         </div>
       </div>

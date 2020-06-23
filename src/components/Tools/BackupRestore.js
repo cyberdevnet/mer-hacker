@@ -20,6 +20,7 @@ export default function BackupRestore(ac) {
   // eslint-disable-next-line
   const [errorMessage, seterrorMessage] = useState(null);
   const [script, setscript] = useState([])
+
   const [showscript, setshowscript] = useState(false)
 
   const APIbody2 = {
@@ -44,11 +45,11 @@ export default function BackupRestore(ac) {
     id: opt.id,
   }));
 
-  const DEVICES = ac.dc.deviceList.map((opt, index) => ({
-    label: opt.name,
-    value: index,
-    id: opt.id,
-  }));
+  // const DEVICES = ac.dc.deviceList.map((opt, index) => ({
+  //   label: opt.name,
+  //   value: index,
+  //   id: opt.id,
+  // }));
 
   const HandleOrganization = (opt) => {
     ac.dc.setorganization(opt.label);
@@ -63,9 +64,9 @@ export default function BackupRestore(ac) {
     ac.dc.setisNetSelected(true);
   };
 
-  const HandleDevices = (opt) => {
-    ac.dc.setdevice(opt.label);
-  };
+  // const HandleDevices = (opt) => {
+  //   ac.dc.setdevice(opt.label);
+  // };
 
 
 
@@ -96,7 +97,7 @@ export default function BackupRestore(ac) {
     e.preventDefault();
     settriggerRestore(triggerRestore + 1);
     if (triggerRestore > 3) {
-      settriggerFile(0);
+      settriggerRestore(0);
     }
 
   };
@@ -105,7 +106,7 @@ export default function BackupRestore(ac) {
     const element = document.createElement("a");
     const file = new Blob([script], { type: 'text/plain' });
     element.href = URL.createObjectURL(file);
-    element.download = "meraki_restore_organization.py";
+    element.download = "meraki_restore_network.py";
     document.body.appendChild(element); // Required for this to work in FireFox
     element.click();
   }
@@ -176,7 +177,8 @@ export default function BackupRestore(ac) {
     }
     async function OpenFile() {
 
-      fetch('http://127.0.0.1:3001/api/backup_restore/meraki_restore_organization.py')
+      fetch('/api/backup_restore/meraki_restore_network.py')
+        // fetch('http://127.0.0.1:3001/api/backup_restore/meraki_restore_network.py')
         .then(response => { return response.text() })
         .then((data) => {
           setscript(data)
@@ -186,15 +188,15 @@ export default function BackupRestore(ac) {
         })
 
         .catch((err) => {
-          console.log("APIcall -> err", err.json());
-          err.json().then((errorMessage) => {
-            seterrorMessage(
-              <div className="form-input-error-msg alert alert-danger">
-                <span className="glyphicon glyphicon-exclamation-sign"></span>
-                {errorMessage}
-              </div>
-            );
-          });
+          console.log("APIcall -> err", err)
+          // err.json().then((errorMessage) => {
+          //   seterrorMessage(
+          //     <div className="form-input-error-msg alert alert-danger">
+          //       <span className="glyphicon glyphicon-exclamation-sign"></span>
+          //       {errorMessage}
+          //     </div>
+          //   );
+          // });
         });
 
     }
@@ -220,9 +222,9 @@ export default function BackupRestore(ac) {
 
       const data = new FormData()
       const file = new Blob([script], { type: 'text/plain' });
-      data.append('file', file, 'meraki_restore_organization.py')
+      data.append('file', file, 'meraki_restore_network.py')
 
-      axios.post("http://127.0.0.1:3001/upload", data, { // receive two parameter endpoint url ,form data 
+      axios.post("/upload", data, { // receive two parameter endpoint url ,form data 
       })
         .then(() => {
           fetch("/run_restore/", {
@@ -234,6 +236,9 @@ export default function BackupRestore(ac) {
             body: JSON.stringify(APIbody2),
           })
         })
+        .then((response) => response.json())
+        .then((data) => console.log(data)
+        )
         .then(() => {
           setloadingButtonRestore(false)
         })
@@ -307,13 +312,13 @@ export default function BackupRestore(ac) {
                     className="select-backup-restore"
                     classNamePrefix="backup-restore"
                   />
-                  <Select
+                  {/* <Select
                     options={DEVICES}
                     placeholder="Devices"
                     onChange={HandleDevices}
                     className="select-backup-restore"
                     classNamePrefix="backup-restore"
-                  />
+                  /> */}
                 </div>
               </form>
 

@@ -43,49 +43,52 @@ export default function GetAllOrganizationSubnets(ac) {
 
         fetch("/allVlans")
           .then((res) => res.json())
-          .then((allVlans) => {
-            ac.dc.setallVlanList(allVlans.result);
+          .then((data) => {
+            if (data.error) {
+              ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                {data.error[0]}
+              </div>)
+            } else {
+              ac.dc.setallVlanList(data.result);
 
-            let Vlanobjects = {};
-            let Nameobjects = {};
-            for (var x = 0; x < allVlans.result.length; x++) {
-              Vlanobjects[x] = allVlans.result[x].allVlans;
-              Nameobjects[x] = allVlans.result[x].networkname;
+              let Vlanobjects = {};
+              let Nameobjects = {};
+              for (var x = 0; x < data.result.length; x++) {
+                Vlanobjects[x] = data.result[x].allVlans;
+                Nameobjects[x] = data.result[x].networkname;
+              }
+              const VLANS = Object.values(Vlanobjects);
+
+              let row = [];
+              // eslint-disable-next-line
+              VLANS.map((item) => {
+                row.push(...item);
+              });
+
+              let row2 = [];
+              // eslint-disable-next-line
+              row.map((item) => {
+                var rowModel = [
+                  {
+                    Subnet: item.subnet,
+                    VlanID: item.id,
+                    VlanName: item.name,
+                    MX_IP: item.applianceIp,
+                    DNS: item.dnsNameservers,
+                    Network: "Network ---",
+                  },
+                ];
+                row2.push(...rowModel);
+                setmapRows(row2);
+              });
+
+              setshowtable(true);
             }
-            const VLANS = Object.values(Vlanobjects);
 
-            let row = [];
-            // eslint-disable-next-line
-            VLANS.map((item) => {
-              row.push(...item);
-            });
-
-            let row2 = [];
-            // eslint-disable-next-line
-            row.map((item) => {
-              var rowModel = [
-                {
-                  Subnet: item.subnet,
-                  VlanID: item.id,
-                  VlanName: item.name,
-                  MX_IP: item.applianceIp,
-                  DNS: item.dnsNameservers,
-                  Network: "Network ---",
-                },
-              ];
-              row2.push(...rowModel);
-              setmapRows(row2);
-            });
-
-            setshowtable(true);
           })
 
           .then(() => setloading(false))
-          .catch((err) => {
-            ac.dc.setalert(true);
-            console.log("this is the err: ", err);
-            ac.dc.setloadingButton(false);
-          });
       } else {
         ac.dc.setswitchAlertModal(true);
         ac.dc.setAlertModalError("Please set Organization and Network.");
@@ -221,8 +224,8 @@ export default function GetAllOrganizationSubnets(ac) {
                 />
               </div>
             ) : (
-              <div></div>
-            )}
+                <div></div>
+              )}
           </div>
         </div>
       </div>

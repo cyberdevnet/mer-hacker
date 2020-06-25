@@ -35,15 +35,16 @@ import meraki
 
 
 
-# def get_org_id(meraki,orgName):
-# 	result = meraki.organizations.get_organizations()
-# 	for row in result:
-# 		if row['name'] == orgName:
-# 			return row['id']
+dirname = os.path.dirname(__file__)
+abspath = os.path.abspath(__file__)
+log_file = os.path.abspath(__file__  + "/../../logs/log_file.log")
+error_file = os.path.abspath(__file__  + "/../../logs/error_file.log")
+# log_file = dirname +'/logs/log_file.log'
+# error_file = dirname +'/logs/error_file.log'
 
-# 	raise ValueError('The organization name does not exist')
 
 def write_restore_header(file):
+
 	file.write("#!/usr/bin/env python3\n");
 	file.write("#-*- coding: utf-8 -*-\n");
 	file.write("#\n");
@@ -55,7 +56,10 @@ def write_restore_header(file):
 	file.write("\n");
 	file.write("\n");
 	file.write("\n");
-	file.write("def restore_network(ARG_ORGID, NET_ID, ARG_APIKEY):\n");
+	file.write("def restore_network(ARG_ORGID, ARG_APIKEY):\n");
+	file.write("\tabspath = os.path.abspath(__file__)\n");
+	file.write("\tlog_file = os.path.abspath(__file__  + ""'/../../logs/log_file.log'"")\n");
+	file.write("\tf = open(log_file, 'w')\n");
 	file.write("\n");
 	file.write("\theaders = {\n");
 	file.write("\t\t'x-cisco-meraki-api-key': ARG_APIKEY,\n");
@@ -71,24 +75,29 @@ def write_admins(file,meraki, orgid):
 	myOrgAdmins=meraki.admins.get_organization_admins(orgid)
 	file.write("# Organisation Dashboard Administrators\n")
 	file.write("# https://dashboard.meraki.com/api_docs#create-a-new-dashboard-administrator\n")
-	file.write("	posturl = 'https://api.meraki.com/api/v0/organizations/{0}/admins'.format(str(ARG_ORGID))\n")
+	file.write("\tprint('Checking Administrator',file=f)\n")
+	file.write("\tf.flush()\n")
+	file.write("\tposturl = 'https://api.meraki.com/api/v0/organizations/{0}/admins'.format(str(ARG_ORGID))\n")
 	for row in myOrgAdmins:
-		file.write("	dashboard = session.post(posturl, json="+repr(row)+", headers=headers)\n")
+		file.write("\tdashboard = session.post(posturl, json="+repr(row)+", headers=headers)\n")
 	file.write("\n")
 
 def write_mx_l3_fw_rules(file,meraki,networkid):
 	myRules=meraki.mx_l_3_firewall.get_network_l_3_firewall_rules(networkid)[0:-1]
 	file.write("\t# MX L3 Firewall Rules\n")
 	file.write("\t# https://api.meraki.com/api_docs#update-the-l3-firewall-rules-of-an-mx-network\n")
+	file.write("\t\tprint('Restoring mx_l3_fw_rules',file=f)\n")
+	file.write("\t\tf.flush()\n")
 	file.write("\t\tputurl = 'https://api.meraki.com/api/v0/networks/{0}/l3FirewallRules'.format(str(networkid))\n")
 	file.write("\t\tdashboard = session.put(puturl, json="+str({"rules":myRules,"syslogDefaultRule":False})+", headers=headers)\n")
 	file.write("\n")
 
 def write_mx_vlans(file,meraki,networkid):
 	vlanEnabled=meraki.vlans.get_network_vlans_enabled_state(networkid)
-
 	file.write("\t# MX VLANs\n")
 	file.write("\t# https://dashboard.meraki.com/api_docs#enable/disable-vlans-for-the-given-network\n")
+	file.write("\t\tprint('Restoring mx_vlans',file=f)\n")
+	file.write("\t\tf.flush()\n")
 	file.write("\t\tputurl = 'https://api.meraki.com/api/v0/networks/{0}/vlansEnabledState'.format(str(networkid))\n")
 	file.write("\t\tdashboard = session.put(puturl, json="+repr(vlanEnabled)+", headers=headers)\n")
 
@@ -103,11 +112,14 @@ def write_mx_vlans(file,meraki,networkid):
 		file.write("\n")
 	else:
 		print("warning: MX VLANs disabled - wont be able to restore IP addressing");
+		f.flush()
 		
 def write_mx_cellular_fw_rules(file,meraki,networkid):
 	myRules=meraki.mx_cellular_firewall.get_network_cellular_firewall_rules(networkid)[0:-1]
 	file.write("\t# MX cellular firewall\n")
 	file.write("\t# https://dashboard.meraki.com/api_docs#mx-cellular-firewall\n")
+	file.write("\t\tprint('Restoring mx_cellular_fw_rules',file=f)\n")
+	file.write("\t\tf.flush()\n")
 	file.write("\t\tputurl = 'https://api.meraki.com/api/v0/networks/{0}/cellularFirewallRules'.format(str(networkid))\n")
 	file.write("\t\tdashboard = session.put(puturl, json="+str({"rules":myRules,"syslogEnabled":False})+", headers=headers)\n")
 	file.write("\n")
@@ -116,6 +128,8 @@ def write_mx_vpn_fw_rules(file,meraki,orgid):
 	myRules=meraki.mx_vpn_firewall.get_organization_vpn_firewall_rules(orgid)[0:-1]
 	file.write("# MX VPN firewall\n")
 	file.write("# https://dashboard.meraki.com/api_docs#mx-vpn-firewall\n")
+	file.write("\tprint('Restoring mx_vpn_firewall_rules',file=f)\n")
+	file.write("\tf.flush()\n")
 	file.write("\tputurl = 'https://api.meraki.com/api/v0/organizations/{0}/vpnFirewallRules'.format(str(ARG_ORGID))\n")
 	file.write("\tdashboard = session.put(puturl, json="+str({"rules":myRules,"syslogEnabled":True})+", headers=headers)\n")
 	file.write("\n")
@@ -124,6 +138,8 @@ def write_vpn_settings(file,meraki,networkid):
 	myVPN=meraki.networks.get_network_site_to_site_vpn(networkid)
 	file.write("\t# Network - AutoVPN Settings\n")
 	file.write("\t# https://dashboard.meraki.com/api_docs#update-the-site-to-site-vpn-settings-of-a-network\n")
+	file.write("\t\tprint('Restoring VPN Settings',file=f)\n")
+	file.write("\t\tf.flush()\n")
 	file.write("\t\tputurl = 'https://api.meraki.com/api/v0/networks/{0}/siteToSiteVpn'.format(str(networkid))\n")
 	file.write("\t\tdashboard = session.put(puturl, json="+str(myVPN)+", headers=headers)\n")
 	file.write("\n")
@@ -145,24 +161,28 @@ def write_snmp_settings(file,meraki,orgid):
 
 	file.write("# SNMP Settings\n")
 	file.write("# https://dashboard.meraki.com/api_docs#update-the-snmp-settings-for-an-organization\n")
+	file.write("\tprint('Restoring SNMP Settings',file=f)\n")
+	file.write("\tf.flush()\n")
 	file.write("\tputurl = 'https://api.meraki.com/api/v0/organizations/{0}/snmp'.format(str(ARG_ORGID))\n")
 	file.write("\ttry:\n")
 	file.write("\t\tdashboard = session.put(puturl, json="+str(mySNMP)+", headers=headers)\n")
 	file.write("\t\tdashboard.raise_for_status()\n")
 	file.write("\texcept requests.exceptions.HTTPError as err:\n")
-	file.write("\t\tprint(err)\n")
+	file.write("\t\tprint(err,file=f)\n")
 	file.write("\n")
 
 def write_non_meraki_vpn_peers(file,meraki,orgid):
 	myPeers=meraki.organizations.get_organization_third_party_vpn_peers(orgid)
 	file.write("# Non Meraki VPN Peers\n")
 	file.write("# https://dashboard.meraki.com/api_docs#update-the-third-party-vpn-peers-for-an-organization\n")
+	file.write("\tprint('Restoring non_meraki_vpn_peers',file=f)\n")
+	file.write("\tf.flush()\n")
 	file.write("\tputurl = 'https://api.meraki.com/api/v0/organizations/{0}/thirdPartyVPNPeers'.format(str(ARG_ORGID))\n")
 	file.write("\ttry:\n")
 	file.write("\t\tdashboard = session.put(puturl, json="+str(myPeers)+", headers=headers)\n")
 	file.write("\t\tdashboard.raise_for_status()\n")
 	file.write("\texcept requests.exceptions.HTTPError as err:\n")
-	file.write("\t\tprint(err)\n")
+	file.write("\t\tprint(err,file=f)\n")
 	file.write("\n")
 
 def write_ssid_settings(file,meraki,networkid):
@@ -171,6 +191,8 @@ def write_ssid_settings(file,meraki,networkid):
 		return
 	file.write("\t# SSIDs\n")
 	file.write("\t# https://dashboard.meraki.com/api_docs#update-the-attributes-of-an-ssid\n")
+	file.write("\t\tprint('Restoring SSIDs',file=f)\n")
+	file.write("\t\tf.flush()\n")
 	for row in mySSIDs:
 		file.write("\t\tputurl = 'https://api.meraki.com/api/v0/networks/{0}/ssids/"+str(row['number'])+"'.format(str(networkid))\n")
 		if 'radiusServers' in row:
@@ -191,6 +213,8 @@ def write_mydevices(file,meraki,networkid):
 		return
 	file.write("\t# Devices\n")
 	file.write("\t# https://developer.cisco.com/meraki/api/#/rest/api-endpoints/devices/update-network-device\n")
+	file.write("\t\tprint('Restoring switchports and devices settings',file=f)\n")
+	file.write("\t\tf.flush()\n")
 	for row in mydevice:
 		# file.write("\tputurl = 'https://api.meraki.com/api/v0/networks/{0}}/devices/claim'.format(str(networkid))\n")
 		# file.write("\tdashboard = session.put(puturl, json="+str(row['serial'])+", headers=headers)\n")
@@ -207,22 +231,34 @@ def write_mydevices(file,meraki,networkid):
 			file.write("\t\tdashboard = session.put(puturl, json="+str(port)+", headers=headers)\n")
 
 
-
 def backup_network(ARG_ORGID, NET_ID, ARG_APIKEY):
+
 	meraki = MerakiSdkClient(ARG_APIKEY)
 	dirname = os.path.dirname(__file__)
 	filename = os.path.join(dirname, 'meraki_restore_network.py')
 	with open(filename, 'w') as file:
 		write_restore_header(file)
-		print('Starting Backup')
+		f = open(log_file, 'w')
+		print('Starting Backup', file=f)
+		f.flush()
+		print('Writing script file meraki_restore_network.py', file=f)
+		f.flush()
 		file.write("# Edit script below this line to control what is #restored.\n")
 		file.write("\n")
 		file.flush()
+
+		print('Writing admins', file=f)
+		f.flush()
 		write_admins(file,meraki, ARG_ORGID)
+		print('Writing mx_vpn_fw_rules', file=f)
+		f.flush()
 		write_mx_vpn_fw_rules(file,meraki,ARG_ORGID)
+		print('Writing snmp_settings', file=f)
+		f.flush()
 		write_snmp_settings(file,meraki,ARG_ORGID)
+		print('Writing non_meraki_vpn_peers', file=f)
+		f.flush()
 		write_non_meraki_vpn_peers(file,meraki,ARG_ORGID)
-		file.flush()
 		
 		myNetwork = meraki.networks.get_network(NET_ID)
 		row = (myNetwork)
@@ -254,8 +290,8 @@ def backup_network(ARG_ORGID, NET_ID, ARG_APIKEY):
             
             
 		file.write("# Add Network: "+row['name']+'-restore'"\n")
-		print('Starting Backup')
-		file.write("\tprint('"+status+"')\n")
+		file.write("\tprint('"+status+"',file=f)\n")
+		file.write("\tf.flush()\n")
 		file.write("\ttry:\n")
 		file.write("\t# https://dashboard.meraki.com/api_docs#create-a-network\n")
 		file.write("\t\tposturl = 'https://api.meraki.com/api/v0/organizations/{0}/networks'.format(str(ARG_ORGID))\n")
@@ -263,38 +299,66 @@ def backup_network(ARG_ORGID, NET_ID, ARG_APIKEY):
 		file.write("\t\tdashboard.raise_for_status()\n")
 		file.write("\t\tnetworkid=dashboard.json()['id']\n")
 		file.write("\n")
+
+		# print('Writing admins', file=f)
+		# f.flush()
+		# print('Writing mx vpn fw rules', file=f)
+		# f.flush()
+		# print('Writing snmp settings', file=f)
+		# f.flush()
+		# print('Writing non meraki vpn peers', file=f)
+		# f.flush()
+
 		try:
-			print('Starting Backup')
+			print('Writing mx vlans', file=f)
+			f.flush()
 			write_mx_vlans(file,meraki, row['id'])
 		except:
-			print("no mx VLANs")
+			print("no mx VLANs",file=f)
+			f.flush()
 		try:
-			print('Starting Backup')
+			print('Writing mx cellular fw rules', file=f)
+			f.flush()
 			write_mx_cellular_fw_rules(file,meraki,row['id'])
 		except:
-			print("no mobile firewall rules")
+			print("no mobile firewall rules",file=f)
+			f.flush()
 		try:
+			print('Writing mx l3 fw rules', file=f)
+			f.flush()
 			write_mx_l3_fw_rules(file,meraki,row['id'])
 		except:
-			print("no MX firewall rule")
+			print("no MX firewall rule",file=f)
+			f.flush()
 		try:
-			print('Starting Backup')
+			print('Writing vpn settings', file=f)
+			f.flush()
 			write_vpn_settings(file,meraki,row['id'])
 		except:
-			print("no VPN settings")
+			print("no VPN settings",file=f)
+			f.flush()
 		try:
+			print('Writing ssid settings', file=f)
+			f.flush()
 			write_ssid_settings(file,meraki,row['id'])
 		except:
-			print("no WiFi settings")
+			print("no WiFi settings",file=f)
+			f.flush()
 		try:
-			print('Starting Backup')
+			print('Writing switch ports', file=f)
+			f.flush()
 			write_mydevices(file,meraki,row['id'])
 		except:
-			print("no devices")
+			print("no devices",file=f)
+			f.flush()
 		file.write("\texcept requests.exceptions.HTTPError as err:\n")
-		file.write("\t\tprint(err)\n")
-		file.write("\t\tprint('Can not add network "+row['name']+" - it probably already exists')\n")
-		print('Starting Backup')
+		file.write("\t\tprint(err,file=f)\n")
+		file.write("\t\tprint('Can not add network "+row['name']+" - it probably already exists. Change the Network name and try again',file=f)\n")
+		file.write("\tprint('Restoring Complete',file=f)\n")
+		file.write("\tf.flush()\n")
+		file.write("\tf.close()\n")
 		file.write("\n");
 		file.flush()
-
+		print('Writing complete', file=f)
+	f.flush()
+	f.close()

@@ -9,7 +9,10 @@ import requests
 
 
 
-def restore_network(ARG_ORGID, NET_ID, ARG_APIKEY):
+def restore_network(ARG_ORGID, ARG_APIKEY):
+	abspath = os.path.abspath(__file__)
+	log_file = os.path.abspath(__file__  + '/../../logs/log_file.log')
+	f = open(log_file, 'w')
 
 	headers = {
 		'x-cisco-meraki-api-key': ARG_APIKEY,
@@ -24,34 +27,43 @@ def restore_network(ARG_ORGID, NET_ID, ARG_APIKEY):
 
 # Organisation Dashboard Administrators
 # https://dashboard.meraki.com/api_docs#create-a-new-dashboard-administrator
+	print('Checking Administrator',file=f)
+	f.flush()
 	posturl = 'https://api.meraki.com/api/v0/organizations/{0}/admins'.format(str(ARG_ORGID))
-	dashboard = session.post(posturl, json={'accountStatus': 'ok', 'email': 'fabrizio.rollo@nts.eu', 'hasApiKey': True, 'id': '967931', 'lastActive': 1592925002, 'name': 'Fabrizio Rollo', 'networks': [], 'orgAccess': 'full', 'tags': [], 'twoFactorAuthEnabled': True}, headers=headers)
+	dashboard = session.post(posturl, json={'accountStatus': 'ok', 'email': 'fabrizio.rollo@nts.eu', 'hasApiKey': True, 'id': '967931', 'lastActive': 1593120956, 'name': 'Fabrizio Rollo', 'networks': [], 'orgAccess': 'full', 'tags': [], 'twoFactorAuthEnabled': True}, headers=headers)
 
 # MX VPN firewall
 # https://dashboard.meraki.com/api_docs#mx-vpn-firewall
+	print('Restoring mx_vpn_firewall_rules',file=f)
+	f.flush()
 	puturl = 'https://api.meraki.com/api/v0/organizations/{0}/vpnFirewallRules'.format(str(ARG_ORGID))
 	dashboard = session.put(puturl, json={'rules': [], 'syslogEnabled': True}, headers=headers)
 
 # SNMP Settings
 # https://dashboard.meraki.com/api_docs#update-the-snmp-settings-for-an-organization
+	print('Restoring SNMP Settings',file=f)
+	f.flush()
 	puturl = 'https://api.meraki.com/api/v0/organizations/{0}/snmp'.format(str(ARG_ORGID))
 	try:
 		dashboard = session.put(puturl, json={'v2cEnabled': True, 'v3Enabled': False}, headers=headers)
 		dashboard.raise_for_status()
 	except requests.exceptions.HTTPError as err:
-		print(err)
+		print(err,file=f)
 
 # Non Meraki VPN Peers
 # https://dashboard.meraki.com/api_docs#update-the-third-party-vpn-peers-for-an-organization
+	print('Restoring non_meraki_vpn_peers',file=f)
+	f.flush()
 	puturl = 'https://api.meraki.com/api/v0/organizations/{0}/thirdPartyVPNPeers'.format(str(ARG_ORGID))
 	try:
 		dashboard = session.put(puturl, json=[], headers=headers)
 		dashboard.raise_for_status()
 	except requests.exceptions.HTTPError as err:
-		print(err)
+		print(err,file=f)
 
 # Add Network: Heisenberg-Lab-restore
-	print('Restoring network Heisenberg-Lab in new network Heisenberg-Lab-restore')
+	print('Restoring network Heisenberg-Lab in new network Heisenberg-Lab-restore',file=f)
+	f.flush()
 	try:
 	# https://dashboard.meraki.com/api_docs#create-a-network
 		posturl = 'https://api.meraki.com/api/v0/organizations/{0}/networks'.format(str(ARG_ORGID))
@@ -61,6 +73,8 @@ def restore_network(ARG_ORGID, NET_ID, ARG_APIKEY):
 
 	# MX VLANs
 	# https://dashboard.meraki.com/api_docs#enable/disable-vlans-for-the-given-network
+		print('Restoring mx_vlans',file=f)
+		f.flush()
 		puturl = 'https://api.meraki.com/api/v0/networks/{0}/vlansEnabledState'.format(str(networkid))
 		dashboard = session.put(puturl, json={'enabled': True, 'networkId': 'L_681169443639788368'}, headers=headers)
 	# https://dashboard.meraki.com/api_docs#add-a-vlan
@@ -71,21 +85,29 @@ def restore_network(ARG_ORGID, NET_ID, ARG_APIKEY):
 
 	# MX cellular firewall
 	# https://dashboard.meraki.com/api_docs#mx-cellular-firewall
+		print('Restoring mx_cellular_fw_rules',file=f)
+		f.flush()
 		puturl = 'https://api.meraki.com/api/v0/networks/{0}/cellularFirewallRules'.format(str(networkid))
 		dashboard = session.put(puturl, json={'rules': [], 'syslogEnabled': False}, headers=headers)
 
 	# MX L3 Firewall Rules
 	# https://api.meraki.com/api_docs#update-the-l3-firewall-rules-of-an-mx-network
+		print('Restoring mx_l3_fw_rules',file=f)
+		f.flush()
 		puturl = 'https://api.meraki.com/api/v0/networks/{0}/l3FirewallRules'.format(str(networkid))
 		dashboard = session.put(puturl, json={'rules': [], 'syslogDefaultRule': False}, headers=headers)
 
 	# Network - AutoVPN Settings
 	# https://dashboard.meraki.com/api_docs#update-the-site-to-site-vpn-settings-of-a-network
+		print('Restoring VPN Settings',file=f)
+		f.flush()
 		puturl = 'https://api.meraki.com/api/v0/networks/{0}/siteToSiteVpn'.format(str(networkid))
 		dashboard = session.put(puturl, json={'mode': 'none'}, headers=headers)
 
 	# SSIDs
 	# https://dashboard.meraki.com/api_docs#update-the-attributes-of-an-ssid
+		print('Restoring SSIDs',file=f)
+		f.flush()
 		puturl = 'https://api.meraki.com/api/v0/networks/{0}/ssids/0'.format(str(networkid))
 		dashboard = session.put(puturl, json={'authMode': 'psk', 'availabilityTags': [], 'availableOnAllAps': True, 'bandSelection': 'Dual band operation', 'defaultVlanId': 666, 'enabled': True, 'encryptionMode': 'wpa', 'ipAssignmentMode': 'Bridge mode', 'lanIsolationEnabled': False, 'minBitrate': 11, 'name': "E' molto lontana l'Islanda!", 'number': 0, 'perClientBandwidthLimitDown': 0, 'perClientBandwidthLimitUp': 0, 'psk': '8volante', 'splashPage': 'None', 'ssidAdminAccessible': False, 'useVlanTagging': True, 'visible': True, 'wpaEncryptionMode': 'WPA2 only'}, headers=headers)
 	# MR L3 firewall
@@ -193,6 +215,8 @@ def restore_network(ARG_ORGID, NET_ID, ARG_APIKEY):
 
 	# Devices
 	# https://developer.cisco.com/meraki/api/#/rest/api-endpoints/devices/update-network-device
+		print('Restoring switchports and devices settings',file=f)
+		f.flush()
 		puturl = 'https://api.meraki.com/api/v0/networks/{0}/devices/Q2HP-QSVT-LBLV'.format(str(networkid))
 		dashboard = session.put(puturl, json={'address': 'Schaeffergasse 20/44', 'firmware': 'switch-11-22', 'floorPlanId': None, 'lanIp': '192.168.128.3', 'lat': 48.19386, 'lng': 16.36354, 'mac': 'e0:cb:bc:3b:25:45', 'model': 'MS220-8P', 'name': 'MS220-8P-Heisenberg', 'networkId': 'L_681169443639788368', 'serial': 'Q2HP-QSVT-LBLV', 'switchProfileId': None, 'tags': ' recently-added '}, headers=headers)
 		puturl = 'https://api.meraki.com/api/v0/networks/{0}/devices/Q2HP-QSVT-LBLV/switchPorts/1'.format(str(networkid))
@@ -260,6 +284,9 @@ def restore_network(ARG_ORGID, NET_ID, ARG_APIKEY):
 		puturl = 'https://api.meraki.com/api/v0/networks/{0}/devices/Q2KN-MEHN-SK32/switchPorts/10'.format(str(networkid))
 		dashboard = session.put(puturl, json={'accessPolicyNumber': None, 'allowedVlans': 'all', 'enabled': True, 'isolationEnabled': False, 'linkNegotiation': 'Auto negotiate', 'macWhitelist': None, 'name': None, 'number': 10, 'poeEnabled': False, 'portScheduleId': None, 'rstpEnabled': True, 'stickyMacWhitelist': None, 'stickyMacWhitelistLimit': None, 'stpGuard': 'disabled', 'tags': None, 'type': 'trunk', 'udld': 'Alert only', 'vlan': 1, 'voiceVlan': None}, headers=headers)
 	except requests.exceptions.HTTPError as err:
-		print(err)
-		print('Can not add network Heisenberg-Lab - it probably already exists')
+		print(err,file=f)
+		print('Can not add network Heisenberg-Lab - it probably already exists. Change the Network name and try again',file=f)
+	print('Restoring Complete',file=f)
+	f.flush()
+	f.close()
 

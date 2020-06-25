@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { LazyLog } from "react-lazylog";
 import "../../styles/FindPorts.css";
 
 export default function NetworkTopUsers(ac) {
@@ -15,6 +16,7 @@ export default function NetworkTopUsers(ac) {
   const [macAddressbeforeTransf, setmacAddressbeforeTransf] = useState("");
   const [macAddressafterTransf, setmacAddressafterTransf] = useState("");
   const [switchTimeInterval, setswitchTimeInterval] = useState(15);
+
 
   const selectTimeInterval = () => {
     let selectBox = document.getElementById("selectBox-find-port");
@@ -205,11 +207,13 @@ export default function NetworkTopUsers(ac) {
       seterrorMessageMAC(false);
       seterrorMessageIP(false);
       seterrorMessageMAC_IP(null);
+
     } else if (macAddressbeforeTransf !== "" && IPAddress === "") {
       settriggerMAC(triggerMAC + 1);
       seterrorMessageMAC(false);
       seterrorMessageIP(false);
       seterrorMessageMAC_IP(null);
+
     } else {
       seterrorMessageMAC(false);
       seterrorMessageIP(false);
@@ -222,6 +226,9 @@ export default function NetworkTopUsers(ac) {
       );
     }
   };
+
+
+
 
   return (
     <div id="page-inner-main-templates">

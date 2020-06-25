@@ -15,6 +15,7 @@ python find_ports.py -k <api_key> -o <org_id> -s <search_parameter> [-t <time>]
 The -s parameter will be either a local file of MAC addresses (one per line), a currently configured port tag in Dashboard, or the currently configured access policy (number of policy slot) on the Switch > Access policy page. Option -t, if using input list of MACs, to only search for clients that were last seen within t minutes, default is 15.
 
 '''
+import os
 from datetime import datetime
 import getopt
 import json
@@ -23,6 +24,12 @@ import sys
 import datetime
 import time
 import meraki
+
+
+dirname = os.path.dirname(__file__)
+log_file = dirname +'/logs/log_file.log'
+error_file = dirname +'/logs/error_file.log'
+
 
 
 # Used in merakirequestthrottler() to avoid hitting dashboard API max request rate
@@ -52,6 +59,7 @@ def merakirequestthrottler():
 
 
 def list_networks(api_key, org_id):
+    e = open(error_file, 'w')
     url = 'https://dashboard.meraki.com/api/v0/organizations/{}/networks'.format(
         org_id)
     try:
@@ -59,10 +67,11 @@ def list_networks(api_key, org_id):
                                 'X-Cisco-Meraki-API-Key': api_key, 'Content-Type': 'application/json'})
         return json.loads(response.text)
     except requests.exceptions.RequestException as e:
-        print('Error calling list_networks: {}'.format(e))
-
+        print('Error calling list_networks: {}'.format(e),file=e)
+    e.close()
 
 def get_inventory(api_key, org_id):
+    e = open(error_file, 'w')
     url = 'https://dashboard.meraki.com/api/v0/organizations/{}/inventory'.format(
         org_id)
     try:
@@ -70,10 +79,11 @@ def get_inventory(api_key, org_id):
                                 'X-Cisco-Meraki-API-Key': api_key, 'Content-Type': 'application/json'})
         return json.loads(response.text)
     except requests.exceptions.RequestException as e:
-        print('Error calling get_inventory: {}'.format(e))
-
+        print('Error calling get_inventory: {}'.format(e),file=e)
+    e.close()
 
 def list_switch_ports(api_key, serial):
+    e = open(error_file, 'w')
     url = 'https://dashboard.meraki.com/api/v0/devices/{}/switchPorts'.format(
         serial)
     try:
@@ -81,10 +91,11 @@ def list_switch_ports(api_key, serial):
                                 'X-Cisco-Meraki-API-Key': api_key, 'Content-Type': 'application/json'})
         return json.loads(response.text)
     except requests.exceptions.RequestException as e:
-        print('Error calling list_switch_ports with serial number {}: {}'.format(serial, e))
-
+        print('Error calling list_switch_ports with serial number {}: {}'.format(serial, e),file=e)
+    e.close()
 
 def get_port_details(api_key, serial, number):
+    e = open(error_file, 'w')
     url = 'https://dashboard.meraki.com/api/v0/devices/{}/switchPorts/{}'.format(
         serial, number)
     try:
@@ -93,10 +104,11 @@ def get_port_details(api_key, serial, number):
         return json.loads(response.text)
     except requests.exceptions.RequestException as e:
         print('Error calling get_port_details with serial {} and port {}: {}'.format(
-            serial, number, e))
-
+            serial, number, e),file=e)
+    e.close()
 
 def update_switch_port(api_key, serial, number, data):
+    e = open(error_file, 'w')
     url = 'https://dashboard.meraki.com/api/v0/devices/{}/switchPorts/{}'.format(
         serial, number)
     try:
@@ -105,10 +117,11 @@ def update_switch_port(api_key, serial, number, data):
         return json.loads(response.text)
     except requests.exceptions.RequestException as e:
         print('Error calling update_switch_port with serial {}, port {}, and data {}: {}'.format(
-            serial, number, data, e))
-
+            serial, number, data, e),file=e)
+    e.close()
 
 def list_clients(api_key, serial, TIME_SPAN):  # timestamp in seconds
+    e = open(error_file, 'w')
     url = 'https://dashboard.meraki.com/api/v0/devices/{}/clients?timespan={}'.format(
         serial, TIME_SPAN)
     try:
@@ -116,7 +129,8 @@ def list_clients(api_key, serial, TIME_SPAN):  # timestamp in seconds
                                 'X-Cisco-Meraki-API-Key': api_key, 'Content-Type': 'application/json'})
         return json.loads(response.text)
     except requests.exceptions.RequestException as e:
-        print('Error calling list_clients with serial {}: {}'.format(serial, e))
+        print('Error calling list_clients with serial {}: {}'.format(serial, e),file=e)
+    e.close()
 
 
 def sumTwo():
@@ -124,9 +138,8 @@ def sumTwo():
 
 
 def find_ports(API_KEY, ORG_ID, MAC_ADDR, IP_ADDR, TIME_SPAN):
-
-    # Find all MS networks
-    # IP_ADDR = '10.6.100.100'
+    f = open(log_file, 'w')
+    e = open(error_file, 'w')
     session = requests.session()
     inventory = get_inventory(API_KEY, ORG_ID)
     switches = [device for device in inventory if device['model']
@@ -136,7 +149,8 @@ def find_ports(API_KEY, ORG_ID, MAC_ADDR, IP_ADDR, TIME_SPAN):
         if switch['networkId'] not in switch_networks:
             switch_networks.append(switch['networkId'])
     print('Found a total of %d switches configured across %d networks in this organization.' % (
-        len(switches), len(switch_networks)))
+        len(switches), len(switch_networks)), file=f)
+
 
     # Find all ports with search parameter
     if MAC_ADDR != '':
@@ -145,7 +159,7 @@ def find_ports(API_KEY, ORG_ID, MAC_ADDR, IP_ADDR, TIME_SPAN):
         macs = MAC_ADDR.split('\n')
 
         print('Searching on list of %d MACs in file, with first and last addresses being %s and %s, respectively.' % (
-            len(macs), macs[0], macs[-1]))
+            len(macs), macs[0], macs[-1]), file=f)
         tally_ports = 0
 
         # Find all clients per switch that match list
@@ -188,7 +202,7 @@ def find_ports(API_KEY, ORG_ID, MAC_ADDR, IP_ADDR, TIME_SPAN):
                 findport.append(c_Findport())
                 findport[0].switch = switch['name']
                 print('Found %d matched MAC addresses on switch %s' %
-                      (len(matches), switch['serial']))
+                      (len(matches), switch['serial']), file=f)
                 tally_ports += len(matched_ports.keys())
                 for port in matched_ports.keys():
                     findport.append(c_Findport())
@@ -196,7 +210,7 @@ def find_ports(API_KEY, ORG_ID, MAC_ADDR, IP_ADDR, TIME_SPAN):
                     print('- on port %s, found %d matches' %
                           (port, matched_ports[port]))
                 return (findport[0].switch, findport[0].port, findport[0].description, findport[0].ip, findport[0].vlan, findport[0].mac)
-        print('Found %d total ports matching search criteria.' % (tally_ports))
+        print('Found %d total ports matching search criteria.' % (tally_ports), file=f)
 
     elif IP_ADDR != '':
 
@@ -222,7 +236,7 @@ def find_ports(API_KEY, ORG_ID, MAC_ADDR, IP_ADDR, TIME_SPAN):
                     matches = [s for s in clients_ips if IP_ADDR in s]
                     print(matches)
             except:
-                print('error')
+                print('error',file=e)
 
             # Find ports of matched clients
             findport = []
@@ -246,7 +260,7 @@ def find_ports(API_KEY, ORG_ID, MAC_ADDR, IP_ADDR, TIME_SPAN):
                 findport.append(c_Findport())
                 findport[0].switch = switch['name']
                 print('Found %d matched IP addresses on switch %s' %
-                      (len(matches), switch['serial']))
+                      (len(matches), switch['serial']),file=f)
                 tally_ports += len(matched_ports.keys())
                 for port in matched_ports.keys():
                     findport.append(c_Findport())
@@ -254,41 +268,6 @@ def find_ports(API_KEY, ORG_ID, MAC_ADDR, IP_ADDR, TIME_SPAN):
                     print('- on port %s, found %d matches' %
                           (port, matched_ports[port]))
                 return (findport[0].switch, findport[0].port, findport[0].description, findport[0].ip, findport[0].vlan, findport[0].mac)
-        print('Found %d total ports matching search criteria.' % (tally_ports))
-    # elif IP_ADDR is not None:
-    #     # Searching on access policy
-    #     print('Searching on switch ports  with IP address %d.' %
-    #           (IP_ADDR))
-    #     tally_ports = 0
-    #     for switch in switches:
-    #         ports = list_switch_ports(API_KEY, switch['serial'])
-    #         ports("ports", ports)
-    #         matched_ports = [port for port in ports if port['accessPolicyNumber']
-    #                          != None and IP_ADDR == port['accessPolicyNumber']]
-    #         if len(matched_ports) > 0:
-    #             print('Found %d matched ports on switch %s' %
-    #                   (len(matched_ports), switch['serial']))
-    #             tally_ports += len(matched_ports)
-    #     print('Found %d total ports matching search criteria.' % (tally_ports))
-    # else:
-    #     # Searching on port tag
-    #     print('Searching on switch ports configured with tag %s.' % (search_tag))
-    #     tally_ports = 0
-    #     for switch in switches:
-    #         ports = list_switch_ports(API_KEY, switch['serial'])
-    #         matched_ports = [port for port in ports if port['tags']
-    #                          != None and search_tag in port['tags']]
-    #         if len(matched_ports) > 0:
-    #             print('Found %d matched ports on switch %s' %
-    #                   (len(matched_ports), switch['serial']))
-    #             tally_ports += len(matched_ports)
-    #     print('Found %d total ports matching search criteria.' % (tally_ports))
-
-
-# if __name__ == '__main__':
-    # startTime = datetime.now()
-    # print('Starting script at: %s' % startTime)
-    # print('Arguments entered: %s' % sys.argv[1:])
-    # main()
-    # print('Ending script at: %s' % datetime.now())
-    # print('Total run time: %s' % (datetime.now() - startTime))
+        print('Found %d total ports matching search criteria.' % (tally_ports),file=f)
+    f.close()
+    e.close()

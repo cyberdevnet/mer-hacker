@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
+import { LazyLog } from "react-lazylog";
+
 import "../styles/LoginAPI.css";
 
 export default function LoginAPI(ac) {

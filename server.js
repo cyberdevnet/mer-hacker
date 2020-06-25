@@ -14,13 +14,20 @@ const expressLogger = expressPino({ logger });
 app.use(expressLogger);
 
 
+
 app.use("/api/backup_restore/", express.static(__dirname + '/api/backup_restore/'));
 
 app.get("/api/backup_restore/", function (req, res) {
 
     express.static(__dirname + '/api/backup_restore/')(req, res)
-    // logger.info('get Request: ', req);
-    // logger.info('get Request: ', res);
+
+});
+
+app.use("/api/logs/", express.static(__dirname + '/api/logs/'));
+
+app.get("/api/logs/", function (req, res) {
+
+    express.static(__dirname + '/api/logs/')(req, res)
 
 });
 

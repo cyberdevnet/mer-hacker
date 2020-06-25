@@ -1,0 +1,13 @@
+Starting Backup
+Writing script file meraki_restore_network.py
+Writing admins
+Writing mx_vpn_fw_rules
+Writing snmp_settings
+Writing non_meraki_vpn_peers
+Writing mx vlans
+Writing mx cellular fw rules
+Writing mx l3 fw rules
+Writing vpn settings
+Writing ssid settings
+Writing switch ports
+Writing complete

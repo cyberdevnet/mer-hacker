@@ -11,8 +11,8 @@ import "ace-builds/src-noconflict/theme-monokai";
 const fs = require('browserify-fs');
 
 export default function BackupRestore(ac) {
-  const [loadingButtonBackup, setloadingButtonBackup] = useState(0);
-  const [loadingButtonRestore, setloadingButtonRestore] = useState(0);
+  const [loadingButtonBackup, setloadingButtonBackup] = useState(false);
+  const [loadingButtonRestore, setloadingButtonRestore] = useState(false);
   const [displayButtons, setdisplayButtons] = useState({ display: 'none' });
   const [triggerBackup, settriggerBackup] = useState(0);
   const [triggerFile, settriggerFile] = useState(0);
@@ -20,8 +20,11 @@ export default function BackupRestore(ac) {
   // eslint-disable-next-line
   const [errorMessage, seterrorMessage] = useState(null);
   const [script, setscript] = useState([])
-
   const [showscript, setshowscript] = useState(false)
+  const [liveLogs, setliveLogs] = useState([]);
+  const [showLiveLogs, setshowLiveLogs] = useState(false)
+
+
 
   const APIbody2 = {
     "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
@@ -33,23 +36,18 @@ export default function BackupRestore(ac) {
   };
 
 
-  const ORGANIZATIONS = ac.dc.organizationList.map((opt, index) => ({
-    label: opt.name,
-    value: index,
-    id: opt.id,
-  }));
-
-  const NETWORKS = ac.dc.networkList.map((opt, index) => ({
-    label: opt.name,
-    value: index,
-    id: opt.id,
-  }));
-
-  // const DEVICES = ac.dc.deviceList.map((opt, index) => ({
+  // const ORGANIZATIONS = ac.dc.organizationList.map((opt, index) => ({
   //   label: opt.name,
   //   value: index,
   //   id: opt.id,
   // }));
+
+  // const NETWORKS = ac.dc.networkList.map((opt, index) => ({
+  //   label: opt.name,
+  //   value: index,
+  //   id: opt.id,
+  // }));
+
 
   const HandleOrganization = (opt) => {
     ac.dc.setorganization(opt.label);
@@ -64,9 +62,6 @@ export default function BackupRestore(ac) {
     ac.dc.setisNetSelected(true);
   };
 
-  // const HandleDevices = (opt) => {
-  //   ac.dc.setdevice(opt.label);
-  // };
 
 
 
@@ -76,6 +71,7 @@ export default function BackupRestore(ac) {
     setscript([])
     // e.preventDefault();
     settriggerBackup(triggerBackup + 1);
+    setshowLiveLogs(true)
     if (triggerBackup > 3) {
       settriggerBackup(0);
       seterrorMessage(null);
@@ -85,6 +81,8 @@ export default function BackupRestore(ac) {
 
   const handleRestoreFile = (e) => {
     e.preventDefault();
+    setshowLiveLogs(false)
+    seterrorMessage(null);
     settriggerFile(triggerFile + 1);
     if (triggerFile > 3) {
       settriggerFile(0);
@@ -96,6 +94,7 @@ export default function BackupRestore(ac) {
   const HandleRestore = (e) => {
     e.preventDefault();
     settriggerRestore(triggerRestore + 1);
+    setshowLiveLogs(true)
     if (triggerRestore > 3) {
       settriggerRestore(0);
     }
@@ -140,19 +139,19 @@ export default function BackupRestore(ac) {
             setdisplayButtons({ display: 'inline-block' })
           })
 
-          .catch((err) => {
-            console.log("Backup -> err", err());
-            err.json().then((errorMessage) => {
-              seterrorMessage(
-                <div className="form-input-error-msg alert alert-danger">
-                  <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {errorMessage}
-                </div>
-              );
-            });
-            setloadingButtonBackup(false);
+        // .catch((err) => {
+        //   console.log("Backup -> err", err());
+        //   err.json().then((errorMessage) => {
+        //     seterrorMessage(
+        //       <div className="form-input-error-msg alert alert-danger">
+        //         <span className="glyphicon glyphicon-exclamation-sign"></span>
+        //         {errorMessage}
+        //       </div>
+        //     );
+        //   });
+        //   setloadingButtonBackup(false);
 
-          });
+        // });
       } else {
         ac.dc.setswitchAlertModal(true);
         ac.dc.setAlertModalError("Please set Organization and Network.");
@@ -178,7 +177,6 @@ export default function BackupRestore(ac) {
     async function OpenFile() {
 
       fetch('/api/backup_restore/meraki_restore_network.py')
-        // fetch('http://127.0.0.1:3001/api/backup_restore/meraki_restore_network.py')
         .then(response => { return response.text() })
         .then((data) => {
           setscript(data)
@@ -218,43 +216,46 @@ export default function BackupRestore(ac) {
       return;
     }
     async function Restore() {
-      setloadingButtonRestore(true);
+      if (showscript === true) {
 
-      const data = new FormData()
-      const file = new Blob([script], { type: 'text/plain' });
-      data.append('file', file, 'meraki_restore_network.py')
+        setloadingButtonRestore(true);
+        setshowscript(false)
 
-      axios.post("/upload", data, { // receive two parameter endpoint url ,form data 
-      })
-        .then(() => {
-          fetch("/run_restore/", {
-            method: ["POST"],
-            cache: "no-cache",
-            headers: {
-              content_type: "application/json",
-            },
-            body: JSON.stringify(APIbody2),
+        const data = new FormData()
+        const file = new Blob([script], { type: 'text/plain' });
+        data.append('file', file, 'meraki_restore_network.py')
+
+        axios.post("/upload", data, { // receive two parameter endpoint url ,form data 
+        })
+
+
+        fetch("/run_restore/", {
+          method: ["POST"],
+          cache: "no-cache",
+          headers: {
+            content_type: "application/json",
+          },
+          body: JSON.stringify(APIbody2),
+        })
+
+          .then((res) => {
+            console.log('POST response: ', res);
           })
-        })
-        .then((response) => response.json())
-        .then((data) => console.log(data)
-        )
-        .then(() => {
-          setloadingButtonRestore(false)
-        })
 
-        .catch((err) => {
-          console.log("APIcall -> err", err.json());
-          err.json().then((errorMessage) => {
-            seterrorMessage(
-              <div className="form-input-error-msg alert alert-danger">
-                <span className="glyphicon glyphicon-exclamation-sign"></span>
-                {errorMessage}
-              </div>
-            );
-          });
-          setloadingButtonRestore(false);
-        });
+
+          .then(() => {
+            setloadingButtonRestore(false)
+          })
+
+      } else {
+        seterrorMessage(
+          <div className="form-input-error-msg alert alert-danger">
+            <span className="glyphicon glyphicon-exclamation-sign"></span>
+          Check the script before restoring the network.
+        </div>
+        )
+      }
+
     }
     Restore();
     return () => {
@@ -264,6 +265,50 @@ export default function BackupRestore(ac) {
     };
     // eslint-disable-next-line
   }, [triggerRestore]);
+
+
+  const isFirstRunLogs = useRef(true);
+  useEffect(() => {
+    if (isFirstRunLogs.current) {
+      isFirstRunLogs.current = false;
+      return;
+    }
+
+    let interval = null;
+    if (showLiveLogs) {
+      interval = setInterval(() => {
+        try {
+          fetch("/api/logs/log_file.log")
+            .then((response) => {
+
+              return response.text();
+            })
+            .then((data) => {
+              setliveLogs(data)
+
+            })
+
+        } catch (err) {
+          if (err) {
+            console.log(err);
+            ac.dc.setalert(true);
+          }
+        }
+
+      }, 1000)
+      // auto-clearing after 30 sec
+      setTimeout(() => {
+        clearInterval(interval)
+      }, 30000);
+
+    } else if (!showLiveLogs) {
+      clearInterval(interval)
+    }
+    return () => clearInterval(interval);
+
+  }, [showLiveLogs]);
+
+
 
   return (
     <div id="page-inner-main-templates">
@@ -296,31 +341,6 @@ export default function BackupRestore(ac) {
               </div>
             </div>
             <div className="panel-body">
-              <form className="form-inline">
-                <div className="form-group">
-                  <Select
-                    options={ORGANIZATIONS}
-                    placeholder={ac.dc.organization}
-                    onChange={HandleOrganization}
-                    className="select-backup-restore"
-                    classNamePrefix="backup-restore"
-                  />
-                  <Select
-                    options={NETWORKS}
-                    placeholder={ac.dc.network}
-                    onChange={HandleNetwork}
-                    className="select-backup-restore"
-                    classNamePrefix="backup-restore"
-                  />
-                  {/* <Select
-                    options={DEVICES}
-                    placeholder="Devices"
-                    onChange={HandleDevices}
-                    className="select-backup-restore"
-                    classNamePrefix="backup-restore"
-                  /> */}
-                </div>
-              </form>
 
               <div>{errorMessage && <span>{errorMessage}</span>}</div>
               <button
@@ -368,7 +388,7 @@ export default function BackupRestore(ac) {
                     style={{ marginRight: "5px" }}
                   />
                 )}
-                {loadingButtonRestore && <span>Loading Data</span>}
+                {loadingButtonRestore && <span>Restoring</span>}
                 {!loadingButtonRestore && <span>Restore</span>}
               </button>
             </div>
@@ -378,6 +398,14 @@ export default function BackupRestore(ac) {
       <div className="row">
         <div className="col-xs-12">
           <div className="panel panel-default">
+            {showLiveLogs ? (<div style={{ height: 350 }}>
+              <LazyLog extraLines={1} enableSearch
+                text={liveLogs}
+                stream
+                caseInsensitive
+                selectableLines />
+            </div>) : (<div></div>)}
+
             {showscript ? (
               <div className="panel-body">
                 <AceEditor

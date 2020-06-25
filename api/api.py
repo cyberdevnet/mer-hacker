@@ -1,9 +1,12 @@
 import time
 from time import sleep
+import os
 import datetime
 import requests
 import json
+import importlib
 from flask import Flask, request, jsonify, abort,flash, render_template
+from flask_socketio import SocketIO
 from werkzeug.exceptions import BadRequest
 import meraki
 import find_ports
@@ -13,6 +16,15 @@ from backup_restore import meraki_restore_network
 import logging
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
+
+
+dirname = os.path.dirname(__file__)
+debug_file = dirname +'/logs/debug_file.log'
+print(debug_file)
+log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+logging.basicConfig(filename=debug_file, level=logging.DEBUG,format=log_format,filemode='w')
+logger= logging.getLogger()
+
 
 # SECTION: GLOBAL VARIABLES: MODIFY TO CHANGE SCRIPT BEHAVIOUR
 
@@ -40,19 +52,11 @@ def merakirequestthrottler():
 app = Flask(__name__)
 # app.debug = True
 app.config['PROPAGATE_EXCEPTIONS'] = True
-CORS(app)
 app.config['SECRET_KEY'] = 'meraki'
-
-# logging.basicConfig(filename='debug_log.log', level=logging.DEBUG)
-
-# logging.basicConfig(filename='/home/cyberdevnet/mer-hacker-dev/src/DebugsLogs/debug.log',
-#                     level=logging.INFO,
-#                     format='%(asctime)s  - %(message)s')
+socketio = SocketIO(app)
+CORS(app)
 
 
-# logging.basicConfig(filename='../src/DebugsLogs/debug.log',
-#                     level=logging.DEBUG,
-#                     format='%(asctime)s - %(name)s - %(levelname)s - %(threadName)s - %(message)s')
 
 
 
@@ -74,6 +78,9 @@ def get_organizations():
         flash('Organization not found, please check your API key and your internet connection')
         flash(err)
         return {'error' : [render_template('flash_template.html')]}
+
+
+
 
 
 @app.route('/networks', methods=['GET', 'POST'])
@@ -297,17 +304,23 @@ def run_backup():
         else:
 
             return {'backup': 'backup'}
-    except meraki.APIError as err:
-        print(err)
-        error = (err.message['errors'][0])
-        flash(error)
-        return {'error' : [render_template('flash_template.html'),err.status]}
+    except Exception as err:
+        print('Exception: ',err)
+        # error = (err.message['errors'][0])
+        flash(err)
+        return {'error' : [render_template('flash_template.html')]}
+    # except meraki.APIError as err:
+    #     print(err)
+    #     error = (err.message['errors'][0])
+    #     flash(error)
+    #     return {'error' : [render_template('flash_template.html'),err.status]}
 
 
 @ app.route('/run_restore/', methods=['GET', 'POST'])
 def run_restore():
     try:
         if request.method == 'POST':
+            importlib.reload(meraki_restore_network)
             global data
             data = request.get_json()
             NET_ID = data['NET_ID']
@@ -316,20 +329,17 @@ def run_restore():
             SERIAL_NUM = data['SERIAL_NUM']
             ARG_ORGID = data['ARG_ORGID']
 
-            return {'backup': meraki_restore_network.restore_network(ARG_ORGID, NET_ID, ARG_APIKEY)}
+            return {'backup': meraki_restore_network.restore_network(ARG_ORGID, ARG_APIKEY)}
         else:
 
             return {'backup': 'backup'}
-    except meraki.APIError as err:
+    except Exception as err:
         print(err)
-        error = (err.message['errors'][0])
-        flash(error)
-        return {'error' : [render_template('flash_template.html'),err.status]}
+        return  {'error': err}
 
 
 
 if __name__ == '__main__':
-    
     app.run(host='127.0.0.1', port=5000)
 
 

@@ -1,10 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
+// import myLogs from "/home/cyberdevnet/mer-hacker-dev/api/logs/debug_file.log";
 // import myLogs from "/home/cyberdevnet/mer-hacker-dev/src/DebugsLogs/debug.log";
 import { LazyLog } from "react-lazylog";
 import "../styles/LiveLog.css";
 
 export default function LiveLog(ac) {
-  const [trigger, settrigger] = useState(0);
+  const [debug_logs, setdebug_logs] = useState([]);
+  const [showDebug, setshowDebug] = useState(false)
+  const [buttonPHolder, setbuttonPHolder] = useState('Debug')
 
   const isFirstRun = useRef(true);
   useEffect(() => {
@@ -12,124 +15,90 @@ export default function LiveLog(ac) {
       isFirstRun.current = false;
       return;
     }
-    async function APICallLog() {
 
+    let interval = null;
+    if (showDebug) {
+      interval = setInterval(() => {
+        try {
+          fetch("/api/logs/debug_file.log")
+            .then((response) => {
 
-      // try {
-      //   fetch("/stream")
-      //     .then((response) => {
-      //       console.log('response', response);
+              return response.text();
+            })
+            .then((data) => {
+              setdebug_logs(data)
 
-      //       return response.text();
-      //     })
-      //     .then((data) => {
-      //       console.log('data', data);
+            })
 
-      //       document.getElementById("log").innerHTML = data;
-      //     })
-      //     .then(() => {
-      //       var logBody = document.getElementById("log");
-      //       logBody.scrollTop = logBody.scrollHeight;
-      //     });
-      // } catch (err) {
-      //   if (err) {
-      //     console.log(err);
-      //     ac.dc.setalert(true);
-      //   }
-      // }
+        } catch (err) {
+          if (err) {
+            console.log(err);
+            ac.dc.setalert(true);
+          }
+        }
 
+      }, 3000)
 
+      // auto-clearing after 30 sec
+      setTimeout(() => {
+        clearInterval(interval)
+      }, 30000);
 
-
-
-
-      // try {
-      //   fetch(myLogs)
-      //     .then((response) => {
-      //       return response.text();
-      //     })
-      //     .then((data) => {
-      //       document.getElementById("log").innerHTML = data;
-      //     })
-      //     .then(() => {
-      //       var logBody = document.getElementById("log");
-      //       logBody.scrollTop = logBody.scrollHeight;
-      //     });
-      // } catch (err) {
-      //   if (err) {
-      //     console.log(err);
-      //     ac.dc.setalert(true);
-      //   }
-      // }
+    } else if (!showDebug) {
+      clearInterval(interval)
     }
-    APICallLog();
-    // setup interval to fetch logs
-    // const intervalTimer = setInterval(APICallLog, 1000);
-    // return () => clearInterval(intervalTimer);
-    // eslint-disable-next-line
-  }, [trigger]);
+    if (showDebug === true) {
+      setbuttonPHolder('Close')
+    } else {
+      setbuttonPHolder('Debug')
+    }
+    return () => clearInterval(interval);
 
-  const toggle = () => {
-    settrigger(trigger + 1);
+  }, [showDebug]);
+
+  const OpenDebug = () => {
+    setTimeout(() => {
+      setshowDebug(!showDebug)
+    }, 900);
+
   };
 
-  // function updateScroll() {
-  //   var logBody = document.getElementById("log");
-  //   logBody.scrollTop = logBody.scrollHeight;
-  // }
-
-  // // once a second
-  // setInterval(updateScroll, 1000);
-
-  const url = "../DebugsLogs/debug.log";
 
   return (
     <div>
       <button
-        onClick={toggle}
-        href="#myModal"
-        id="openBtn"
-        data-toggle="modal"
-        className="btn btn-primary"
+        onClick={OpenDebug}
+        className="btn btn-primary-live-log"
       >
-        Logs
+        {buttonPHolder}
       </button>
-      {/* <div style={{ height: 500, width: 902 }}>
-        <LazyLog extraLines={1} enableSearch url={url} caseInsensitive />
-      </div> */}
-      <div className="modal fade" id="myModal">
-        <div className="modal-dialog modal-xl">
-          <div className="modal-content-log">
-            <div className="modal-header">
-              <button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-hidden="true"
-              >
-                ×
-              </button>
-            </div>
-            <div id="log" className="modal-body-log"></div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-default "
-                data-dismiss="modal"
-              >
-                Close
-              </button>
-              <button
-                onClick={() => settrigger(trigger + 1)}
-                type="button"
-                className="btn btn-primary"
-              >
-                Refresh
-              </button>
+      {showDebug ? (
+        <div className="row">
+          <div className="col-xs-12">
+            <div className="panel panel-default">
+              <div className="panel-body">
+                <div style={{ height: 800 }}>
+                  <LazyLog extraLines={1} enableSearch text={debug_logs} stream caseInsensitive selectableLines />
+                  {/* <ScrollFollow
+                    startFollowing
+                    render={({ onScroll, follow, startFollowing, stopFollowing }) => (
+                      <LazyLog extraLines={1} enableSearch text={debug_logs} stream caseInsensitive selectableLines />
+                    )}
+                  /> */}
+                  {/* <LazyLog extraLines={1}
+                    enableSearch
+                    url={debug_logs}
+                    caseInsensitive
+                    selectableLines
+                  /> */}
+                </div>
+
+              </div>
             </div>
           </div>
+
         </div>
-      </div>
+      ) : (<div></div>)}
     </div>
   );
 }

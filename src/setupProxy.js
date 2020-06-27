@@ -116,5 +116,12 @@ module.exports = function (app) {
       changeOrigin: true,
     })
   );
+  app.use(
+    "/run_restore_switch/",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
 
 };

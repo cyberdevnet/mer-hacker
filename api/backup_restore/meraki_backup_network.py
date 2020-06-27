@@ -33,6 +33,7 @@ from meraki_sdk.exceptions.api_exception import APIException
 import argparse
 import json
 import meraki
+import requests
 
 
 
@@ -56,6 +57,7 @@ def write_restore_header(file):
 	file.write("import requests\n");
 	file.write("\n");
 	file.write("\n");
+	# file.write("networkid=''\n");
 	file.write("\n");
 	file.write("def restore_network(ARG_ORGID, ARG_APIKEY):\n");
 	file.write("\tabspath = os.path.abspath(__file__)\n");
@@ -208,30 +210,86 @@ def write_ssid_settings(file,meraki,networkid):
 		file.write("\t\tdashboard = session.put(puturl, json="+str({"rules":myRules,"allowLanAccess":True})+", headers=headers)\n")
 		file.write("\n")
 
-def write_mydevices(file,meraki,networkid):
+def write_devices_props(file,meraki,networkid):
 	mydevice=meraki.devices.get_network_devices(networkid)
-	check = sys.getdefaultencoding()
 	if mydevice is None:
 		return
 	file.write("\t# Devices\n")
 	file.write("\t# https://developer.cisco.com/meraki/api/#/rest/api-endpoints/devices/update-network-device\n")
-	file.write("\t\tprint('Restoring switchports and devices settings',file=f)\n")
+	file.write("\t\tprint('Restoring devices properties',file=f)\n")
+	# file.write("\t\tglobal networkid\n")
+	file.write("\t\tprint('Network id: ',networkid, file=f)\n")
 	file.write("\t\tf.flush()\n")
 	for row in mydevice:
-		# file.write("\tputurl = 'https://api.meraki.com/api/v0/networks/{0}}/devices/claim'.format(str(networkid))\n")
-		# file.write("\tdashboard = session.put(puturl, json="+str(row['serial'])+", headers=headers)\n")
-		# print(row)
-		# row.update({"url": nettype})
 		if 'url' in row:
 			del row['url']
+		if 'networkId' in row:
+			del row['networkId']
 		file.write("\t\tputurl = 'https://api.meraki.com/api/v0/networks/{0}/devices/"+str(row['serial'])+"'.format(str(networkid))\n")
 		file.write("\t\tdashboard = session.put(puturl, json="+str(row)+", headers=headers)\n")
+
+
+def write_mydevices(file,meraki,networkid):
+	mydevice=meraki.devices.get_network_devices(networkid)
+	if mydevice is None:
+		return
+	# file.write("\t# Devices\n")
+	# file.write("\t# https://developer.cisco.com/meraki/api/#/rest/api-endpoints/devices/update-network-device\n")
+	# file.write("\t\tprint('Restoring switchports and devices settings',file=f)\n")
+	# file.write("\t\tprint('Network id: ',networkid, file=f)\n")
+	# file.write("\t\tf.flush()\n")
+	for row in mydevice:
+		# if 'url' in row:
+		# 	del row['url']
+		# if 'networkId' in row:
+		# 	del row['networkId']
+		# file.write("\t\tputurl = 'https://api.meraki.com/api/v0/networks/{0}/devices/"+str(row['serial'])+"'.format(str(networkid))\n")
+		# file.write("\t\tdashboard = session.put(puturl, json="+str(row)+", headers=headers)\n")
 		if 'switchProfileId' in row:
 			switchports=meraki.switch_ports.get_device_switch_ports(row['serial'])
-			for port in switchports:
-				file.write("\t\tputurl = 'https://api.meraki.com/api/v0/networks/{0}/devices/"+str(row['serial'])+"/switchPorts/"+str(port['number'])+"'.format(str(networkid))\n")
-				file.write("\t\tdashboard = session.put(puturl, json="+str(port)+", headers=headers)\n")
+			url = "https://api.meraki.com/api/v0/devices/{}/switchPorts".format(str(row['serial']))
 
+			payload = None
+
+			headers = {
+    			"Content-Type": "application/json",
+    			"Accept": "application/json",
+    			"X-Cisco-Meraki-API-Key": "d5c1be108a9dc2c89ea4ba757abc2355b704e774"
+			}
+
+			response = requests.request('GET', url, headers=headers, data = payload)
+			a = json.loads(response.text)
+			for port in a:
+				if 'macWhitelist' in port:
+					del port['macWhitelist']
+				if 'stickyMacWhitelist' in port:
+					del port['stickyMacWhitelist']
+				if 'stickyMacWhitelistLimit' in port:
+					del port['stickyMacWhitelistLimit']
+
+				dumpsport = json.dumps(port)
+				for key, value in port.items():
+					if value == None:
+						a = "null"
+						b = a.strip('"')
+						# print(b)
+						port[key] = b
+						# print(port)
+				
+				
+				print(dumpsport.replace('"null"','null'))
+				print("payload = '"+dumpsport+"'")
+
+				file.write("\t\tputurl = 'https://api.meraki.com/api/v0/devices/"+str(row['serial'])+"/switchPorts/"+str(port['number'])+"'\n")
+				file.write("\t\tprint('Restoring configuration Port"+str(port['number'])+" switch "+str(row['serial'])+"',file=f)\n")
+				# file.write("\t\tprint('Restoring Port"+str(port['number'])+"',file=f)\n")
+				file.write("\t\tpayload = '"+dumpsport+"'\n")
+				# file.write("\t\tpayload = "+str(port)+"\n")
+				file.write("\t\tresponse = requests.request('PUT', puturl, headers=headers, data = payload)\n")
+
+
+
+				# file.write("\t\tdashboard = session.put(puturl, json="+str(port)+", headers=headers)\n")
 
 def backup_network(ARG_ORGID, NET_ID, ARG_APIKEY):
 
@@ -299,17 +357,12 @@ def backup_network(ARG_ORGID, NET_ID, ARG_APIKEY):
 		file.write("\t\tposturl = 'https://api.meraki.com/api/v0/organizations/{0}/networks'.format(str(ARG_ORGID))\n")
 		file.write("\t\tdashboard = session.post(posturl, json="+payload+", headers=headers)\n")
 		file.write("\t\tdashboard.raise_for_status()\n")
+		# file.write("\t\tglobal networkid\n")
 		file.write("\t\tnetworkid=dashboard.json()['id']\n")
+		file.write("\t\tprint('Networkid:  ',dashboard.json()['id'], file=f)\n")
+		file.write("\t\tprint('Dashboard:  ',dashboard.json(), file=f)\n")
 		file.write("\n")
 
-		# print('Writing admins', file=f)
-		# f.flush()
-		# print('Writing mx vpn fw rules', file=f)
-		# f.flush()
-		# print('Writing snmp settings', file=f)
-		# f.flush()
-		# print('Writing non meraki vpn peers', file=f)
-		# f.flush()
 
 		try:
 			print('Writing mx vlans', file=f)
@@ -347,6 +400,42 @@ def backup_network(ARG_ORGID, NET_ID, ARG_APIKEY):
 			print("no WiFi settings",file=f)
 			f.flush()
 		try:
+			print('Writing device properties', file=f)
+			f.flush()
+			write_devices_props(file,meraki,row['id'])
+		except:
+			print("no devices",file=f)
+			f.flush()
+		
+		# End of First Function block
+		file.write("\texcept requests.exceptions.HTTPError as err:\n")
+		file.write("\t\tprint(err,file=f)\n")
+		file.write("\t\tprint('Can not add network "+row['name']+" - it probably already exists. Change the Network name and make a new backup.',file=f)\n")
+		file.write("\tprint('Restoring Complete, move your switchs to the new network and restore the switch configuration.',file=f)\n")
+		file.write("\treturn networkid\n")
+		file.write("\tf.flush()\n")
+		file.write("\tf.close()\n")
+		file.write("\n")
+		file.write("\n");
+
+		# Start second Function block
+		file.write("def restore_switchports(ARG_APIKEY):\n");
+		file.write("\tabspath = os.path.abspath(__file__)\n");
+		file.write("\tlog_file = os.path.abspath(__file__  + ""'/../../logs/log_file.log'"")\n");
+		file.write("\tf = open(log_file, 'w')\n");
+		file.write("\n");
+		file.write("\theaders = {\n");
+		file.write("\t\t'x-cisco-meraki-api-key': ARG_APIKEY,\n");
+		file.write("\t\t'Content-Type': 'application/json',\n");
+		file.write("\t\t'Accept': 'application/json',\n");
+		file.write("\t\t}\n");
+		file.write("\n");
+		file.write("\tsession = requests.Session()\n")														
+		file.write("\n");					  
+		file.write("\n");
+		file.write("\ttry:\n")
+
+		try:
 			print('Writing switch ports', file=f)
 			f.flush()
 			write_mydevices(file,meraki,row['id'])
@@ -356,8 +445,8 @@ def backup_network(ARG_ORGID, NET_ID, ARG_APIKEY):
 			f.flush()
 		file.write("\texcept requests.exceptions.HTTPError as err:\n")
 		file.write("\t\tprint(err,file=f)\n")
-		file.write("\t\tprint('Can not add network "+row['name']+" - it probably already exists. Change the Network name and make a new backup.',file=f)\n")
-		file.write("\tprint('Restoring Complete',file=f)\n")
+		file.write("\t\tprint('There was an error restoring the switchs configuration, check the logs for more details.',file=f)\n")
+		file.write("\tprint('Restoring Switch configuration complete.',file=f)\n")
 		file.write("\tf.flush()\n")
 		file.write("\tf.close()\n")
 		file.write("\n");

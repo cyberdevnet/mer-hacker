@@ -15,10 +15,12 @@ const fs = require('browserify-fs');
 export default function BackupRestore(ac) {
   const [loadingButtonBackup, setloadingButtonBackup] = useState(false);
   const [loadingButtonRestore, setloadingButtonRestore] = useState(false);
+  const [loadingButtonRestoreSwitch, setloadingButtonRestoreSwitch] = useState(false);
   // const [displayButtons, setdisplayButtons] = useState({ display: 'none' });
   const [triggerBackup, settriggerBackup] = useState(0);
   const [triggerFile, settriggerFile] = useState(0);
   const [triggerRestore, settriggerRestore] = useState(0);
+  const [triggerRestoreSwitch, settriggerRestoreSwitch] = useState(0);
   // eslint-disable-next-line
   const [errorMessage, seterrorMessage] = useState(null);
   const [liveLogs, setliveLogs] = useState('');
@@ -66,6 +68,7 @@ export default function BackupRestore(ac) {
   };
 
 
+
   const HandleRestore = (e) => {
     e.preventDefault();
     ac.dc.setswitchConfirmRestore(true)
@@ -85,6 +88,31 @@ export default function BackupRestore(ac) {
     setshowLiveLogs(true)
     if (triggerRestore > 3) {
       settriggerRestore(0);
+    }
+  };
+
+
+
+  const HandleRestoreSwitch = (f) => {
+    f.preventDefault();
+    ac.dc.setswitchConfirmRestoreSwitch(true)
+    ac.dc.setshowRestorescript(false)
+    setshowLiveLogs(false)
+
+  };
+
+  const CancelRestoreSwitch = (f) => {
+    f.preventDefault();
+    ac.dc.setswitchConfirmRestoreSwitch(false);
+  };
+
+  const ConfirmRestoreSwitch = (f) => {
+    f.preventDefault();
+    ac.dc.setswitchConfirmRestoreSwitch(false)
+    settriggerRestoreSwitch(triggerRestoreSwitch + 1);
+    setshowLiveLogs(true)
+    if (triggerRestoreSwitch > 3) {
+      settriggerRestoreSwitch(0);
     }
   };
 
@@ -254,6 +282,65 @@ export default function BackupRestore(ac) {
   }, [triggerRestore]);
 
 
+
+  const isFirstRunRestoreSwitch = useRef(true);
+  useEffect(() => {
+    if (isFirstRunRestoreSwitch.current) {
+      isFirstRunRestoreSwitch.current = false;
+      return;
+    }
+    async function RestoreSwitch() {
+      // if (ac.dc.showRestorescript === true) {
+
+      setloadingButtonRestoreSwitch(true);
+      ac.dc.setshowRestorescript(false)
+
+      const data = new FormData()
+      const file = new Blob([ac.dc.restoreScript], { type: 'text/plain' });
+      data.append('file', file, 'meraki_restore_network.py')
+
+      axios.post("/upload", data, { // receive two parameter endpoint url ,form data 
+      })
+
+
+      fetch("/run_restore_switch/", {
+        method: ["POST"],
+        cache: "no-cache",
+        headers: {
+          content_type: "application/json",
+        },
+        body: JSON.stringify(APIbody2),
+      })
+
+        .then((res) => {
+          console.log('POST response: ', res);
+        })
+
+
+        .then(() => {
+          setloadingButtonRestoreSwitch(false)
+        })
+
+      // } else {
+      //   seterrorMessage(
+      //     <div className="form-input-error-msg alert alert-danger">
+      //       <span className="glyphicon glyphicon-exclamation-sign"></span>
+      //     Check the script before restoring the network.
+      //   </div>
+      //   )
+      // }
+
+    }
+    RestoreSwitch();
+    return () => {
+      ac.dc.setshowRestorescript(false)
+      ac.dc.setalert(false);
+      seterrorMessage(null);
+    };
+    // eslint-disable-next-line
+  }, [triggerRestoreSwitch]);
+
+
   const isFirstRunLogs = useRef(true);
   useEffect(() => {
     if (isFirstRunLogs.current) {
@@ -379,6 +466,22 @@ export default function BackupRestore(ac) {
                 {loadingButtonRestore && <span>Restoring</span>}
                 {!loadingButtonRestore && <span>Restore</span>}
               </button>
+              <button
+                style={ac.dc.displayButtons}
+                id="restore"
+                className="btn btn-danger"
+                onClick={!loadingButtonRestoreSwitch ? HandleRestoreSwitch : null}
+                disabled={loadingButtonRestoreSwitch}
+              >
+                {loadingButtonRestoreSwitch && (
+                  <i
+                    className="fa fa-refresh fa-spin"
+                    style={{ marginRight: "5px" }}
+                  />
+                )}
+                {loadingButtonRestoreSwitch && <span>Restoring</span>}
+                {!loadingButtonRestoreSwitch && <span>Restore Switchs</span>}
+              </button>
             </div>
 
           </div>
@@ -388,9 +491,9 @@ export default function BackupRestore(ac) {
       <div>
         <ReactModal
           isOpen={ac.dc.switchConfirmRestore}
-          contentLabel="Confirm Modal"
-          className="Modal"
-          overlayClassName="Overlay"
+          contentLabel="Confirm Restore Modal"
+          className="Modal-restore"
+          overlayClassName="Overlay-restore"
           onRequestClose={CancelRestore}
         >
           <div>
@@ -399,6 +502,22 @@ export default function BackupRestore(ac) {
           </div>
           <button onClick={CancelRestore} type="button" className="btn btn-secondary" >Cancel</button>
           <button onClick={ConfirmRestore} type="button" className="btn btn-danger">Restore</button>
+        </ReactModal>
+      </div>
+      <div>
+        <ReactModal
+          isOpen={ac.dc.switchConfirmRestoreSwitch}
+          contentLabel="Confirm Restore Switch Modal"
+          className="Modal-restore-switch"
+          overlayClassName="Overlay-restore-switch"
+          onRequestClose={CancelRestoreSwitch}
+        >
+          <div>
+            <p>Are you sure you want to restore the switch configuration? </p>
+            {/* <p className="text-secondary"><small>switch configuration will be copied from {ac.dc.network}.</small></p> */}
+          </div>
+          <button onClick={CancelRestoreSwitch} type="button" className="btn btn-secondary" >Cancel</button>
+          <button onClick={ConfirmRestoreSwitch} type="button" className="btn btn-danger">Restore</button>
         </ReactModal>
       </div>
 

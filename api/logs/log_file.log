@@ -1,3 +1,11 @@
-Found a total of 58 switches configured across 24 networks in this organization.
-Searching on list of 1 MACs in file, with first and last addresses being A0:42:3F:35:18:2D and A0:42:3F:35:18:2D, respectively.
-Found 1 matched MAC addresses on switch Q2KW-6R4Q-389G
+Restoring configuration Port1 switch Q2HP-QSVT-LBLV
+Restoring configuration Port2 switch Q2HP-QSVT-LBLV
+Restoring configuration Port3 switch Q2HP-QSVT-LBLV
+Restoring configuration Port4 switch Q2HP-QSVT-LBLV
+Restoring configuration Port5 switch Q2HP-QSVT-LBLV
+Restoring configuration Port6 switch Q2HP-QSVT-LBLV
+Restoring configuration Port7 switch Q2HP-QSVT-LBLV
+Restoring configuration Port8 switch Q2HP-QSVT-LBLV
+Restoring configuration Port9 switch Q2HP-QSVT-LBLV
+Restoring configuration Port10 switch Q2HP-QSVT-LBLV
+Restoring Switch configuration complete.

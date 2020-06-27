@@ -338,6 +338,29 @@ def run_restore():
         return  {'error': err}
 
 
+@ app.route('/run_restore_switch/', methods=['GET', 'POST'])
+def run_restore_switch():
+    try:
+        if request.method == 'POST':
+            importlib.reload(meraki_restore_network)
+            global data
+            data = request.get_json()
+            # NET_ID = data['NET_ID']
+            networkid = 'L_681169443639808523'
+            ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
+            ARG_ORGNAME = data['ARG_ORGNAME']
+            SERIAL_NUM = data['SERIAL_NUM']
+            ARG_ORGID = data['ARG_ORGID']
+
+            return {'backup': meraki_restore_network.restore_switchports(ARG_APIKEY)}
+        else:
+
+            return {'backup': 'backup'}
+    except Exception as err:
+        print('Error: ', err)
+        return  {'error': err}
+
+
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000)

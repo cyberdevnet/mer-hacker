@@ -42,7 +42,7 @@ export default function LiveLog(ac) {
       // auto-clearing after 30 sec
       setTimeout(() => {
         clearInterval(interval)
-      }, 30000);
+      }, 60000);
 
     } else if (!showDebug) {
       clearInterval(interval)

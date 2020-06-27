@@ -74,7 +74,7 @@ def get_organizations():
             organizations = dashboard.organizations.getOrganizations()
             return {'organizations': organizations}
     except meraki.APIError as err:
-        print(err)
+        print('Error: ', err)
         flash('Organization not found, please check your API key and your internet connection')
         flash(err)
         return {'error' : [render_template('flash_template.html')]}
@@ -97,7 +97,7 @@ def get_networks():
                 data['organizationId'])
             return {'networks': networks}
     except meraki.APIError as err:
-        print(err)
+        print('Error: ', err)
         error = (err.message['errors'][0])
         flash(error)
         return {'error' : [render_template('flash_template.html'),err.status]}
@@ -118,7 +118,7 @@ def get_devices():
                 data['networkId'])
             return {'devices': devices}
     except meraki.APIError as err:
-        print(err)
+        print('Error: ', err)
         error = (err.message['errors'][0])
         flash(error)
         return {'error' : [render_template('flash_template.html'),err.status]}
@@ -138,7 +138,7 @@ def get_subnets():
                 data['networkId'])
             return {'vlans': vlans}
     except meraki.APIError as err:
-        print(err)
+        print('Error: ', err)
         error = (err.message['errors'][0])
         flash(error)
         return {'error' : [render_template('flash_template.html'),err.status]}
@@ -160,7 +160,7 @@ def clients():
             clients = dashboard.clients.getNetworkClients(NET_ID, perPage=1000,timespan=3600)
             return {'clients': clients}
     except meraki.APIError as err:
-        print(err)
+        print('Error: ', err)
         error = (err.message['errors'][0])
         flash(error)
         return {'error' : [render_template('flash_template.html'),err.status]}
@@ -180,7 +180,7 @@ def device_status():
                 data['organizationId'])
             return {'deviceStatus': deviceStatus}
     except meraki.APIError as err:
-        print(err)
+        print('Error: ', err)
         error = (err.message['errors'][0])
         flash(error)
         return {'error' : [render_template('flash_template.html'),err.status]}
@@ -216,7 +216,7 @@ def get_all_networks_subnets():
             print('script end')
             return(vlans)
     except meraki.APIError as err:
-        print(err)
+        print('Error: ', err)
         error = (err.message['errors'][0])
         flash(error)
         return {'error' : [render_template('flash_template.html'),err.status]}
@@ -281,7 +281,7 @@ def traffic_analysis():
                 NET_ID, timespan=TIME_SPAN, deviceType=DEV_TYPE)
             return {'analysis': analysis}
     except meraki.APIError as err:
-        print(err)
+        print('Error: ', err)
         error = (err.message['errors'][0])
         flash(error)
         return {'error' : [render_template('flash_template.html'),err.status]}
@@ -310,7 +310,7 @@ def run_backup():
         flash(err)
         return {'error' : [render_template('flash_template.html')]}
     # except meraki.APIError as err:
-    #     print(err)
+    #     print('Error: ', err)
     #     error = (err.message['errors'][0])
     #     flash(error)
     #     return {'error' : [render_template('flash_template.html'),err.status]}
@@ -334,7 +334,7 @@ def run_restore():
 
             return {'backup': 'backup'}
     except Exception as err:
-        print(err)
+        print('Error: ', err)
         return  {'error': err}
 
 

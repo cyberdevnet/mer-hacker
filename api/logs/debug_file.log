@@ -1,472 +1,494 @@
-2020-06-25 21:35:30,823 - engineio.server - INFO - Server initialized for eventlet.
-2020-06-25 21:35:30,835 - werkzeug - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
-2020-06-25 21:35:33,842 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-06-25 21:35:34,037 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/admins HTTP/1.1" 302 None
-2020-06-25 21:35:34,043 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-06-25 21:35:34,374 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/admins HTTP/1.1" 200 None
-2020-06-25 21:35:34,491 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/vpnFirewallRules HTTP/1.1" 302 None
-2020-06-25 21:35:34,869 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/vpnFirewallRules HTTP/1.1" 200 None
-2020-06-25 21:35:34,916 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/snmp HTTP/1.1" 302 None
-2020-06-25 21:35:35,172 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/snmp HTTP/1.1" 200 None
-2020-06-25 21:35:35,297 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/thirdPartyVPNPeers HTTP/1.1" 302 None
-2020-06-25 21:35:35,617 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/thirdPartyVPNPeers HTTP/1.1" 200 None
-2020-06-25 21:35:35,666 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478 HTTP/1.1" 302 None
-2020-06-25 21:35:35,906 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478 HTTP/1.1" 200 None
-2020-06-25 21:35:35,954 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/vlansEnabledState HTTP/1.1" 302 None
-2020-06-25 21:35:36,212 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/vlansEnabledState HTTP/1.1" 200 None
-2020-06-25 21:35:36,260 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/vlans HTTP/1.1" 302 None
-2020-06-25 21:35:36,539 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/vlans HTTP/1.1" 200 None
-2020-06-25 21:35:36,665 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/cellularFirewallRules HTTP/1.1" 302 None
-2020-06-25 21:35:36,969 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/cellularFirewallRules HTTP/1.1" 200 None
-2020-06-25 21:35:37,065 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:35:37,339 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:35:37,393 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/siteToSiteVpn HTTP/1.1" 302 None
-2020-06-25 21:35:37,744 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/siteToSiteVpn HTTP/1.1" 200 None
-2020-06-25 21:35:37,847 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids HTTP/1.1" 302 None
-2020-06-25 21:35:38,250 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids HTTP/1.1" 200 None
-2020-06-25 21:35:38,300 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/0/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:35:38,597 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/0/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:35:38,660 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/1/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:35:38,908 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/1/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:35:38,961 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/2/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:35:39,218 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/2/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:35:39,274 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/3/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:35:39,602 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/3/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:35:39,659 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/4/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:35:39,928 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/4/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:35:39,978 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/5/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:35:40,236 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/5/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:35:40,290 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/6/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:35:40,635 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/6/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:35:40,738 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/7/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:35:41,033 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/7/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:35:41,083 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/8/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:35:41,365 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/8/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:35:41,412 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/9/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:35:41,688 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/9/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:35:41,738 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/10/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:35:42,008 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/10/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:35:42,058 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/11/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:35:42,342 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/11/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:35:42,396 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/12/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:35:42,664 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/12/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:35:42,715 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/13/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:35:42,971 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/13/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:35:43,066 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/14/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:35:43,336 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/ssids/14/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:35:43,389 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/devices HTTP/1.1" 302 None
-2020-06-25 21:35:43,736 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808478/devices HTTP/1.1" 200 None
-2020-06-25 21:35:43,739 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:35:43] "[37mPOST /run_backup/ HTTP/1.1[0m" 200 -
-2020-06-25 21:36:04,474 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-06-25 21:36:04,654 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "POST /api/v0/organizations/764320/admins HTTP/1.1" 308 None
-2020-06-25 21:36:04,657 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-06-25 21:36:05,030 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "POST /api/v0/organizations/764320/admins HTTP/1.1" 400 None
-2020-06-25 21:36:05,118 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/organizations/764320/vpnFirewallRules HTTP/1.1" 308 None
-2020-06-25 21:36:05,378 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/organizations/764320/vpnFirewallRules HTTP/1.1" 200 None
-2020-06-25 21:36:05,437 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/organizations/764320/snmp HTTP/1.1" 308 None
-2020-06-25 21:36:05,670 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/organizations/764320/snmp HTTP/1.1" 200 None
-2020-06-25 21:36:05,782 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/organizations/764320/thirdPartyVPNPeers HTTP/1.1" 308 None
-2020-06-25 21:36:06,040 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/organizations/764320/thirdPartyVPNPeers HTTP/1.1" 200 None
-2020-06-25 21:36:06,092 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "POST /api/v0/organizations/764320/networks HTTP/1.1" 308 None
-2020-06-25 21:36:08,387 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "POST /api/v0/organizations/764320/networks HTTP/1.1" 201 None
-2020-06-25 21:36:08,425 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/vlansEnabledState HTTP/1.1" 308 None
-2020-06-25 21:36:08,927 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/vlansEnabledState HTTP/1.1" 200 None
-2020-06-25 21:36:08,965 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "POST /api/v0/networks/L_681169443639808479/vlans HTTP/1.1" 308 None
-2020-06-25 21:36:09,220 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "POST /api/v0/networks/L_681169443639808479/vlans HTTP/1.1" 400 None
-2020-06-25 21:36:09,258 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "POST /api/v0/networks/L_681169443639808479/vlans HTTP/1.1" 308 None
-2020-06-25 21:36:09,606 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "POST /api/v0/networks/L_681169443639808479/vlans HTTP/1.1" 201 None
-2020-06-25 21:36:09,675 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "POST /api/v0/networks/L_681169443639808479/vlans HTTP/1.1" 308 None
-2020-06-25 21:36:10,020 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "POST /api/v0/networks/L_681169443639808479/vlans HTTP/1.1" 201 None
-2020-06-25 21:36:10,099 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/cellularFirewallRules HTTP/1.1" 308 None
-2020-06-25 21:36:10,482 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/cellularFirewallRules HTTP/1.1" 200 None
-2020-06-25 21:36:10,569 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/l3FirewallRules HTTP/1.1" 308 None
-2020-06-25 21:36:11,018 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:36:11,061 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/siteToSiteVpn HTTP/1.1" 308 None
-2020-06-25 21:36:11,531 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/siteToSiteVpn HTTP/1.1" 200 None
-2020-06-25 21:36:11,564 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/0 HTTP/1.1" 308 None
-2020-06-25 21:36:12,006 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/0 HTTP/1.1" 200 None
-2020-06-25 21:36:12,041 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/0/l3FirewallRules HTTP/1.1" 308 None
-2020-06-25 21:36:12,393 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/0/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:36:12,430 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/1 HTTP/1.1" 308 None
-2020-06-25 21:36:12,849 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/1 HTTP/1.1" 200 None
-2020-06-25 21:36:12,887 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/1/l3FirewallRules HTTP/1.1" 308 None
-2020-06-25 21:36:13,233 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/1/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:36:13,305 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/2 HTTP/1.1" 308 None
-2020-06-25 21:36:13,736 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/2 HTTP/1.1" 200 None
-2020-06-25 21:36:13,773 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/2/l3FirewallRules HTTP/1.1" 308 None
-2020-06-25 21:36:14,118 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/2/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:36:14,199 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/3 HTTP/1.1" 308 None
-2020-06-25 21:36:14,608 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/3 HTTP/1.1" 200 None
-2020-06-25 21:36:14,696 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/3/l3FirewallRules HTTP/1.1" 308 None
-2020-06-25 21:36:15,355 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/3/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:36:15,391 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/4 HTTP/1.1" 308 None
-2020-06-25 21:36:15,959 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/4 HTTP/1.1" 200 None
-2020-06-25 21:36:15,998 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/4/l3FirewallRules HTTP/1.1" 308 None
-2020-06-25 21:36:16,308 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/4/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:36:16,393 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/5 HTTP/1.1" 308 None
-2020-06-25 21:36:16,764 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/5 HTTP/1.1" 200 None
-2020-06-25 21:36:16,931 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/5/l3FirewallRules HTTP/1.1" 308 None
-2020-06-25 21:36:17,248 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/5/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:36:17,286 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/6 HTTP/1.1" 308 None
-2020-06-25 21:36:17,618 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/6 HTTP/1.1" 200 None
-2020-06-25 21:36:17,661 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/6/l3FirewallRules HTTP/1.1" 308 None
-2020-06-25 21:36:17,949 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/6/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:36:18,017 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/7 HTTP/1.1" 308 None
-2020-06-25 21:36:18,313 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/7 HTTP/1.1" 200 None
-2020-06-25 21:36:18,390 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/7/l3FirewallRules HTTP/1.1" 308 None
-2020-06-25 21:36:18,672 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/7/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:36:18,751 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/8 HTTP/1.1" 308 None
-2020-06-25 21:36:19,025 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/8 HTTP/1.1" 200 None
-2020-06-25 21:36:19,097 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/8/l3FirewallRules HTTP/1.1" 308 None
-2020-06-25 21:36:19,368 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/8/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:36:19,452 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/9 HTTP/1.1" 308 None
-2020-06-25 21:36:19,753 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/9 HTTP/1.1" 200 None
-2020-06-25 21:36:19,789 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/9/l3FirewallRules HTTP/1.1" 308 None
-2020-06-25 21:36:20,061 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/9/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:36:20,093 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/10 HTTP/1.1" 308 None
-2020-06-25 21:36:20,411 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/10 HTTP/1.1" 200 None
-2020-06-25 21:36:20,455 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/10/l3FirewallRules HTTP/1.1" 308 None
-2020-06-25 21:36:20,716 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/10/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:36:20,755 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/11 HTTP/1.1" 308 None
-2020-06-25 21:36:21,228 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/11 HTTP/1.1" 200 None
-2020-06-25 21:36:21,258 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/11/l3FirewallRules HTTP/1.1" 308 None
-2020-06-25 21:36:21,517 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/11/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:36:21,548 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/12 HTTP/1.1" 308 None
-2020-06-25 21:36:21,837 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/12 HTTP/1.1" 200 None
-2020-06-25 21:36:21,906 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/12/l3FirewallRules HTTP/1.1" 308 None
-2020-06-25 21:36:22,150 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/12/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:36:22,184 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/13 HTTP/1.1" 308 None
-2020-06-25 21:36:22,509 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/13 HTTP/1.1" 200 None
-2020-06-25 21:36:22,550 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/13/l3FirewallRules HTTP/1.1" 308 None
-2020-06-25 21:36:22,926 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/13/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:36:22,961 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/14 HTTP/1.1" 308 None
-2020-06-25 21:36:23,215 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/14 HTTP/1.1" 200 None
-2020-06-25 21:36:23,296 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/14/l3FirewallRules HTTP/1.1" 308 None
-2020-06-25 21:36:23,549 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "PUT /api/v0/networks/L_681169443639808479/ssids/14/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:36:23,555 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:36:23] "[37mPOST /run_restore/ HTTP/1.1[0m" 200 -
-2020-06-25 21:44:57,450 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:44:57] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-06-25 21:44:57,452 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fde11a217f0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-06-25 21:44:57,453 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
-2020-06-25 21:44:57,455 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-06-25 21:44:57,617 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 302 None
-2020-06-25 21:44:57,620 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-06-25 21:44:57,958 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 200 None
-2020-06-25 21:44:57,959 - meraki - INFO - Organizations, getOrganizations - 200 OK
-2020-06-25 21:44:57,960 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:44:57] "[37mGET /organizations HTTP/1.1[0m" 200 -
-2020-06-25 21:45:00,150 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:45:00] "[37mPOST /networks HTTP/1.1[0m" 200 -
-2020-06-25 21:45:00,153 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fde11a21e80>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-06-25 21:45:00,155 - meraki - DEBUG - {'tags': ['Networks'], 'operation': 'getOrganizationNetworks', 'method': 'GET', 'url': '/organizations/764320/networks', 'params': {}}
-2020-06-25 21:45:00,158 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-06-25 21:45:00,312 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/networks HTTP/1.1" 302 None
-2020-06-25 21:45:00,316 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-06-25 21:45:00,614 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/networks HTTP/1.1" 200 None
-2020-06-25 21:45:00,615 - meraki - INFO - Networks, getOrganizationNetworks - 200 OK
-2020-06-25 21:45:00,616 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:45:00] "[37mGET /networks HTTP/1.1[0m" 200 -
-2020-06-25 21:45:01,669 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:45:01] "[37mPOST /devices HTTP/1.1[0m" 200 -
-2020-06-25 21:45:01,674 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:45:01] "[37mPOST /clients HTTP/1.1[0m" 200 -
-2020-06-25 21:45:01,687 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fde10fff9d0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-06-25 21:45:01,689 - meraki - DEBUG - {'tags': ['Devices'], 'operation': 'getNetworkDevices', 'method': 'GET', 'url': '/networks/L_681169443639788368/devices', 'params': None}
-2020-06-25 21:45:01,691 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-06-25 21:45:01,702 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fde11017370>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-06-25 21:45:01,705 - meraki - DEBUG - {'tags': ['Clients'], 'operation': 'getNetworkClients', 'page': 1}
-2020-06-25 21:45:01,707 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-06-25 21:45:01,834 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 302 None
-2020-06-25 21:45:01,839 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-06-25 21:45:01,854 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/clients?perPage=1000&timespan=3600 HTTP/1.1" 302 None
-2020-06-25 21:45:01,857 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-06-25 21:45:02,315 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/clients?perPage=1000&timespan=3600&perPage=1000&timespan=3600 HTTP/1.1" 200 None
-2020-06-25 21:45:02,317 - meraki - INFO - Clients, getNetworkClients; page 1 - 200 OK
-2020-06-25 21:45:02,319 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:45:02] "[37mGET /clients HTTP/1.1[0m" 200 -
-2020-06-25 21:45:02,456 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 200 None
-2020-06-25 21:45:02,457 - meraki - INFO - Devices, getNetworkDevices - 200 OK
-2020-06-25 21:45:02,458 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:45:02] "[37mGET /devices HTTP/1.1[0m" 200 -
-2020-06-25 21:45:10,302 - urllib3.connectionpool - DEBUG - Resetting dropped connection: api.meraki.com
-2020-06-25 21:45:10,502 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/admins HTTP/1.1" 302 None
-2020-06-25 21:45:10,505 - urllib3.connectionpool - DEBUG - Resetting dropped connection: n210.meraki.com
-2020-06-25 21:45:10,955 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/admins HTTP/1.1" 200 None
-2020-06-25 21:45:11,091 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/vpnFirewallRules HTTP/1.1" 302 None
-2020-06-25 21:45:11,374 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/vpnFirewallRules HTTP/1.1" 200 None
-2020-06-25 21:45:11,425 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/snmp HTTP/1.1" 302 None
-2020-06-25 21:45:11,727 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/snmp HTTP/1.1" 200 None
-2020-06-25 21:45:11,848 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/thirdPartyVPNPeers HTTP/1.1" 302 None
-2020-06-25 21:45:12,155 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/thirdPartyVPNPeers HTTP/1.1" 200 None
-2020-06-25 21:45:12,204 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368 HTTP/1.1" 302 None
-2020-06-25 21:45:12,486 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368 HTTP/1.1" 200 None
-2020-06-25 21:45:12,611 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/vlansEnabledState HTTP/1.1" 302 None
-2020-06-25 21:45:12,931 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/vlansEnabledState HTTP/1.1" 200 None
-2020-06-25 21:45:12,989 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/vlans HTTP/1.1" 302 None
-2020-06-25 21:45:13,237 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/vlans HTTP/1.1" 200 None
-2020-06-25 21:45:13,365 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/cellularFirewallRules HTTP/1.1" 302 None
-2020-06-25 21:45:13,631 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/cellularFirewallRules HTTP/1.1" 200 None
-2020-06-25 21:45:13,758 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:45:14,011 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:45:14,073 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/siteToSiteVpn HTTP/1.1" 302 None
-2020-06-25 21:45:14,468 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/siteToSiteVpn HTTP/1.1" 200 None
-2020-06-25 21:45:14,519 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids HTTP/1.1" 302 None
-2020-06-25 21:45:14,852 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids HTTP/1.1" 200 None
-2020-06-25 21:45:14,912 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/0/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:45:15,330 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/0/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:45:15,404 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/1/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:45:15,665 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/1/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:45:15,719 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/2/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:45:16,015 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/2/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:45:16,249 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/3/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:45:16,543 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/3/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:45:16,597 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/4/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:45:16,883 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/4/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:45:16,957 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/5/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:45:17,230 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/5/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:45:17,462 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/6/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:45:17,727 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/6/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:45:17,786 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/7/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:45:18,042 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/7/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:45:18,097 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/8/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:45:18,342 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/8/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:45:18,421 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/9/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:45:18,663 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/9/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:45:18,728 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/10/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:45:19,044 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/10/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:45:19,111 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/11/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:45:19,326 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/11/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:45:19,392 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/12/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:45:19,643 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/12/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:45:19,704 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/13/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:45:19,949 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/13/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:45:20,010 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/14/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:45:20,229 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/14/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:45:20,298 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 302 None
-2020-06-25 21:45:20,763 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 200 None
-2020-06-25 21:45:20,822 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/devices/Q2HP-QSVT-LBLV/switchPorts HTTP/1.1" 302 None
-2020-06-25 21:45:21,112 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/devices/Q2HP-QSVT-LBLV/switchPorts HTTP/1.1" 200 None
-2020-06-25 21:45:21,116 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:45:21] "[37mPOST /run_backup/ HTTP/1.1[0m" 200 -
-2020-06-25 21:45:58,925 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:45:58] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-06-25 21:45:58,929 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fde10fffd30>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-06-25 21:45:58,930 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
-2020-06-25 21:45:58,932 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-06-25 21:45:59,092 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 302 None
-2020-06-25 21:45:59,094 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-06-25 21:45:59,535 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 200 None
-2020-06-25 21:45:59,536 - meraki - INFO - Organizations, getOrganizations - 200 OK
-2020-06-25 21:45:59,537 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:45:59] "[37mGET /organizations HTTP/1.1[0m" 200 -
-2020-06-25 21:46:57,027 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:46:57] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-06-25 21:46:57,031 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fde11003b50>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-06-25 21:46:57,032 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
-2020-06-25 21:46:57,033 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-06-25 21:46:57,179 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 302 None
-2020-06-25 21:46:57,182 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-06-25 21:46:57,545 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 200 None
-2020-06-25 21:46:57,545 - meraki - INFO - Organizations, getOrganizations - 200 OK
-2020-06-25 21:46:57,546 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:46:57] "[37mGET /organizations HTTP/1.1[0m" 200 -
-2020-06-25 21:47:14,543 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fde10fff190>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-06-25 21:47:14,543 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
-2020-06-25 21:47:14,552 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:47:14] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-06-25 21:47:14,552 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-06-25 21:47:14,705 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 302 None
-2020-06-25 21:47:14,710 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-06-25 21:47:15,097 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 200 None
-2020-06-25 21:47:15,099 - meraki - INFO - Organizations, getOrganizations - 200 OK
-2020-06-25 21:47:15,100 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:47:15] "[37mGET /organizations HTTP/1.1[0m" 200 -
-2020-06-25 21:47:19,442 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:47:19] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-06-25 21:47:19,444 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fde1101b340>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-06-25 21:47:19,445 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
-2020-06-25 21:47:19,447 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-06-25 21:47:19,589 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 302 None
-2020-06-25 21:47:19,592 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-06-25 21:47:19,898 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 200 None
-2020-06-25 21:47:19,899 - meraki - INFO - Organizations, getOrganizations - 200 OK
-2020-06-25 21:47:19,900 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:47:19] "[37mGET /organizations HTTP/1.1[0m" 200 -
-2020-06-25 21:49:24,366 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fde11a70eb0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-06-25 21:49:24,369 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:49:24] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-06-25 21:49:24,370 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
-2020-06-25 21:49:24,376 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-06-25 21:49:24,525 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 302 None
-2020-06-25 21:49:24,531 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-06-25 21:49:24,985 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 200 None
-2020-06-25 21:49:24,986 - meraki - INFO - Organizations, getOrganizations - 200 OK
-2020-06-25 21:49:24,987 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:49:24] "[37mGET /organizations HTTP/1.1[0m" 200 -
-2020-06-25 21:53:53,694 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:53:53] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-06-25 21:53:53,696 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fde11003be0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-06-25 21:53:53,698 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
-2020-06-25 21:53:53,701 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-06-25 21:53:53,859 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 302 None
-2020-06-25 21:53:53,867 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-06-25 21:53:54,172 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 200 None
-2020-06-25 21:53:54,173 - meraki - INFO - Organizations, getOrganizations - 200 OK
-2020-06-25 21:53:54,175 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:53:54] "[37mGET /organizations HTTP/1.1[0m" 200 -
-2020-06-25 21:53:59,838 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:53:59] "[37mPOST /networks HTTP/1.1[0m" 200 -
-2020-06-25 21:53:59,840 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fde11a70f70>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-06-25 21:53:59,841 - meraki - DEBUG - {'tags': ['Networks'], 'operation': 'getOrganizationNetworks', 'method': 'GET', 'url': '/organizations/764320/networks', 'params': {}}
-2020-06-25 21:53:59,843 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-06-25 21:53:59,974 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/networks HTTP/1.1" 302 None
-2020-06-25 21:53:59,977 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-06-25 21:54:00,326 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/networks HTTP/1.1" 200 None
-2020-06-25 21:54:00,327 - meraki - INFO - Networks, getOrganizationNetworks - 200 OK
-2020-06-25 21:54:00,328 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:54:00] "[37mGET /networks HTTP/1.1[0m" 200 -
-2020-06-25 21:54:04,971 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fde11a35760>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-06-25 21:54:04,974 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:54:04] "[37mPOST /devices HTTP/1.1[0m" 200 -
-2020-06-25 21:54:04,974 - meraki - DEBUG - {'tags': ['Devices'], 'operation': 'getNetworkDevices', 'method': 'GET', 'url': '/networks/L_681169443639808479/devices', 'params': None}
-2020-06-25 21:54:04,976 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fde110390a0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-06-25 21:54:04,979 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-06-25 21:54:04,982 - meraki - DEBUG - {'tags': ['Clients'], 'operation': 'getNetworkClients', 'page': 1}
-2020-06-25 21:54:04,984 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:54:04] "[37mPOST /clients HTTP/1.1[0m" 200 -
-2020-06-25 21:54:04,987 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-06-25 21:54:05,113 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/clients?perPage=1000&timespan=3600 HTTP/1.1" 302 None
-2020-06-25 21:54:05,115 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-06-25 21:54:05,123 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/devices HTTP/1.1" 302 None
-2020-06-25 21:54:05,126 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-06-25 21:54:05,504 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/devices HTTP/1.1" 200 None
-2020-06-25 21:54:05,506 - meraki - INFO - Devices, getNetworkDevices - 200 OK
-2020-06-25 21:54:05,507 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:54:05] "[37mGET /devices HTTP/1.1[0m" 200 -
-2020-06-25 21:54:05,565 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/clients?perPage=1000&timespan=3600&perPage=1000&timespan=3600 HTTP/1.1" 200 None
-2020-06-25 21:54:05,566 - meraki - INFO - Clients, getNetworkClients; page 1 - 200 OK
-2020-06-25 21:54:05,567 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:54:05] "[37mGET /clients HTTP/1.1[0m" 200 -
-2020-06-25 21:54:08,444 - urllib3.connectionpool - DEBUG - Resetting dropped connection: api.meraki.com
-2020-06-25 21:54:08,621 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/admins HTTP/1.1" 302 None
-2020-06-25 21:54:08,624 - urllib3.connectionpool - DEBUG - Resetting dropped connection: n210.meraki.com
-2020-06-25 21:54:08,904 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/admins HTTP/1.1" 200 None
-2020-06-25 21:54:09,016 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/vpnFirewallRules HTTP/1.1" 302 None
-2020-06-25 21:54:09,237 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/vpnFirewallRules HTTP/1.1" 200 None
-2020-06-25 21:54:09,285 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/snmp HTTP/1.1" 302 None
-2020-06-25 21:54:09,509 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/snmp HTTP/1.1" 200 None
-2020-06-25 21:54:09,635 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/thirdPartyVPNPeers HTTP/1.1" 302 None
-2020-06-25 21:54:09,847 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/thirdPartyVPNPeers HTTP/1.1" 200 None
-2020-06-25 21:54:09,903 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479 HTTP/1.1" 302 None
-2020-06-25 21:54:10,150 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479 HTTP/1.1" 200 None
-2020-06-25 21:54:10,212 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/vlansEnabledState HTTP/1.1" 302 None
-2020-06-25 21:54:10,832 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/vlansEnabledState HTTP/1.1" 200 None
-2020-06-25 21:54:10,884 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/vlans HTTP/1.1" 302 None
-2020-06-25 21:54:11,270 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/vlans HTTP/1.1" 200 None
-2020-06-25 21:54:11,381 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/cellularFirewallRules HTTP/1.1" 302 None
-2020-06-25 21:54:11,697 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/cellularFirewallRules HTTP/1.1" 200 None
-2020-06-25 21:54:11,747 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:54:11,990 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:54:12,047 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/siteToSiteVpn HTTP/1.1" 302 None
-2020-06-25 21:54:12,299 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/siteToSiteVpn HTTP/1.1" 200 None
-2020-06-25 21:54:12,350 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids HTTP/1.1" 302 None
-2020-06-25 21:54:12,704 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids HTTP/1.1" 200 None
-2020-06-25 21:54:12,829 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/0/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:54:13,090 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/0/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:54:13,157 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/1/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:54:13,455 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/1/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:54:13,508 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/2/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:54:13,796 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/2/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:54:13,848 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/3/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:54:14,130 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/3/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:54:14,185 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/4/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:54:14,463 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/4/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:54:14,521 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/5/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:54:14,803 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/5/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:54:14,863 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/6/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:54:15,121 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/6/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:54:15,175 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/7/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:54:15,406 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/7/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:54:15,466 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/8/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:54:15,715 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/8/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:54:15,779 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/9/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:54:16,009 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/9/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:54:16,069 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/10/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:54:16,281 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/10/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:54:16,338 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/11/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:54:16,585 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/11/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:54:16,636 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/12/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:54:16,853 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/12/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:54:16,918 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/13/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:54:17,130 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/13/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:54:17,181 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/14/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:54:17,414 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/ssids/14/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:54:17,495 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/devices HTTP/1.1" 302 None
-2020-06-25 21:54:17,835 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639808479/devices HTTP/1.1" 200 None
-2020-06-25 21:54:17,837 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:54:17] "[37mPOST /run_backup/ HTTP/1.1[0m" 200 -
-2020-06-25 21:55:05,920 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:55:05] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-06-25 21:55:05,923 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fde11017c40>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-06-25 21:55:05,924 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
-2020-06-25 21:55:05,927 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-06-25 21:55:06,092 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 302 None
-2020-06-25 21:55:06,096 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-06-25 21:55:06,644 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 200 None
-2020-06-25 21:55:06,646 - meraki - INFO - Organizations, getOrganizations - 200 OK
-2020-06-25 21:55:06,647 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:55:06] "[37mGET /organizations HTTP/1.1[0m" 200 -
-2020-06-25 21:55:08,641 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:55:08] "[37mPOST /networks HTTP/1.1[0m" 200 -
-2020-06-25 21:55:08,646 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fde1101b250>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-06-25 21:55:08,647 - meraki - DEBUG - {'tags': ['Networks'], 'operation': 'getOrganizationNetworks', 'method': 'GET', 'url': '/organizations/764320/networks', 'params': {}}
-2020-06-25 21:55:08,649 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-06-25 21:55:08,773 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/networks HTTP/1.1" 302 None
-2020-06-25 21:55:08,777 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-06-25 21:55:09,116 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/networks HTTP/1.1" 200 None
-2020-06-25 21:55:09,121 - meraki - INFO - Networks, getOrganizationNetworks - 200 OK
-2020-06-25 21:55:09,123 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:55:09] "[37mGET /networks HTTP/1.1[0m" 200 -
-2020-06-25 21:55:10,034 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:55:10] "[37mPOST /devices HTTP/1.1[0m" 200 -
-2020-06-25 21:55:10,037 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fde1101bc40>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-06-25 21:55:10,039 - meraki - DEBUG - {'tags': ['Devices'], 'operation': 'getNetworkDevices', 'method': 'GET', 'url': '/networks/L_681169443639788368/devices', 'params': None}
-2020-06-25 21:55:10,041 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-06-25 21:55:10,070 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:55:10] "[37mPOST /clients HTTP/1.1[0m" 200 -
-2020-06-25 21:55:10,074 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fde11a35ee0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-06-25 21:55:10,077 - meraki - DEBUG - {'tags': ['Clients'], 'operation': 'getNetworkClients', 'page': 1}
-2020-06-25 21:55:10,081 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-06-25 21:55:10,183 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 302 None
-2020-06-25 21:55:10,218 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-06-25 21:55:10,219 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/clients?perPage=1000&timespan=3600 HTTP/1.1" 302 None
-2020-06-25 21:55:10,222 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-06-25 21:55:10,655 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/clients?perPage=1000&timespan=3600&perPage=1000&timespan=3600 HTTP/1.1" 200 None
-2020-06-25 21:55:10,657 - meraki - INFO - Clients, getNetworkClients; page 1 - 200 OK
-2020-06-25 21:55:10,659 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:55:10] "[37mGET /clients HTTP/1.1[0m" 200 -
-2020-06-25 21:55:10,798 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 200 None
-2020-06-25 21:55:10,799 - meraki - INFO - Devices, getNetworkDevices - 200 OK
-2020-06-25 21:55:10,801 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:55:10] "[37mGET /devices HTTP/1.1[0m" 200 -
-2020-06-25 21:55:15,355 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/admins HTTP/1.1" 302 None
-2020-06-25 21:55:15,594 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/admins HTTP/1.1" 200 None
-2020-06-25 21:55:15,699 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/vpnFirewallRules HTTP/1.1" 302 None
-2020-06-25 21:55:15,960 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/vpnFirewallRules HTTP/1.1" 200 None
-2020-06-25 21:55:16,012 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/snmp HTTP/1.1" 302 None
-2020-06-25 21:55:16,228 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/snmp HTTP/1.1" 200 None
-2020-06-25 21:55:16,353 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/thirdPartyVPNPeers HTTP/1.1" 302 None
-2020-06-25 21:55:16,557 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/thirdPartyVPNPeers HTTP/1.1" 200 None
-2020-06-25 21:55:16,624 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368 HTTP/1.1" 302 None
-2020-06-25 21:55:17,105 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368 HTTP/1.1" 200 None
-2020-06-25 21:55:17,168 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/vlansEnabledState HTTP/1.1" 302 None
-2020-06-25 21:55:17,434 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/vlansEnabledState HTTP/1.1" 200 None
-2020-06-25 21:55:17,493 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/vlans HTTP/1.1" 302 None
-2020-06-25 21:55:17,906 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/vlans HTTP/1.1" 200 None
-2020-06-25 21:55:17,969 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/cellularFirewallRules HTTP/1.1" 302 None
-2020-06-25 21:55:18,292 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/cellularFirewallRules HTTP/1.1" 200 None
-2020-06-25 21:55:18,450 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:55:18,755 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:55:18,816 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/siteToSiteVpn HTTP/1.1" 302 None
-2020-06-25 21:55:19,058 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/siteToSiteVpn HTTP/1.1" 200 None
-2020-06-25 21:55:19,113 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids HTTP/1.1" 302 None
-2020-06-25 21:55:19,463 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids HTTP/1.1" 200 None
-2020-06-25 21:55:19,522 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/0/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:55:20,020 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/0/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:55:20,077 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/1/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:55:20,395 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/1/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:55:20,455 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/2/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:55:20,781 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/2/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:55:21,047 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/3/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:55:21,365 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/3/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:55:21,419 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/4/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:55:21,718 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/4/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:55:21,780 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/5/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:55:22,046 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/5/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:55:22,103 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/6/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:55:22,367 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/6/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:55:22,421 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/7/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:55:22,788 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/7/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:55:22,844 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/8/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:55:23,175 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/8/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:55:23,237 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/9/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:55:23,587 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/9/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:55:23,653 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/10/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:55:23,983 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/10/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:55:24,048 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/11/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:55:24,341 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/11/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:55:24,394 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/12/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:55:24,675 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/12/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:55:24,731 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/13/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:55:24,997 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/13/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:55:25,087 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/14/l3FirewallRules HTTP/1.1" 302 None
-2020-06-25 21:55:25,348 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/14/l3FirewallRules HTTP/1.1" 200 None
-2020-06-25 21:55:25,403 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 302 None
-2020-06-25 21:55:25,834 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 200 None
-2020-06-25 21:55:25,893 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/devices/Q2HP-QSVT-LBLV/switchPorts HTTP/1.1" 302 None
-2020-06-25 21:55:26,171 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/devices/Q2HP-QSVT-LBLV/switchPorts HTTP/1.1" 200 None
-2020-06-25 21:55:26,176 - werkzeug - INFO - 127.0.0.1 - - [25/Jun/2020 21:55:26] "[37mPOST /run_backup/ HTTP/1.1[0m" 200 -
+2020-06-27 06:07:21,329 - engineio.server - INFO - Server initialized for eventlet.
+2020-06-27 06:07:21,341 - werkzeug - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2020-06-27 06:07:25,702 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:07:25] "[37mPOST /organizations HTTP/1.1[0m" 200 -
+2020-06-27 06:07:25,706 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f42b3bfc580>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-06-27 06:07:25,707 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
+2020-06-27 06:07:25,709 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-06-27 06:07:25,860 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 302 None
+2020-06-27 06:07:25,864 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-06-27 06:07:26,217 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 200 None
+2020-06-27 06:07:26,218 - meraki - INFO - Organizations, getOrganizations - 200 OK
+2020-06-27 06:07:26,219 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:07:26] "[37mGET /organizations HTTP/1.1[0m" 200 -
+2020-06-27 06:07:27,868 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:07:27] "[37mPOST /networks HTTP/1.1[0m" 200 -
+2020-06-27 06:07:27,874 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f42b3bfc460>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-06-27 06:07:27,874 - meraki - DEBUG - {'tags': ['Networks'], 'operation': 'getOrganizationNetworks', 'method': 'GET', 'url': '/organizations/764320/networks', 'params': {}}
+2020-06-27 06:07:27,876 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-06-27 06:07:28,001 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/networks HTTP/1.1" 302 None
+2020-06-27 06:07:28,005 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-06-27 06:07:28,395 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/networks HTTP/1.1" 200 None
+2020-06-27 06:07:28,396 - meraki - INFO - Networks, getOrganizationNetworks - 200 OK
+2020-06-27 06:07:28,397 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:07:28] "[37mGET /networks HTTP/1.1[0m" 200 -
+2020-06-27 06:07:36,942 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:07:36] "[37mPOST /devices HTTP/1.1[0m" 200 -
+2020-06-27 06:07:36,946 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f42b3c228e0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-06-27 06:07:36,952 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f42b3bbaca0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-06-27 06:07:36,956 - meraki - DEBUG - {'tags': ['Clients'], 'operation': 'getNetworkClients', 'page': 1}
+2020-06-27 06:07:36,955 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:07:36] "[37mPOST /clients HTTP/1.1[0m" 200 -
+2020-06-27 06:07:36,955 - meraki - DEBUG - {'tags': ['Devices'], 'operation': 'getNetworkDevices', 'method': 'GET', 'url': '/networks/L_681169443639788368/devices', 'params': None}
+2020-06-27 06:07:36,961 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-06-27 06:07:36,965 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-06-27 06:07:37,097 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/clients?perPage=1000&timespan=3600 HTTP/1.1" 302 None
+2020-06-27 06:07:37,103 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-06-27 06:07:37,100 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 302 None
+2020-06-27 06:07:37,108 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-06-27 06:07:37,442 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/clients?perPage=1000&timespan=3600&perPage=1000&timespan=3600 HTTP/1.1" 200 None
+2020-06-27 06:07:37,445 - meraki - INFO - Clients, getNetworkClients; page 1 - 200 OK
+2020-06-27 06:07:37,446 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:07:37] "[37mGET /clients HTTP/1.1[0m" 200 -
+2020-06-27 06:07:37,581 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 200 None
+2020-06-27 06:07:37,584 - meraki - INFO - Devices, getNetworkDevices - 200 OK
+2020-06-27 06:07:37,585 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:07:37] "[37mGET /devices HTTP/1.1[0m" 200 -
+2020-06-27 06:07:51,064 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:07:51] "[37mPOST /traffic_analysis/ HTTP/1.1[0m" 200 -
+2020-06-27 06:07:51,098 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f42b3bbed60>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-06-27 06:07:51,098 - meraki - DEBUG - {'tags': ['Networks'], 'operation': 'getNetworkTraffic', 'method': 'GET', 'url': '/networks/L_681169443639788368/traffic', 'params': {'timespan': 7200, 'deviceType': 'combined'}}
+2020-06-27 06:07:51,100 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-06-27 06:07:51,235 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/traffic?timespan=7200&deviceType=combined HTTP/1.1" 302 None
+2020-06-27 06:07:51,238 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-06-27 06:07:51,787 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/traffic?timespan=7200&deviceType=combined&timespan=7200&deviceType=combined HTTP/1.1" 400 None
+2020-06-27 06:07:51,789 - meraki - ERROR - Networks, getNetworkTraffic - 400 Bad Request, {'errors': ['Traffic Analysis with Hostname Visibility must be enabled on this network to retrieve traffic data.']}
+2020-06-27 06:07:51,800 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:07:51] "[37mGET /traffic_analysis/ HTTP/1.1[0m" 200 -
+2020-06-27 06:08:38,948 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): dashboard.meraki.com:443
+2020-06-27 06:08:39,640 - urllib3.connectionpool - DEBUG - https://dashboard.meraki.com:443 "GET /api/v0/organizations/764320/inventory HTTP/1.1" 307 164
+2020-06-27 06:08:39,642 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-06-27 06:08:39,788 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/inventory HTTP/1.1" 302 None
+2020-06-27 06:08:39,790 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-06-27 06:08:40,076 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/inventory HTTP/1.1" 200 None
+2020-06-27 06:08:40,083 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): dashboard.meraki.com:443
+2020-06-27 06:08:40,864 - urllib3.connectionpool - DEBUG - https://dashboard.meraki.com:443 "GET /api/v0/devices/Q2HP-QSVT-LBLV/clients?timespan=900 HTTP/1.1" 307 164
+2020-06-27 06:08:40,866 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-06-27 06:08:40,990 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/devices/Q2HP-QSVT-LBLV/clients?timespan=900 HTTP/1.1" 302 None
+2020-06-27 06:08:40,994 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-06-27 06:08:41,391 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/devices/Q2HP-QSVT-LBLV/clients?timespan=900 HTTP/1.1" 200 None
+2020-06-27 06:08:41,397 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:08:41] "[37mPOST /find_ports HTTP/1.1[0m" 200 -
+2020-06-27 06:08:50,582 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): dashboard.meraki.com:443
+2020-06-27 06:08:51,258 - urllib3.connectionpool - DEBUG - https://dashboard.meraki.com:443 "GET /api/v0/organizations/764320/inventory HTTP/1.1" 307 164
+2020-06-27 06:08:51,262 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-06-27 06:08:51,398 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/inventory HTTP/1.1" 302 None
+2020-06-27 06:08:51,403 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-06-27 06:08:51,714 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/inventory HTTP/1.1" 200 None
+2020-06-27 06:08:51,723 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): dashboard.meraki.com:443
+2020-06-27 06:08:52,391 - urllib3.connectionpool - DEBUG - https://dashboard.meraki.com:443 "GET /api/v0/devices/Q2HP-QSVT-LBLV/clients?timespan=900 HTTP/1.1" 307 164
+2020-06-27 06:08:52,394 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-06-27 06:08:52,522 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/devices/Q2HP-QSVT-LBLV/clients?timespan=900 HTTP/1.1" 302 None
+2020-06-27 06:08:52,526 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-06-27 06:08:52,803 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/devices/Q2HP-QSVT-LBLV/clients?timespan=900 HTTP/1.1" 200 None
+2020-06-27 06:08:52,812 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:08:52] "[37mPOST /find_ports HTTP/1.1[0m" 200 -
+2020-06-27 06:08:59,861 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:08:59] "[37mPOST /networks HTTP/1.1[0m" 200 -
+2020-06-27 06:08:59,866 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f42b3bfcc10>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-06-27 06:08:59,866 - meraki - DEBUG - {'tags': ['Networks'], 'operation': 'getOrganizationNetworks', 'method': 'GET', 'url': '/organizations/631744/networks', 'params': {}}
+2020-06-27 06:08:59,869 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:08:59] "[37mPOST /devices HTTP/1.1[0m" 200 -
+2020-06-27 06:08:59,872 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-06-27 06:08:59,879 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f42b229ac10>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-06-27 06:08:59,880 - meraki - DEBUG - {'tags': ['Devices'], 'operation': 'getNetworkDevices', 'method': 'GET', 'url': '/networks/L_681169443639788368/devices', 'params': None}
+2020-06-27 06:08:59,883 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-06-27 06:08:59,887 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f42b2297c70>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-06-27 06:08:59,889 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:08:59] "[37mPOST /clients HTTP/1.1[0m" 200 -
+2020-06-27 06:08:59,890 - meraki - DEBUG - {'tags': ['Clients'], 'operation': 'getNetworkClients', 'page': 1}
+2020-06-27 06:08:59,893 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-06-27 06:09:00,001 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 302 None
+2020-06-27 06:09:00,004 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-06-27 06:09:00,010 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/631744/networks HTTP/1.1" 302 None
+2020-06-27 06:09:00,014 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n326.meraki.com:443
+2020-06-27 06:09:00,021 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/clients?perPage=1000&timespan=3600 HTTP/1.1" 302 None
+2020-06-27 06:09:00,024 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-06-27 06:09:00,423 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 200 None
+2020-06-27 06:09:00,425 - meraki - INFO - Devices, getNetworkDevices - 200 OK
+2020-06-27 06:09:00,427 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:09:00] "[37mGET /devices HTTP/1.1[0m" 200 -
+2020-06-27 06:09:00,505 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/clients?perPage=1000&timespan=3600&perPage=1000&timespan=3600 HTTP/1.1" 200 None
+2020-06-27 06:09:00,508 - meraki - INFO - Clients, getNetworkClients; page 1 - 200 OK
+2020-06-27 06:09:00,509 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:09:00] "[37mGET /clients HTTP/1.1[0m" 200 -
+2020-06-27 06:09:00,700 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/organizations/631744/networks HTTP/1.1" 200 None
+2020-06-27 06:09:00,733 - meraki - INFO - Networks, getOrganizationNetworks - 200 OK
+2020-06-27 06:09:00,737 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:09:00] "[37mGET /networks HTTP/1.1[0m" 200 -
+2020-06-27 06:09:03,144 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:09:03] "[37mPOST /devices HTTP/1.1[0m" 200 -
+2020-06-27 06:09:03,147 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f42b22d35b0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-06-27 06:09:03,149 - meraki - DEBUG - {'tags': ['Devices'], 'operation': 'getNetworkDevices', 'method': 'GET', 'url': '/networks/L_595038100766337509/devices', 'params': None}
+2020-06-27 06:09:03,152 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-06-27 06:09:03,160 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f42b22cea30>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-06-27 06:09:03,163 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:09:03] "[37mPOST /clients HTTP/1.1[0m" 200 -
+2020-06-27 06:09:03,164 - meraki - DEBUG - {'tags': ['Clients'], 'operation': 'getNetworkClients', 'page': 1}
+2020-06-27 06:09:03,167 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-06-27 06:09:03,293 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_595038100766337509/clients?perPage=1000&timespan=3600 HTTP/1.1" 302 None
+2020-06-27 06:09:03,298 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n326.meraki.com:443
+2020-06-27 06:09:03,305 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_595038100766337509/devices HTTP/1.1" 302 None
+2020-06-27 06:09:03,308 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n326.meraki.com:443
+2020-06-27 06:09:03,497 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_595038100766337509/devices HTTP/1.1" 200 None
+2020-06-27 06:09:03,499 - meraki - INFO - Devices, getNetworkDevices - 200 OK
+2020-06-27 06:09:03,502 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:09:03] "[37mGET /devices HTTP/1.1[0m" 200 -
+2020-06-27 06:09:04,446 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_595038100766337509/clients?perPage=1000&timespan=3600&perPage=1000&timespan=3600 HTTP/1.1" 200 None
+2020-06-27 06:09:04,447 - meraki - INFO - Clients, getNetworkClients; page 1 - 200 OK
+2020-06-27 06:09:04,449 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:09:04] "[37mGET /clients HTTP/1.1[0m" 200 -
+2020-06-27 06:09:05,655 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): dashboard.meraki.com:443
+2020-06-27 06:09:06,340 - urllib3.connectionpool - DEBUG - https://dashboard.meraki.com:443 "GET /api/v0/organizations/631744/inventory HTTP/1.1" 307 164
+2020-06-27 06:09:06,343 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-06-27 06:09:06,475 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/631744/inventory HTTP/1.1" 302 None
+2020-06-27 06:09:06,478 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n326.meraki.com:443
+2020-06-27 06:09:07,234 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/organizations/631744/inventory HTTP/1.1" 200 None
+2020-06-27 06:09:07,270 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): dashboard.meraki.com:443
+2020-06-27 06:09:07,958 - urllib3.connectionpool - DEBUG - https://dashboard.meraki.com:443 "GET /api/v0/devices/Q2DX-HG9Z-ZHHS/clients?timespan=900 HTTP/1.1" 307 164
+2020-06-27 06:09:07,960 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-06-27 06:09:08,095 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/devices/Q2DX-HG9Z-ZHHS/clients?timespan=900 HTTP/1.1" 302 None
+2020-06-27 06:09:08,098 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n326.meraki.com:443
+2020-06-27 06:09:08,282 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/devices/Q2DX-HG9Z-ZHHS/clients?timespan=900 HTTP/1.1" 200 None
+2020-06-27 06:09:08,289 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): dashboard.meraki.com:443
+2020-06-27 06:09:08,963 - urllib3.connectionpool - DEBUG - https://dashboard.meraki.com:443 "GET /api/v0/devices/Q2KW-6R4Q-389G/clients?timespan=900 HTTP/1.1" 307 164
+2020-06-27 06:09:08,966 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-06-27 06:09:09,108 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/devices/Q2KW-6R4Q-389G/clients?timespan=900 HTTP/1.1" 302 None
+2020-06-27 06:09:09,112 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n326.meraki.com:443
+2020-06-27 06:09:09,507 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/devices/Q2KW-6R4Q-389G/clients?timespan=900 HTTP/1.1" 200 None
+2020-06-27 06:09:09,516 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:09:09] "[37mPOST /find_ports HTTP/1.1[0m" 200 -
+2020-06-27 06:09:30,475 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f42b2297f10>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-06-27 06:09:30,480 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:09:30] "[37mPOST /allVlans HTTP/1.1[0m" 200 -
+2020-06-27 06:09:30,484 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:09:30] "[35m[1mGET /allVlans HTTP/1.1[0m" 500 -
+2020-06-27 06:09:30,491 - werkzeug - ERROR - Error on request:
+Traceback (most recent call last):
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 323, in run_wsgi
+    execute(self.server.app)
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 312, in execute
+    application_iter = app(environ, start_response)
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2463, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_socketio/__init__.py", line 45, in __call__
+    return super(_SocketIOMiddleware, self).__call__(environ,
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/engineio/middleware.py", line 74, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2449, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_cors/extension.py", line 161, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1866, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2446, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1951, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_cors/extension.py", line 161, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1820, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/cyberdevnet/mer-hacker-dev/api/api.py", line 201, in get_all_networks_subnets
+    data['organizationId'])
+KeyError: 'organizationId'
+2020-06-27 06:10:04,831 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:10:04] "[37mPOST /allVlans HTTP/1.1[0m" 200 -
+2020-06-27 06:10:04,841 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f42b3bbe970>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-06-27 06:10:04,841 - meraki - DEBUG - {'tags': ['Networks'], 'operation': 'getOrganizationNetworks', 'method': 'GET', 'url': '/organizations/631744/networks', 'params': {}}
+2020-06-27 06:10:04,843 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-06-27 06:10:05,200 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/631744/networks HTTP/1.1" 302 None
+2020-06-27 06:10:05,206 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n326.meraki.com:443
+2020-06-27 06:10:05,501 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/organizations/631744/networks HTTP/1.1" 200 None
+2020-06-27 06:10:05,519 - meraki - INFO - Networks, getOrganizationNetworks - 200 OK
+2020-06-27 06:10:05,521 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_595038100766357852/vlans', 'params': None}
+2020-06-27 06:10:05,760 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_595038100766357852/vlans HTTP/1.1" 400 None
+2020-06-27 06:10:05,760 - meraki - ERROR - VLANs, getNetworkVlans - 400 Bad Request, {'errors': ['This endpoint only supports MX networks']}
+2020-06-27 06:10:05,762 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_595038100766332434/vlans', 'params': None}
+2020-06-27 06:10:05,950 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_595038100766332434/vlans HTTP/1.1" 400 None
+2020-06-27 06:10:05,950 - meraki - ERROR - VLANs, getNetworkVlans - 400 Bad Request, {'errors': ['VLANs are not enabled for this network']}
+2020-06-27 06:10:05,952 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_595038100766337509/vlans', 'params': None}
+2020-06-27 06:10:06,119 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_595038100766337509/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:06,119 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:06,121 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_595038100766334220/vlans', 'params': None}
+2020-06-27 06:10:06,281 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_595038100766334220/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:06,283 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:06,284 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_595038100766334224/vlans', 'params': None}
+2020-06-27 06:10:06,434 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_595038100766334224/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:06,435 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:06,436 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_595038100766334399/vlans', 'params': None}
+2020-06-27 06:10:06,544 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_595038100766334399/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:06,545 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:06,546 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_595038100766334432/vlans', 'params': None}
+2020-06-27 06:10:06,625 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_595038100766334432/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:06,626 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:06,626 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_595038100766334581/vlans', 'params': None}
+2020-06-27 06:10:06,805 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_595038100766334581/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:06,806 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:06,806 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_595038100766334583/vlans', 'params': None}
+2020-06-27 06:10:06,983 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_595038100766334583/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:06,985 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:06,985 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_595038100766334646/vlans', 'params': None}
+2020-06-27 06:10:07,173 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_595038100766334646/vlans HTTP/1.1" 400 None
+2020-06-27 06:10:07,174 - meraki - ERROR - VLANs, getNetworkVlans - 400 Bad Request, {'errors': ['VLANs are not enabled for this network']}
+2020-06-27 06:10:07,174 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_595038100766334743/vlans', 'params': None}
+2020-06-27 06:10:07,309 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_595038100766334743/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:07,310 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:07,311 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_595038100766334921/vlans', 'params': None}
+2020-06-27 06:10:07,860 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_595038100766334921/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:07,861 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:07,861 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_595038100766335907/vlans', 'params': None}
+2020-06-27 06:10:07,965 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_595038100766335907/vlans HTTP/1.1" 400 None
+2020-06-27 06:10:07,965 - meraki - ERROR - VLANs, getNetworkVlans - 400 Bad Request, {'errors': ['VLANs are not enabled for this network']}
+2020-06-27 06:10:07,966 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_595038100766336491/vlans', 'params': None}
+2020-06-27 06:10:08,165 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_595038100766336491/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:08,166 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:08,166 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_595038100766336692/vlans', 'params': None}
+2020-06-27 06:10:08,333 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_595038100766336692/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:08,334 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:08,335 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869803272/vlans', 'params': None}
+2020-06-27 06:10:08,423 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869803272/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:08,424 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:08,424 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869797422/vlans', 'params': None}
+2020-06-27 06:10:08,592 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869797422/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:08,593 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:08,593 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869797562/vlans', 'params': None}
+2020-06-27 06:10:08,673 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869797562/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:08,674 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:08,674 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869797653/vlans', 'params': None}
+2020-06-27 06:10:09,137 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869797653/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:09,138 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:09,138 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869797654/vlans', 'params': None}
+2020-06-27 06:10:09,235 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869797654/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:09,237 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:09,238 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869798023/vlans', 'params': None}
+2020-06-27 06:10:09,347 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869798023/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:09,348 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:09,348 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869799516/vlans', 'params': None}
+2020-06-27 06:10:09,438 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869799516/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:09,439 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:09,439 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869799259/vlans', 'params': None}
+2020-06-27 06:10:09,648 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869799259/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:09,649 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:09,649 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869799336/vlans', 'params': None}
+2020-06-27 06:10:10,178 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869799336/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:10,179 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:10,181 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869799362/vlans', 'params': None}
+2020-06-27 06:10:10,262 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869799362/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:10,264 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:10,264 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_702561541869803957/vlans', 'params': None}
+2020-06-27 06:10:10,535 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_702561541869803957/vlans HTTP/1.1" 400 None
+2020-06-27 06:10:10,535 - meraki - ERROR - VLANs, getNetworkVlans - 400 Bad Request, {'errors': ['This endpoint only supports MX networks']}
+2020-06-27 06:10:10,536 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869799634/vlans', 'params': None}
+2020-06-27 06:10:10,622 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869799634/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:10,623 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:10,623 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869799641/vlans', 'params': None}
+2020-06-27 06:10:10,784 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869799641/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:10,787 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:10,788 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869799666/vlans', 'params': None}
+2020-06-27 06:10:10,866 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869799666/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:10,869 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:10,871 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869807493/vlans', 'params': None}
+2020-06-27 06:10:10,951 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869807493/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:10,953 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:10,954 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869800427/vlans', 'params': None}
+2020-06-27 06:10:11,134 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869800427/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:11,135 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:11,135 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869800440/vlans', 'params': None}
+2020-06-27 06:10:11,300 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869800440/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:11,301 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:11,302 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869800862/vlans', 'params': None}
+2020-06-27 06:10:11,422 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869800862/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:11,422 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:11,423 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869807984/vlans', 'params': None}
+2020-06-27 06:10:11,659 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869807984/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:11,661 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:11,662 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_702561541869808246/vlans', 'params': None}
+2020-06-27 06:10:11,730 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_702561541869808246/vlans HTTP/1.1" 400 None
+2020-06-27 06:10:11,731 - meraki - ERROR - VLANs, getNetworkVlans - 400 Bad Request, {'errors': ['This endpoint only supports MX networks']}
+2020-06-27 06:10:11,732 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869801388/vlans', 'params': None}
+2020-06-27 06:10:11,798 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869801388/vlans HTTP/1.1" 429 None
+2020-06-27 06:10:11,798 - meraki - WARNING - VLANs, getNetworkVlans - 429 Too Many Requests, retrying in 1 seconds
+2020-06-27 06:10:12,879 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869801388/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:12,880 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:12,881 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869801951/vlans', 'params': None}
+2020-06-27 06:10:12,956 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869801951/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:12,957 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:12,957 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869802499/vlans', 'params': None}
+2020-06-27 06:10:13,224 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869802499/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:13,225 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:13,225 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869802927/vlans', 'params': None}
+2020-06-27 06:10:13,353 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869802927/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:13,353 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:13,354 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869802952/vlans', 'params': None}
+2020-06-27 06:10:13,601 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869802952/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:13,602 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:13,603 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_702561541869816548/vlans', 'params': None}
+2020-06-27 06:10:13,681 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_702561541869816548/vlans HTTP/1.1" 400 None
+2020-06-27 06:10:13,682 - meraki - ERROR - VLANs, getNetworkVlans - 400 Bad Request, {'errors': ['VLANs are not enabled for this network']}
+2020-06-27 06:10:13,684 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_702561541869816884/vlans', 'params': None}
+2020-06-27 06:10:13,881 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_702561541869816884/vlans HTTP/1.1" 400 None
+2020-06-27 06:10:13,882 - meraki - ERROR - VLANs, getNetworkVlans - 400 Bad Request, {'errors': ['This endpoint only supports MX networks']}
+2020-06-27 06:10:13,882 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_702561541869817054/vlans', 'params': None}
+2020-06-27 06:10:13,954 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_702561541869817054/vlans HTTP/1.1" 400 None
+2020-06-27 06:10:13,955 - meraki - ERROR - VLANs, getNetworkVlans - 400 Bad Request, {'errors': ['This endpoint only supports MX networks']}
+2020-06-27 06:10:13,955 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_702561541869817362/vlans', 'params': None}
+2020-06-27 06:10:14,313 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_702561541869817362/vlans HTTP/1.1" 400 None
+2020-06-27 06:10:14,314 - meraki - ERROR - VLANs, getNetworkVlans - 400 Bad Request, {'errors': ['VLANs are not enabled for this network']}
+2020-06-27 06:10:14,315 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869803881/vlans', 'params': None}
+2020-06-27 06:10:14,394 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869803881/vlans HTTP/1.1" 400 None
+2020-06-27 06:10:14,395 - meraki - ERROR - VLANs, getNetworkVlans - 400 Bad Request, {'errors': ['VLANs are not enabled for this network']}
+2020-06-27 06:10:14,395 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_702561541869817908/vlans', 'params': None}
+2020-06-27 06:10:14,462 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_702561541869817908/vlans HTTP/1.1" 400 None
+2020-06-27 06:10:14,464 - meraki - ERROR - VLANs, getNetworkVlans - 400 Bad Request, {'errors': ['This endpoint only supports MX networks']}
+2020-06-27 06:10:14,465 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869804385/vlans', 'params': None}
+2020-06-27 06:10:14,545 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869804385/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:14,546 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:14,547 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_702561541869820224/vlans', 'params': None}
+2020-06-27 06:10:14,613 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_702561541869820224/vlans HTTP/1.1" 400 None
+2020-06-27 06:10:14,615 - meraki - ERROR - VLANs, getNetworkVlans - 400 Bad Request, {'errors': ['This endpoint only supports MX networks']}
+2020-06-27 06:10:14,615 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869804682/vlans', 'params': None}
+2020-06-27 06:10:14,683 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869804682/vlans HTTP/1.1" 400 None
+2020-06-27 06:10:14,684 - meraki - ERROR - VLANs, getNetworkVlans - 400 Bad Request, {'errors': ['This endpoint only supports MX networks']}
+2020-06-27 06:10:14,684 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869804689/vlans', 'params': None}
+2020-06-27 06:10:14,748 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869804689/vlans HTTP/1.1" 429 None
+2020-06-27 06:10:14,749 - meraki - WARNING - VLANs, getNetworkVlans - 429 Too Many Requests, retrying in 1 seconds
+2020-06-27 06:10:15,873 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869804689/vlans HTTP/1.1" 400 None
+2020-06-27 06:10:15,876 - meraki - ERROR - VLANs, getNetworkVlans - 400 Bad Request, {'errors': ['This endpoint only supports MX networks']}
+2020-06-27 06:10:15,877 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869805248/vlans', 'params': None}
+2020-06-27 06:10:16,083 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869805248/vlans HTTP/1.1" 400 None
+2020-06-27 06:10:16,084 - meraki - ERROR - VLANs, getNetworkVlans - 400 Bad Request, {'errors': ['This endpoint only supports MX networks']}
+2020-06-27 06:10:16,085 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869805481/vlans', 'params': None}
+2020-06-27 06:10:16,213 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869805481/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:16,214 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:16,215 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869805643/vlans', 'params': None}
+2020-06-27 06:10:16,307 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869805643/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:16,309 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:16,310 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_702561541869823758/vlans', 'params': None}
+2020-06-27 06:10:16,377 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_702561541869823758/vlans HTTP/1.1" 400 None
+2020-06-27 06:10:16,379 - meraki - ERROR - VLANs, getNetworkVlans - 400 Bad Request, {'errors': ['VLANs are not enabled for this network']}
+2020-06-27 06:10:16,379 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869806707/vlans', 'params': None}
+2020-06-27 06:10:16,460 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869806707/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:16,461 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:16,462 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869806708/vlans', 'params': None}
+2020-06-27 06:10:16,546 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869806708/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:16,546 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:16,547 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869806709/vlans', 'params': None}
+2020-06-27 06:10:16,636 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869806709/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:16,637 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:16,638 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869806710/vlans', 'params': None}
+2020-06-27 06:10:16,725 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869806710/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:16,726 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:16,727 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869806925/vlans', 'params': None}
+2020-06-27 06:10:16,786 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869806925/vlans HTTP/1.1" 429 None
+2020-06-27 06:10:16,787 - meraki - WARNING - VLANs, getNetworkVlans - 429 Too Many Requests, retrying in 1 seconds
+2020-06-27 06:10:17,933 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869806925/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:17,934 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:17,934 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_702561541869827121/vlans', 'params': None}
+2020-06-27 06:10:18,002 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_702561541869827121/vlans HTTP/1.1" 400 None
+2020-06-27 06:10:18,003 - meraki - ERROR - VLANs, getNetworkVlans - 400 Bad Request, {'errors': ['VLANs are not enabled for this network']}
+2020-06-27 06:10:18,004 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_702561541869829145/vlans', 'params': None}
+2020-06-27 06:10:18,463 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_702561541869829145/vlans HTTP/1.1" 400 None
+2020-06-27 06:10:18,463 - meraki - ERROR - VLANs, getNetworkVlans - 400 Bad Request, {'errors': ['VLANs are not enabled for this network']}
+2020-06-27 06:10:18,464 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869807846/vlans', 'params': None}
+2020-06-27 06:10:18,544 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869807846/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:18,545 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:18,545 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869807933/vlans', 'params': None}
+2020-06-27 06:10:18,620 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869807933/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:18,621 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:18,621 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869808036/vlans', 'params': None}
+2020-06-27 06:10:18,710 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869808036/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:18,712 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:18,713 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869808288/vlans', 'params': None}
+2020-06-27 06:10:18,795 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869808288/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:18,795 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:18,796 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869808369/vlans', 'params': None}
+2020-06-27 06:10:18,877 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869808369/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:18,878 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:18,878 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869809306/vlans', 'params': None}
+2020-06-27 06:10:18,947 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869809306/vlans HTTP/1.1" 400 None
+2020-06-27 06:10:18,949 - meraki - ERROR - VLANs, getNetworkVlans - 400 Bad Request, {'errors': ['VLANs are not enabled for this network']}
+2020-06-27 06:10:18,949 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_702561541869834643/vlans', 'params': None}
+2020-06-27 06:10:19,031 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_702561541869834643/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:19,032 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:19,032 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_702561541869809370/vlans', 'params': None}
+2020-06-27 06:10:19,107 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869809370/vlans HTTP/1.1" 429 None
+2020-06-27 06:10:19,108 - meraki - WARNING - VLANs, getNetworkVlans - 429 Too Many Requests, retrying in 1 seconds
+2020-06-27 06:10:20,262 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_702561541869809370/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:20,264 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:20,265 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_746471638236659961/vlans', 'params': None}
+2020-06-27 06:10:20,605 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_746471638236659961/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:20,605 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:20,606 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_746471638236659920/vlans', 'params': None}
+2020-06-27 06:10:20,677 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_746471638236659920/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:20,677 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:20,678 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_746471638236660669/vlans', 'params': None}
+2020-06-27 06:10:20,827 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_746471638236660669/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:20,827 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:20,828 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_746471638236660670/vlans', 'params': None}
+2020-06-27 06:10:20,926 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_746471638236660670/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:20,926 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:20,927 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_746471638236660671/vlans', 'params': None}
+2020-06-27 06:10:21,017 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_746471638236660671/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:21,018 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:21,019 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_746471638236660684/vlans', 'params': None}
+2020-06-27 06:10:21,356 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_746471638236660684/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:21,357 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:21,357 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_746471638236660694/vlans', 'params': None}
+2020-06-27 06:10:21,450 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_746471638236660694/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:21,451 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:21,451 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_746471638236660695/vlans', 'params': None}
+2020-06-27 06:10:21,628 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_746471638236660695/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:21,629 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:21,629 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_746471638236660720/vlans', 'params': None}
+2020-06-27 06:10:21,835 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_746471638236660720/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:21,836 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:21,837 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_746471638236660721/vlans', 'params': None}
+2020-06-27 06:10:21,937 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_746471638236660721/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:21,938 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:21,939 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_746471638236660722/vlans', 'params': None}
+2020-06-27 06:10:22,100 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_746471638236660722/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:22,101 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:22,101 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_746471638236660723/vlans', 'params': None}
+2020-06-27 06:10:22,234 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_746471638236660723/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:22,235 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:22,235 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_746471638236660775/vlans', 'params': None}
+2020-06-27 06:10:22,332 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_746471638236660775/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:22,333 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:22,334 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_746471638236660792/vlans', 'params': None}
+2020-06-27 06:10:22,464 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_746471638236660792/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:22,465 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:22,466 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_746471638236660793/vlans', 'params': None}
+2020-06-27 06:10:22,573 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_746471638236660793/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:22,574 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:22,574 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_746471638236660806/vlans', 'params': None}
+2020-06-27 06:10:22,640 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_746471638236660806/vlans HTTP/1.1" 429 None
+2020-06-27 06:10:22,641 - meraki - WARNING - VLANs, getNetworkVlans - 429 Too Many Requests, retrying in 1 seconds
+2020-06-27 06:10:23,750 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_746471638236660806/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:23,752 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:23,752 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_746471638236660890/vlans', 'params': None}
+2020-06-27 06:10:23,906 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_746471638236660890/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:23,906 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:23,907 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_746471638236660891/vlans', 'params': None}
+2020-06-27 06:10:24,070 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_746471638236660891/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:24,070 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:24,071 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_746471638236660904/vlans', 'params': None}
+2020-06-27 06:10:24,164 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_746471638236660904/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:24,165 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:24,165 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_746471638236660231/vlans', 'params': None}
+2020-06-27 06:10:24,253 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_746471638236660231/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:24,254 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:24,254 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/N_746471638236661617/vlans', 'params': None}
+2020-06-27 06:10:24,347 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/N_746471638236661617/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:24,348 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:24,348 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_746471638236660318/vlans', 'params': None}
+2020-06-27 06:10:24,563 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_746471638236660318/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:24,564 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:24,565 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_746471638236660442/vlans', 'params': None}
+2020-06-27 06:10:24,990 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_746471638236660442/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:24,991 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:24,991 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_746471638236660443/vlans', 'params': None}
+2020-06-27 06:10:25,157 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_746471638236660443/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:25,159 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:25,160 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_746471638236660530/vlans', 'params': None}
+2020-06-27 06:10:25,354 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_746471638236660530/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:25,357 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:25,358 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_746471638236660765/vlans', 'params': None}
+2020-06-27 06:10:25,359 - urllib3.connectionpool - DEBUG - Resetting dropped connection: n326.meraki.com
+2020-06-27 06:10:25,575 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_746471638236660765/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:25,577 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:25,577 - meraki - DEBUG - {'tags': ['VLANs'], 'operation': 'getNetworkVlans', 'method': 'GET', 'url': '/networks/L_746471638236660766/vlans', 'params': None}
+2020-06-27 06:10:25,845 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_746471638236660766/vlans HTTP/1.1" 200 None
+2020-06-27 06:10:25,846 - meraki - INFO - VLANs, getNetworkVlans - 200 OK
+2020-06-27 06:10:25,850 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:10:25] "[37mGET /allVlans HTTP/1.1[0m" 200 -
+2020-06-27 06:11:09,425 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:11:09] "[37mPOST /organizations HTTP/1.1[0m" 200 -
+2020-06-27 06:11:09,427 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f42b3bfc460>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-06-27 06:11:09,431 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
+2020-06-27 06:11:09,433 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-06-27 06:11:09,593 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 302 None
+2020-06-27 06:11:09,599 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-06-27 06:11:10,160 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 200 None
+2020-06-27 06:11:10,162 - meraki - INFO - Organizations, getOrganizations - 200 OK
+2020-06-27 06:11:10,163 - werkzeug - INFO - 127.0.0.1 - - [27/Jun/2020 06:11:10] "[37mGET /organizations HTTP/1.1[0m" 200 -

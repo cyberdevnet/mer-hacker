@@ -98,6 +98,8 @@ export default function Template(ac) {
     ac.dc.setorganization(opt.label);
     ac.dc.setorganizationID(opt.id);
     ac.dc.setnetwork("Networks");
+    ac.dc.setshowRestorescript(false)
+    ac.dc.setdisplayButtons({ display: 'none' })
     routeNetwork();
     // ac.dc.setclassOrganization("");
     ac.dc.setisOrgSelected(true);
@@ -107,6 +109,8 @@ export default function Template(ac) {
     ac.dc.setnetwork(opt.label);
     ac.dc.setnetworkID(opt.id);
     routeToolsTemplate();
+    ac.dc.setshowRestorescript(false)
+    ac.dc.setdisplayButtons({ display: 'none' })
     // ac.dc.setclassNetwork("");
     ac.dc.setisNetSelected(true);
     ac.dc.settriggerTopReports(ac.dc.triggerTopReports + 1);

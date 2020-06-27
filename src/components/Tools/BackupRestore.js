@@ -2,27 +2,28 @@
 import React, { useEffect, useState, useRef } from "react";
 import Select from "react-select";
 import { LazyLog } from "react-lazylog";
-import io from "socket.io-client";
 import "../../styles/BackupRestore.css";
 import axios from 'axios';
 import AceEditor from "react-ace";
+import ReactModal from 'react-modal'
 import "ace-builds/src-noconflict/mode-python";
-import "ace-builds/src-noconflict/theme-monokai";
+import "ace-builds/src-noconflict/theme-twilight";
+import "ace-builds/src-min-noconflict/ext-language_tools";
 const fs = require('browserify-fs');
+
 
 export default function BackupRestore(ac) {
   const [loadingButtonBackup, setloadingButtonBackup] = useState(false);
   const [loadingButtonRestore, setloadingButtonRestore] = useState(false);
-  const [displayButtons, setdisplayButtons] = useState({ display: 'none' });
+  // const [displayButtons, setdisplayButtons] = useState({ display: 'none' });
   const [triggerBackup, settriggerBackup] = useState(0);
   const [triggerFile, settriggerFile] = useState(0);
   const [triggerRestore, settriggerRestore] = useState(0);
   // eslint-disable-next-line
   const [errorMessage, seterrorMessage] = useState(null);
-  const [script, setscript] = useState([])
-  const [showscript, setshowscript] = useState(false)
-  const [liveLogs, setliveLogs] = useState([]);
+  const [liveLogs, setliveLogs] = useState('');
   const [showLiveLogs, setshowLiveLogs] = useState(false)
+
 
 
 
@@ -36,41 +37,15 @@ export default function BackupRestore(ac) {
   };
 
 
-  // const ORGANIZATIONS = ac.dc.organizationList.map((opt, index) => ({
-  //   label: opt.name,
-  //   value: index,
-  //   id: opt.id,
-  // }));
-
-  // const NETWORKS = ac.dc.networkList.map((opt, index) => ({
-  //   label: opt.name,
-  //   value: index,
-  //   id: opt.id,
-  // }));
-
-
-  const HandleOrganization = (opt) => {
-    ac.dc.setorganization(opt.label);
-    ac.dc.setorganizationID(opt.id);
-    ac.dc.setnetwork("Networks");
-    ac.dc.setisOrgSelected(true);
-  };
-
-  const HandleNetwork = (opt) => {
-    ac.dc.setnetwork(opt.label);
-    ac.dc.setnetworkID(opt.id);
-    ac.dc.setisNetSelected(true);
-  };
-
-
-
 
   const handleBackup = (e) => {
     e.stopPropagation()
-    setshowscript(false)
-    setscript([])
+    ac.dc.setshowRestorescript(false)
+    ac.dc.setrestoreScript([])
+    ac.dc.setdisplayButtons({ display: 'none' })
     // e.preventDefault();
     settriggerBackup(triggerBackup + 1);
+    setliveLogs([])
     setshowLiveLogs(true)
     if (triggerBackup > 3) {
       settriggerBackup(0);
@@ -93,17 +68,29 @@ export default function BackupRestore(ac) {
 
   const HandleRestore = (e) => {
     e.preventDefault();
+    ac.dc.setswitchConfirmRestore(true)
+    ac.dc.setshowRestorescript(false)
+    setshowLiveLogs(false)
+  };
+
+  const CancelRestore = (e) => {
+    e.preventDefault();
+    ac.dc.setswitchConfirmRestore(false);
+  };
+
+  const ConfirmRestore = (e) => {
+    e.preventDefault();
+    ac.dc.setswitchConfirmRestore(false)
     settriggerRestore(triggerRestore + 1);
     setshowLiveLogs(true)
     if (triggerRestore > 3) {
       settriggerRestore(0);
     }
-
   };
 
   const downloadScript = () => {
     const element = document.createElement("a");
-    const file = new Blob([script], { type: 'text/plain' });
+    const file = new Blob([ac.dc.restoreScript], { type: 'text/plain' });
     element.href = URL.createObjectURL(file);
     element.download = "meraki_restore_network.py";
     document.body.appendChild(element); // Required for this to work in FireFox
@@ -136,7 +123,7 @@ export default function BackupRestore(ac) {
           .then((res) => res.json())
           .then(() => {
             setloadingButtonBackup(false);
-            setdisplayButtons({ display: 'inline-block' })
+            ac.dc.setdisplayButtons({ display: 'inline-block' })
           })
 
         // .catch((err) => {
@@ -179,10 +166,10 @@ export default function BackupRestore(ac) {
       fetch('/api/backup_restore/meraki_restore_network.py')
         .then(response => { return response.text() })
         .then((data) => {
-          setscript(data)
+          ac.dc.setrestoreScript(data)
         })
         .then(() => {
-          setshowscript(true)
+          ac.dc.setshowRestorescript(true)
         })
 
         .catch((err) => {
@@ -200,7 +187,7 @@ export default function BackupRestore(ac) {
     }
     OpenFile();
     return () => {
-      setshowscript(false)
+      ac.dc.setshowRestorescript(false)
       ac.dc.setalert(false);
       seterrorMessage(null);
     };
@@ -216,50 +203,50 @@ export default function BackupRestore(ac) {
       return;
     }
     async function Restore() {
-      if (showscript === true) {
+      // if (ac.dc.showRestorescript === true) {
 
-        setloadingButtonRestore(true);
-        setshowscript(false)
+      setloadingButtonRestore(true);
+      ac.dc.setshowRestorescript(false)
 
-        const data = new FormData()
-        const file = new Blob([script], { type: 'text/plain' });
-        data.append('file', file, 'meraki_restore_network.py')
+      const data = new FormData()
+      const file = new Blob([ac.dc.restoreScript], { type: 'text/plain' });
+      data.append('file', file, 'meraki_restore_network.py')
 
-        axios.post("/upload", data, { // receive two parameter endpoint url ,form data 
+      axios.post("/upload", data, { // receive two parameter endpoint url ,form data 
+      })
+
+
+      fetch("/run_restore/", {
+        method: ["POST"],
+        cache: "no-cache",
+        headers: {
+          content_type: "application/json",
+        },
+        body: JSON.stringify(APIbody2),
+      })
+
+        .then((res) => {
+          console.log('POST response: ', res);
         })
 
 
-        fetch("/run_restore/", {
-          method: ["POST"],
-          cache: "no-cache",
-          headers: {
-            content_type: "application/json",
-          },
-          body: JSON.stringify(APIbody2),
+        .then(() => {
+          setloadingButtonRestore(false)
         })
 
-          .then((res) => {
-            console.log('POST response: ', res);
-          })
-
-
-          .then(() => {
-            setloadingButtonRestore(false)
-          })
-
-      } else {
-        seterrorMessage(
-          <div className="form-input-error-msg alert alert-danger">
-            <span className="glyphicon glyphicon-exclamation-sign"></span>
-          Check the script before restoring the network.
-        </div>
-        )
-      }
+      // } else {
+      //   seterrorMessage(
+      //     <div className="form-input-error-msg alert alert-danger">
+      //       <span className="glyphicon glyphicon-exclamation-sign"></span>
+      //     Check the script before restoring the network.
+      //   </div>
+      //   )
+      // }
 
     }
     Restore();
     return () => {
-      setshowscript(false)
+      ac.dc.setshowRestorescript(false)
       ac.dc.setalert(false);
       seterrorMessage(null);
     };
@@ -299,7 +286,7 @@ export default function BackupRestore(ac) {
       // auto-clearing after 30 sec
       setTimeout(() => {
         clearInterval(interval)
-      }, 30000);
+      }, 60000);
 
     } else if (!showLiveLogs) {
       clearInterval(interval)
@@ -312,6 +299,7 @@ export default function BackupRestore(ac) {
 
   return (
     <div id="page-inner-main-templates">
+
       <div className="row">
         <div className="col-xs-12">
           <div className="panel panel-default">
@@ -360,7 +348,7 @@ export default function BackupRestore(ac) {
                 {!loadingButtonBackup && <span>Run Backup</span>}
               </button>
               <button
-                style={displayButtons}
+                style={ac.dc.displayButtons}
                 id="openscript"
                 className="btn btn-primary"
                 onClick={handleRestoreFile}
@@ -368,7 +356,7 @@ export default function BackupRestore(ac) {
                 Show Script
               </button>
               <button
-                style={displayButtons}
+                style={ac.dc.displayButtons}
                 id="downloadscript"
                 className="btn btn-primary"
                 onClick={downloadScript}
@@ -376,7 +364,7 @@ export default function BackupRestore(ac) {
                 Download Script
               </button>
               <button
-                style={displayButtons}
+                style={ac.dc.displayButtons}
                 id="restore"
                 className="btn btn-danger"
                 onClick={!loadingButtonRestore ? HandleRestore : null}
@@ -392,9 +380,31 @@ export default function BackupRestore(ac) {
                 {!loadingButtonRestore && <span>Restore</span>}
               </button>
             </div>
+
           </div>
         </div>
       </div>
+
+      <div>
+        <ReactModal
+          isOpen={ac.dc.switchConfirmRestore}
+          contentLabel="Confirm Modal"
+          className="Modal"
+          overlayClassName="Overlay"
+          onRequestClose={CancelRestore}
+        >
+          <div>
+            <p>Are you sure you want to restore the Network {ac.dc.network}? </p>
+            <p className="text-secondary"><small>a new network with name {ac.dc.network}-restore will be created</small></p>
+          </div>
+          <button onClick={CancelRestore} type="button" className="btn btn-secondary" >Cancel</button>
+          <button onClick={ConfirmRestore} type="button" className="btn btn-danger">Restore</button>
+        </ReactModal>
+      </div>
+
+
+
+
       <div className="row">
         <div className="col-xs-12">
           <div className="panel panel-default">
@@ -406,14 +416,14 @@ export default function BackupRestore(ac) {
                 selectableLines />
             </div>) : (<div></div>)}
 
-            {showscript ? (
+            {ac.dc.showRestorescript ? (
               <div className="panel-body">
                 <AceEditor
-                  value={script}
+                  value={ac.dc.restoreScript}
                   // ref="aceEditor"
                   mode="python"
-                  theme="monokai"
-                  onChange={value => setscript(value)}
+                  theme="twilight"
+                  onChange={value => ac.dc.setrestoreScript(value)}
                   name="ace-editor"
                   id="ace-editor"
                   width='auto'
@@ -434,7 +444,7 @@ export default function BackupRestore(ac) {
                     {
                       name: 'run',
                       bindKey: { win: 'Ctrl-s', mac: 'Command-s' },
-                      exec: (value) => { setscript(value) }
+                      exec: (value) => { ac.dc.setrestoreScript(value) }
                     }
                   ]}
                 />,

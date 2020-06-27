@@ -26,6 +26,7 @@
 # restore the bits you want.
 
 import os
+import io
 import sys
 from meraki_sdk.meraki_sdk_client import MerakiSdkClient
 from meraki_sdk.exceptions.api_exception import APIException
@@ -209,6 +210,7 @@ def write_ssid_settings(file,meraki,networkid):
 
 def write_mydevices(file,meraki,networkid):
 	mydevice=meraki.devices.get_network_devices(networkid)
+	check = sys.getdefaultencoding()
 	if mydevice is None:
 		return
 	file.write("\t# Devices\n")
@@ -226,9 +228,9 @@ def write_mydevices(file,meraki,networkid):
 		file.write("\t\tdashboard = session.put(puturl, json="+str(row)+", headers=headers)\n")
 		if 'switchProfileId' in row:
 			switchports=meraki.switch_ports.get_device_switch_ports(row['serial'])
-		for port in switchports:
-			file.write("\t\tputurl = 'https://api.meraki.com/api/v0/networks/{0}/devices/"+str(row['serial'])+"/switchPorts/"+str(port['number'])+"'.format(str(networkid))\n")
-			file.write("\t\tdashboard = session.put(puturl, json="+str(port)+", headers=headers)\n")
+			for port in switchports:
+				file.write("\t\tputurl = 'https://api.meraki.com/api/v0/networks/{0}/devices/"+str(row['serial'])+"/switchPorts/"+str(port['number'])+"'.format(str(networkid))\n")
+				file.write("\t\tdashboard = session.put(puturl, json="+str(port)+", headers=headers)\n")
 
 
 def backup_network(ARG_ORGID, NET_ID, ARG_APIKEY):
@@ -236,7 +238,7 @@ def backup_network(ARG_ORGID, NET_ID, ARG_APIKEY):
 	meraki = MerakiSdkClient(ARG_APIKEY)
 	dirname = os.path.dirname(__file__)
 	filename = os.path.join(dirname, 'meraki_restore_network.py')
-	with open(filename, 'w') as file:
+	with io.open(filename, 'w', encoding='utf-8', errors='ignore') as file:
 		write_restore_header(file)
 		f = open(log_file, 'w')
 		print('Starting Backup', file=f)
@@ -349,11 +351,12 @@ def backup_network(ARG_ORGID, NET_ID, ARG_APIKEY):
 			f.flush()
 			write_mydevices(file,meraki,row['id'])
 		except:
-			print("no devices",file=f)
+			print("no devices found or there was an error.",file=f)
+			print(err,file=f)
 			f.flush()
 		file.write("\texcept requests.exceptions.HTTPError as err:\n")
 		file.write("\t\tprint(err,file=f)\n")
-		file.write("\t\tprint('Can not add network "+row['name']+" - it probably already exists. Change the Network name and try again',file=f)\n")
+		file.write("\t\tprint('Can not add network "+row['name']+" - it probably already exists. Change the Network name and make a new backup.',file=f)\n")
 		file.write("\tprint('Restoring Complete',file=f)\n")
 		file.write("\tf.flush()\n")
 		file.write("\tf.close()\n")

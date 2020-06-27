@@ -125,12 +125,6 @@ export default function TrafficAnalysis(ac) {
                   });
                 }
               })
-              // .then(() => {
-              //   if (mapROW1.length > 0) {
-              //     ac.dc.setloadingButton(false);
-
-              //   }
-              // })
               .then(() => {
                 setshowtable(true);
                 ac.dc.setloadingButton(false);

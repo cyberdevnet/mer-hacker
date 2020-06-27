@@ -8,15 +8,36 @@
   float: left;
 }
 
-.CodeMirror.cm-s-material {
-  height: auto;
-}
 
-.CodeMirror-scroll {
-  max-height: 750px;
+
+.ace_content {
+height: 0px;
 }
 
 .ace_editor.ace-monokai.ace_dark {
-  width: 800px;
+  width: auto;
   height: 750px;
+}
+
+.Modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  padding: 2em;
+  min-width: 20em;
+  max-width: 70%;
+  color: #676767;
+  background-color: #fff;
+  border-radius: 1em;
+  transform: translate(-50%, -50%);
+  outline: transparent;
+}
+.Overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0,0,0,.4);
 }

@@ -8,6 +8,7 @@ export default function NetworkTopUsers(ac) {
   const [mapROW2, setmapROW2] = useState([]);
   const [mapROW3, setmapROW3] = useState([]);
   const [errorMessage, seterrorMessage] = useState(null);
+  console.log("NetworkTopUsers -> errorMessage", errorMessage)
 
   const APIbody2 = {
     "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
@@ -155,8 +156,9 @@ export default function NetworkTopUsers(ac) {
               });
           } catch (err) {
             if (err) {
-              console.log(err);
-              ac.dc.setalert(true);
+              console.log('Error: ', err);
+              ac.dc.setloadingButton(false);
+
             }
           }
         } else {

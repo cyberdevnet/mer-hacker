@@ -25,5 +25,5 @@ yarn-debug.log*
 yarn-error.log*
 
 #variuos files to ignore
-
+.log
 meraki_restore_organization.py

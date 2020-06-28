@@ -16,7 +16,9 @@ export default function BackupRestore(ac) {
   const [loadingButtonBackup, setloadingButtonBackup] = useState(false);
   const [loadingButtonRestore, setloadingButtonRestore] = useState(false);
   const [loadingButtonRestoreSwitch, setloadingButtonRestoreSwitch] = useState(false);
-  // const [displayButtons, setdisplayButtons] = useState({ display: 'none' });
+  const [displayButtons, setdisplayButtons] = useState({ display: 'none' });
+  const [displayRestoreButtons, setdisplayRestoreButtons] = useState({ display: 'none' });
+  const [displayRestoreSwitchButtons, setdisplayRestoreSwitchButtons] = useState({ display: 'none' });
   const [triggerBackup, settriggerBackup] = useState(0);
   const [triggerFile, settriggerFile] = useState(0);
   const [triggerRestore, settriggerRestore] = useState(0);
@@ -44,7 +46,7 @@ export default function BackupRestore(ac) {
     e.stopPropagation()
     ac.dc.setshowRestorescript(false)
     ac.dc.setrestoreScript([])
-    ac.dc.setdisplayButtons({ display: 'none' })
+    setdisplayButtons({ display: 'none' })
     // e.preventDefault();
     settriggerBackup(triggerBackup + 1);
     setliveLogs([])
@@ -151,7 +153,8 @@ export default function BackupRestore(ac) {
           .then((res) => res.json())
           .then(() => {
             setloadingButtonBackup(false);
-            ac.dc.setdisplayButtons({ display: 'inline-block' })
+            setdisplayButtons({ display: 'inline-block' })
+            setdisplayRestoreButtons({ display: 'inline-block' })
           })
 
         // .catch((err) => {
@@ -231,7 +234,6 @@ export default function BackupRestore(ac) {
       return;
     }
     async function Restore() {
-      // if (ac.dc.showRestorescript === true) {
 
       setloadingButtonRestore(true);
       ac.dc.setshowRestorescript(false)
@@ -259,17 +261,10 @@ export default function BackupRestore(ac) {
 
 
         .then(() => {
+          setdisplayRestoreSwitchButtons({ display: 'inline-block' })
+          setdisplayRestoreButtons({ display: 'none' })
           setloadingButtonRestore(false)
         })
-
-      // } else {
-      //   seterrorMessage(
-      //     <div className="form-input-error-msg alert alert-danger">
-      //       <span className="glyphicon glyphicon-exclamation-sign"></span>
-      //     Check the script before restoring the network.
-      //   </div>
-      //   )
-      // }
 
     }
     Restore();
@@ -369,11 +364,11 @@ export default function BackupRestore(ac) {
           }
         }
 
-      }, 1000)
+      }, 900)
       // auto-clearing after 30 sec
       setTimeout(() => {
         clearInterval(interval)
-      }, 60000);
+      }, 600000);
 
     } else if (!showLiveLogs) {
       clearInterval(interval)
@@ -435,7 +430,7 @@ export default function BackupRestore(ac) {
                 {!loadingButtonBackup && <span>Run Backup</span>}
               </button>
               <button
-                style={ac.dc.displayButtons}
+                style={displayButtons}
                 id="openscript"
                 className="btn btn-primary"
                 onClick={handleRestoreFile}
@@ -443,7 +438,7 @@ export default function BackupRestore(ac) {
                 Show Script
               </button>
               <button
-                style={ac.dc.displayButtons}
+                style={displayButtons}
                 id="downloadscript"
                 className="btn btn-primary"
                 onClick={downloadScript}
@@ -451,7 +446,7 @@ export default function BackupRestore(ac) {
                 Download Script
               </button>
               <button
-                style={ac.dc.displayButtons}
+                style={displayRestoreButtons}
                 id="restore"
                 className="btn btn-danger"
                 onClick={!loadingButtonRestore ? HandleRestore : null}
@@ -467,7 +462,7 @@ export default function BackupRestore(ac) {
                 {!loadingButtonRestore && <span>Restore</span>}
               </button>
               <button
-                style={ac.dc.displayButtons}
+                style={displayRestoreSwitchButtons}
                 id="restore"
                 className="btn btn-danger"
                 onClick={!loadingButtonRestoreSwitch ? HandleRestoreSwitch : null}
@@ -480,7 +475,7 @@ export default function BackupRestore(ac) {
                   />
                 )}
                 {loadingButtonRestoreSwitch && <span>Restoring</span>}
-                {!loadingButtonRestoreSwitch && <span>Restore Switchs</span>}
+                {!loadingButtonRestoreSwitch && <span>Restore Switchsports</span>}
               </button>
             </div>
 

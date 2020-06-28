@@ -345,8 +345,7 @@ def run_restore_switch():
             importlib.reload(meraki_restore_network)
             global data
             data = request.get_json()
-            # NET_ID = data['NET_ID']
-            networkid = 'L_681169443639808523'
+            NET_ID = data['NET_ID']
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             ARG_ORGNAME = data['ARG_ORGNAME']
             SERIAL_NUM = data['SERIAL_NUM']

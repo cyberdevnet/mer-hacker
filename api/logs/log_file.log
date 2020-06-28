@@ -1,11 +1,24 @@
-Restoring configuration Port1 switch Q2HP-QSVT-LBLV
-Restoring configuration Port2 switch Q2HP-QSVT-LBLV
-Restoring configuration Port3 switch Q2HP-QSVT-LBLV
-Restoring configuration Port4 switch Q2HP-QSVT-LBLV
-Restoring configuration Port5 switch Q2HP-QSVT-LBLV
-Restoring configuration Port6 switch Q2HP-QSVT-LBLV
-Restoring configuration Port7 switch Q2HP-QSVT-LBLV
-Restoring configuration Port8 switch Q2HP-QSVT-LBLV
-Restoring configuration Port9 switch Q2HP-QSVT-LBLV
-Restoring configuration Port10 switch Q2HP-QSVT-LBLV
-Restoring Switch configuration complete.
+Starting Backup
+Writing script file meraki_restore_network.py
+Writing admins
+Writing mx_vpn_fw_rules
+Writing snmp_settings
+Writing non_meraki_vpn_peers
+Writing mx vlans
+Writing mx cellular fw rules
+Writing mx l3 fw rules
+Writing vpn settings
+Writing ssid settings
+warning: added dummy radius password for SSID bluehole, replace the original password after restore.
+warning: added dummy radius password for SSID blueguest_test, replace the original password after restore.
+warning: no WiFi settings
+Writing device properties
+warning: no devices
+Writing switch ports
+warning: device Q2PN-V7EX-NBDS is not a Switch, skipping.
+warning: device Q2KD-QT7C-KR36 is not a Switch, skipping.
+warning: device Q2PD-5X9L-XUPT is not a Switch, skipping.
+warning: device Q2KD-6BRT-VQ5U is not a Switch, skipping.
+warning: device Q2KD-CMHW-7ZLX is not a Switch, skipping.
+warning: device Q2PD-VRHE-2D3V is not a Switch, skipping.
+Writing complete, check the script before restore.

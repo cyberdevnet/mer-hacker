@@ -37,12 +37,12 @@ export default function LiveLog(ac) {
           }
         }
 
-      }, 3000)
+      }, 1500)
 
       // auto-clearing after 30 sec
       setTimeout(() => {
         clearInterval(interval)
-      }, 60000);
+      }, 600000);
 
     } else if (!showDebug) {
       clearInterval(interval)
@@ -59,7 +59,7 @@ export default function LiveLog(ac) {
   const OpenDebug = () => {
     setTimeout(() => {
       setshowDebug(!showDebug)
-    }, 900);
+    }, 800);
 
   };
 
@@ -79,18 +79,6 @@ export default function LiveLog(ac) {
               <div className="panel-body">
                 <div style={{ height: 800 }}>
                   <LazyLog extraLines={1} enableSearch text={debug_logs} stream caseInsensitive selectableLines />
-                  {/* <ScrollFollow
-                    startFollowing
-                    render={({ onScroll, follow, startFollowing, stopFollowing }) => (
-                      <LazyLog extraLines={1} enableSearch text={debug_logs} stream caseInsensitive selectableLines />
-                    )}
-                  /> */}
-                  {/* <LazyLog extraLines={1}
-                    enableSearch
-                    url={debug_logs}
-                    caseInsensitive
-                    selectableLines
-                  /> */}
                 </div>
 
               </div>

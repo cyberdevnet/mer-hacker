@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { CSVLink } from "react-csv";
 import { MDBDataTableV5 } from "mdbreact";
 
 export default function GetAllSubnets(ac) {
@@ -187,6 +188,7 @@ export default function GetAllSubnets(ac) {
           <div className="panel panel-default">
             {showtable ? (
               <div className="panel-body">
+                <CSVLink data={mapRows} separator={";"}>Download cvs</CSVLink>;
                 <MDBDataTableV5
                   hover
                   entriesOptions={[10, 25, 50, 100]}

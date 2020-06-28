@@ -108,6 +108,7 @@ export default function Template(ac) {
   const HandleNetwork = (opt) => {
     ac.dc.setnetwork(opt.label);
     ac.dc.setnetworkID(opt.id);
+    // routeDashboard();
     routeToolsTemplate();
     ac.dc.setshowRestorescript(false)
     // ac.dc.setdisplayButtons({ display: 'none' })
@@ -157,7 +158,15 @@ export default function Template(ac) {
                 <i className="fa fa-desktop"></i> {ac.dc.logInlogOut}
               </a>
             </li>
-
+            <li>
+              <a
+                href="#null"
+                className={ac.dc.classDashboard}
+                onClick={routeDashboard}
+              >
+                <i className="fa fa-dashboard"></i> Dashboard
+              </a>
+            </li>
             <div className="select-organization">
               <p>ORGANIZATION</p>
             </div>
@@ -182,15 +191,7 @@ export default function Template(ac) {
               classNamePrefix="foo"
             />
 
-            <li>
-              <a
-                href="#null"
-                className={ac.dc.classDashboard}
-                onClick={routeDashboard}
-              >
-                <i className="fa fa-dashboard"></i> Dashboard
-              </a>
-            </li>
+
             <li>
               <a
                 href="#null"

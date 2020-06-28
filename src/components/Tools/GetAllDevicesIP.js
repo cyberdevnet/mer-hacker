@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { CSVLink } from "react-csv";
 import { MDBDataTableV5 } from "mdbreact";
 
 export default function GetAllDevicesIP(ac) {
@@ -6,6 +7,7 @@ export default function GetAllDevicesIP(ac) {
   const [trigger, settrigger] = useState(0);
   const [loading, setloading] = useState(false);
   const [mapRows, setmapRows] = useState([]);
+  console.log("GetAllDevicesIP -> mapRows", mapRows)
 
   // eslint-disable-next-line
   const [alert, setalert] = useState(false);
@@ -203,6 +205,7 @@ export default function GetAllDevicesIP(ac) {
           <div className="panel panel-default">
             {showtable ? (
               <div className="panel-body">
+                <CSVLink data={mapRows} separator={";"}>Download cvs</CSVLink>;
                 <MDBDataTableV5
                   hover
                   entriesOptions={[10, 25, 50, 100]}

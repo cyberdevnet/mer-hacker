@@ -185,6 +185,25 @@ def device_status():
         flash(error)
         return {'error' : [render_template('flash_template.html'),err.status]}
 
+@app.route('/uplink_loss', methods=['GET', 'POST'])
+def uplink_loss():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json()
+            return data
+        else:
+            dashboard = meraki.DashboardAPI(
+                data['X-Cisco-Meraki-API-Key'], output_log=False)
+            uplinkLoss = dashboard.organizations.getOrganizationUplinksLossAndLatency(
+                data['organizationId'])
+            return {'uplinkLoss': uplinkLoss}
+    except meraki.APIError as err:
+        print('Error: ', err)
+        error = (err.message['errors'][0])
+        flash(error)
+        return {'error' : [render_template('flash_template.html'),err.status]}
+
 
 @ app.route('/allVlans', methods=['GET', 'POST'])
 def get_all_networks_subnets():

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { CSVLink } from "react-csv";
 import { MDBDataTableV5 } from "mdbreact";
 
 export default function NetworkTopUsers(ac) {
@@ -8,7 +9,6 @@ export default function NetworkTopUsers(ac) {
   const [mapROW2, setmapROW2] = useState([]);
   const [mapROW3, setmapROW3] = useState([]);
   const [errorMessage, seterrorMessage] = useState(null);
-  console.log("NetworkTopUsers -> errorMessage", errorMessage)
 
   const APIbody2 = {
     "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
@@ -428,6 +428,8 @@ export default function NetworkTopUsers(ac) {
             {showtable ? (
               <div>
                 <div className="panel-body">
+                  <CSVLink data={mapROW1} separator={";"}>Download cvs</CSVLink>;
+
                   <MDBDataTableV5
                     hover
                     entriesOptions={[10]}
@@ -441,6 +443,8 @@ export default function NetworkTopUsers(ac) {
                   />
                 </div>
                 <div className="panel-body">
+                  <CSVLink data={mapROW2} separator={";"}>Download cvs</CSVLink>;
+
                   <MDBDataTableV5
                     hover
                     entriesOptions={[10]}
@@ -454,6 +458,8 @@ export default function NetworkTopUsers(ac) {
                   />
                 </div>
                 <div className="panel-body">
+                  <CSVLink data={mapROW3} separator={";"}>Download cvs</CSVLink>;
+
                   <MDBDataTableV5
                     hover
                     entriesOptions={[10]}

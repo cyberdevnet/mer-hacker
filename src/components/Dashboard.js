@@ -20,6 +20,9 @@ export default function Dashboard(ac) {
       fill: {
         colors: ["#FABE28", "#ef4040", "#1ABC9C"],
       },
+      legend: {
+        show: false
+      },
     },
     series: [
       {
@@ -28,6 +31,50 @@ export default function Dashboard(ac) {
       },
     ],
   });
+
+
+  const [UplinkLossNetworkchart, setUplinkLossNetworkchart] = useState({
+    options: {
+      chart: {
+        height: 350,
+        type: 'area',
+        zoom: {
+          autoScaleYaxis: true
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        curve: 'smooth'
+      },
+      xaxis: {
+        type: 'datetime',
+        categories: [],
+        min: new Date().toLocaleString(),
+        tickAmount: 6,
+      },
+
+      tooltip: {
+        x: {
+          format: 'HH:mm'
+        },
+      },
+      fill: {
+        colors: ["#FABE28"],
+      },
+
+    },
+    series: [{
+      name: '5 minutes Packet-Loss',
+      data: []
+    }, {
+      name: '5 minutes Latency',
+      data: []
+    }],
+  });
+
+
 
   const [chartModel, setchartModel] = useState({
     options: {
@@ -45,6 +92,9 @@ export default function Dashboard(ac) {
       fill: {
         colors: ["#FABE28", "#ef4040", "#1ABC9C"],
       },
+      legend: {
+        show: false
+      },
     },
     series: [
       {
@@ -60,117 +110,341 @@ export default function Dashboard(ac) {
     networkId: `${ac.dc.networkID}`,
   };
 
-  // const isFirstRunDeviceStatus = useRef(true);
+
   useEffect(() => {
-    // if (isFirstRunDeviceStatus.current) {
-    //   isFirstRunDeviceStatus.current = false;
-    //   return;
-    // }
-    async function callDeviceStatus() {
-      fetch("/device_status", {
-        method: ["POST"],
-        cache: "no-cache",
-        headers: {
-          content_type: "application/json",
-        },
-        body: JSON.stringify(APIbody),
-      }).then((response) => {
-        return response.json;
-      });
-      fetch("/device_status")
-        .then((res) => res.json())
+    const abortController = new AbortController()
+    const signal = abortController.signal
+    async function callDevices() {
 
+      try {
+        fetch("/devices", {
+          method: ["POST"],
+          cache: "no-cache",
+          headers: {
+            content_type: "application/json",
+          },
+          body: JSON.stringify(APIbody),
+        }).then((response) => {
+          return response.json;
+        });
+        fetch("/devices", { signal: signal })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.error) {
+              ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                {data.error[0]}
+              </div>)
+            } else {
+              ac.dc.setdeviceList(data.devices);
+              ac.dc.settotalDevices(data.devices.length);
 
-        .then((data) => {
-          if (data.error) {
-            ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
-              <span className="glyphicon glyphicon-exclamation-sign"></span>
-              {data.error[0]}
-            </div>)
-          } else {
-
-            ac.dc.setdeviceStatusList(data.deviceStatus);
-            ac.dc.settotaldeviceStatusList(data.deviceStatus.length);
-
-            let DeviceStatusobjects = {};
-            for (var x = 0; x < data.deviceStatus.length; x++) {
-              DeviceStatusobjects[x] = data.deviceStatus[x].status;
-            }
-            const DEVICEOBJ = Object.values(DeviceStatusobjects);
-            let OnlineObj = [];
-            let OfflineObj = [];
-            let AlertingObj = [];
-            for (var y = 0; y < data.deviceStatus.length; y++) {
-              if (DEVICEOBJ[y] === "online") {
-                OnlineObj.push(DEVICEOBJ[y]);
-              } else if (DEVICEOBJ[y] === "offline") {
-                OfflineObj.push(DEVICEOBJ[y]);
-              } else if (DEVICEOBJ[y] === "alerting") {
-                AlertingObj.push(DEVICEOBJ[y]);
+              let ModelObj = {};
+              for (var x = 0; x < data.devices.length; x++) {
+                ModelObj[x] = data.devices[x].model;
               }
+
+              const MODELOBJ = Object.values(ModelObj);
+              let Firewalls = [];
+              let Switches = [];
+              let AccessPoint = [];
+              for (var z = 0; z < data.devices.length; z++) {
+                if (MODELOBJ[z].startsWith("MX") || MODELOBJ[z].startsWith("Z")) {
+                  Firewalls.push(MODELOBJ[z]);
+                } else if (MODELOBJ[z].startsWith("MS")) {
+                  Switches.push(MODELOBJ[z]);
+                } else if (MODELOBJ[z].startsWith("MR")) {
+                  AccessPoint.push(MODELOBJ[z]);
+                }
+              }
+
+              setchartModel({
+                ...chartModel,
+                series: [
+                  ...chartModel.series[0].data,
+                  {
+                    name: "Devices",
+                    data: [Firewalls.length, Switches.length, AccessPoint.length],
+                  },
+                ],
+              });
             }
+          })
 
-            setchart({
-              ...chart,
-              series: [
-                ...chart.series[0].data,
-                {
-                  name: "Devices",
-                  data: [AlertingObj.length, OfflineObj.length, OnlineObj.length],
-                },
-              ],
-            });
+      } catch (err) {
+        if (err) {
+          console.log(err);
+          ac.dc.setalert(true);
+        }
+      }
+
+    }
+    callDevices();
+    return function cleanup() {
+      abortController.abort()
+      ac.dc.setalert(false);
+      console.log("cleanup -> abortController")
+    }
+    // eslint-disable-next-line
+  }, [ac.dc.networkID]);
 
 
-          }
+  useEffect(() => {
+    const abortController = new AbortController()
+    const signal = abortController.signal
+    async function callDeviceStatus() {
 
+      try {
+        fetch("/device_status", {
+          method: ["POST"],
+          cache: "no-cache",
+          headers: {
+            content_type: "application/json",
+          },
+          body: JSON.stringify(APIbody),
+        }).then((response) => {
+          return response.json;
+        });
+        fetch("/device_status", { signal: signal })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.error) {
+              ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                {data.error[0]}
+              </div>)
+            } else {
 
+              ac.dc.setdeviceStatusList(data.deviceStatus);
+              ac.dc.settotaldeviceStatusList(data.deviceStatus.length);
 
-        })
-      return () => {
-        ac.dc.setalert(false);
-      };
+              let DeviceStatusobjects = {};
+              for (var x = 0; x < data.deviceStatus.length; x++) {
+                DeviceStatusobjects[x] = data.deviceStatus[x].status;
+              }
+              const DEVICEOBJ = Object.values(DeviceStatusobjects);
+              let OnlineObj = [];
+              let OfflineObj = [];
+              let AlertingObj = [];
+              for (var y = 0; y < data.deviceStatus.length; y++) {
+                if (DEVICEOBJ[y] === "online") {
+                  OnlineObj.push(DEVICEOBJ[y]);
+                } else if (DEVICEOBJ[y] === "offline") {
+                  OfflineObj.push(DEVICEOBJ[y]);
+                } else if (DEVICEOBJ[y] === "alerting") {
+                  AlertingObj.push(DEVICEOBJ[y]);
+                }
+              }
+              setchart({
+                ...chart,
+                series: [
+                  ...chart.series[0].data,
+                  {
+                    name: "Devices",
+                    data: [AlertingObj.length, OfflineObj.length, OnlineObj.length],
+                  },
+                ],
+              });
+            }
+          })
+
+      } catch (err) {
+        if (err) {
+          console.log(err);
+          ac.dc.setalert(true);
+        }
+      }
+
     }
     callDeviceStatus();
+    return function cleanup() {
+      abortController.abort()
+      ac.dc.setalert(false);
+
+      console.log("cleanup -> abortController")
+
+    }
 
     // eslint-disable-next-line
-  }, []);
+  }, [ac.dc.networkID]);
+
+
 
   useEffect(() => {
-    let ModelObj = {};
-    for (var x = 0; x < ac.dc.deviceList.length; x++) {
-      ModelObj[x] = ac.dc.deviceList[x].model;
-    }
-    const MODELOBJ = Object.values(ModelObj);
-    let Firewalls = [];
-    let Switches = [];
-    let AccessPoint = [];
-    for (var z = 0; z < ac.dc.deviceList.length; z++) {
-      if (MODELOBJ[z].startsWith("MX")) {
-        Firewalls.push(MODELOBJ[z]);
-      } else if (MODELOBJ[z].startsWith("MS")) {
-        Switches.push(MODELOBJ[z]);
-      } else if (MODELOBJ[z].startsWith("MR")) {
-        AccessPoint.push(MODELOBJ[z]);
-      }
-    }
+    const abortController = new AbortController()
+    const signal = abortController.signal
+    let interval = null;
+    async function UplinkStatus() {
 
-    setchartModel({
-      ...chartModel,
-      series: [
-        ...chartModel.series[0].data,
-        {
-          name: "Devices",
-          data: [Firewalls.length, Switches.length, AccessPoint.length],
-        },
-      ],
-    });
+      try {
+        fetch("/uplink_loss", {
+          method: ["POST"],
+          cache: "no-cache",
+          headers: {
+            content_type: "application/json",
+          },
+          body: JSON.stringify(APIbody),
+        }).then((response) => {
+          return response.json;
+        });
+        fetch("/uplink_loss", { signal: signal })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.error) {
+              ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                {data.error[0]}
+              </div>)
+            } else {
+
+              try {
+                var UplinkLossNetObj = data.uplinkLoss.filter(function (obj) {
+                  return obj.networkId === ac.dc.networkID;
+                })[0];
+
+
+                const UPLINKOBJ = Object.values(UplinkLossNetObj.timeSeries);
+                let latencyMs = [];
+                let lossPercent = [];
+                let ts = [];
+                let UplinkSeries = {}
+
+
+                for (var y = 0; y < UplinkLossNetObj.timeSeries.length; y++) {
+                  UplinkSeries[y] = UPLINKOBJ[y]
+                  latencyMs.push(UplinkSeries[y].latencyMs);
+                  lossPercent.push(UplinkSeries[y].lossPercent);
+                  ts.push(UplinkSeries[y].ts);
+                }
+                const tsOBJ = Object.values(ts)
+
+                setUplinkLossNetworkchart({
+                  ...UplinkLossNetworkchart,
+                  options: {
+                    ...UplinkLossNetworkchart.options,
+                    xaxis: {
+                      ...UplinkLossNetworkchart.options.xaxis,
+
+                      categories: UplinkLossNetworkchart.options.xaxis.categories.concat(ts)
+                    }
+                  },
+                  series: [
+                    ...UplinkLossNetworkchart.series[0].data,
+                    {
+                      data: lossPercent
+                    }, {
+                      data: latencyMs
+                    }
+                  ],
+                });
+              }
+              catch (err) {
+                if (err) {
+                  console.log(err);
+                  ac.dc.setalert(true);
+                }
+              }
+            }
+          })
+          .catch(err => {
+            if (err.name === 'AbortError') return
+            throw err.name
+          })
+      } catch (err) {
+        if (err) {
+          console.log(err);
+          ac.dc.setalert(true);
+        }
+      }
+
+
+      interval = setTimeout(() => {
+        UplinkStatus()
+      }, 300000);
+
+    }
+    UplinkStatus();
+    return function cleanup() {
+      abortController.abort()
+      clearInterval(interval)
+      ac.dc.setalert(false);
+      console.log("cleanup -> abortController")
+
+    }
     // eslint-disable-next-line
-  }, []);
+  }, [ac.dc.networkID]);
+
 
   return (
     <div id="page-inner">
       <div>{ac.dc.flashMessages && <span>{ac.dc.flashMessages}</span>}</div>
+      <div className="row">
+        <div className="col-md-3 col-sm-12 col-xs-12">
+          <div className="board">
+            <div className="panel panel-primary">
+              <div className="number">
+                <h3 className="h3-dashboard">{ac.dc.organization}</h3>
+                <small>Organization</small>
+              </div>
+              <div className="icon">
+                <i className="fa fa-id-card-o fa-5x blue"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-3 col-sm-12 col-xs-12">
+          <div className="board">
+            <div className="panel panel-primary">
+              <div className="number">
+                <h3 className="h3-dashboard">{ac.dc.networkList.length}</h3>
+                <small>Total Networks</small>
+              </div>
+              <div className="icon">
+                <i className="fa fa-sitemap fa-5x red"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-3 col-sm-12 col-xs-12">
+          <div className="board">
+            <div className="panel panel-primary">
+              <div className="number">
+                <h3 className="h3-dashboard">{ac.dc.timeZone}</h3>
+                <small>Time Zone</small>
+              </div>
+              <div className="icon">
+                <i className="fa fa-clock-o fa-5x green"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-3 col-sm-12 col-xs-12">
+          <div className="board">
+            <div className="panel panel-primary">
+              <div className="number">
+                <h3 className="h3-dashboard">{ac.dc.totaldeviceStatusList}</h3>
+                <small>Total Organization Devices</small>
+              </div>
+              <div className="icon">
+                <i className="fa fa-server fa-5x yellow"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="row justify-content-center">
+        <div className="span6" style={{ float: 'none', margin: '0 auto', width: '600px' }}>
+          <div className="mixed-chart">
+            <Chart
+              options={chart.options}
+              series={chart.series}
+              type="bar"
+            // width="500"
+            />
+          </div>
+        </div>
+      </div>
+
       <div className="row">
         <div className="col-md-3 col-sm-12 col-xs-12">
           <div className="board">
@@ -185,35 +459,32 @@ export default function Dashboard(ac) {
             </div>
           </div>
         </div>
-
         <div className="col-md-3 col-sm-12 col-xs-12">
           <div className="board">
             <div className="panel panel-primary">
               <div className="number">
-                <h3 className="h3-dashboard">{ac.dc.organizationID}</h3>
-                <small>Organization ID</small>
+                <h3 className="h3-dashboard">{ac.dc.totalHosts}</h3>
+                <small>Clients Online</small>
               </div>
               <div className="icon">
-                <i className="fa fa-id-card-o fa-5x blue"></i>
+                <i className="fa fa-users blue"></i>
               </div>
             </div>
           </div>
         </div>
-
         <div className="col-md-3 col-sm-12 col-xs-12">
           <div className="board">
             <div className="panel panel-primary">
               <div className="number">
-                <h3 className="h3-dashboard">{ac.dc.timeZone}</h3>
-                <small>Time Zone</small>
+                <h3 className="h3-dashboard">{ac.dc.totaldeviceStatusList}</h3>
+                <small>Customers</small>
               </div>
               <div className="icon">
-                <i className="fa fa-clock-o fa-5x green"></i>
+                <i className="fa fa-sitemap fa-5x red"></i>
               </div>
             </div>
           </div>
         </div>
-
         <div className="col-md-3 col-sm-12 col-xs-12">
           <div className="board">
             <div className="panel panel-primary">
@@ -227,78 +498,31 @@ export default function Dashboard(ac) {
             </div>
           </div>
         </div>
+
       </div>
-      <div className="row">
-        <div className="mixed-chart">
-          <Chart
-            options={chart.options}
-            series={chart.series}
-            type="bar"
-            width="500"
-          />
+      <div className="row justify-content-center">
+        <div className="col-md-6">
+          <div className="mixed-chart">
+            <Chart
+              options={chartModel.options}
+              series={chartModel.series}
+              type="bar"
+            // width="500"
+            />
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="mixed-chart">
+            <Chart
+              options={UplinkLossNetworkchart.options}
+              series={UplinkLossNetworkchart.series}
+              type="area"
+            // width="500"
+            />
+          </div>
         </div>
       </div>
 
-      <div className="row">
-        <div className="col-xs-6 col-md-3">
-          <div className="panel panel-default">
-            <div className="panel-body easypiechart-panel">
-              <h4>Total Networks</h4>
-              <div className="easypiechart" id="easypiechart-blue">
-                <span className="percent">{ac.dc.networkList.length}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="col-xs-6 col-md-3">
-          <div className="panel panel-default">
-            <div className="panel-body easypiechart-panel">
-              <h4>Total Organization Devices</h4>
-              <div className="easypiechart" id="easypiechart-orange">
-                <span className="percent">{ac.dc.totaldeviceStatusList}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="col-xs-6 col-md-3">
-          <div className="panel panel-default">
-            <div className="panel-body easypiechart-panel">
-              <h4>Customers</h4>
-              <div
-                className="easypiechart"
-                id="easypiechart-teal"
-                data-percent="84"
-              >
-                <span className="percent">84%</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="col-xs-6 col-md-3">
-          <div className="panel panel-default">
-            <div className="panel-body easypiechart-panel">
-              <h4>Clients Online</h4>
-              <div
-                className="easypiechart"
-                id="easypiechart-red"
-                data-percent="46"
-              >
-                <span className="percent">{ac.dc.totalHosts}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="mixed-chart">
-          <Chart
-            options={chartModel.options}
-            series={chartModel.series}
-            type="bar"
-            width="500"
-          />
-        </div>
-      </div>
 
       {/* <div className="row">
         <div className="col-md-5">

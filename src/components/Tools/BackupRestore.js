@@ -365,7 +365,7 @@ export default function BackupRestore(ac) {
         }
 
       }, 900)
-      // auto-clearing after 30 sec
+      // auto-clear Interval
       setTimeout(() => {
         clearInterval(interval)
       }, 600000);

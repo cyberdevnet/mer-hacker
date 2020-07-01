@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Select from "react-select";
 import LoginAPI from "./LoginAPI";
 import Dashboard from "./Dashboard";
@@ -6,11 +6,15 @@ import LoggedIn from "./LoggedIn";
 import Logout from "./Logout";
 import ToolsTemplate from "./ToolsTemplate";
 import AlertModal from "./AlertsModal";
-import BlinkingAlert from "./BlinkingAlert";
+import Countdown from 'react-countdown';
 
 import "../styles/Template.css";
 
+
+
 export default function Template(ac) {
+
+
   const ORGANIZATIONS = ac.dc.organizationList.map((opt, index) => ({
     label: opt.name,
     value: index,
@@ -118,6 +122,7 @@ export default function Template(ac) {
   };
 
   return (
+
     <div id="wrapper">
       <nav className="navbar navbar-default top-navbar" role="navigation">
         <div className="navbar-header">
@@ -134,19 +139,24 @@ export default function Template(ac) {
           </button>
           <a className="navbar-brand" href="index.html">
             <strong>
-              <i className="icon fa fa-plane"></i> MER-HACKER
+              <i className="icon fa fa-plane" ></i> MER-HACKER
             </strong>
           </a>
 
-          <div id="sideNav" href="">
-            <i className="fa fa-bars icon"></i>
+          <div id="sideNav" href="" >
+            <i className="fa fa-bars icon" style={ac.dc.collapseButton}></i>
           </div>
         </div>
         <div className="nav navbar-top-links navbar-right">
-          {ac.dc.alert ? <BlinkingAlert dc={ac.dc} /> : <div></div>}
+          {ac.dc.isLoggedIn ? (<div className='timeout-wrapper'>
+            Session Timeout: <Countdown className='timeout' date={Date.now() + (ac.dc.sessionTime * 1000)} daysInHours />
+
+          </div>) : (<div></div>)}
         </div>
+
       </nav>
-      <nav className="navbar-default navbar-side" role="navigation">
+
+      <nav className="navbar-default navbar-side" role="navigation" >
         <div className="sidebar-collapse">
           <ul className="nav" id="main-menu">
             <li>
@@ -204,7 +214,7 @@ export default function Template(ac) {
           </ul>
         </div>
       </nav>
-      <div id="page-wrapper">
+      <div id="page-wrapper" >
         <div className="header">
           <p className="page-header"></p>
         </div>
@@ -216,5 +226,10 @@ export default function Template(ac) {
         {ac.dc.switchToolsTemplate ? <ToolsTemplate dc={ac.dc} /> : <div></div>}
       </div>
     </div>
+
+
+
+
+
   );
 }

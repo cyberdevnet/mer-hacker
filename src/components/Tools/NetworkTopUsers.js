@@ -30,6 +30,8 @@ export default function NetworkTopUsers(ac) {
 
   const isFirstRun = useRef(true);
   useEffect(() => {
+    const abortController = new AbortController()
+    const signal = abortController.signal
     if (isFirstRun.current) {
       isFirstRun.current = false;
       return;
@@ -42,6 +44,7 @@ export default function NetworkTopUsers(ac) {
             ac.dc.setloadingButton(true);
 
             fetch("/topuserdata/", {
+              signal: signal,
               method: ["POST"],
               cache: "no-cache",
               headers: {
@@ -53,6 +56,7 @@ export default function NetworkTopUsers(ac) {
             });
 
             fetch("/topuserdata/", {
+              signal: signal,
               method: ["POST"],
               cache: "no-cache",
               headers: {
@@ -163,7 +167,6 @@ export default function NetworkTopUsers(ac) {
           }
         } else {
           ac.dc.setloadingButton(false);
-          ac.dc.setalert(true);
 
           seterrorMessage(
             <div className="form-input-error-msg alert alert-danger">
@@ -181,12 +184,13 @@ export default function NetworkTopUsers(ac) {
     }
     APIcall();
     return () => {
+      abortController.abort()
+      console.log("cleanup -> abortController")
       ac.dc.setreports([]);
       setmapROW1([]);
       setmapROW2([]);
       setmapROW3([]);
       setshowtable(false);
-      ac.dc.setalert(false);
       seterrorMessage(null);
     };
     // eslint-disable-next-line

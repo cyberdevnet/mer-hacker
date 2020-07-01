@@ -70,3 +70,13 @@ a {
   background-color: hsla(0, 0%, 98%, 0);
   border-color: hsla(0, 0%, 80%, 0.16);
 }
+
+
+.timeout-wrapper {
+  margin-right: 30px;
+  position: relative;
+  top: 19px;
+  font-size: 14px;
+  color: #777;
+  font-weight: 600;
+}

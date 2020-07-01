@@ -11,38 +11,38 @@ import "../../styles/MainTools.css";
 export default function MainTools(ac) {
   return (
     <div>
-      {ac.ts.switchAllTools[1] ? (
-        <GetAllDevicesIP dc={ac.dc} ts={ac.ts} />
+      {ac.dc.switchAllTools[1] ? (
+        <GetAllDevicesIP dc={ac.dc} />
       ) : (
           <div></div>
         )}
-      {ac.ts.switchAllTools[2] ? (
-        <GetAllSubnets dc={ac.dc} ts={ac.ts} />
+      {ac.dc.switchAllTools[2] ? (
+        <GetAllSubnets dc={ac.dc} />
       ) : (
           <div></div>
         )}
-      {ac.ts.switchAllTools[3] ? (
-        <GetAllOrganizationSubnets dc={ac.dc} ts={ac.ts} />
+      {ac.dc.switchAllTools[3] ? (
+        <GetAllOrganizationSubnets dc={ac.dc} />
       ) : (
           <div></div>
         )}
-      {ac.ts.switchAllTools[4] ? (
-        <NetworkTopUsers dc={ac.dc} ts={ac.ts} />
+      {ac.dc.switchAllTools[4] ? (
+        <NetworkTopUsers dc={ac.dc} />
       ) : (
           <div></div>
         )}
-      {ac.ts.switchAllTools[5] ? (
-        <FindPorts dc={ac.dc} ts={ac.ts} />
+      {ac.dc.switchAllTools[5] ? (
+        <FindPorts dc={ac.dc} />
       ) : (
           <div></div>
         )}
-      {ac.ts.switchAllTools[6] ? (
-        <TrafficAnalysis dc={ac.dc} ts={ac.ts} />
+      {ac.dc.switchAllTools[6] ? (
+        <TrafficAnalysis dc={ac.dc} />
       ) : (
           <div></div>
         )}
-      {ac.ts.switchAllTools[7] ? (
-        <BackupRestore dc={ac.dc} ts={ac.ts} />
+      {ac.dc.switchAllTools[7] ? (
+        <BackupRestore dc={ac.dc} />
       ) : (
           <div></div>
         )}

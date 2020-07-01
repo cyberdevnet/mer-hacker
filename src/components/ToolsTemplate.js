@@ -4,57 +4,35 @@ import LiveLog from "./LiveLog";
 
 import "../styles/ToolsTemplate.css";
 
-const ToolsContext = React.createContext(null);
 
 export default function ToolsTemplate(ac) {
-  const [organization, setorganization] = useState("Set Organization");
-  const [organizationID, setorganizationID] = useState(0);
-  const [networkID, setnetworkID] = useState(0);
-  const [network, setnetwork] = useState("Networks");
-  const [switchAllTools, setswitchAllTools] = useState({
-    1: false,
-    2: false,
-    3: false,
-    4: false,
-    5: false,
-    6: false,
-    7: false,
-    8: false,
-  });
+  // const [organization, setorganization] = useState("Set Organization");
+  // const [organizationID, setorganizationID] = useState(0);
+  // const [networkID, setnetworkID] = useState(0);
+  // const [network, setnetwork] = useState("Networks");
+
 
   const shutAllTools = () => {
     ac.dc.setswitchMainTools(true);
     let selectBox = document.getElementById("selectBox");
     let selectedValue = selectBox.options[selectBox.selectedIndex].value;
     if (selectedValue === "1") {
-      setswitchAllTools({ 1: true });
+      ac.dc.setswitchAllTools({ 1: true });
     } else if (selectedValue === "2") {
-      setswitchAllTools({ 2: true });
+      ac.dc.setswitchAllTools({ 2: true });
     } else if (selectedValue === "3") {
-      setswitchAllTools({ 3: true });
+      ac.dc.setswitchAllTools({ 3: true });
     } else if (selectedValue === "4") {
-      setswitchAllTools({ 4: true });
+      ac.dc.setswitchAllTools({ 4: true });
     } else if (selectedValue === "5") {
-      setswitchAllTools({ 5: true });
+      ac.dc.setswitchAllTools({ 5: true });
     } else if (selectedValue === "6") {
-      setswitchAllTools({ 6: true });
+      ac.dc.setswitchAllTools({ 6: true });
     } else if (selectedValue === "7") {
-      setswitchAllTools({ 7: true });
+      ac.dc.setswitchAllTools({ 7: true });
     }
   };
 
-  const ts = {
-    switchAllTools,
-    setswitchAllTools,
-    organization,
-    setorganization,
-    organizationID,
-    setorganizationID,
-    networkID,
-    setnetworkID,
-    network,
-    setnetwork,
-  };
 
   return (
     <div id="page-inner-tool-templates">
@@ -145,9 +123,7 @@ export default function ToolsTemplate(ac) {
           </div>
         </div>
       </div>
-      <ToolsContext.Provider ts={ts}>
-        {ac.dc.switchMainTools ? <MainTools dc={ac.dc} ts={ts} /> : <div></div>}
-      </ToolsContext.Provider>
+      {ac.dc.switchMainTools ? <MainTools dc={ac.dc} /> : <div></div>}
     </div>
   );
 }

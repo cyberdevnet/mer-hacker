@@ -131,6 +131,8 @@ export default function BackupRestore(ac) {
 
   const isFirstRun = useRef(true);
   useEffect(() => {
+    const abortController = new AbortController()
+    const signal = abortController.signal
     if (isFirstRun.current) {
       isFirstRun.current = false;
       return;
@@ -142,6 +144,7 @@ export default function BackupRestore(ac) {
         setloadingButtonBackup(true);
 
         fetch("/run_backup/", {
+          signal: signal,
           method: ["POST"],
           cache: "no-cache",
           headers: {
@@ -157,18 +160,6 @@ export default function BackupRestore(ac) {
             setdisplayRestoreButtons({ display: 'inline-block' })
           })
 
-        // .catch((err) => {
-        //   console.log("Backup -> err", err());
-        //   err.json().then((errorMessage) => {
-        //     seterrorMessage(
-        //       <div className="form-input-error-msg alert alert-danger">
-        //         <span className="glyphicon glyphicon-exclamation-sign"></span>
-        //         {errorMessage}
-        //       </div>
-        //     );
-        //   });
-        //   setloadingButtonBackup(false);
-
         // });
       } else {
         ac.dc.setswitchAlertModal(true);
@@ -178,7 +169,8 @@ export default function BackupRestore(ac) {
     }
     Backup();
     return () => {
-      ac.dc.setalert(false);
+      abortController.abort()
+      console.log("cleanup -> abortController")
       seterrorMessage(null);
     };
     // eslint-disable-next-line
@@ -188,13 +180,15 @@ export default function BackupRestore(ac) {
 
   const isFirstRunFile = useRef(true);
   useEffect(() => {
+    const abortController = new AbortController()
+    const signal = abortController.signal
     if (isFirstRunFile.current) {
       isFirstRunFile.current = false;
       return;
     }
     async function OpenFile() {
 
-      fetch('/api/backup_restore/meraki_restore_network.py')
+      fetch('/api/backup_restore/meraki_restore_network.py', { signal: signal })
         .then(response => { return response.text() })
         .then((data) => {
           ac.dc.setrestoreScript(data)
@@ -205,21 +199,15 @@ export default function BackupRestore(ac) {
 
         .catch((err) => {
           console.log("APIcall -> err", err)
-          // err.json().then((errorMessage) => {
-          //   seterrorMessage(
-          //     <div className="form-input-error-msg alert alert-danger">
-          //       <span className="glyphicon glyphicon-exclamation-sign"></span>
-          //       {errorMessage}
-          //     </div>
-          //   );
-          // });
+
         });
 
     }
     OpenFile();
     return () => {
+      abortController.abort()
+      console.log("cleanup -> abortController")
       ac.dc.setshowRestorescript(false)
-      ac.dc.setalert(false);
       seterrorMessage(null);
     };
     // eslint-disable-next-line
@@ -229,6 +217,8 @@ export default function BackupRestore(ac) {
 
   const isFirstRunRestore = useRef(true);
   useEffect(() => {
+    const abortController = new AbortController()
+    const signal = abortController.signal
     if (isFirstRunRestore.current) {
       isFirstRunRestore.current = false;
       return;
@@ -247,6 +237,7 @@ export default function BackupRestore(ac) {
 
 
       fetch("/run_restore/", {
+        signal: signal,
         method: ["POST"],
         cache: "no-cache",
         headers: {
@@ -269,8 +260,9 @@ export default function BackupRestore(ac) {
     }
     Restore();
     return () => {
+      abortController.abort()
+      console.log("cleanup -> abortController")
       ac.dc.setshowRestorescript(false)
-      ac.dc.setalert(false);
       seterrorMessage(null);
     };
     // eslint-disable-next-line
@@ -280,6 +272,8 @@ export default function BackupRestore(ac) {
 
   const isFirstRunRestoreSwitch = useRef(true);
   useEffect(() => {
+    const abortController = new AbortController()
+    const signal = abortController.signal
     if (isFirstRunRestoreSwitch.current) {
       isFirstRunRestoreSwitch.current = false;
       return;
@@ -299,6 +293,7 @@ export default function BackupRestore(ac) {
 
 
       fetch("/run_restore_switch/", {
+        signal: signal,
         method: ["POST"],
         cache: "no-cache",
         headers: {
@@ -328,8 +323,9 @@ export default function BackupRestore(ac) {
     }
     RestoreSwitch();
     return () => {
+      abortController.abort()
+      console.log("cleanup -> abortController")
       ac.dc.setshowRestorescript(false)
-      ac.dc.setalert(false);
       seterrorMessage(null);
     };
     // eslint-disable-next-line
@@ -338,6 +334,8 @@ export default function BackupRestore(ac) {
 
   const isFirstRunLogs = useRef(true);
   useEffect(() => {
+    const abortController = new AbortController()
+    const signal = abortController.signal
     if (isFirstRunLogs.current) {
       isFirstRunLogs.current = false;
       return;
@@ -347,7 +345,7 @@ export default function BackupRestore(ac) {
     if (showLiveLogs) {
       interval = setInterval(() => {
         try {
-          fetch("/api/logs/log_file.log")
+          fetch("/api/logs/log_file.log", { signal: signal })
             .then((response) => {
 
               return response.text();
@@ -360,7 +358,6 @@ export default function BackupRestore(ac) {
         } catch (err) {
           if (err) {
             console.log(err);
-            ac.dc.setalert(true);
           }
         }
 
@@ -373,7 +370,11 @@ export default function BackupRestore(ac) {
     } else if (!showLiveLogs) {
       clearInterval(interval)
     }
-    return () => clearInterval(interval);
+    return () => {
+      abortController.abort()
+      console.log("cleanup -> abortController")
+      clearInterval(interval)
+    };
 
   }, [showLiveLogs]);
 

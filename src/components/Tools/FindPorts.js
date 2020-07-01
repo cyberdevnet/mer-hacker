@@ -32,6 +32,8 @@ export default function NetworkTopUsers(ac) {
 
   const isFirstRunMAC = useRef(true);
   useEffect(() => {
+    const abortController = new AbortController()
+    const signal = abortController.signal
     if (isFirstRunMAC.current) {
       isFirstRunMAC.current = false;
       return;
@@ -58,6 +60,7 @@ export default function NetworkTopUsers(ac) {
             ac.dc.setloadingButton(true);
 
             fetch("/find_ports", {
+              signal: signal,
               method: ["POST"],
               cache: "no-cache",
               headers: {
@@ -107,16 +110,19 @@ export default function NetworkTopUsers(ac) {
     }
     APICallMAC();
     return () => {
+      abortController.abort()
+      console.log("cleanup -> abortController")
       setfindPort([]);
       setshowtable(false);
       setshowError(false);
-      ac.dc.setalert(false);
     };
     // eslint-disable-next-line
   }, [triggerMAC]);
 
   const isFirstRunIP = useRef(true);
   useEffect(() => {
+    const abortController = new AbortController()
+    const signal = abortController.signal
     if (isFirstRunIP.current) {
       isFirstRunIP.current = false;
       return;
@@ -134,6 +140,7 @@ export default function NetworkTopUsers(ac) {
             ac.dc.setloadingButton(true);
 
             fetch("/find_ports", {
+              signal: signal,
               method: ["POST"],
               cache: "no-cache",
               headers: {
@@ -154,7 +161,6 @@ export default function NetworkTopUsers(ac) {
               .then(() => setshowtable(true))
               .then(() => ac.dc.setloadingButton(false))
               .catch((err) => {
-                ac.dc.setalert(true);
                 console.log("this is the err: ", err);
                 ac.dc.setloadingButton(false);
               });
@@ -177,10 +183,11 @@ export default function NetworkTopUsers(ac) {
     }
     APICallIP();
     return () => {
+      abortController.abort()
+      console.log("cleanup -> abortController")
       setfindPort([]);
       setshowtable(false);
       setshowError(false);
-      ac.dc.setalert(false);
     };
     // eslint-disable-next-line
   }, [triggerIP]);

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { CSVLink } from "react-csv";
 import { MDBDataTableV5 } from "mdbreact";
 
 export default function TrafficAnalysis(ac) {
@@ -59,6 +60,8 @@ export default function TrafficAnalysis(ac) {
 
   const isFirstRun = useRef(true);
   useEffect(() => {
+    const abortController = new AbortController()
+    const signal = abortController.signal
     if (isFirstRun.current) {
       isFirstRun.current = false;
       return;
@@ -81,7 +84,7 @@ export default function TrafficAnalysis(ac) {
               return response.json;
             });
 
-            fetch("/traffic_analysis/")
+            fetch("/traffic_analysis/", { signal: signal })
               .then((res) => {
                 return res.json();
               })
@@ -132,13 +135,11 @@ export default function TrafficAnalysis(ac) {
           } catch (err) {
             if (err) {
               console.log("This is the error:", err);
-              ac.dc.setalert(true);
               ac.dc.setloadingButton(false);
             }
           }
         } else {
           ac.dc.setloadingButton(false);
-          ac.dc.setalert(true);
         }
       } else {
         ac.dc.setswitchAlertModal(true);
@@ -148,10 +149,11 @@ export default function TrafficAnalysis(ac) {
     }
     APIcall();
     return () => {
+      abortController.abort()
+      console.log("cleanup -> abortController")
       setnetwanalysis([]);
       setmapROW1([]);
       setshowtable(false);
-      ac.dc.setalert(false);
       ac.dc.setflashMessages(null);
     };
     // eslint-disable-next-line
@@ -316,6 +318,7 @@ export default function TrafficAnalysis(ac) {
             {showtable ? (
               <div>
                 <div className="panel-body">
+                  <CSVLink data={mapROW1} separator={";"}>Download cvs</CSVLink>;
                   <MDBDataTableV5
                     hover
                     entriesOptions={[10, 25, 100, 250, 500, 1000, 2000]}

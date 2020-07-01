@@ -1,4 +1,5 @@
 import React from "react";
+import $ from 'jquery'
 import "../styles/LoggedIn.css";
 
 export default function LoggedIn(ac) {
@@ -10,6 +11,13 @@ export default function LoggedIn(ac) {
     ac.dc.setclassLogin("");
     ac.dc.setclassDashboard("active-menu");
     ac.dc.setlogInlogOut("Logout");
+    // if (ac.dc.switchLoggedOut === true) {
+
+    ac.dc.setcollapseButton({ display: 'block' })
+    $('.navbar-side').animate({ left: '0px' });
+    $(this).removeClass('closed');
+    $('#page-wrapper').animate({ 'margin-left': '260px' });
+    // }
   };
   return (
     <div>

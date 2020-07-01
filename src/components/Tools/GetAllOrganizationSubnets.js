@@ -9,7 +9,6 @@ export default function GetAllOrganizationSubnets(ac) {
   const [mapRows, setmapRows] = useState([]);
 
   // eslint-disable-next-line
-  const [alert, setalert] = useState(false);
 
   const APIbody = {
     "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
@@ -24,6 +23,8 @@ export default function GetAllOrganizationSubnets(ac) {
 
   const isFirstRun = useRef(true);
   useEffect(() => {
+    const abortController = new AbortController()
+    const signal = abortController.signal
     if (isFirstRun.current) {
       isFirstRun.current = false;
       return;
@@ -42,7 +43,7 @@ export default function GetAllOrganizationSubnets(ac) {
           return response.json;
         });
 
-        fetch("/allVlans")
+        fetch("/allVlans", { signal: signal })
           .then((res) => res.json())
           .then((data) => {
             if (data.error) {
@@ -98,10 +99,11 @@ export default function GetAllOrganizationSubnets(ac) {
     }
     APIcall();
     return () => {
+      abortController.abort()
+      console.log("cleanup -> abortController")
       ac.dc.setallVlanList([]);
       setmapRows([]);
       setshowtable(false);
-      ac.dc.setalert(false);
     };
     // eslint-disable-next-line
   }, [trigger]);

@@ -7,10 +7,8 @@ export default function GetAllDevicesIP(ac) {
   const [trigger, settrigger] = useState(0);
   const [loading, setloading] = useState(false);
   const [mapRows, setmapRows] = useState([]);
-  console.log("GetAllDevicesIP -> mapRows", mapRows)
 
   // eslint-disable-next-line
-  const [alert, setalert] = useState(false);
 
   const APIbody = {
     "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
@@ -20,6 +18,8 @@ export default function GetAllDevicesIP(ac) {
 
   const isFirstRun = useRef(true);
   useEffect(() => {
+    const abortController = new AbortController()
+    const signal = abortController.signal
     if (isFirstRun.current) {
       isFirstRun.current = false;
       return;
@@ -37,7 +37,7 @@ export default function GetAllDevicesIP(ac) {
         }).then((response) => {
           return response.json;
         });
-        fetch("/devices")
+        fetch("/devices", { signal: signal })
           .then((res) => res.json())
           .then((data) => {
             if (data.error) {
@@ -81,10 +81,11 @@ export default function GetAllDevicesIP(ac) {
 
     APIcall();
     return () => {
+      abortController.abort()
+      console.log("cleanup -> abortController")
       ac.dc.setclientList([]);
       setmapRows([]);
       setshowtable(false);
-      ac.dc.setalert(false);
     };
     // eslint-disable-next-line
   }, [trigger]);

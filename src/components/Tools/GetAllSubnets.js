@@ -16,6 +16,8 @@ export default function GetAllSubnets(ac) {
 
   const isFirstRun = useRef(true);
   useEffect(() => {
+    const abortController = new AbortController()
+    const signal = abortController.signal
     if (isFirstRun.current) {
       isFirstRun.current = false;
       return;
@@ -33,7 +35,7 @@ export default function GetAllSubnets(ac) {
         }).then((response) => {
           return response.json;
         });
-        fetch("/vlans")
+        fetch("/vlans", { signal: signal })
           .then((res) => res.json())
           .then((data) => {
             if (data.error) {
@@ -73,11 +75,12 @@ export default function GetAllSubnets(ac) {
 
     APIcall();
     return () => {
+      abortController.abort()
+      console.log("cleanup -> abortController")
       ac.dc.setflashMessages([])
       ac.dc.setvlanList([]);
       setmapRows([]);
       setshowtable(false);
-      ac.dc.setalert(false);
     };
     // eslint-disable-next-line
   }, [trigger]);

@@ -174,7 +174,6 @@ export default function Dashboard(ac) {
       } catch (err) {
         if (err) {
           console.log(err);
-          ac.dc.setalert(true);
         }
       }
 
@@ -182,7 +181,6 @@ export default function Dashboard(ac) {
     callDevices();
     return function cleanup() {
       abortController.abort()
-      ac.dc.setalert(false);
       console.log("cleanup -> abortController")
     }
     // eslint-disable-next-line
@@ -251,7 +249,6 @@ export default function Dashboard(ac) {
       } catch (err) {
         if (err) {
           console.log(err);
-          ac.dc.setalert(true);
         }
       }
 
@@ -259,7 +256,6 @@ export default function Dashboard(ac) {
     callDeviceStatus();
     return function cleanup() {
       abortController.abort()
-      ac.dc.setalert(false);
 
       console.log("cleanup -> abortController")
 
@@ -341,7 +337,6 @@ export default function Dashboard(ac) {
               catch (err) {
                 if (err) {
                   console.log(err);
-                  ac.dc.setalert(true);
                 }
               }
             }
@@ -353,7 +348,6 @@ export default function Dashboard(ac) {
       } catch (err) {
         if (err) {
           console.log(err);
-          ac.dc.setalert(true);
         }
       }
 
@@ -367,7 +361,6 @@ export default function Dashboard(ac) {
     return function cleanup() {
       abortController.abort()
       clearInterval(interval)
-      ac.dc.setalert(false);
       console.log("cleanup -> abortController")
 
     }
@@ -376,7 +369,9 @@ export default function Dashboard(ac) {
 
 
   return (
+
     <div id="page-inner">
+
       <div>{ac.dc.flashMessages && <span>{ac.dc.flashMessages}</span>}</div>
       <div className="row">
         <div className="col-md-3 col-sm-12 col-xs-12">
@@ -525,43 +520,43 @@ export default function Dashboard(ac) {
 
 
       {/* <div className="row">
-        <div className="col-md-5">
-          <div className="panel panel-default">
-            <div className="panel-heading">Line Chart</div>
-            <div className="panel-body">
-              <div id="morris-line-chart"></div>
-            </div>
-          </div>
-        </div>
+  <div className="col-md-5">
+    <div className="panel panel-default">
+      <div className="panel-heading">Line Chart</div>
+      <div className="panel-body">
+        <div id="morris-line-chart"></div>
+      </div>
+    </div>
+  </div>
 
-        <div className="col-md-7">
-          <div className="panel panel-default">
-            <div className="panel-heading">Bar Chart Example</div>
-            <div className="panel-body">
-              <div id="morris-bar-chart"></div>
-            </div>
-          </div>
-        </div>
-      </div> */}
+  <div className="col-md-7">
+    <div className="panel panel-default">
+      <div className="panel-heading">Bar Chart Example</div>
+      <div className="panel-body">
+        <div id="morris-bar-chart"></div>
+      </div>
+    </div>
+  </div>
+</div> */}
 
       {/* <div className="row">
-        <div className="col-md-9 col-sm-12 col-xs-12">
-          <div className="panel panel-default">
-            <div className="panel-heading">Area Chart</div>
-            <div className="panel-body">
-              <div id="morris-area-chart"></div>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-3 col-sm-12 col-xs-12">
-          <div className="panel panel-default">
-            <div className="panel-heading">Donut Chart Example</div>
-            <div className="panel-body">
-              <div id="morris-donut-chart"></div>
-            </div>
-          </div>
-        </div>
-      </div> */}
+  <div className="col-md-9 col-sm-12 col-xs-12">
+    <div className="panel panel-default">
+      <div className="panel-heading">Area Chart</div>
+      <div className="panel-body">
+        <div id="morris-area-chart"></div>
+      </div>
+    </div>
+  </div>
+  <div className="col-md-3 col-sm-12 col-xs-12">
+    <div className="panel panel-default">
+      <div className="panel-heading">Donut Chart Example</div>
+      <div className="panel-body">
+        <div id="morris-donut-chart"></div>
+      </div>
+    </div>
+  </div>
+</div> */}
       <div className="row">
         <div className="col-md-12"></div>
       </div>
@@ -575,27 +570,27 @@ export default function Dashboard(ac) {
                 <a href="/" className="list-group-item">
                   <span className="badge">7 minutes ago</span>
                   <i className="fa fa-fw fa-comment"></i> Commented on a post
-                </a>
+          </a>
                 <a href="/" className="list-group-item">
                   <span className="badge">16 minutes ago</span>
                   <i className="fa fa-fw fa-truck"></i> Order 392 shipped
-                </a>
+          </a>
                 <a href="/" className="list-group-item">
                   <span className="badge">36 minutes ago</span>
                   <i className="fa fa-fw fa-globe"></i> Invoice 653 has paid
-                </a>
+          </a>
                 <a href="/" className="list-group-item">
                   <span className="badge">1 hour ago</span>
                   <i className="fa fa-fw fa-user"></i> A new user has been added
-                </a>
+          </a>
                 <a href="/" className="list-group-item">
                   <span className="badge">1.23 hour ago</span>
                   <i className="fa fa-fw fa-user"></i> A new user has added
-                </a>
+          </a>
                 <a href="/" className="list-group-item">
                   <span className="badge">yesterday</span>
                   <i className="fa fa-fw fa-globe"></i> Saved the world
-                </a>
+          </a>
               </div>
               <div className="text-right">
                 <a href="/">
@@ -678,5 +673,6 @@ export default function Dashboard(ac) {
         </p>
       </footer>
     </div>
+
   );
 }

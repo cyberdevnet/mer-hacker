@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import { LazyLog } from "react-lazylog";
 import "../../styles/FindPorts.css";
 
 export default function NetworkTopUsers(ac) {
@@ -14,6 +13,7 @@ export default function NetworkTopUsers(ac) {
   const [errorMessageMAC_IP, seterrorMessageMAC_IP] = useState(null);
   const [IPAddress, setIPAddress] = useState("");
   const [macAddressbeforeTransf, setmacAddressbeforeTransf] = useState("");
+  // eslint-disable-next-line
   const [macAddressafterTransf, setmacAddressafterTransf] = useState("");
   const [switchTimeInterval, setswitchTimeInterval] = useState(15);
 

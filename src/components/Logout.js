@@ -1,36 +1,50 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
+import axios from 'axios'
+
+
 import $ from 'jquery'
 import "../styles/Logout.css";
 
-export default function Logout(ac) {
+export default function Logout(ac, props) {
+
+
+  const deleteCookie = async () => {
+    try {
+      await axios.get('/clear-cookie');
+      ac.setisSignedIn(false);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  let history = useHistory();
+
   const ConfirmLogout = () => {
-    ac.dc.setsessionTimeout(false);
-    ac.dc.setsessionTime(0)
-    ac.dc.setapiKey("");
-    ac.dc.setisLoggedIn(false)
-    ac.dc.setgetOrgStatusCode(0);
-    ac.dc.setswitchLoginAPI(true);
-    ac.dc.setswitchDashboard(false);
-    ac.dc.setswitchLoggedout(false);
-    ac.dc.setinputKey("");
-    ac.dc.setinputConfKey("");
-    ac.dc.setlogInlogOut("Login");
-    ac.dc.setorganization("Set Organization");
-    ac.dc.setnetworkID(0);
-    ac.dc.setnetwork("Networks");
-    // if (ac.dc.switchLoggedOut === true) {
-    ac.dc.setcollapseButton({ display: 'none' })
+    deleteCookie()
+    history.push('/login')
+    ac.setsessionTimeout(false);
+    ac.setsessionTime(3600)
+    ac.setapiKey("");
+    ac.setisSignedIn(false)
+    ac.setgetOrgStatusCode(0);
+    ac.setswitchLoginAPI(true);
+    ac.setswitchDashboard(false);
+    ac.setswitchLoggedout(false);
+    ac.setinputKey("");
+    ac.setinputConfKey("");
+    ac.setorganization("Set Organization");
+    ac.setnetworkID(0);
+    ac.setnetwork("Networks");
+    ac.setcollapseButton({ display: 'none' })
     $(this).addClass('closed');
     $('.navbar-side').css({ left: '-260px' });
     $('#page-wrapper').css({ 'margin-left': '0px' });
-    // }
-    ac.dc.sethideLogin({ display: "block" });
-
+    // ac.sethideLogin({ display: "block" });
   };
 
   const Cancel = () => {
-    ac.dc.setswitchLoggedout(false);
-    ac.dc.setswitchDashboard(true);
+    ac.history.goBack()
   };
 
   return (

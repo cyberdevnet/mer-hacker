@@ -15,6 +15,62 @@ app.use(expressLogger);
 
 
 
+//Auth
+
+const basicAuth = require('express-basic-auth');
+const cookieParser = require('cookie-parser');
+
+// A random key for signing the cookie
+app.use(cookieParser('82e4e438a0705fabf61f9854e3b575af'));
+
+const auth = basicAuth({
+    users: {
+        admin: '123',
+    },
+});
+
+
+
+app.get('/authenticate', auth, (req, res) => {
+
+    const options = {
+        httpOnly: true,
+        signed: true,
+    };
+
+    if (req.auth.user === 'admin') {
+        res.cookie('name', 'admin', options).send({ signedIn: true });
+    } else {
+        res.send({ signedIn: false });
+    }
+});
+
+app.get('/read-cookie', (req, res) => {
+    console.log(req.signedCookies);
+    if (req.signedCookies.name === 'admin') {
+        res.send({ signedIn: true });
+    } else {
+        res.send({ signedIn: false });
+    }
+});
+
+app.get('/clear-cookie', (req, res) => {
+    res.clearCookie('name').end();
+    // res.send('you have been logged out');
+});
+
+app.get('/get-auth-status', (req, res) => {
+    if (req.signedCookies.name === 'admin') {
+        res.send('you are logged in');
+    } else {
+        res.send('you are NOT logged in');
+        res.end();
+    }
+});
+
+
+
+
 app.use("/api/backup_restore/", express.static(__dirname + '/api/backup_restore/'));
 
 app.get("/api/backup_restore/", function (req, res) {
@@ -57,11 +113,7 @@ app.post('/upload', function (req, res) {
 
 });
 
-// app.listen(3001, function () {
 
-//     console.log('App running on port 3001');
-
-// });
 const HOST = "localhost";
 const PORT = process.env.PORT || 3001;
 

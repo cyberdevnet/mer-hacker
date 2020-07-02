@@ -30,7 +30,7 @@ def restore_network(ARG_ORGID, ARG_APIKEY):
 	print('Checking Administrator',file=f)
 	f.flush()
 	posturl = 'https://api.meraki.com/api/v0/organizations/{0}/admins'.format(str(ARG_ORGID))
-	dashboard = session.post(posturl, json={'accountStatus': 'ok', 'email': 'fabrizio.rollo@nts.eu', 'hasApiKey': True, 'id': '967931', 'lastActive': 1593417243, 'name': 'Fabrizio Rollo', 'networks': [], 'orgAccess': 'full', 'tags': [], 'twoFactorAuthEnabled': True}, headers=headers)
+	dashboard = session.post(posturl, json={'accountStatus': 'ok', 'authenticationMethod': 'Email', 'email': 'fabrizio.rollo@nts.eu', 'hasApiKey': True, 'id': '967931', 'lastActive': 1593593674, 'name': 'Fabrizio Rollo', 'networks': [], 'orgAccess': 'full', 'tags': [], 'twoFactorAuthEnabled': True}, headers=headers)
 
 # MX VPN firewall
 # https://dashboard.meraki.com/api_docs#mx-vpn-firewall

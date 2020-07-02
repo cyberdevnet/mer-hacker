@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState, useRef } from "react";
-import Select from "react-select";
 import { LazyLog } from "react-lazylog";
 import "../../styles/BackupRestore.css";
 import axios from 'axios';
@@ -9,6 +8,7 @@ import ReactModal from 'react-modal'
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/theme-twilight";
 import "ace-builds/src-min-noconflict/ext-language_tools";
+// eslint-disable-next-line
 const fs = require('browserify-fs');
 
 

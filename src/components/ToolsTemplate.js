@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import MainTools from "./Tools/MainTools";
 import LiveLog from "./LiveLog";
 
@@ -6,43 +6,39 @@ import "../styles/ToolsTemplate.css";
 
 
 export default function ToolsTemplate(ac) {
-  // const [organization, setorganization] = useState("Set Organization");
-  // const [organizationID, setorganizationID] = useState(0);
-  // const [networkID, setnetworkID] = useState(0);
-  // const [network, setnetwork] = useState("Networks");
 
 
   const shutAllTools = () => {
-    ac.dc.setswitchMainTools(true);
+    ac.setswitchMainTools(true);
     let selectBox = document.getElementById("selectBox");
     let selectedValue = selectBox.options[selectBox.selectedIndex].value;
     if (selectedValue === "1") {
-      ac.dc.setswitchAllTools({ 1: true });
+      ac.setswitchAllTools({ 1: true });
     } else if (selectedValue === "2") {
-      ac.dc.setswitchAllTools({ 2: true });
+      ac.setswitchAllTools({ 2: true });
     } else if (selectedValue === "3") {
-      ac.dc.setswitchAllTools({ 3: true });
+      ac.setswitchAllTools({ 3: true });
     } else if (selectedValue === "4") {
-      ac.dc.setswitchAllTools({ 4: true });
+      ac.setswitchAllTools({ 4: true });
     } else if (selectedValue === "5") {
-      ac.dc.setswitchAllTools({ 5: true });
+      ac.setswitchAllTools({ 5: true });
     } else if (selectedValue === "6") {
-      ac.dc.setswitchAllTools({ 6: true });
+      ac.setswitchAllTools({ 6: true });
     } else if (selectedValue === "7") {
-      ac.dc.setswitchAllTools({ 7: true });
+      ac.setswitchAllTools({ 7: true });
     }
   };
 
 
   return (
     <div id="page-inner-tool-templates">
-      <div>{ac.dc.flashMessages && <span>{ac.dc.flashMessages}</span>}</div>
+      <div>{ac.flashMessages && <span>{ac.flashMessages}</span>}</div>
       <div className="row">
         <div className="col-md-3 col-sm-12 col-xs-12">
           <div className="board">
             <div className="panel panel-primary">
               <div className="number">
-                <h3 className="h3-dashboard">{ac.dc.network}</h3>
+                <h3 className="h3-dashboard">{ac.network}</h3>
                 <small>Network</small>
               </div>
               <div className="icon">
@@ -56,7 +52,7 @@ export default function ToolsTemplate(ac) {
           <div className="board">
             <div className="panel panel-primary">
               <div className="number">
-                <h3 className="h3-dashboard">{ac.dc.organizationID}</h3>
+                <h3 className="h3-dashboard">{ac.organizationID}</h3>
                 <small>Organization ID</small>
               </div>
               <div className="icon">
@@ -70,7 +66,7 @@ export default function ToolsTemplate(ac) {
           <div className="board">
             <div className="panel panel-primary">
               <div className="number">
-                <h3 className="h3-dashboard">{ac.dc.timeZone}</h3>
+                <h3 className="h3-dashboard">{ac.timeZone}</h3>
                 <small>Time Zone</small>
               </div>
               <div className="icon">
@@ -84,7 +80,7 @@ export default function ToolsTemplate(ac) {
           <div className="board">
             <div className="panel panel-primary">
               <div className="number">
-                <h3 className="h3-dashboard">{ac.dc.totalDevices}</h3>
+                <h3 className="h3-dashboard">{ac.totalDevices}</h3>
                 <small>Total Devices</small>
               </div>
               <div className="icon">
@@ -123,7 +119,7 @@ export default function ToolsTemplate(ac) {
           </div>
         </div>
       </div>
-      {ac.dc.switchMainTools ? <MainTools dc={ac.dc} /> : <div></div>}
+      {ac.switchMainTools ? <MainTools dc={ac} /> : <div></div>}
     </div>
   );
 }

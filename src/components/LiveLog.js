@@ -53,7 +53,7 @@ export default function LiveLog(ac) {
       setbuttonPHolder('Debug')
     }
     return () => clearInterval(interval);
-
+    // eslint-disable-next-line
   }, [showDebug]);
 
   const OpenDebug = () => {

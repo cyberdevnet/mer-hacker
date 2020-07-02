@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Chart from "react-apexcharts";
+// import Template from './Template'
 import "../styles/Dashboard.css";
 
 export default function Dashboard(ac) {
@@ -105,9 +106,9 @@ export default function Dashboard(ac) {
   });
 
   const APIbody = {
-    "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
-    organizationId: `${ac.dc.organizationID}`,
-    networkId: `${ac.dc.networkID}`,
+    "X-Cisco-Meraki-API-Key": `${ac.apiKey}`,
+    organizationId: `${ac.organizationID}`,
+    networkId: `${ac.networkID}`,
   };
 
 
@@ -131,13 +132,13 @@ export default function Dashboard(ac) {
           .then((res) => res.json())
           .then((data) => {
             if (data.error) {
-              ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+              ac.setflashMessages(<div className="form-input-error-msg alert alert-danger">
                 <span className="glyphicon glyphicon-exclamation-sign"></span>
                 {data.error[0]}
               </div>)
             } else {
-              ac.dc.setdeviceList(data.devices);
-              ac.dc.settotalDevices(data.devices.length);
+              ac.setdeviceList(data.devices);
+              ac.settotalDevices(data.devices.length);
 
               let ModelObj = {};
               for (var x = 0; x < data.devices.length; x++) {
@@ -184,7 +185,7 @@ export default function Dashboard(ac) {
       console.log("cleanup -> abortController")
     }
     // eslint-disable-next-line
-  }, [ac.dc.networkID]);
+  }, [ac.networkID]);
 
 
   useEffect(() => {
@@ -207,14 +208,14 @@ export default function Dashboard(ac) {
           .then((res) => res.json())
           .then((data) => {
             if (data.error) {
-              ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+              ac.setflashMessages(<div className="form-input-error-msg alert alert-danger">
                 <span className="glyphicon glyphicon-exclamation-sign"></span>
                 {data.error[0]}
               </div>)
             } else {
 
-              ac.dc.setdeviceStatusList(data.deviceStatus);
-              ac.dc.settotaldeviceStatusList(data.deviceStatus.length);
+              ac.setdeviceStatusList(data.deviceStatus);
+              ac.settotaldeviceStatusList(data.deviceStatus.length);
 
               let DeviceStatusobjects = {};
               for (var x = 0; x < data.deviceStatus.length; x++) {
@@ -262,7 +263,7 @@ export default function Dashboard(ac) {
     }
 
     // eslint-disable-next-line
-  }, [ac.dc.networkID]);
+  }, [ac.networkID]);
 
 
 
@@ -287,7 +288,7 @@ export default function Dashboard(ac) {
           .then((res) => res.json())
           .then((data) => {
             if (data.error) {
-              ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+              ac.setflashMessages(<div className="form-input-error-msg alert alert-danger">
                 <span className="glyphicon glyphicon-exclamation-sign"></span>
                 {data.error[0]}
               </div>)
@@ -295,7 +296,7 @@ export default function Dashboard(ac) {
 
               try {
                 var UplinkLossNetObj = data.uplinkLoss.filter(function (obj) {
-                  return obj.networkId === ac.dc.networkID;
+                  return obj.networkId === ac.networkID;
                 })[0];
 
 
@@ -312,7 +313,6 @@ export default function Dashboard(ac) {
                   lossPercent.push(UplinkSeries[y].lossPercent);
                   ts.push(UplinkSeries[y].ts);
                 }
-                const tsOBJ = Object.values(ts)
 
                 setUplinkLossNetworkchart({
                   ...UplinkLossNetworkchart,
@@ -365,20 +365,18 @@ export default function Dashboard(ac) {
 
     }
     // eslint-disable-next-line
-  }, [ac.dc.networkID]);
+  }, [ac.networkID]);
 
 
   return (
-
     <div id="page-inner">
-
-      <div>{ac.dc.flashMessages && <span>{ac.dc.flashMessages}</span>}</div>
+      <div>{ac.flashMessages && <span>{ac.flashMessages}</span>}</div>
       <div className="row">
         <div className="col-md-3 col-sm-12 col-xs-12">
           <div className="board">
             <div className="panel panel-primary">
               <div className="number">
-                <h3 className="h3-dashboard">{ac.dc.organization}</h3>
+                <h3 className="h3-dashboard">{ac.organization}</h3>
                 <small>Organization</small>
               </div>
               <div className="icon">
@@ -391,7 +389,7 @@ export default function Dashboard(ac) {
           <div className="board">
             <div className="panel panel-primary">
               <div className="number">
-                <h3 className="h3-dashboard">{ac.dc.networkList.length}</h3>
+                <h3 className="h3-dashboard">{ac.networkList.length}</h3>
                 <small>Total Networks</small>
               </div>
               <div className="icon">
@@ -404,7 +402,7 @@ export default function Dashboard(ac) {
           <div className="board">
             <div className="panel panel-primary">
               <div className="number">
-                <h3 className="h3-dashboard">{ac.dc.timeZone}</h3>
+                <h3 className="h3-dashboard">{ac.timeZone}</h3>
                 <small>Time Zone</small>
               </div>
               <div className="icon">
@@ -417,7 +415,7 @@ export default function Dashboard(ac) {
           <div className="board">
             <div className="panel panel-primary">
               <div className="number">
-                <h3 className="h3-dashboard">{ac.dc.totaldeviceStatusList}</h3>
+                <h3 className="h3-dashboard">{ac.totaldeviceStatusList}</h3>
                 <small>Total Organization Devices</small>
               </div>
               <div className="icon">
@@ -445,7 +443,7 @@ export default function Dashboard(ac) {
           <div className="board">
             <div className="panel panel-primary">
               <div className="number">
-                <h3 className="h3-dashboard">{ac.dc.network}</h3>
+                <h3 className="h3-dashboard">{ac.network}</h3>
                 <small>Network</small>
               </div>
               <div className="icon">
@@ -458,7 +456,7 @@ export default function Dashboard(ac) {
           <div className="board">
             <div className="panel panel-primary">
               <div className="number">
-                <h3 className="h3-dashboard">{ac.dc.totalHosts}</h3>
+                <h3 className="h3-dashboard">{ac.totalHosts}</h3>
                 <small>Clients Online</small>
               </div>
               <div className="icon">
@@ -471,7 +469,7 @@ export default function Dashboard(ac) {
           <div className="board">
             <div className="panel panel-primary">
               <div className="number">
-                <h3 className="h3-dashboard">{ac.dc.totaldeviceStatusList}</h3>
+                <h3 className="h3-dashboard">{ac.totaldeviceStatusList}</h3>
                 <small>Customers</small>
               </div>
               <div className="icon">
@@ -484,7 +482,7 @@ export default function Dashboard(ac) {
           <div className="board">
             <div className="panel panel-primary">
               <div className="number">
-                <h3 className="h3-dashboard">{ac.dc.totalDevices}</h3>
+                <h3 className="h3-dashboard">{ac.totalDevices}</h3>
                 <small>Total Network Devices</small>
               </div>
               <div className="icon">

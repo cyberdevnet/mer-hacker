@@ -1,5 +1,9 @@
 /* 'Successful Login' */
 
+.form-control {
+  width: 340px;
+}
+
 .modal-confirm {
   color: #636363;
   width: 325px;

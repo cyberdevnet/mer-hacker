@@ -24,6 +24,34 @@ module.exports = function (app) {
       changeOrigin: true,
     })
   );
+  app.use(
+    "/authenticate",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/get-auth-status",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/read-cookie",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/clear-cookie",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
   // END Express-Server Part
   app.use(
     "/flash",

@@ -1,3 +1,16 @@
-Found a total of 58 switches configured across 24 networks in this organization.
-Searching on list of 1 MACs in file, with first and last addresses being A0:42:3F:35:18:2D and A0:42:3F:35:18:2D, respectively.
-Found 1 matched MAC addresses on switch Q2KW-6R4Q-389G
+Starting Backup
+Writing script file meraki_restore_network.py
+Writing admins
+Writing mx_vpn_fw_rules
+Writing snmp_settings
+Writing non_meraki_vpn_peers
+Writing mx vlans
+Writing mx cellular fw rules
+Writing mx l3 fw rules
+Writing vpn settings
+Writing ssid settings
+Writing device properties
+Writing switch ports
+warning: device Q2PD-M66A-L5TE is not a Switch, skipping.
+warning: device Q2KN-MEHN-SK32 is not a Switch, skipping.
+Writing complete, check the script before restore.

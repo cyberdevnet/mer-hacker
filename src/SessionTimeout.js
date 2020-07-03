@@ -17,7 +17,7 @@ export default function SessionTimeout(ac) {
         }
         if (ac.dc.sessionTime === 0) {
             handleLogOff()
-            ac.dc.setsessionTime(3600)
+            ac.dc.setsessionTime(0)
 
         }
 
@@ -40,7 +40,7 @@ export default function SessionTimeout(ac) {
         ac.dc.setapiKey("");
         ac.dc.setgetOrgStatusCode(0);
         ac.dc.setsessionTimeout(false);
-        ac.dc.setsessionTime(3600)
+        ac.dc.setsessionTime(0)
         ac.dc.setisSignedIn(false)
         ac.dc.setswitchLoginAPI(true);
         ac.dc.setswitchDashboard(false);
@@ -50,12 +50,10 @@ export default function SessionTimeout(ac) {
         ac.dc.setorganization("Set Organization");
         ac.dc.setnetworkID(0);
         ac.dc.setnetwork("Networks");
-        // if (ac.dc.switchLoggedOut === true) {
         ac.dc.setcollapseButton({ display: 'none' })
         $(this).addClass('closed');
         $('.navbar-side').css({ left: '-260px' });
         $('#page-wrapper').css({ 'margin-left': '0px' });
-        // }
         ac.dc.sethideLogin({ display: "block" });
     };
 
@@ -64,18 +62,14 @@ export default function SessionTimeout(ac) {
         <Dialog
             open={ac.dc.sessionTimeout}
             onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
         >
-            <div className="modal-content">
+            <div>
                 <div className="modal-header">
                     <h4 className="modal-title-idle">Your session is about to expire</h4>
                 </div>
-                <div className="modal-body-idle">
-                    <p className>
-                        Please choose to stay signed in or to logoff.
-                        Otherwise, you will be logged off automatically.
-                      </p>
+                <div className="modal-body text-center">
+                    Please choose to stay signed in or to logoff.
+                    Otherwise, you will be logged off automatically.
                 </div>
                 <div className="modal-footer">
                     <button

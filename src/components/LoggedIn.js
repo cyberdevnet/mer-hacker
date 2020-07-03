@@ -1,40 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from 'axios'
-
 import { useHistory } from "react-router-dom";
 
 import $ from 'jquery'
 import "../styles/LoggedIn.css";
 
 export default function LoggedIn(ac) {
-
+  const [loading, setloading] = useState(false);
   const [inputKey, setinputKey] = useState('')
   const [triggerLogin, settriggerLogin] = useState(0)
   console.log("LoggedIn -> inputKey", inputKey)
 
 
-  // const postKey = () => {
-  //   (async () => {
-  //     const rawResponse = await fetch('/post-api-key', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Accept': 'application/json',
-  //         'Content-Type': 'application/json'
-  //       },
-  //       body: JSON.stringify({ key: `${inputKey}` })
-  //     })
-  //       .then((res) => {
-  //         return res.json;
-  //       })
-  //     const content = await rawResponse.json();
-  //     console.log("postKey -> content", content)
 
-  //   })();
-  // }
-
-
-
-
+  // post key to backend
   async function postKey() {
 
     const rawResponse = await fetch('/post-api-key', {
@@ -73,24 +51,30 @@ export default function LoggedIn(ac) {
       return;
     }
     const handleLoginSuccess = () => {
+      setloading(true)
       postKey()
         .then(() => getKey())
         .then(() =>
+          ac.dc.setisSignedIn(true),
           ac.dc.setswitchLoggedIn(false),
           ac.dc.setswitchLoginAPI(false),
           ac.dc.setswitchDashboard(true),
           ac.dc.setswitchLoggedout(false),
           history.push('/home'),
           ac.dc.setcollapseButton({ display: 'block' }),
+          ac.dc.setsessionTime(3600),
           $('.navbar-side').animate({ left: '0px' }),
           $(this).removeClass('closed'),
           $('#page-wrapper').animate({ 'margin-left': '260px' }),
         )
+        // Trigger getOrganization on-login
+        .then(() => ac.dc.settriggerGetOrg(ac.dc.triggerGetOrg + 1))
+        .then(() => setloading(false))
 
     };
     handleLoginSuccess()
+    // eslint-disable-next-line
   }, [triggerLogin])
-
 
   return (
     <div>
@@ -113,7 +97,7 @@ export default function LoggedIn(ac) {
                     <input
                       type="password"
                       required={true}
-                      className="form-control"
+                      className="form-control-api"
                       placeholder="API key *"
                       value={inputKey}
                       autoComplete="api"
@@ -124,12 +108,27 @@ export default function LoggedIn(ac) {
               </div>
             </div>
             <div className="modal-footer">
-              <button
+              {/* <button
                 onClick={() => settriggerLogin(triggerLogin + 1)}
                 className="btn btn-success btn-block"
                 data-dismiss="modal"
               >
                 OK
+              </button> */}
+              <button
+                onClick={!loading ? () => settriggerLogin(triggerLogin + 1) : null}
+                disabled={loading}
+                className="btn btn-success btn-block"
+                data-dismiss="modal"
+              >
+                {loading && (
+                  <i
+                    className="fa fa-refresh fa-spin"
+                    style={{ marginRight: "5px" }}
+                  />
+                )}
+                {loading && <span>Login</span>}
+                {!loading && <span>OK</span>}
               </button>
             </div>
           </div>

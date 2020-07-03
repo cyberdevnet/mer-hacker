@@ -3,8 +3,10 @@ var app = express();
 var multer = require('multer')
 var cors = require('cors');
 const bodyParser = require('body-parser')
+const bcrypt = require('bcrypt')
 
 app.use(cors())
+app.use(express.json())
 app.use(bodyParser.json());
 let urlencodedParser = (bodyParser.urlencoded({ extended: true }))
 // app.use(bodyParser.urlencoded({ extended: true }))
@@ -27,31 +29,68 @@ const cookieParser = require('cookie-parser');
 // A random key for signing the cookie
 app.use(cookieParser('82e4e438a0705fabf61f9854e3b575af'));
 
-const auth = basicAuth({
-    users: {
-        admin: '123',
-    },
-});
 
 
 
-app.get('/authenticate', auth, (req, res) => {
+const users = []
+
+
+//just to see the users in database, passwords are salted + hashed
+app.get('/users', (req, res) => {
+    res.json(users)
+})
+
+//create a new user + password and salt + hash
+app.post('/hash-users', async (req, res) => {
+    console.log("req", req.body)
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10)
+        const user = { username: req.body.username, password: hashedPassword }
+        users.push(user)
+        res.status(201).send()
+    } catch {
+        res.status(500).send()
+    }
+})
+
+//login from client checking if user match and password match with salt + hash
+app.post('/authenticate', async (req, res) => {
+
+    const user = users.find(user => user.username === req.body.username)
+    if (user == null) {
+        return res.status(400).send('Cannot find user')
+    }
+    try {
+        if (await bcrypt.compare(req.body.password, user.password)) {
+            res.send('Allowed')
+        } else {
+            res.send('Not Allowed')
+        }
+    } catch {
+        res.status(500).send()
+    }
+})
+
+app.get('/set-cookie', (req, res) => {
 
     const options = {
-        httpOnly: true,
-        signed: true,
+        maxAge: 1000 * 60 * 60, // would expire after 60 minutes
+        httpOnly: true, // The cookie only accessible by the web server
+        signed: true // Indicates if the cookie should be signed
     };
 
-    if (req.auth.user === 'admin') {
-        res.cookie('name', 'admin', options).send({ signedIn: true });
-    } else {
-        res.send({ signedIn: false });
-    }
+
+    res.cookie('cookie', 'somerandomstuff', options).send({ signedIn: true });
+    console.log('cookie created successfully');
+
 });
 
 app.get('/read-cookie', (req, res) => {
-    console.log(req.signedCookies);
-    if (req.signedCookies.name === 'admin') {
+    console.log('Cookies: ', req.cookies)
+    console.log('Signed Cookies: ', req.signedCookies)
+
+
+    if (req.signedCookies.cookie === 'somerandomstuff') {
         res.send({ signedIn: true });
     } else {
         res.send({ signedIn: false });
@@ -59,18 +98,76 @@ app.get('/read-cookie', (req, res) => {
 });
 
 app.get('/clear-cookie', (req, res) => {
-    res.clearCookie('name').end();
-    // res.send('you have been logged out');
+    console.log("Cookie cleared")
+    res.clearCookie('cookie').end();
 });
 
-app.get('/get-auth-status', (req, res) => {
-    if (req.signedCookies.name === 'admin') {
-        res.send('you are logged in');
-    } else {
-        res.send('you are NOT logged in');
-        res.end();
-    }
-});
+
+
+
+
+
+
+
+
+
+
+// //Auth
+
+// const basicAuth = require('express-basic-auth');
+// const cookieParser = require('cookie-parser');
+
+// // A random key for signing the cookie
+// app.use(cookieParser('82e4e438a0705fabf61f9854e3b575af'));
+
+// const auth = basicAuth({
+//     users: {
+//         admin: '123',
+//     },
+// });
+
+
+
+// app.get('/authenticate', auth, (req, res) => {
+
+//     const options = {
+//         httpOnly: true,
+//         signed: true,
+//     };
+
+//     if (req.auth.user === 'admin') {
+//         res.cookie('name', 'admin', options).send({ signedIn: true });
+//     } else {
+//         res.send({ signedIn: false });
+//     }
+// });
+
+// app.get('/read-cookie', (req, res) => {
+//     console.log(req.signedCookies);
+//     if (req.signedCookies.name === 'admin') {
+//         res.send({ signedIn: true });
+//     } else {
+//         res.send({ signedIn: false });
+//     }
+// });
+
+// app.get('/clear-cookie', (req, res) => {
+//     res.clearCookie('name').end();
+//     // res.send('you have been logged out');
+// });
+
+// app.get('/get-auth-status', (req, res) => {
+//     if (req.signedCookies.name === 'admin') {
+//         res.send('you are logged in');
+//     } else {
+//         res.send('you are NOT logged in');
+//         res.end();
+//     }
+// });
+
+
+
+
 
 
 // retrieve and store API key

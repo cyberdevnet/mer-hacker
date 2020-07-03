@@ -12,51 +12,36 @@ export default function LoginAPI(ac) {
   const [triggertryLogin, settriggertryLogin] = useState(0);
   const [loading, setloading] = useState(false);
   const [errorMessageLogin, seterrorMessageLogin] = useState(null);
-  const [errorMessValidation, seterrorMessValidation] = useState(null);
-
-  const [keyTest, setkeyTest] = useState('')
-
-
-
-  const postKey = () => {
-    (async () => {
-      const rawResponse = await fetch('/post-api-key', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ key: `${keyTest}` })
-      });
-      const content = await rawResponse.json();
-      console.log("postKey -> content", content)
-
-    })();
-  }
-
-  async function getKey() {
-    try {
-      fetch('/get-api-key')
-        .then(res => res.text())
-        .then((data) => {
-          console.log("getKey -> res", data)
-          ac.setapiKey(data)
-        })
-        .catch(error => console.log('An error occured ', error))
-    } catch (e) {
-      console.log('Error:', e);
-    }
-  }
-
-
 
   let history = useHistory();
+
+
+
+
+
+
+
+  // setCookie Function if successeful Login
+  const setCookie = async () => {
+    try {
+      const res = await axios.get('/set-cookie');
+      console.log("setCookie -> res", res)
+
+    } catch (e) {
+      console.log('setCookie Error:', e);
+    }
+  };
+
+
+
+
 
 
   // readCookie Function checks if SignedIN or not
   const readCookie = async () => {
     try {
       const res = await axios.get('/read-cookie');
+      console.log("readCookie -> res", res)
 
       if (res.data.signedIn === true) {
         ac.setisSignedIn(res.data.signedIn);
@@ -75,12 +60,14 @@ export default function LoginAPI(ac) {
 
   useEffect(() => {
     readCookie();
+    // eslint-disable-next-line
   }, []);
 
 
 
   const handleLogin = () => {
     settriggertryLogin(triggertryLogin + 1);
+
   };
 
   JSON.stringify({
@@ -107,32 +94,37 @@ export default function LoginAPI(ac) {
       let username = ac.User
       let password = ac.Password
       try {
-        const res = await axios.get('/authenticate', { auth: { username, password } });
+        const res = await axios.post('/authenticate',
+          { "username": `${username}`, "password": `${password}` },
+          // { withCredentials: true }
+        );
+        console.log("auth -> res", res)
+        //simulate delay
+        setTimeout(() => {
+          if (res.data === 'Allowed') {
+            ac.sethideLogin({ display: "none" });
+            setCookie()
+            ac.setisSignedIn(res.data.signedIn);
+            ac.setswitchLoggedIn(true);
+            setloading(false);
 
-        if (res.data.signedIn === true) {
-          ac.setisSignedIn(res.data.signedIn);
-
-          ac.setswitchLoggedIn(true);
-          ac.sethideLogin({ display: "none" });
-          setloading(false);
-          // settriggerAllowLogin(triggerAllowLogin + 1)
-
-        } else {
-          setloading(false);
-          seterrorMessageLogin(
-            <div className="form-input-error-msg alert alert-danger">
-              <span className="glyphicon glyphicon-exclamation-sign-login"></span>
-              We are unable to complete your login please check your API key, your
+          } else {
+            setloading(false);
+            seterrorMessageLogin(
+              <div className="form-input-error-msg alert alert-danger">
+                <span className="glyphicon glyphicon-exclamation-sign-login"></span>
+                {res.data}: We are unable to complete your login please check your username and password, your
               Internet connection or try again later
             </div>
-          );
-        }
+            );
+          }
+        }, 1500);
       } catch (e) {
         setloading(false);
         seterrorMessageLogin(
           <div className="form-input-error-msg alert alert-danger">
             <span className="glyphicon glyphicon-exclamation-sign-login"></span>
-            We are unable to complete your login please check your API key, your
+            We are unable to complete your login please check your username and password, your
             Internet connection or try again later
           </div>
         );
@@ -147,6 +139,7 @@ export default function LoginAPI(ac) {
       ac.setAlertModalError([]);
       ac.setflashMessages([])
     }
+    // eslint-disable-next-line
   }, [triggertryLogin])
 
 
@@ -166,8 +159,6 @@ export default function LoginAPI(ac) {
             <div>
               <div className="row register-form">
                 {errorMessageLogin && <span>{errorMessageLogin}</span>}
-                {errorMessValidation && <span>{errorMessValidation}</span>}
-
                 <div className="col-md-6">
                   <form>
                     <div className="form-group">

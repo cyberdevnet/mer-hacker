@@ -32,7 +32,21 @@ module.exports = function (app) {
     })
   );
   app.use(
+    "/hash-users",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
     "/get-auth-status",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/set-cookie",
     createProxyMiddleware({
       target: "http://127.0.0.1:3001",
       changeOrigin: true,

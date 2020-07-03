@@ -1,0 +1,36 @@
+
+
+GET http://localhost:3001/users
+
+###
+GET http://localhost:3001/clear-cookie
+
+###
+GET http://localhost:3001/read-cookie
+
+###
+
+
+
+GET http://localhost:3001/set-cookie
+
+###
+
+POST http://localhost:3001/hash-users
+Content-Type: application/json 
+Accept : */*
+
+{
+    "username": "master", "password": "1234"
+
+}
+
+###
+
+POST http://localhost:3001/authenticate
+Content-Type: application/json
+
+{
+    "username": "admin", "password": "1234"
+
+}

@@ -43,7 +43,7 @@ export default function Logout(ac, props) {
     history.push('/login')
     ac.setswitchLoginAPI(true);
     ac.setsessionTimeout(false);
-    ac.setsessionTime(3600)
+    ac.setsessionTime(0)
     ac.setapiKey("");
     ac.setisSignedIn(false)
     ac.setgetOrgStatusCode(0);

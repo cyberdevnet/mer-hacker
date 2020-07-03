@@ -9,26 +9,44 @@ import "../styles/Logout.css";
 export default function Logout(ac, props) {
 
 
+  let history = useHistory();
+
+
   const deleteCookie = async () => {
     try {
       await axios.get('/clear-cookie');
       ac.setisSignedIn(false);
+      history.push('/login')
+
     } catch (e) {
       console.log(e);
     }
   };
 
-  let history = useHistory();
+
+  // send a 'leer' string to server on logout to clear the key
+  async function postKey() {
+    const rawResponse = await fetch('/post-api-key', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ key: 'leer' })
+    })
+    return await rawResponse.json();
+  }
 
   const ConfirmLogout = () => {
     deleteCookie()
+    postKey()
     history.push('/login')
+    ac.setswitchLoginAPI(true);
     ac.setsessionTimeout(false);
     ac.setsessionTime(3600)
     ac.setapiKey("");
     ac.setisSignedIn(false)
     ac.setgetOrgStatusCode(0);
-    ac.setswitchLoginAPI(true);
     ac.setswitchDashboard(false);
     ac.setswitchLoggedout(false);
     ac.setinputKey("");

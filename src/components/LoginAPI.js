@@ -1,27 +1,56 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useHistory } from "react-router-dom";
+import $ from 'jquery'
 import axios from 'axios'
 
-import $ from 'jquery'
+
 
 
 import "../styles/LoginAPI.css";
 
 export default function LoginAPI(ac) {
   const [triggertryLogin, settriggertryLogin] = useState(0);
-  const [triggerAllowLogin, settriggerAllowLogin] = useState(0);
   const [loading, setloading] = useState(false);
   const [errorMessageLogin, seterrorMessageLogin] = useState(null);
   const [errorMessValidation, seterrorMessValidation] = useState(null);
 
+  const [keyTest, setkeyTest] = useState('')
 
 
 
+  const postKey = () => {
+    (async () => {
+      const rawResponse = await fetch('/post-api-key', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ key: `${keyTest}` })
+      });
+      const content = await rawResponse.json();
+      console.log("postKey -> content", content)
 
-  //Authentication Request to Server
+    })();
+  }
 
-  const [signedIn, setsignedIn] = useState('auth');
+  async function getKey() {
+    try {
+      fetch('/get-api-key')
+        .then(res => res.text())
+        .then((data) => {
+          console.log("getKey -> res", data)
+          ac.setapiKey(data)
+        })
+        .catch(error => console.log('An error occured ', error))
+    } catch (e) {
+      console.log('Error:', e);
+    }
+  }
 
 
+
+  let history = useHistory();
 
 
   // readCookie Function checks if SignedIN or not
@@ -29,11 +58,17 @@ export default function LoginAPI(ac) {
     try {
       const res = await axios.get('/read-cookie');
 
-      if (res.data.signedIn !== undefined) {
-        setsignedIn(res.data.signedIn);
+      if (res.data.signedIn === true) {
+        ac.setisSignedIn(res.data.signedIn);
+
+      } else {
+        history.push('/login')
+        $(this).addClass('closed');
+        $('.navbar-side').css({ left: '-260px' });
+        $('#page-wrapper').css({ 'margin-left': '0px' });
       }
     } catch (e) {
-      setsignedIn('auth');
+      ac.setisSignedIn(false);
       console.log('ReadCookie Error:', e);
     }
   };
@@ -44,39 +79,8 @@ export default function LoginAPI(ac) {
 
 
 
-  // const { signedIn, setsignedIn } = props;
-
-  const [data, setData] = useState();
-
-
-  const getAuthStatus = async () => {
-    try {
-      const res = await axios.get('/get-auth-status');
-      console.log(res.data)
-      setData(res.data);
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   const handleLogin = () => {
     settriggertryLogin(triggertryLogin + 1);
-    // seterrorMessageLogin(null);
-    // seterrorMessValidation(null);
   };
 
   JSON.stringify({
@@ -86,49 +90,7 @@ export default function LoginAPI(ac) {
   })
 
 
-
-
-
-  // const isFirstTryLogin = useRef(true);
-  // useEffect(() => {
-  //   // const abortController = new AbortController()
-  //   // const signal = abortController.signal
-  //   if (isFirstTryLogin.current) {
-  //     isFirstTryLogin.current = false;
-  //     return;
-  //   }
-  //   const auth = async () => {
-  //     // setloading(true);
-
-  //     try {
-  //       const res = await axios.get('/authenticate',
-  //         { auth: { ciccio, pasticcio } })
-  //       // const res = await axios.get('/authenticate',
-  //       //   { auth: { 'user': `${ac.User}`, 'password': `${ac.Password}` } })
-  //       // const res = await axios.get('/authenticate', { auth: [ac.User, ac.Password] });
-  //       console.log("auth -> res", res)
-
-  //       if (res.data.signedIn !== undefined) {
-  //         setsignedIn(res.data.signedIn);
-
-  //         console.log(res.data);
-  //         // setloading(false);
-
-  //       }
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-
-  //   };
-  //   auth();
-  //   return () => {
-  //     // abortController.abort()
-  //     // console.log("cleanup -> abortController")
-  //     ac.setAlertModalError([]);
-  //     ac.setflashMessages([])
-  //   }
-  //   // eslint-disable-next-line
-  // }, [triggertryLogin]);
+  //Authentication Request to Server
 
   const isFirstTryLogin = useRef(true);
   useEffect(() => {
@@ -189,54 +151,6 @@ export default function LoginAPI(ac) {
 
 
 
-  // const isFirstAllowLogin = useRef(true);
-  // useEffect(() => {
-  //   if (isFirstAllowLogin.current) {
-  //     isFirstAllowLogin.current = false;
-  //     return;
-  //   }
-  //   const AllowLogin = () => {
-  //     if (ac.isSignedIn === true) {
-  //       setTimeout(() => {
-  //         ac.setswitchLoggedIn(true);
-  //         ac.sethideLogin({ display: "none" });
-  //         setloading(false);
-
-
-
-  //       }, 2500);
-  //     } else {
-  //       setloading(false);
-  //       seterrorMessageLogin(
-  //         <div className="form-input-error-msg alert alert-danger">
-  //           <span className="glyphicon glyphicon-exclamation-sign-login"></span>
-  //           We are unable to complete your login please check your API key, your
-  //           Internet connection or try again later
-  //         </div>
-  //       );
-  //     }
-  //   };
-  //   AllowLogin();
-  //   // eslint-disable-next-line
-  // }, [triggerAllowLogin]);   //ac.getOrgStatusCode
-
-
-
-
-
-  useEffect(() => {
-    if (ac.isSignedIn) {
-      $('.navbar-side').animate({ left: '0px' });
-      $(this).removeClass('closed');
-      $('#page-wrapper').animate({ 'margin-left': '260px' });
-    } else {
-      $(this).addClass('closed');
-      $('.navbar-side').css({ left: '-260px' });
-      $('#page-wrapper').css({ 'margin-left': '0px' });
-    }
-  }, [ac.isSignedIn])
-
-
 
   return (
 
@@ -245,8 +159,6 @@ export default function LoginAPI(ac) {
         <div className="col-md-3 register-left">
           <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt="" />
           <h3>Welcome</h3>
-          {/* <p>Please set your Meraki API key</p> */}
-
           <br />
         </div>
         <div className="col-md-9 register-right">
@@ -257,19 +169,6 @@ export default function LoginAPI(ac) {
                 {errorMessValidation && <span>{errorMessValidation}</span>}
 
                 <div className="col-md-6">
-                  {/* <form>
-                    <div className="form-group">
-                      <input
-                        type="password"
-                        required={true}
-                        className="form-control"
-                        placeholder="API key *"
-                        value={ac.inputKey}
-                        autoComplete="api"
-                        onChange={(e) => ac.setinputKey(e.target.value)}
-                      />
-                    </div>
-                  </form> */}
                   <form>
                     <div className="form-group">
                       <input
@@ -285,20 +184,6 @@ export default function LoginAPI(ac) {
                   </form>
                 </div>
                 <div className="col-md-6">
-
-                  {/* <form>
-                    <div className="form-group">
-                      <input
-                        type="password"
-                        required={true}
-                        className="form-control"
-                        placeholder="Confirm API key *"
-                        value={ac.dc.inputConfKey}
-                        autoComplete="api"
-                        onChange={(e) => ac.setinputConfKey(e.target.value)}
-                      />
-                    </div>
-                  </form> */}
                   <form>
                     <div className="form-group">
                       <input
@@ -326,7 +211,6 @@ export default function LoginAPI(ac) {
                     {loading && <span>Login</span>}
                     {!loading && <span>Login</span>}
                   </button>
-                  <button onClick={readCookie}>Get Data</button>
                 </div>
               </div>
             </div>

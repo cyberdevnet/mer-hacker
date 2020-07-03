@@ -516,45 +516,6 @@ export default function Dashboard(ac) {
         </div>
       </div>
 
-
-      {/* <div className="row">
-  <div className="col-md-5">
-    <div className="panel panel-default">
-      <div className="panel-heading">Line Chart</div>
-      <div className="panel-body">
-        <div id="morris-line-chart"></div>
-      </div>
-    </div>
-  </div>
-
-  <div className="col-md-7">
-    <div className="panel panel-default">
-      <div className="panel-heading">Bar Chart Example</div>
-      <div className="panel-body">
-        <div id="morris-bar-chart"></div>
-      </div>
-    </div>
-  </div>
-</div> */}
-
-      {/* <div className="row">
-  <div className="col-md-9 col-sm-12 col-xs-12">
-    <div className="panel panel-default">
-      <div className="panel-heading">Area Chart</div>
-      <div className="panel-body">
-        <div id="morris-area-chart"></div>
-      </div>
-    </div>
-  </div>
-  <div className="col-md-3 col-sm-12 col-xs-12">
-    <div className="panel panel-default">
-      <div className="panel-heading">Donut Chart Example</div>
-      <div className="panel-body">
-        <div id="morris-donut-chart"></div>
-      </div>
-    </div>
-  </div>
-</div> */}
       <div className="row">
         <div className="col-md-12"></div>
       </div>

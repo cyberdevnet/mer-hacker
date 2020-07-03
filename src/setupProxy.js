@@ -52,6 +52,20 @@ module.exports = function (app) {
       changeOrigin: true,
     })
   );
+  app.use(
+    "/post-api-key",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/get-api-key",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
   // END Express-Server Part
   app.use(
     "/flash",

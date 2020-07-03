@@ -2,8 +2,12 @@ var express = require('express');
 var app = express();
 var multer = require('multer')
 var cors = require('cors');
+const bodyParser = require('body-parser')
 
 app.use(cors())
+app.use(bodyParser.json());
+let urlencodedParser = (bodyParser.urlencoded({ extended: true }))
+// app.use(bodyParser.urlencoded({ extended: true }))
 
 const pino = require('pino');
 const expressPino = require('express-pino-logger');
@@ -67,6 +71,30 @@ app.get('/get-auth-status', (req, res) => {
         res.end();
     }
 });
+
+
+// retrieve and store API key
+
+var apiKey = ['test'];
+
+app.post('/post-api-key', function (req, res) {
+    console.log("req", req.body.key)
+    var key = req.body;
+    apiKey = key.key.slice(0)
+    res.send(req.body);
+    console.log("apiKey", apiKey)
+
+})
+
+app.get('/get-api-key', (req, res) => {
+    console.log("apiKey", typeof apiKey)
+    res.send(apiKey);
+    res.end();
+
+});
+
+
+
 
 
 

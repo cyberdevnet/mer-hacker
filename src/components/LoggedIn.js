@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
+import axios from 'axios'
+
 import { useHistory } from "react-router-dom";
 
 import $ from 'jquery'
@@ -6,23 +8,90 @@ import "../styles/LoggedIn.css";
 
 export default function LoggedIn(ac) {
 
+  const [inputKey, setinputKey] = useState('')
+  const [triggerLogin, settriggerLogin] = useState(0)
+  console.log("LoggedIn -> inputKey", inputKey)
+
+
+  // const postKey = () => {
+  //   (async () => {
+  //     const rawResponse = await fetch('/post-api-key', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Accept': 'application/json',
+  //         'Content-Type': 'application/json'
+  //       },
+  //       body: JSON.stringify({ key: `${inputKey}` })
+  //     })
+  //       .then((res) => {
+  //         return res.json;
+  //       })
+  //     const content = await rawResponse.json();
+  //     console.log("postKey -> content", content)
+
+  //   })();
+  // }
+
+
+
+
+  async function postKey() {
+
+    const rawResponse = await fetch('/post-api-key', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ key: `${inputKey}` })
+    })
+    return await rawResponse.json();
+  }
+
+  async function getKey() {
+    try {
+      fetch('/get-api-key')
+        .then(res => res.text())
+        .then((data) => {
+          console.log("getKey -> res", data)
+          ac.dc.setapiKey(data)
+        })
+        .catch(error => console.log('An error occured ', error))
+    } catch (e) {
+      console.log('Error:', e);
+    }
+  }
+
+
   let history = useHistory();
 
-  const handleLoginSuccess = () => {
-    ac.dc.setapiKey(ac.dc.inputKey);
-    ac.dc.setswitchLoggedIn(false);
-    ac.dc.setswitchLoginAPI(false);
-    ac.dc.setswitchDashboard(true);
-    ac.dc.setswitchLoggedout(false);
-    history.push('/home')
-    ac.dc.setcollapseButton({ display: 'block' })
-    $('.navbar-side').animate({ left: '0px' });
-    $(this).removeClass('closed');
-    $('#page-wrapper').animate({ 'margin-left': '260px' });
+  const isFirstSetKey = useRef(true);
+
+  useEffect(() => {
+    if (isFirstSetKey.current) {
+      isFirstSetKey.current = false;
+      return;
+    }
+    const handleLoginSuccess = () => {
+      postKey()
+        .then(() => getKey())
+        .then(() =>
+          ac.dc.setswitchLoggedIn(false),
+          ac.dc.setswitchLoginAPI(false),
+          ac.dc.setswitchDashboard(true),
+          ac.dc.setswitchLoggedout(false),
+          history.push('/home'),
+          ac.dc.setcollapseButton({ display: 'block' }),
+          $('.navbar-side').animate({ left: '0px' }),
+          $(this).removeClass('closed'),
+          $('#page-wrapper').animate({ 'margin-left': '260px' }),
+        )
+
+    };
+    handleLoginSuccess()
+  }, [triggerLogin])
 
 
-
-  };
   return (
     <div>
       <div id="myModal">
@@ -46,9 +115,9 @@ export default function LoggedIn(ac) {
                       required={true}
                       className="form-control"
                       placeholder="API key *"
-                      value={ac.dc.inputKey}
+                      value={inputKey}
                       autoComplete="api"
-                      onChange={(e) => ac.dc.setinputKey(e.target.value)}
+                      onChange={(e) => setinputKey(e.target.value)}
                     />
                   </div>
                 </form>
@@ -56,7 +125,7 @@ export default function LoggedIn(ac) {
             </div>
             <div className="modal-footer">
               <button
-                onClick={handleLoginSuccess}
+                onClick={() => settriggerLogin(triggerLogin + 1)}
                 className="btn btn-success btn-block"
                 data-dismiss="modal"
               >

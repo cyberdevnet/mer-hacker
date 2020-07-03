@@ -17,7 +17,7 @@ export default function StatePersister(ac) {
     useEffect(() => {
         const isSignedIn = localStorage.getItem("my-isSignedIn");
 
-        const apiKey = localStorage.getItem("my-apiKey");
+        // const apiKey = localStorage.getItem("my-apiKey");
         // const organization = localStorage.getItem("my-organization");
         // const organizationID = localStorage.getItem("my-organizationID");
         // const isOrgSelected = localStorage.getItem("my-isOrgSelected");
@@ -36,7 +36,7 @@ export default function StatePersister(ac) {
 
         ac.dc.setisSignedIn(JSON.parse(isSignedIn));
 
-        ac.dc.setapiKey(JSON.parse(apiKey));
+        // ac.dc.setapiKey(JSON.parse(apiKey));
         // ac.dc.setorganization(JSON.parse(organization));
         // ac.dc.setorganizationID(JSON.parse(organizationID));
         // ac.dc.setisOrgSelected(JSON.parse(isOrgSelected));
@@ -61,7 +61,7 @@ export default function StatePersister(ac) {
     useEffect(() => {
         localStorage.setItem("my-isSignedIn", JSON.stringify(ac.dc.isSignedIn));
 
-        localStorage.setItem("my-apiKey", JSON.stringify(ac.dc.apiKey));
+        // localStorage.setItem("my-apiKey", JSON.stringify(ac.dc.apiKey));
         // localStorage.setItem("my-organization", JSON.stringify(ac.dc.organization));
         // localStorage.setItem("my-organizationID", JSON.stringify(ac.dc.organizationID));
         // localStorage.setItem("my-isOrgSelected", JSON.stringify(ac.dc.isOrgSelected));

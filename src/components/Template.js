@@ -11,7 +11,7 @@ import Logout from "./Logout";
 import PageNotFound from '../PageNotFound'
 import ToolsTemplate from "./ToolsTemplate";
 import AlertModal from "./AlertsModal";
-// import Countdown from 'react-countdown';
+import Countdown from 'react-countdown';
 import "../styles/Template.css";
 
 
@@ -74,12 +74,12 @@ export default function Template(ac, dc) {
               <i className="fa fa-bars icon" style={ac.dc.collapseButton}></i>
             </div>
           </div>
-          {/* <div className="nav navbar-top-links navbar-right">
+          <div className="nav navbar-top-links navbar-right">
             {ac.dc.isSignedIn ? (<div className='timeout-wrapper'>
               Session Timeout: <Countdown className='timeout' date={Date.now() + (ac.dc.sessionTime * 1000)} daysInHours />
 
             </div>) : (<div></div>)}
-          </div> */}
+          </div>
 
         </nav>
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 import $ from 'jquery'
 import axios from 'axios'
 
@@ -9,6 +9,7 @@ import axios from 'axios'
 import "../styles/LoginAPI.css";
 
 export default function LoginAPI(ac) {
+  console.log("LoginAPI -> ac", ac)
   const [triggertryLogin, settriggertryLogin] = useState(0);
   const [loading, setloading] = useState(false);
   const [errorMessageLogin, seterrorMessageLogin] = useState(null);
@@ -31,10 +32,6 @@ export default function LoginAPI(ac) {
       console.log('setCookie Error:', e);
     }
   };
-
-
-
-
 
 
   // readCookie Function checks if SignedIN or not
@@ -95,19 +92,17 @@ export default function LoginAPI(ac) {
       let password = ac.Password
       try {
         const res = await axios.post('/authenticate',
-          { "username": `${username}`, "password": `${password}` },
-          // { withCredentials: true }
+          { "username": `${username}`, "password": `${password}` }, { signal: signal }
         );
-        console.log("auth -> res", res)
+
         //simulate delay
         setTimeout(() => {
           if (res.data === 'Allowed') {
             ac.sethideLogin({ display: "none" });
             setCookie()
-            ac.setisSignedIn(res.data.signedIn);
-            ac.setswitchLoggedIn(true);
-            setloading(false);
-
+            ac.setswitchLoggedIn(true)
+            ac.setisSignedIn(res.data.signedIn)
+            setloading(false)
           } else {
             setloading(false);
             seterrorMessageLogin(
@@ -143,7 +138,7 @@ export default function LoginAPI(ac) {
   }, [triggertryLogin])
 
 
-
+  //style={ac.hideLogin}
 
   return (
 

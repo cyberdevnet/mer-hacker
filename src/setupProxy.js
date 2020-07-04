@@ -81,6 +81,18 @@ module.exports = function (app) {
     })
   );
   // END Express-Server Part
+
+
+  // START Mongodb Part
+  app.use(
+    "/dump",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  // END Mongodb Part
+
   app.use(
     "/flash",
     createProxyMiddleware({

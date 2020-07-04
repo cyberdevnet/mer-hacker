@@ -34,10 +34,14 @@ const ProtectedRoute = ({ component: Component, ac, ...rest }) => {
             {tempState ? (<Route {...rest}
                 render={props => {
 
-                    if (rest.isSignedIn === true) {
+                    if (tempState === true) {
+                        console.log("ProtectedRoute -> tempStatetrue", tempState)
+                        // if (rest.isSignedIn === true) {
+
                         return <Component {...rest} {...props} />
                     }
                     else {
+                        console.log("ProtectedRoute -> tempStatefalse", tempState)
                         return (<Redirect
                             to={{
                                 pathname: '/login',

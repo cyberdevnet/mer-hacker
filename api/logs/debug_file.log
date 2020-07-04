@@ -1,8 +1,150 @@
-2020-07-03 21:57:00,732 - engineio.server - INFO - Server initialized for eventlet.
-2020-07-03 21:57:00,746 - werkzeug - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
-2020-07-03 21:57:05,512 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 21:57:05] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-07-03 21:57:05,519 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 21:57:05] "[35m[1mGET /organizations HTTP/1.1[0m" 500 -
-2020-07-03 21:57:05,530 - werkzeug - ERROR - Error on request:
+2020-07-04 11:08:50,984 - engineio.server - INFO - Server initialized for eventlet.
+2020-07-04 11:08:50,999 - werkzeug - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2020-07-04 11:08:55,771 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:08:55] "[37mPOST /organizations HTTP/1.1[0m" 200 -
+2020-07-04 11:08:55,779 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f06a3f14be0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************st"]', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-04 11:08:55,780 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
+2020-07-04 11:08:55,784 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-04 11:08:55,944 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 404 None
+2020-07-04 11:08:55,946 - meraki - ERROR - Organizations, getOrganizations - 404 Not Found, b' '
+2020-07-04 11:08:56,230 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:08:56] "[37mGET /organizations HTTP/1.1[0m" 200 -
+2020-07-04 11:09:00,097 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:09:00] "[37mPOST /organizations HTTP/1.1[0m" 200 -
+2020-07-04 11:09:00,102 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f06a3668820>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-04 11:09:00,103 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
+2020-07-04 11:09:00,105 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-04 11:09:00,250 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 302 None
+2020-07-04 11:09:00,255 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-07-04 11:09:01,236 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 200 None
+2020-07-04 11:09:01,237 - meraki - INFO - Organizations, getOrganizations - 200 OK
+2020-07-04 11:09:01,238 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:09:01] "[37mGET /organizations HTTP/1.1[0m" 200 -
+2020-07-04 11:09:02,357 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:09:02] "[37mPOST /networks HTTP/1.1[0m" 200 -
+2020-07-04 11:09:02,360 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f06a36820a0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-04 11:09:02,362 - meraki - DEBUG - {'tags': ['Networks'], 'operation': 'getOrganizationNetworks', 'method': 'GET', 'url': '/organizations/764320/networks', 'params': {}}
+2020-07-04 11:09:02,364 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-04 11:09:02,489 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/networks HTTP/1.1" 302 None
+2020-07-04 11:09:02,492 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-07-04 11:09:02,812 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/networks HTTP/1.1" 200 None
+2020-07-04 11:09:02,814 - meraki - INFO - Networks, getOrganizationNetworks - 200 OK
+2020-07-04 11:09:02,815 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:09:02] "[37mGET /networks HTTP/1.1[0m" 200 -
+2020-07-04 11:09:04,566 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:09:04] "[37mPOST /clients HTTP/1.1[0m" 200 -
+2020-07-04 11:09:04,570 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f06a368e820>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-04 11:09:04,570 - meraki - DEBUG - {'tags': ['Clients'], 'operation': 'getNetworkClients', 'page': 1}
+2020-07-04 11:09:04,571 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-04 11:09:04,696 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/clients?perPage=1000&timespan=3600 HTTP/1.1" 302 None
+2020-07-04 11:09:04,701 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-07-04 11:09:05,082 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/clients?perPage=1000&timespan=3600&perPage=1000&timespan=3600 HTTP/1.1" 200 None
+2020-07-04 11:09:05,085 - meraki - INFO - Clients, getNetworkClients; page 1 - 200 OK
+2020-07-04 11:09:05,087 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:09:05] "[37mGET /clients HTTP/1.1[0m" 200 -
+2020-07-04 11:09:10,486 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:09:10] "[37mPOST /devices HTTP/1.1[0m" 200 -
+2020-07-04 11:09:10,493 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f06a368ee50>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-04 11:09:10,496 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:09:10] "[37mPOST /device_status HTTP/1.1[0m" 200 -
+2020-07-04 11:09:10,497 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f06a3693a90>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-04 11:09:10,504 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizationDeviceStatuses', 'method': 'GET', 'url': '/organizations/764320/deviceStatuses', 'params': None}
+2020-07-04 11:09:10,501 - meraki - DEBUG - {'tags': ['Devices'], 'operation': 'getNetworkDevices', 'method': 'GET', 'url': '/networks/L_681169443639788368/devices', 'params': None}
+2020-07-04 11:09:10,502 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f06a3630dc0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-04 11:09:10,499 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:09:10] "[37mPOST /uplink_loss HTTP/1.1[0m" 200 -
+2020-07-04 11:09:10,509 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-04 11:09:10,509 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-04 11:09:10,512 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizationUplinksLossAndLatency', 'method': 'GET', 'url': '/organizations/764320/uplinksLossAndLatency', 'params': {}}
+2020-07-04 11:09:10,518 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-04 11:09:10,644 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/deviceStatuses HTTP/1.1" 302 None
+2020-07-04 11:09:10,649 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-07-04 11:09:10,654 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/uplinksLossAndLatency HTTP/1.1" 302 None
+2020-07-04 11:09:10,657 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-07-04 11:09:10,659 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 302 None
+2020-07-04 11:09:10,662 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-07-04 11:09:10,929 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/uplinksLossAndLatency HTTP/1.1" 200 None
+2020-07-04 11:09:10,930 - meraki - INFO - Organizations, getOrganizationUplinksLossAndLatency - 200 OK
+2020-07-04 11:09:10,931 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:09:10] "[37mGET /uplink_loss HTTP/1.1[0m" 200 -
+2020-07-04 11:09:11,020 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/deviceStatuses HTTP/1.1" 200 None
+2020-07-04 11:09:11,024 - meraki - INFO - Organizations, getOrganizationDeviceStatuses - 200 OK
+2020-07-04 11:09:11,026 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:09:11] "[37mGET /device_status HTTP/1.1[0m" 200 -
+2020-07-04 11:09:11,265 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 200 None
+2020-07-04 11:09:11,267 - meraki - INFO - Devices, getNetworkDevices - 200 OK
+2020-07-04 11:09:11,268 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:09:11] "[37mGET /devices HTTP/1.1[0m" 200 -
+2020-07-04 11:09:31,156 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-04 11:09:31,333 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/admins HTTP/1.1" 302 None
+2020-07-04 11:09:31,337 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-07-04 11:09:31,720 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/admins HTTP/1.1" 200 None
+2020-07-04 11:09:31,722 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f06a369c040>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-04 11:09:31,722 - meraki - DEBUG - {'tags': ['MX VPN firewall'], 'operation': 'getOrganizationVpnFirewallRules', 'method': 'GET', 'url': '/organizations/764320/vpnFirewallRules', 'params': None}
+2020-07-04 11:09:31,724 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-04 11:09:31,911 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/vpnFirewallRules HTTP/1.1" 302 None
+2020-07-04 11:09:31,915 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-07-04 11:09:32,223 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/vpnFirewallRules HTTP/1.1" 200 None
+2020-07-04 11:09:32,224 - meraki - INFO - MX VPN firewall, getOrganizationVpnFirewallRules - 200 OK
+2020-07-04 11:09:32,277 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/snmp HTTP/1.1" 302 None
+2020-07-04 11:09:32,509 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/snmp HTTP/1.1" 200 None
+2020-07-04 11:09:32,614 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/thirdPartyVPNPeers HTTP/1.1" 302 None
+2020-07-04 11:09:32,881 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/thirdPartyVPNPeers HTTP/1.1" 200 None
+2020-07-04 11:09:32,934 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368 HTTP/1.1" 302 None
+2020-07-04 11:09:33,179 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368 HTTP/1.1" 200 None
+2020-07-04 11:09:33,235 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/vlansEnabledState HTTP/1.1" 302 None
+2020-07-04 11:09:33,481 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/vlansEnabledState HTTP/1.1" 200 None
+2020-07-04 11:09:33,537 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/vlans HTTP/1.1" 302 None
+2020-07-04 11:09:33,878 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/vlans HTTP/1.1" 200 None
+2020-07-04 11:09:34,387 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/cellularFirewallRules HTTP/1.1" 302 None
+2020-07-04 11:09:34,971 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/cellularFirewallRules HTTP/1.1" 200 None
+2020-07-04 11:09:35,089 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/l3FirewallRules HTTP/1.1" 302 None
+2020-07-04 11:09:35,351 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/l3FirewallRules HTTP/1.1" 200 None
+2020-07-04 11:09:35,472 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/siteToSiteVpn HTTP/1.1" 302 None
+2020-07-04 11:09:35,704 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/siteToSiteVpn HTTP/1.1" 200 None
+2020-07-04 11:09:35,765 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids HTTP/1.1" 302 None
+2020-07-04 11:09:36,053 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids HTTP/1.1" 200 None
+2020-07-04 11:09:36,107 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/0/l3FirewallRules HTTP/1.1" 302 None
+2020-07-04 11:09:36,370 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/0/l3FirewallRules HTTP/1.1" 200 None
+2020-07-04 11:09:36,419 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/1/l3FirewallRules HTTP/1.1" 302 None
+2020-07-04 11:09:36,760 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/1/l3FirewallRules HTTP/1.1" 200 None
+2020-07-04 11:09:36,809 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/2/l3FirewallRules HTTP/1.1" 302 None
+2020-07-04 11:09:37,088 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/2/l3FirewallRules HTTP/1.1" 200 None
+2020-07-04 11:09:37,143 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/3/l3FirewallRules HTTP/1.1" 302 None
+2020-07-04 11:09:37,557 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/3/l3FirewallRules HTTP/1.1" 200 None
+2020-07-04 11:09:37,607 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/4/l3FirewallRules HTTP/1.1" 302 None
+2020-07-04 11:09:37,851 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/4/l3FirewallRules HTTP/1.1" 200 None
+2020-07-04 11:09:37,899 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/5/l3FirewallRules HTTP/1.1" 302 None
+2020-07-04 11:09:38,136 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/5/l3FirewallRules HTTP/1.1" 200 None
+2020-07-04 11:09:38,187 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/6/l3FirewallRules HTTP/1.1" 302 None
+2020-07-04 11:09:38,465 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/6/l3FirewallRules HTTP/1.1" 200 None
+2020-07-04 11:09:38,570 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/7/l3FirewallRules HTTP/1.1" 302 None
+2020-07-04 11:09:38,977 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/7/l3FirewallRules HTTP/1.1" 200 None
+2020-07-04 11:09:39,030 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/8/l3FirewallRules HTTP/1.1" 302 None
+2020-07-04 11:09:39,277 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/8/l3FirewallRules HTTP/1.1" 200 None
+2020-07-04 11:09:39,334 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/9/l3FirewallRules HTTP/1.1" 302 None
+2020-07-04 11:09:39,562 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/9/l3FirewallRules HTTP/1.1" 200 None
+2020-07-04 11:09:39,616 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/10/l3FirewallRules HTTP/1.1" 302 None
+2020-07-04 11:09:39,887 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/10/l3FirewallRules HTTP/1.1" 200 None
+2020-07-04 11:09:39,940 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/11/l3FirewallRules HTTP/1.1" 302 None
+2020-07-04 11:09:40,308 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/11/l3FirewallRules HTTP/1.1" 200 None
+2020-07-04 11:09:40,360 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/12/l3FirewallRules HTTP/1.1" 302 None
+2020-07-04 11:09:40,730 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/12/l3FirewallRules HTTP/1.1" 200 None
+2020-07-04 11:09:40,785 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/13/l3FirewallRules HTTP/1.1" 302 None
+2020-07-04 11:09:41,069 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/13/l3FirewallRules HTTP/1.1" 200 None
+2020-07-04 11:09:41,127 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/14/l3FirewallRules HTTP/1.1" 302 None
+2020-07-04 11:09:41,344 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/ssids/14/l3FirewallRules HTTP/1.1" 200 None
+2020-07-04 11:09:41,418 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 302 None
+2020-07-04 11:09:41,911 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 200 None
+2020-07-04 11:09:41,913 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f06a3638310>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-04 11:09:41,914 - meraki - DEBUG - {'tags': ['Devices'], 'operation': 'getNetworkDevices', 'method': 'GET', 'url': '/networks/L_681169443639788368/devices', 'params': None}
+2020-07-04 11:09:41,915 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-04 11:09:42,066 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 302 None
+2020-07-04 11:09:42,070 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-07-04 11:09:42,539 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 200 None
+2020-07-04 11:09:42,544 - meraki - INFO - Devices, getNetworkDevices - 200 OK
+2020-07-04 11:09:42,544 - meraki - DEBUG - {'tags': ['Switch ports'], 'operation': 'getDeviceSwitchPorts', 'method': 'GET', 'url': '/devices/Q2HP-QSVT-LBLV/switchPorts', 'params': None}
+2020-07-04 11:09:42,824 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/devices/Q2HP-QSVT-LBLV/switchPorts HTTP/1.1" 200 None
+2020-07-04 11:09:42,825 - meraki - INFO - Switch ports, getDeviceSwitchPorts - 200 OK
+2020-07-04 11:09:42,826 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:09:42] "[37mPOST /run_backup/ HTTP/1.1[0m" 200 -
+2020-07-04 11:10:06,026 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f06a3638d90>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-04 11:10:06,032 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:10:06] "[37mPOST /device_status HTTP/1.1[0m" 200 -
+2020-07-04 11:10:06,034 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f06a3630bb0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-04 11:10:06,038 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:10:06] "[37mPOST /devices HTTP/1.1[0m" 200 -
+2020-07-04 11:10:06,044 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f06a3640040>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-04 11:10:06,047 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:10:06] "[35m[1mGET /devices HTTP/1.1[0m" 500 -
+2020-07-04 11:10:06,049 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:10:06] "[37mPOST /uplink_loss HTTP/1.1[0m" 200 -
+2020-07-04 11:10:06,065 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizationUplinksLossAndLatency', 'method': 'GET', 'url': '/organizations/764320/uplinksLossAndLatency', 'params': {}}
+2020-07-04 11:10:06,065 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizationDeviceStatuses', 'method': 'GET', 'url': '/organizations/764320/deviceStatuses', 'params': None}
+2020-07-04 11:10:06,081 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-04 11:10:06,088 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-04 11:10:06,093 - werkzeug - ERROR - Error on request:
 Traceback (most recent call last):
   File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 323, in run_wsgi
     execute(self.server.app)
@@ -36,48 +178,23 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1935, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "/home/cyberdevnet/mer-hacker-dev/api/api.py", line 72, in get_organizations
-    dashboard = meraki.DashboardAPI(data['X-Cisco-Meraki-API-Key'],
-NameError: name 'data' is not defined
-2020-07-03 21:57:08,991 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 21:57:08] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-07-03 21:57:08,995 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fc88c233700>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-07-03 21:57:08,998 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
-2020-07-03 21:57:09,002 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-07-03 21:57:09,148 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 302 None
-2020-07-03 21:57:09,152 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-07-03 21:57:09,586 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 200 None
-2020-07-03 21:57:09,588 - meraki - INFO - Organizations, getOrganizations - 200 OK
-2020-07-03 21:57:09,589 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 21:57:09] "[37mGET /organizations HTTP/1.1[0m" 200 -
-2020-07-03 21:57:10,869 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 21:57:10] "[37mPOST /networks HTTP/1.1[0m" 200 -
-2020-07-03 21:57:10,874 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fc88afd5550>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-07-03 21:57:10,875 - meraki - DEBUG - {'tags': ['Networks'], 'operation': 'getOrganizationNetworks', 'method': 'GET', 'url': '/organizations/764320/networks', 'params': {}}
-2020-07-03 21:57:10,878 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-07-03 21:57:11,008 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/networks HTTP/1.1" 302 None
-2020-07-03 21:57:11,011 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-07-03 21:57:11,375 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/networks HTTP/1.1" 200 None
-2020-07-03 21:57:11,377 - meraki - INFO - Networks, getOrganizationNetworks - 200 OK
-2020-07-03 21:57:11,379 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 21:57:11] "[37mGET /networks HTTP/1.1[0m" 200 -
-2020-07-03 21:57:12,632 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fc88afd5a00>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-07-03 21:57:12,635 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 21:57:12] "[37mPOST /clients HTTP/1.1[0m" 200 -
-2020-07-03 21:57:12,635 - meraki - DEBUG - {'tags': ['Clients'], 'operation': 'getNetworkClients', 'page': 1}
-2020-07-03 21:57:12,637 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-07-03 21:57:12,752 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/0/clients?perPage=1000&timespan=3600 HTTP/1.1" 404 None
-2020-07-03 21:57:12,754 - meraki - ERROR - Clients, getNetworkClients - 404 Not Found, b' '
-2020-07-03 21:57:12,765 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 21:57:12] "[35m[1mGET /clients HTTP/1.1[0m" 500 -
-2020-07-03 21:57:12,777 - werkzeug - ERROR - Error on request:
-Traceback (most recent call last):
-  File "/home/cyberdevnet/mer-hacker-dev/api/api.py", line 160, in clients
-    clients = dashboard.clients.getNetworkClients(NET_ID, perPage=1000,timespan=3600)
-  File "/home/cyberdevnet/mer-hacker-dev/api/meraki/api/clients.py", line 55, in getNetworkClients
-    return self._session.get_pages(metadata, resource, params, total_pages, direction)
-  File "/home/cyberdevnet/mer-hacker-dev/api/meraki/rest_session.py", line 273, in get_pages
-    response = self.request(metadata, 'GET', url, params=params)
-  File "/home/cyberdevnet/mer-hacker-dev/api/meraki/rest_session.py", line 252, in request
-    raise APIError(metadata, response)
-meraki.exceptions.APIError: Clients, getNetworkClients - 404 Not Found, b' '
-
-During handling of the above exception, another exception occurred:
-
+  File "/home/cyberdevnet/mer-hacker-dev/api/api.py", line 118, in get_devices
+    data['networkId'])
+KeyError: 'networkId'
+2020-07-04 11:10:06,257 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/deviceStatuses HTTP/1.1" 302 None
+2020-07-04 11:10:06,261 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-07-04 11:10:06,272 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/uplinksLossAndLatency HTTP/1.1" 302 None
+2020-07-04 11:10:06,277 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-07-04 11:10:06,673 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/deviceStatuses HTTP/1.1" 200 None
+2020-07-04 11:10:06,673 - meraki - INFO - Organizations, getOrganizationDeviceStatuses - 200 OK
+2020-07-04 11:10:06,674 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:10:06] "[37mGET /device_status HTTP/1.1[0m" 200 -
+2020-07-04 11:10:06,935 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/uplinksLossAndLatency HTTP/1.1" 200 None
+2020-07-04 11:10:06,936 - meraki - INFO - Organizations, getOrganizationUplinksLossAndLatency - 200 OK
+2020-07-04 11:10:06,938 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:10:06] "[37mGET /uplink_loss HTTP/1.1[0m" 200 -
+2020-07-04 11:10:19,144 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:10:19] "[37mPOST /clients HTTP/1.1[0m" 200 -
+2020-07-04 11:10:19,148 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:10:19] "[37mPOST /networks HTTP/1.1[0m" 200 -
+2020-07-04 11:10:19,153 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:10:19] "[35m[1mGET /networks HTTP/1.1[0m" 500 -
+2020-07-04 11:10:19,165 - werkzeug - ERROR - Error on request:
 Traceback (most recent call last):
   File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 323, in run_wsgi
     execute(self.server.app)
@@ -111,28 +228,54 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1935, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "/home/cyberdevnet/mer-hacker-dev/api/api.py", line 164, in clients
-    error = (err.message['errors'][0])
-TypeError: byte indices must be integers or slices, not str
-2020-07-03 22:21:31,091 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fc88afd5250>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-07-03 22:21:31,093 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 22:21:31] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-07-03 22:21:31,094 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
-2020-07-03 22:21:31,096 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-07-03 22:21:31,243 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 302 None
-2020-07-03 22:21:31,246 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-07-03 22:21:31,949 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 200 None
-2020-07-03 22:21:31,950 - meraki - INFO - Organizations, getOrganizations - 200 OK
-2020-07-03 22:21:31,951 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 22:21:31] "[37mGET /organizations HTTP/1.1[0m" 200 -
-2020-07-03 22:23:20,576 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 22:23:20] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-07-03 22:23:20,577 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fc88af72a30>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************st"]', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-07-03 22:23:20,578 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
-2020-07-03 22:23:20,580 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-07-03 22:23:20,721 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 404 None
-2020-07-03 22:23:20,722 - meraki - ERROR - Organizations, getOrganizations - 404 Not Found, b' '
-2020-07-03 22:23:20,737 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 22:23:20] "[37mGET /organizations HTTP/1.1[0m" 200 -
-2020-07-03 22:23:49,557 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 22:23:49] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-07-03 22:23:49,564 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 22:23:49] "[35m[1mGET /organizations HTTP/1.1[0m" 500 -
-2020-07-03 22:23:49,571 - werkzeug - ERROR - Error on request:
+  File "/home/cyberdevnet/mer-hacker-dev/api/api.py", line 94, in get_networks
+    dashboard = meraki.DashboardAPI(
+  File "/home/cyberdevnet/mer-hacker-dev/api/meraki/__init__.py", line 130, in __init__
+    raise APIKeyError()
+meraki.exceptions.APIKeyError: Meraki API key needs to be defined
+2020-07-04 11:10:19,170 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:10:19] "[35m[1mGET /clients HTTP/1.1[0m" 500 -
+2020-07-04 11:10:19,178 - werkzeug - ERROR - Error on request:
+Traceback (most recent call last):
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 323, in run_wsgi
+    execute(self.server.app)
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 312, in execute
+    application_iter = app(environ, start_response)
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2463, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_socketio/__init__.py", line 45, in __call__
+    return super(_SocketIOMiddleware, self).__call__(environ,
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/engineio/middleware.py", line 74, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2449, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_cors/extension.py", line 161, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1866, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2446, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1951, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_cors/extension.py", line 161, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1820, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/cyberdevnet/mer-hacker-dev/api/api.py", line 159, in clients
+    dashboard = meraki.DashboardAPI(ARG_APIKEY)
+  File "/home/cyberdevnet/mer-hacker-dev/api/meraki/__init__.py", line 130, in __init__
+    raise APIKeyError()
+meraki.exceptions.APIKeyError: Meraki API key needs to be defined
+2020-07-04 11:10:27,065 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:10:27] "[37mPOST /organizations HTTP/1.1[0m" 200 -
+2020-07-04 11:10:27,074 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:10:27] "[35m[1mGET /organizations HTTP/1.1[0m" 500 -
+2020-07-04 11:10:27,083 - werkzeug - ERROR - Error on request:
 Traceback (most recent call last):
   File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 323, in run_wsgi
     execute(self.server.app)
@@ -171,9 +314,9 @@ Traceback (most recent call last):
   File "/home/cyberdevnet/mer-hacker-dev/api/meraki/__init__.py", line 130, in __init__
     raise APIKeyError()
 meraki.exceptions.APIKeyError: Meraki API key needs to be defined
-2020-07-03 22:25:16,337 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 22:25:16] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-07-03 22:25:16,346 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 22:25:16] "[35m[1mGET /organizations HTTP/1.1[0m" 500 -
-2020-07-03 22:25:16,352 - werkzeug - ERROR - Error on request:
+2020-07-04 11:10:29,709 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:10:29] "[37mPOST /organizations HTTP/1.1[0m" 200 -
+2020-07-04 11:10:29,715 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:10:29] "[35m[1mGET /organizations HTTP/1.1[0m" 500 -
+2020-07-04 11:10:29,724 - werkzeug - ERROR - Error on request:
 Traceback (most recent call last):
   File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 323, in run_wsgi
     execute(self.server.app)
@@ -212,395 +355,21 @@ Traceback (most recent call last):
   File "/home/cyberdevnet/mer-hacker-dev/api/meraki/__init__.py", line 130, in __init__
     raise APIKeyError()
 meraki.exceptions.APIKeyError: Meraki API key needs to be defined
-2020-07-03 22:26:03,400 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 22:26:03] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-07-03 22:26:03,406 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 22:26:03] "[35m[1mGET /organizations HTTP/1.1[0m" 500 -
-2020-07-03 22:26:03,413 - werkzeug - ERROR - Error on request:
-Traceback (most recent call last):
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 323, in run_wsgi
-    execute(self.server.app)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 312, in execute
-    application_iter = app(environ, start_response)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2463, in __call__
-    return self.wsgi_app(environ, start_response)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_socketio/__init__.py", line 45, in __call__
-    return super(_SocketIOMiddleware, self).__call__(environ,
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/engineio/middleware.py", line 74, in __call__
-    return self.wsgi_app(environ, start_response)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2449, in wsgi_app
-    response = self.handle_exception(e)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_cors/extension.py", line 161, in wrapped_function
-    return cors_after_request(app.make_response(f(*args, **kwargs)))
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1866, in handle_exception
-    reraise(exc_type, exc_value, tb)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
-    raise value
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2446, in wsgi_app
-    response = self.full_dispatch_request()
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1951, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_cors/extension.py", line 161, in wrapped_function
-    return cors_after_request(app.make_response(f(*args, **kwargs)))
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1820, in handle_user_exception
-    reraise(exc_type, exc_value, tb)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
-    raise value
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1949, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1935, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "/home/cyberdevnet/mer-hacker-dev/api/api.py", line 72, in get_organizations
-    dashboard = meraki.DashboardAPI(data['X-Cisco-Meraki-API-Key'],
-  File "/home/cyberdevnet/mer-hacker-dev/api/meraki/__init__.py", line 130, in __init__
-    raise APIKeyError()
-meraki.exceptions.APIKeyError: Meraki API key needs to be defined
-2020-07-03 22:33:20,713 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 22:33:20] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-07-03 22:33:20,718 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 22:33:20] "[35m[1mGET /organizations HTTP/1.1[0m" 500 -
-2020-07-03 22:33:20,729 - werkzeug - ERROR - Error on request:
-Traceback (most recent call last):
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 323, in run_wsgi
-    execute(self.server.app)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 312, in execute
-    application_iter = app(environ, start_response)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2463, in __call__
-    return self.wsgi_app(environ, start_response)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_socketio/__init__.py", line 45, in __call__
-    return super(_SocketIOMiddleware, self).__call__(environ,
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/engineio/middleware.py", line 74, in __call__
-    return self.wsgi_app(environ, start_response)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2449, in wsgi_app
-    response = self.handle_exception(e)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_cors/extension.py", line 161, in wrapped_function
-    return cors_after_request(app.make_response(f(*args, **kwargs)))
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1866, in handle_exception
-    reraise(exc_type, exc_value, tb)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
-    raise value
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2446, in wsgi_app
-    response = self.full_dispatch_request()
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1951, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_cors/extension.py", line 161, in wrapped_function
-    return cors_after_request(app.make_response(f(*args, **kwargs)))
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1820, in handle_user_exception
-    reraise(exc_type, exc_value, tb)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
-    raise value
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1949, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1935, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "/home/cyberdevnet/mer-hacker-dev/api/api.py", line 72, in get_organizations
-    dashboard = meraki.DashboardAPI(data['X-Cisco-Meraki-API-Key'],
-  File "/home/cyberdevnet/mer-hacker-dev/api/meraki/__init__.py", line 130, in __init__
-    raise APIKeyError()
-meraki.exceptions.APIKeyError: Meraki API key needs to be defined
-2020-07-03 22:34:20,567 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 22:34:20] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-07-03 22:34:20,571 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fc88a8ff2e0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************st"]', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-07-03 22:34:20,572 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
-2020-07-03 22:34:20,575 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-07-03 22:34:20,707 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 404 None
-2020-07-03 22:34:20,708 - meraki - ERROR - Organizations, getOrganizations - 404 Not Found, b' '
-2020-07-03 22:34:20,710 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 22:34:20] "[37mGET /organizations HTTP/1.1[0m" 200 -
-2020-07-03 22:58:58,491 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fc88af67400>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************st"]', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-07-03 22:58:58,492 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 22:58:58] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-07-03 22:58:58,493 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
-2020-07-03 22:58:58,494 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-07-03 22:58:58,625 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 404 None
-2020-07-03 22:58:58,625 - meraki - ERROR - Organizations, getOrganizations - 404 Not Found, b' '
-2020-07-03 22:58:58,626 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 22:58:58] "[37mGET /organizations HTTP/1.1[0m" 200 -
-2020-07-03 23:04:20,442 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:04:20] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-07-03 23:04:20,449 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:04:20] "[35m[1mGET /organizations HTTP/1.1[0m" 500 -
-2020-07-03 23:04:20,455 - werkzeug - ERROR - Error on request:
-Traceback (most recent call last):
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 323, in run_wsgi
-    execute(self.server.app)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 312, in execute
-    application_iter = app(environ, start_response)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2463, in __call__
-    return self.wsgi_app(environ, start_response)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_socketio/__init__.py", line 45, in __call__
-    return super(_SocketIOMiddleware, self).__call__(environ,
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/engineio/middleware.py", line 74, in __call__
-    return self.wsgi_app(environ, start_response)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2449, in wsgi_app
-    response = self.handle_exception(e)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_cors/extension.py", line 161, in wrapped_function
-    return cors_after_request(app.make_response(f(*args, **kwargs)))
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1866, in handle_exception
-    reraise(exc_type, exc_value, tb)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
-    raise value
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2446, in wsgi_app
-    response = self.full_dispatch_request()
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1951, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_cors/extension.py", line 161, in wrapped_function
-    return cors_after_request(app.make_response(f(*args, **kwargs)))
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1820, in handle_user_exception
-    reraise(exc_type, exc_value, tb)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
-    raise value
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1949, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1935, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "/home/cyberdevnet/mer-hacker-dev/api/api.py", line 72, in get_organizations
-    dashboard = meraki.DashboardAPI(data['X-Cisco-Meraki-API-Key'],
-  File "/home/cyberdevnet/mer-hacker-dev/api/meraki/__init__.py", line 130, in __init__
-    raise APIKeyError()
-meraki.exceptions.APIKeyError: Meraki API key needs to be defined
-2020-07-03 23:05:15,615 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:05:15] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-07-03 23:05:15,620 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:05:15] "[35m[1mGET /organizations HTTP/1.1[0m" 500 -
-2020-07-03 23:05:15,626 - werkzeug - ERROR - Error on request:
-Traceback (most recent call last):
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 323, in run_wsgi
-    execute(self.server.app)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 312, in execute
-    application_iter = app(environ, start_response)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2463, in __call__
-    return self.wsgi_app(environ, start_response)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_socketio/__init__.py", line 45, in __call__
-    return super(_SocketIOMiddleware, self).__call__(environ,
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/engineio/middleware.py", line 74, in __call__
-    return self.wsgi_app(environ, start_response)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2449, in wsgi_app
-    response = self.handle_exception(e)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_cors/extension.py", line 161, in wrapped_function
-    return cors_after_request(app.make_response(f(*args, **kwargs)))
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1866, in handle_exception
-    reraise(exc_type, exc_value, tb)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
-    raise value
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2446, in wsgi_app
-    response = self.full_dispatch_request()
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1951, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_cors/extension.py", line 161, in wrapped_function
-    return cors_after_request(app.make_response(f(*args, **kwargs)))
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1820, in handle_user_exception
-    reraise(exc_type, exc_value, tb)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
-    raise value
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1949, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1935, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "/home/cyberdevnet/mer-hacker-dev/api/api.py", line 72, in get_organizations
-    dashboard = meraki.DashboardAPI(data['X-Cisco-Meraki-API-Key'],
-  File "/home/cyberdevnet/mer-hacker-dev/api/meraki/__init__.py", line 130, in __init__
-    raise APIKeyError()
-meraki.exceptions.APIKeyError: Meraki API key needs to be defined
-2020-07-03 23:12:30,910 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:12:30] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-07-03 23:12:30,912 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fc88ad3f520>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************st"]', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-07-03 23:12:30,913 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
-2020-07-03 23:12:30,915 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-07-03 23:12:31,040 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 404 None
-2020-07-03 23:12:31,040 - meraki - ERROR - Organizations, getOrganizations - 404 Not Found, b' '
-2020-07-03 23:12:31,042 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:12:31] "[37mGET /organizations HTTP/1.1[0m" 200 -
-2020-07-03 23:17:15,308 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fc88aad4970>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************st"]', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-07-03 23:17:15,310 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:17:15] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-07-03 23:17:15,311 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
-2020-07-03 23:17:15,315 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-07-03 23:17:15,669 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 404 None
-2020-07-03 23:17:15,669 - meraki - ERROR - Organizations, getOrganizations - 404 Not Found, b' '
-2020-07-03 23:17:15,671 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:17:15] "[37mGET /organizations HTTP/1.1[0m" 200 -
-2020-07-03 23:34:01,976 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:34:01] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-07-03 23:34:01,987 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:34:01] "[35m[1mGET /organizations HTTP/1.1[0m" 500 -
-2020-07-03 23:34:01,998 - werkzeug - ERROR - Error on request:
-Traceback (most recent call last):
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 323, in run_wsgi
-    execute(self.server.app)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 312, in execute
-    application_iter = app(environ, start_response)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2463, in __call__
-    return self.wsgi_app(environ, start_response)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_socketio/__init__.py", line 45, in __call__
-    return super(_SocketIOMiddleware, self).__call__(environ,
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/engineio/middleware.py", line 74, in __call__
-    return self.wsgi_app(environ, start_response)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2449, in wsgi_app
-    response = self.handle_exception(e)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_cors/extension.py", line 161, in wrapped_function
-    return cors_after_request(app.make_response(f(*args, **kwargs)))
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1866, in handle_exception
-    reraise(exc_type, exc_value, tb)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
-    raise value
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2446, in wsgi_app
-    response = self.full_dispatch_request()
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1951, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_cors/extension.py", line 161, in wrapped_function
-    return cors_after_request(app.make_response(f(*args, **kwargs)))
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1820, in handle_user_exception
-    reraise(exc_type, exc_value, tb)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
-    raise value
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1949, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1935, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "/home/cyberdevnet/mer-hacker-dev/api/api.py", line 72, in get_organizations
-    dashboard = meraki.DashboardAPI(data['X-Cisco-Meraki-API-Key'],
-  File "/home/cyberdevnet/mer-hacker-dev/api/meraki/__init__.py", line 130, in __init__
-    raise APIKeyError()
-meraki.exceptions.APIKeyError: Meraki API key needs to be defined
-2020-07-03 23:38:07,127 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:38:07] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-07-03 23:38:07,129 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fc88a70bb80>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************st"]', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-07-03 23:38:07,132 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
-2020-07-03 23:38:07,135 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-07-03 23:38:07,277 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 404 None
-2020-07-03 23:38:07,281 - meraki - ERROR - Organizations, getOrganizations - 404 Not Found, b' '
-2020-07-03 23:38:07,284 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:38:07] "[37mGET /organizations HTTP/1.1[0m" 200 -
-2020-07-03 23:42:43,831 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fc88ad2b100>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************st"]', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-07-03 23:42:43,832 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:42:43] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-07-03 23:42:43,837 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
-2020-07-03 23:42:43,839 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-07-03 23:42:43,961 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 404 None
-2020-07-03 23:42:43,963 - meraki - ERROR - Organizations, getOrganizations - 404 Not Found, b' '
-2020-07-03 23:42:43,964 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:42:43] "[37mGET /organizations HTTP/1.1[0m" 200 -
-2020-07-03 23:44:11,989 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:44:11] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-07-03 23:44:11,995 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:44:11] "[35m[1mGET /organizations HTTP/1.1[0m" 500 -
-2020-07-03 23:44:12,001 - werkzeug - ERROR - Error on request:
-Traceback (most recent call last):
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 323, in run_wsgi
-    execute(self.server.app)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 312, in execute
-    application_iter = app(environ, start_response)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2463, in __call__
-    return self.wsgi_app(environ, start_response)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_socketio/__init__.py", line 45, in __call__
-    return super(_SocketIOMiddleware, self).__call__(environ,
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/engineio/middleware.py", line 74, in __call__
-    return self.wsgi_app(environ, start_response)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2449, in wsgi_app
-    response = self.handle_exception(e)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_cors/extension.py", line 161, in wrapped_function
-    return cors_after_request(app.make_response(f(*args, **kwargs)))
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1866, in handle_exception
-    reraise(exc_type, exc_value, tb)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
-    raise value
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2446, in wsgi_app
-    response = self.full_dispatch_request()
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1951, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_cors/extension.py", line 161, in wrapped_function
-    return cors_after_request(app.make_response(f(*args, **kwargs)))
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1820, in handle_user_exception
-    reraise(exc_type, exc_value, tb)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
-    raise value
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1949, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1935, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "/home/cyberdevnet/mer-hacker-dev/api/api.py", line 72, in get_organizations
-    dashboard = meraki.DashboardAPI(data['X-Cisco-Meraki-API-Key'],
-  File "/home/cyberdevnet/mer-hacker-dev/api/meraki/__init__.py", line 130, in __init__
-    raise APIKeyError()
-meraki.exceptions.APIKeyError: Meraki API key needs to be defined
-2020-07-03 23:45:00,198 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:45:00] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-07-03 23:45:00,206 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:45:00] "[35m[1mGET /organizations HTTP/1.1[0m" 500 -
-2020-07-03 23:45:00,213 - werkzeug - ERROR - Error on request:
-Traceback (most recent call last):
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 323, in run_wsgi
-    execute(self.server.app)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/werkzeug/serving.py", line 312, in execute
-    application_iter = app(environ, start_response)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2463, in __call__
-    return self.wsgi_app(environ, start_response)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_socketio/__init__.py", line 45, in __call__
-    return super(_SocketIOMiddleware, self).__call__(environ,
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/engineio/middleware.py", line 74, in __call__
-    return self.wsgi_app(environ, start_response)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2449, in wsgi_app
-    response = self.handle_exception(e)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_cors/extension.py", line 161, in wrapped_function
-    return cors_after_request(app.make_response(f(*args, **kwargs)))
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1866, in handle_exception
-    reraise(exc_type, exc_value, tb)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
-    raise value
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 2446, in wsgi_app
-    response = self.full_dispatch_request()
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1951, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask_cors/extension.py", line 161, in wrapped_function
-    return cors_after_request(app.make_response(f(*args, **kwargs)))
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1820, in handle_user_exception
-    reraise(exc_type, exc_value, tb)
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
-    raise value
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1949, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/home/cyberdevnet/.local/lib/python3.8/site-packages/flask/app.py", line 1935, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "/home/cyberdevnet/mer-hacker-dev/api/api.py", line 72, in get_organizations
-    dashboard = meraki.DashboardAPI(data['X-Cisco-Meraki-API-Key'],
-  File "/home/cyberdevnet/mer-hacker-dev/api/meraki/__init__.py", line 130, in __init__
-    raise APIKeyError()
-meraki.exceptions.APIKeyError: Meraki API key needs to be defined
-2020-07-03 23:45:04,809 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:45:04] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-07-03 23:45:04,813 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fc88aaceee0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-07-03 23:45:04,815 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
-2020-07-03 23:45:04,817 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-07-03 23:45:05,001 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 302 None
-2020-07-03 23:45:05,004 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-07-03 23:45:05,333 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 200 None
-2020-07-03 23:45:05,334 - meraki - INFO - Organizations, getOrganizations - 200 OK
-2020-07-03 23:45:05,335 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:45:05] "[37mGET /organizations HTTP/1.1[0m" 200 -
-2020-07-03 23:45:06,805 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:45:06] "[37mPOST /networks HTTP/1.1[0m" 200 -
-2020-07-03 23:45:06,809 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fc88af72b50>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-07-03 23:45:06,811 - meraki - DEBUG - {'tags': ['Networks'], 'operation': 'getOrganizationNetworks', 'method': 'GET', 'url': '/organizations/764320/networks', 'params': {}}
-2020-07-03 23:45:06,813 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-07-03 23:45:06,950 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/networks HTTP/1.1" 302 None
-2020-07-03 23:45:06,953 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-07-03 23:45:07,245 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/networks HTTP/1.1" 200 None
-2020-07-03 23:45:07,247 - meraki - INFO - Networks, getOrganizationNetworks - 200 OK
-2020-07-03 23:45:07,249 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:45:07] "[37mGET /networks HTTP/1.1[0m" 200 -
-2020-07-03 23:45:08,979 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:45:08] "[37mPOST /clients HTTP/1.1[0m" 200 -
-2020-07-03 23:45:08,984 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fc88a70b670>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-07-03 23:45:08,985 - meraki - DEBUG - {'tags': ['Clients'], 'operation': 'getNetworkClients', 'page': 1}
-2020-07-03 23:45:08,986 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-07-03 23:45:09,129 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/clients?perPage=1000&timespan=3600 HTTP/1.1" 302 None
-2020-07-03 23:45:09,133 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-07-03 23:45:09,505 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/clients?perPage=1000&timespan=3600&perPage=1000&timespan=3600 HTTP/1.1" 200 None
-2020-07-03 23:45:09,506 - meraki - INFO - Clients, getNetworkClients; page 1 - 200 OK
-2020-07-03 23:45:09,508 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:45:09] "[37mGET /clients HTTP/1.1[0m" 200 -
-2020-07-03 23:45:32,063 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:45:32] "[37mPOST /organizations HTTP/1.1[0m" 200 -
-2020-07-03 23:45:32,065 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fc88af72eb0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-07-03 23:45:32,067 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
-2020-07-03 23:45:32,068 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-07-03 23:45:32,207 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 302 None
-2020-07-03 23:45:32,214 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-07-03 23:45:32,597 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 200 None
-2020-07-03 23:45:32,599 - meraki - INFO - Organizations, getOrganizations - 200 OK
-2020-07-03 23:45:32,603 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:45:32] "[37mGET /organizations HTTP/1.1[0m" 200 -
-2020-07-03 23:45:33,657 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:45:33] "[37mPOST /networks HTTP/1.1[0m" 200 -
-2020-07-03 23:45:33,661 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fc88afeabb0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-07-03 23:45:33,661 - meraki - DEBUG - {'tags': ['Networks'], 'operation': 'getOrganizationNetworks', 'method': 'GET', 'url': '/organizations/764320/networks', 'params': {}}
-2020-07-03 23:45:33,663 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-07-03 23:45:33,796 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/networks HTTP/1.1" 302 None
-2020-07-03 23:45:33,802 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-07-03 23:45:34,129 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/networks HTTP/1.1" 200 None
-2020-07-03 23:45:34,131 - meraki - INFO - Networks, getOrganizationNetworks - 200 OK
-2020-07-03 23:45:34,132 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:45:34] "[37mGET /networks HTTP/1.1[0m" 200 -
-2020-07-03 23:45:35,372 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:45:35] "[37mPOST /clients HTTP/1.1[0m" 200 -
-2020-07-03 23:45:35,376 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fc88a70b880>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-07-03 23:45:35,378 - meraki - DEBUG - {'tags': ['Clients'], 'operation': 'getNetworkClients', 'page': 1}
-2020-07-03 23:45:35,380 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-07-03 23:45:35,525 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/clients?perPage=1000&timespan=3600 HTTP/1.1" 302 None
-2020-07-03 23:45:35,528 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-07-03 23:45:35,918 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/clients?perPage=1000&timespan=3600&perPage=1000&timespan=3600 HTTP/1.1" 200 None
-2020-07-03 23:45:35,919 - meraki - INFO - Clients, getNetworkClients; page 1 - 200 OK
-2020-07-03 23:45:35,920 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:45:35] "[37mGET /clients HTTP/1.1[0m" 200 -
-2020-07-03 23:45:38,515 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:45:38] "[37mPOST /devices HTTP/1.1[0m" 200 -
-2020-07-03 23:45:38,519 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fc88afeae50>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
-2020-07-03 23:45:38,521 - meraki - DEBUG - {'tags': ['Devices'], 'operation': 'getNetworkDevices', 'method': 'GET', 'url': '/networks/L_681169443639788368/devices', 'params': None}
-2020-07-03 23:45:38,523 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
-2020-07-03 23:45:38,667 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 302 None
-2020-07-03 23:45:38,675 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
-2020-07-03 23:45:39,033 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 200 None
-2020-07-03 23:45:39,034 - meraki - INFO - Devices, getNetworkDevices - 200 OK
-2020-07-03 23:45:39,037 - werkzeug - INFO - 127.0.0.1 - - [03/Jul/2020 23:45:39] "[37mGET /devices HTTP/1.1[0m" 200 -
+2020-07-04 11:10:30,464 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:10:30] "[37mPOST /networks HTTP/1.1[0m" 200 -
+2020-07-04 11:10:30,475 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f06a3693ac0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-04 11:10:30,477 - meraki - DEBUG - {'tags': ['Networks'], 'operation': 'getOrganizationNetworks', 'method': 'GET', 'url': '/organizations/764320/networks', 'params': {}}
+2020-07-04 11:10:30,479 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-04 11:10:30,611 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/networks HTTP/1.1" 302 None
+2020-07-04 11:10:30,614 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-07-04 11:10:31,086 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/networks HTTP/1.1" 200 None
+2020-07-04 11:10:31,088 - meraki - INFO - Networks, getOrganizationNetworks - 200 OK
+2020-07-04 11:10:31,089 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:10:31] "[37mGET /networks HTTP/1.1[0m" 200 -
+2020-07-04 11:10:32,374 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:10:32] "[37mPOST /clients HTTP/1.1[0m" 200 -
+2020-07-04 11:10:32,378 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7f06a363dee0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-04 11:10:32,380 - meraki - DEBUG - {'tags': ['Clients'], 'operation': 'getNetworkClients', 'page': 1}
+2020-07-04 11:10:32,383 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-04 11:10:32,510 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/clients?perPage=1000&timespan=3600 HTTP/1.1" 302 None
+2020-07-04 11:10:32,515 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-07-04 11:10:33,029 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/clients?perPage=1000&timespan=3600&perPage=1000&timespan=3600 HTTP/1.1" 200 None
+2020-07-04 11:10:33,031 - meraki - INFO - Clients, getNetworkClients; page 1 - 200 OK
+2020-07-04 11:10:33,032 - werkzeug - INFO - 127.0.0.1 - - [04/Jul/2020 11:10:33] "[37mGET /clients HTTP/1.1[0m" 200 -

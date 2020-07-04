@@ -8,7 +8,6 @@ export default function LoggedIn(ac) {
   const [loading, setloading] = useState(false);
   const [inputKey, setinputKey] = useState('')
   const [triggerLogin, settriggerLogin] = useState(0)
-  console.log("LoggedIn -> inputKey", inputKey)
 
 
 

@@ -7,6 +7,7 @@ import $ from 'jquery'
 import "../styles/Logout.css";
 
 export default function Logout(ac, props) {
+  console.log("Logout -> ac", ac)
 
 
   let history = useHistory();
@@ -58,7 +59,7 @@ export default function Logout(ac, props) {
     $(this).addClass('closed');
     $('.navbar-side').css({ left: '-260px' });
     $('#page-wrapper').css({ 'margin-left': '0px' });
-    // ac.sethideLogin({ display: "block" });
+    ac.sethideLogin({ display: "block" });
   };
 
   const Cancel = () => {

@@ -1,6 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Redirect, NavLink } from "react-router-dom";
-import axios from 'axios'
+import { BrowserRouter as Router, Switch, Route, NavLink } from "react-router-dom";
 import Select from "react-select";
 import ProtectedRoute from '../ProtectedRoute'
 import Home from './Home'
@@ -13,6 +12,7 @@ import ToolsTemplate from "./ToolsTemplate";
 import AlertModal from "./AlertsModal";
 import Countdown from 'react-countdown';
 import "../styles/Template.css";
+
 
 
 

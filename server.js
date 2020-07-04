@@ -1,15 +1,15 @@
-var express = require('express');
-var app = express();
-var multer = require('multer')
-var cors = require('cors');
+const express = require('express');
+const app = express();
+const multer = require('multer')
+const cors = require('cors');
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
+const Mongoose = require("mongoose");
 
 app.use(cors())
 app.use(express.json())
 app.use(bodyParser.json());
 let urlencodedParser = (bodyParser.urlencoded({ extended: true }))
-// app.use(bodyParser.urlencoded({ extended: true }))
 
 const pino = require('pino');
 const expressPino = require('express-pino-logger');
@@ -29,48 +29,83 @@ const cookieParser = require('cookie-parser');
 // A random key for signing the cookie
 app.use(cookieParser('82e4e438a0705fabf61f9854e3b575af'));
 
+// Mongodb initialization
+
+Mongoose.connect("mongodb://localhost/users", { useNewUrlParser: true, useUnifiedTopology: true });
+
+const UserSchema = new Mongoose.Schema({
+    username: String,
+    password: String
+});
 
 
+//check to see if the user is being created or changed. 
+//If the user is not being created or changed, we will skip over the hashing part.
 
-const users = []
+UserSchema.pre("save", function (next) {
+    if (!this.isModified("password")) {
+        return next();
+    }
+    this.password = bcrypt.hashSync(this.password, 10);
+    next();
+});
 
 
-//just to see the users in database, passwords are salted + hashed
-app.get('/users', (req, res) => {
-    res.json(users)
-})
+//function take the provided data, compare it against our hashed data, 
+//and then return the boolean res within the callback.
 
-//create a new user + password and salt + hash
-app.post('/hash-users', async (req, res) => {
-    console.log("req", req.body)
+UserSchema.methods.comparePassword = function (plaintext, callback) {
+    return callback(null, bcrypt.compareSync(plaintext, this.password));
+};
+
+
+const UserModel = new Mongoose.model("user", UserSchema);
+
+//connection to the Mongodb database to check the users
+app.get("/dump", async (req, res) => {
     try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10)
-        const user = { username: req.body.username, password: hashedPassword }
-        users.push(user)
+        var result = await UserModel.find().exec();
+        res.send(result);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
+
+//create a new user on Mongodb + password and salt + hash
+app.post('/hash-users', async (req, res) => {
+    try {
+        const user = new UserModel(req.body);
+        const result = await user.save();
+        res.send(result);
         res.status(201).send()
-    } catch {
-        res.status(500).send()
+    } catch (error) {
+        res.status(500).send(error);
     }
 })
+
+
 
 //login from client checking if user match and password match with salt + hash
-app.post('/authenticate', async (req, res) => {
-
-    const user = users.find(user => user.username === req.body.username)
-    if (user == null) {
-        return res.status(400).send('Cannot find user')
-    }
+app.post('/authenticate', async (req, res, next) => {
     try {
-        if (await bcrypt.compare(req.body.password, user.password)) {
-            res.send('Allowed')
-        } else {
-            res.send('Not Allowed')
+        var user = await UserModel.findOne({ username: req.body.username }).exec();
+        if (!user) {
+            res.send('Not Allowed user or user not set ')
         }
-    } catch {
-        res.status(500).send()
+        user.comparePassword(req.body.password, (error, match) => {
+            if (!match) {
+                res.send('Not Allowed password or password not set')
+            }
+        });
+        res.send('Allowed')
+    } catch (error) {
+        return next(new Error('either user or password are not set'))
+
     }
 })
 
+//cookie set - read - clear
 app.get('/set-cookie', (req, res) => {
 
     const options = {
@@ -78,18 +113,10 @@ app.get('/set-cookie', (req, res) => {
         httpOnly: true, // The cookie only accessible by the web server
         signed: true // Indicates if the cookie should be signed
     };
-
-
     res.cookie('cookie', 'somerandomstuff', options).send({ signedIn: true });
-    console.log('cookie created successfully');
-
 });
 
 app.get('/read-cookie', (req, res) => {
-    console.log('Cookies: ', req.cookies)
-    console.log('Signed Cookies: ', req.signedCookies)
-
-
     if (req.signedCookies.cookie === 'somerandomstuff') {
         res.send({ signedIn: true });
     } else {
@@ -98,76 +125,8 @@ app.get('/read-cookie', (req, res) => {
 });
 
 app.get('/clear-cookie', (req, res) => {
-    console.log("Cookie cleared")
     res.clearCookie('cookie').end();
 });
-
-
-
-
-
-
-
-
-
-
-
-// //Auth
-
-// const basicAuth = require('express-basic-auth');
-// const cookieParser = require('cookie-parser');
-
-// // A random key for signing the cookie
-// app.use(cookieParser('82e4e438a0705fabf61f9854e3b575af'));
-
-// const auth = basicAuth({
-//     users: {
-//         admin: '123',
-//     },
-// });
-
-
-
-// app.get('/authenticate', auth, (req, res) => {
-
-//     const options = {
-//         httpOnly: true,
-//         signed: true,
-//     };
-
-//     if (req.auth.user === 'admin') {
-//         res.cookie('name', 'admin', options).send({ signedIn: true });
-//     } else {
-//         res.send({ signedIn: false });
-//     }
-// });
-
-// app.get('/read-cookie', (req, res) => {
-//     console.log(req.signedCookies);
-//     if (req.signedCookies.name === 'admin') {
-//         res.send({ signedIn: true });
-//     } else {
-//         res.send({ signedIn: false });
-//     }
-// });
-
-// app.get('/clear-cookie', (req, res) => {
-//     res.clearCookie('name').end();
-//     // res.send('you have been logged out');
-// });
-
-// app.get('/get-auth-status', (req, res) => {
-//     if (req.signedCookies.name === 'admin') {
-//         res.send('you are logged in');
-//     } else {
-//         res.send('you are NOT logged in');
-//         res.end();
-//     }
-// });
-
-
-
-
 
 
 // retrieve and store API key
@@ -175,16 +134,13 @@ app.get('/clear-cookie', (req, res) => {
 var apiKey = ['test'];
 
 app.post('/post-api-key', function (req, res) {
-    console.log("req", req.body.key)
     var key = req.body;
     apiKey = key.key.slice(0)
     res.send(req.body);
-    console.log("apiKey", apiKey)
 
 })
 
 app.get('/get-api-key', (req, res) => {
-    console.log("apiKey", typeof apiKey)
     res.send(apiKey);
     res.end();
 
@@ -193,8 +149,7 @@ app.get('/get-api-key', (req, res) => {
 
 
 
-
-
+// serve static files for backup/restore script
 
 app.use("/api/backup_restore/", express.static(__dirname + '/api/backup_restore/'));
 
@@ -204,6 +159,7 @@ app.get("/api/backup_restore/", function (req, res) {
 
 });
 
+// serve static files for live logs
 app.use("/api/logs/", express.static(__dirname + '/api/logs/'));
 
 app.get("/api/logs/", function (req, res) {
@@ -213,6 +169,7 @@ app.get("/api/logs/", function (req, res) {
 });
 
 
+// download restore script
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, './api/backup_restore/')

@@ -1,9 +1,35 @@
 import React, { useEffect } from "react";
+import { useHistory, Redirect } from "react-router-dom";
+import axios from 'axios'
 import Dialog from '@material-ui/core/Dialog';
 import $ from 'jquery'
 
 
 export default function SessionTimeout(ac) {
+
+    const deleteCookie = async () => {
+        try {
+            await axios.get('/clear-cookie');
+            ac.dc.setisSignedIn(false);
+
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+
+    // send a 'leer' string to server on logout to clear the key
+    async function postKey() {
+        const rawResponse = await fetch('/post-api-key', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ key: 'leer' })
+        })
+        return await rawResponse.json();
+    }
 
     useEffect(() => {
 
@@ -22,11 +48,8 @@ export default function SessionTimeout(ac) {
         }
 
         return () => clearInterval(timer);
-
-
         // eslint-disable-next-line
     }, [ac.dc.isSignedIn, ac.dc.sessionTime]);
-
 
 
     const handleClose = () => {
@@ -37,25 +60,37 @@ export default function SessionTimeout(ac) {
 
 
     const handleLogOff = () => {
-        ac.dc.setapiKey("");
-        ac.dc.setgetOrgStatusCode(0);
-        ac.dc.setsessionTimeout(false);
-        ac.dc.setsessionTime(0)
-        ac.dc.setisSignedIn(false)
-        ac.dc.setswitchLoginAPI(true);
-        ac.dc.setswitchDashboard(false);
-        ac.dc.setswitchLoggedout(false);
-        ac.dc.setinputKey("");
-        ac.dc.setinputConfKey("");
-        ac.dc.setorganization("Set Organization");
-        ac.dc.setnetworkID(0);
-        ac.dc.setnetwork("Networks");
-        ac.dc.setcollapseButton({ display: 'none' })
-        $(this).addClass('closed');
-        $('.navbar-side').css({ left: '-260px' });
-        $('#page-wrapper').css({ 'margin-left': '0px' });
-        ac.dc.sethideLogin({ display: "block" });
+        //since the timer runs at first render it fires the handleLogOff
+        //on login the login not disappear
+        //with this if statement we check if the api box is open or not
+        // and we hie the login
+        if (ac.dc.switchLoggedIn === true) {
+            ac.dc.sethideLogin({ display: "none" });
+        } else {
+            ac.dc.sethideLogin({ display: "block" });
+            deleteCookie()
+            postKey()
+            ac.dc.setswitchLoginAPI(true);
+            ac.dc.setsessionTimeout(false);
+            ac.dc.setsessionTime(0)
+            ac.dc.setapiKey("");
+            ac.dc.setisSignedIn(false)
+            ac.dc.setgetOrgStatusCode(0);
+            ac.dc.setswitchDashboard(false);
+            ac.dc.setswitchLoggedout(false);
+            ac.dc.setinputKey("");
+            ac.dc.setinputConfKey("");
+            ac.dc.setorganization("Set Organization");
+            ac.dc.setnetworkID(0);
+            ac.dc.setnetwork("Networks");
+            ac.dc.setcollapseButton({ display: 'none' })
+            $(this).addClass('closed');
+            $('.navbar-side').css({ left: '-260px' });
+            $('#page-wrapper').css({ 'margin-left': '0px' });
+        }
     };
+
+
 
 
     return (

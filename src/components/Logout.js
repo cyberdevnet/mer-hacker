@@ -7,7 +7,6 @@ import $ from 'jquery'
 import "../styles/Logout.css";
 
 export default function Logout(ac, props) {
-  console.log("Logout -> ac", ac)
 
 
   let history = useHistory();

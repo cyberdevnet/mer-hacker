@@ -9,7 +9,7 @@ const ProtectedRoute = ({ component: Component, ac, ...rest }) => {
 
     useEffect(() => {
         readCookie()
-
+        // eslint-disable-next-line
     }, [])
 
     let history = useHistory();
@@ -35,13 +35,10 @@ const ProtectedRoute = ({ component: Component, ac, ...rest }) => {
                 render={props => {
 
                     if (tempState === true) {
-                        console.log("ProtectedRoute -> tempStatetrue", tempState)
-                        // if (rest.isSignedIn === true) {
 
                         return <Component {...rest} {...props} />
                     }
                     else {
-                        console.log("ProtectedRoute -> tempStatefalse", tempState)
                         return (<Redirect
                             to={{
                                 pathname: '/login',

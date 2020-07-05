@@ -48,6 +48,7 @@ export default function Template(ac, dc) {
     ac.dc.settriggerTopReports(ac.dc.triggerTopReports + 1);
   };
 
+
   return (
     <Router>
       <div id="wrapper">
@@ -75,10 +76,14 @@ export default function Template(ac, dc) {
             </div>
           </div>
           <div className="nav navbar-top-links navbar-right">
-            {ac.dc.isSignedIn ? (<div className='timeout-wrapper'>
-              Session Timeout: <Countdown className='timeout' date={Date.now() + (ac.dc.sessionTime * 1000)} daysInHours />
-
-            </div>) : (<div></div>)}
+            {ac.dc.isSignedIn ? (
+              <div>
+                <div className='timeout-wrapper'>
+                  Session Timeout: <Countdown className='timeout' date={Date.now() + (ac.dc.sessionTime * 1000)} daysInHours />
+                </div>
+                <i className="fa fa-gear fa-spin" style={{ fontSize: "24px" }}></i>
+              </div>
+            ) : (<div></div>)}
           </div>
 
         </nav>

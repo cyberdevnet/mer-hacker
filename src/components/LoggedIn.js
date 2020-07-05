@@ -28,10 +28,9 @@ export default function LoggedIn(ac) {
   async function getKey() {
     try {
       fetch('/get-api-key')
-        .then(res => res.text())
+        .then(res => res.json())
         .then((data) => {
-          console.log("getKey -> res", data)
-          ac.dc.setapiKey(data)
+          ac.dc.setapiKey(data.key)
         })
         .catch(error => console.log('An error occured ', error))
     } catch (e) {
@@ -54,21 +53,28 @@ export default function LoggedIn(ac) {
       postKey()
         .then(() => getKey())
         .then(() =>
-          ac.dc.setisSignedIn(true),
-          ac.dc.setswitchLoggedIn(false),
-          ac.dc.setswitchLoginAPI(false),
-          ac.dc.setswitchDashboard(true),
-          ac.dc.setswitchLoggedout(false),
-          history.push('/home'),
-          ac.dc.setcollapseButton({ display: 'block' }),
           ac.dc.setsessionTime(3600),
-          $('.navbar-side').animate({ left: '0px' }),
-          $(this).removeClass('closed'),
-          $('#page-wrapper').animate({ 'margin-left': '260px' }),
+
         )
         // Trigger getOrganization on-login
-        .then(() => ac.dc.settriggerGetOrg(ac.dc.triggerGetOrg + 1))
-        .then(() => setloading(false))
+        // .then(() => ac.dc.settriggerGetOrg(ac.dc.triggerGetOrg + 1))
+        .then(() => {
+          setTimeout(() => {
+            ac.dc.settriggerGetOrg(ac.dc.triggerGetOrg + 1)
+            ac.dc.setisSignedIn(true)
+            ac.dc.setswitchLoggedIn(false)
+            ac.dc.setswitchLoginAPI(false)
+            ac.dc.setswitchDashboard(true)
+            ac.dc.setswitchLoggedout(false)
+            ac.dc.setcollapseButton({ display: 'block' })
+            $('.navbar-side').animate({ left: '0px' })
+            $(this).removeClass('closed')
+            $('#page-wrapper').animate({ 'margin-left': '260px' })
+            history.push('/home')
+            setloading(false)
+          }, 1500);
+
+        })
 
     };
     handleLoginSuccess()

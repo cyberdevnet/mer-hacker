@@ -7,7 +7,7 @@ import json
 import importlib
 from flask import Flask, request, jsonify, abort,flash, render_template
 from flask_socketio import SocketIO
-from werkzeug.exceptions import BadRequest
+from werkzeug.exceptions import BadRequest, HTTPException
 import meraki
 import find_ports
 import top_report
@@ -55,6 +55,27 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 app.config['SECRET_KEY'] = 'meraki'
 socketio = SocketIO(app)
 CORS(app)
+
+
+# @app.errorhandler(500)
+# def internal_error(error):
+#     return ("500 error"), 500
+
+
+# flask will check if raised exception is of type 'SomeException' (or lower)
+# if so, will just execute this method
+@app.errorhandler(Exception)
+def handle_error(e):
+    code = 500
+    if isinstance(e, HTTPException):
+        code = e.code
+    return jsonify(error=str(e)), code
+
+# An exception will be raised, hopefully to be caught by 'handle_error'    
+@app.route('/error_handling', methods=['GET'])
+def error_handling():
+    return (1 / 'ciao')
+
 
 
 
@@ -304,6 +325,8 @@ def traffic_analysis():
         error = (err.message['errors'][0])
         flash(error)
         return {'error' : [render_template('flash_template.html'),err.status]}
+
+
 
 
 

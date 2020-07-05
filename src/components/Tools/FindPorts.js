@@ -260,8 +260,11 @@ export default function NetworkTopUsers(ac) {
                   </div>
                   <div id="collapseOne" className="panel-collapse collapse">
                     <div className="panel-body">
-                      This script finds the switch and ports where a clients is connected, searching either by clients MAC address
-                      or IP address. This script work only on MS-series switchs
+                      <dl>
+                        <dt>This script finds the switch and ports where a clients is connected, searching either by clients MAC address or IP address.</dt>
+                        <dt>This script works only on MS-series switchs.</dt>
+                      </dl>
+
                     </div>
                   </div>
                 </div>

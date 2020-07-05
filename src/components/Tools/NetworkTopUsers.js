@@ -388,9 +388,12 @@ export default function NetworkTopUsers(ac) {
                   </div>
                   <div id="collapseOne" className="panel-collapse collapse">
                     <div className="panel-body">
-                      This script finds the top 10 heaviest bandwidth users of
-                      an MX security appliance in the last 10, 30 and 60
-                      minutes.
+                      <dl>
+                        <dt>This script finds the top 10 heaviest bandwidth users of
+                        an MX security appliance in the last 10, 30 and 60
+                      minutes.</dt>
+                      </dl>
+
                     </div>
                   </div>
                 </div>

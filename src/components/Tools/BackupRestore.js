@@ -401,11 +401,27 @@ export default function BackupRestore(ac) {
                       </a>
                     </h4>
                   </div>
-                  <div id="collapseOne" className="panel-collapse collapse">
+                  <div id="collapseOne" className="panel-collapse collapse in">
                     <div className="panel-body">
-                      This is script gets the top 10 heaviest bandwidth users of
-                      an MX security appliance for the last 10, 30 and 60
-                      minutes.
+                      <p><strong>Please read carefully before starting the Backup & Restore.</strong></p>
+
+                      <dl>
+                        <dt>This script makes a snapshot of a network and creates a downloadable python file used to restore the configuration.</dt>
+                        <dt>The configuration will be restored creating a new network with name "your-new-network-restore"</dt>
+                        <dt>Since the Switchs configuration is lost when a device is moved to another network, the backup process must be run in two parts.</dt>
+                      </dl>
+                      <ul>
+                        <li>Run Backup.</li>
+                        <li>Review the script snapshot before starting the restore.</li>
+                        <li>Download the script(optional).</li>
+                        <li>Restore the configuration (a new network with name "your-new-network-restore" will be created).</li>
+                        <li>Go to your Meraki dashboard and move your devices to the newly created network.</li>
+                        <li>Restore the switchports configuration.</li>
+                      </ul>
+                      <dl>
+                        <dt>Note that the Restore will not overwrite existing networks but creates a new one.</dt>
+                        <dt>The script can be modified before the Restore process (basic knowledge of python required).</dt>
+                      </dl>
                     </div>
                   </div>
                 </div>

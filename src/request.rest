@@ -1,7 +1,5 @@
 
 
-GET http://localhost:3001/users
-
 ###
 GET http://localhost:3001/clear-cookie
 
@@ -21,7 +19,7 @@ Content-Type: application/json
 Accept : */*
 
 {
-    "username": "master", "password": "1234"
+    "username": "admin", "password": "8dudjd"
 
 }
 
@@ -31,11 +29,33 @@ POST http://localhost:3001/authenticate
 Content-Type: application/json
 
 {
-    "username": "admin", "password": "1234"
+    "username": "admin", "password": "s0sosd"
 
 }
 
 
 
+
+
+
+
 ###
 GET http://localhost:3001/dump
+
+
+
+
+
+
+###
+GET http://localhost:3001/get-api-key
+
+
+###
+POST http://localhost:3001/post-api-key
+Content-Type: application/json
+
+{
+    "key": "778zeuhsh"
+
+}

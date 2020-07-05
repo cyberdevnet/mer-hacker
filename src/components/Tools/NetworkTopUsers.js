@@ -388,8 +388,8 @@ export default function NetworkTopUsers(ac) {
                   </div>
                   <div id="collapseOne" className="panel-collapse collapse">
                     <div className="panel-body">
-                      This is script gets the top 10 heaviest bandwidth users of
-                      an MX security appliance for the last 10, 30 and 60
+                      This script finds the top 10 heaviest bandwidth users of
+                      an MX security appliance in the last 10, 30 and 60
                       minutes.
                     </div>
                   </div>
@@ -432,7 +432,7 @@ export default function NetworkTopUsers(ac) {
             {showtable ? (
               <div>
                 <div className="panel-body">
-                  <CSVLink data={mapROW1} separator={";"}>Download cvs</CSVLink>;
+                  <CSVLink data={mapROW1} separator={";"}>Download cvs</CSVLink>
 
                   <MDBDataTableV5
                     hover
@@ -447,7 +447,7 @@ export default function NetworkTopUsers(ac) {
                   />
                 </div>
                 <div className="panel-body">
-                  <CSVLink data={mapROW2} separator={";"}>Download cvs</CSVLink>;
+                  <CSVLink data={mapROW2} separator={";"}>Download cvs</CSVLink>
 
                   <MDBDataTableV5
                     hover
@@ -462,7 +462,7 @@ export default function NetworkTopUsers(ac) {
                   />
                 </div>
                 <div className="panel-body">
-                  <CSVLink data={mapROW3} separator={";"}>Download cvs</CSVLink>;
+                  <CSVLink data={mapROW3} separator={";"}>Download cvs</CSVLink>
 
                   <MDBDataTableV5
                     hover

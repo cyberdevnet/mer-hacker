@@ -73,10 +73,18 @@ a {
 
 
 .timeout-wrapper {
-  margin-right: 30px;
+  margin-right: 70px;
   position: relative;
-  top: 19px;
+  top: 23px;
   font-size: 14px;
   color: #777;
   font-weight: 600;
+}
+
+.fa.fa-gear.fa-spin {
+  float: right;
+    margin-right: 30px;
+    color: #777;
+    font-weight: 600;
+    font-size: 24px;
 }

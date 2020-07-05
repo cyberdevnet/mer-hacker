@@ -175,8 +175,8 @@ export default function GetAllOrganizationSubnets(ac) {
                   <div id="collapseOne" className="panel-collapse collapse">
                     <div className="panel-body">
                       This scripts iterates through all networks in an
-                      organization and print all the subnets and VLANs
-                      associated with every organization. The script works only
+                      organization and returns all the subnets and VLANs
+                      associated with every network. The script works only
                       on MX and Z3 devices, does not work on VPN HUBs, the
                       network must be reachable in the Meraki Dashboard.
                     </div>
@@ -197,14 +197,6 @@ export default function GetAllOrganizationSubnets(ac) {
                 {loading && <span>Loading Data</span>}
                 {!loading && <span>RUN</span>}
               </button>
-
-              {/* <a
-                  href="#null"
-                  className="btn btn-primary"
-                  onClick={handleResults}
-                >
-                  Show results
-                </a> */}
             </div>
           </div>
         </div>
@@ -214,7 +206,7 @@ export default function GetAllOrganizationSubnets(ac) {
           <div className="panel panel-default">
             {showtable ? (
               <div className="panel-body">
-                <CSVLink data={mapRows} separator={";"}>Download cvs</CSVLink>;
+                <CSVLink data={mapRows} separator={";"}>Download cvs</CSVLink>
                 <MDBDataTableV5
                   hover
                   entriesOptions={[10, 25, 50, 100]}

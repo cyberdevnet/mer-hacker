@@ -169,8 +169,7 @@ export default function GetAllDevicesIP(ac) {
                   <div id="collapseOne" className="panel-collapse collapse">
                     <div className="panel-body">
                       This scripts iterates through all networks in an
-                      organization and returns all the IPs associated with every
-                      organization.
+                      organization and returns all the IPs, serial-numbers and models of all devices.
                     </div>
                   </div>
                 </div>
@@ -206,7 +205,7 @@ export default function GetAllDevicesIP(ac) {
           <div className="panel panel-default">
             {showtable ? (
               <div className="panel-body">
-                <CSVLink data={mapRows} separator={";"}>Download cvs</CSVLink>;
+                <CSVLink data={mapRows} separator={";"}>Download cvs</CSVLink>
                 <MDBDataTableV5
                   hover
                   entriesOptions={[10, 25, 50, 100]}

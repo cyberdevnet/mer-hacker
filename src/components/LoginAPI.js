@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useHistory, Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import $ from 'jquery'
 import axios from 'axios'
 
@@ -9,7 +9,6 @@ import axios from 'axios'
 import "../styles/LoginAPI.css";
 
 export default function LoginAPI(ac) {
-  console.log("LoginAPI -> ac", ac)
   const [triggertryLogin, settriggertryLogin] = useState(0);
   const [loading, setloading] = useState(false);
   const [errorMessageLogin, seterrorMessageLogin] = useState(null);
@@ -17,19 +16,13 @@ export default function LoginAPI(ac) {
   let history = useHistory();
 
 
-
-
-
-
-
   // setCookie Function if successeful Login
   const setCookie = async () => {
     try {
+      // eslint-disable-next-line
       const res = await axios.get('/set-cookie');
-      console.log("setCookie -> res", res)
 
     } catch (e) {
-      console.log('setCookie Error:', e);
     }
   };
 
@@ -38,7 +31,6 @@ export default function LoginAPI(ac) {
   const readCookie = async () => {
     try {
       const res = await axios.get('/read-cookie');
-      console.log("readCookie -> res", res)
 
       if (res.data.signedIn === true) {
         ac.setisSignedIn(res.data.signedIn);
@@ -51,7 +43,6 @@ export default function LoginAPI(ac) {
       }
     } catch (e) {
       ac.setisSignedIn(false);
-      console.log('ReadCookie Error:', e);
     }
   };
 

@@ -9,7 +9,7 @@ const Mongoose = require("mongoose");
 app.use(cors())
 app.use(express.json())
 app.use(bodyParser.json());
-let urlencodedParser = (bodyParser.urlencoded({ extended: true }))
+// let urlencodedParser = (bodyParser.urlencoded({ extended: true }))
 
 const pino = require('pino');
 const expressPino = require('express-pino-logger');
@@ -23,13 +23,13 @@ app.use(expressLogger);
 
 //Auth
 
-const basicAuth = require('express-basic-auth');
+// const basicAuth = require('express-basic-auth');
 const cookieParser = require('cookie-parser');
 
 // A random key for signing the cookie
 app.use(cookieParser('82e4e438a0705fabf61f9854e3b575af'));
 
-// Mongodb initialization
+// Mongodb initialization to users database
 
 Mongoose.connect("mongodb://localhost/users", { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -129,22 +129,100 @@ app.get('/clear-cookie', (req, res) => {
 });
 
 
-// retrieve and store API key
+// store and retrieve API key
 
-var apiKey = ['test'];
+// Mongodb initialization to apikeys database
 
-app.post('/post-api-key', function (req, res) {
-    var key = req.body;
-    apiKey = key.key.slice(0)
-    res.send(req.body);
+Mongoose.connect("mongodb://localhost/apikeys", {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
+});
+
+const ApiKeysModel = new Mongoose.model("apikeys", { key: String });
+
+
+//this route updates an existing entry in the database with the api key sent from client
+// if for every reason there were no entry, create a new one with the route above:
+
+app.post('/post-api-key', async (req, res, next) => {
+
+    try {
+        const key = ApiKeysModel.findOneAndUpdate({}, { key: req.body.key }, req.body).exec()
+        res.json(key);
+        res.status(201).send()
+    } catch (error) {
+        res.status(500).send(error);
+        return next(new Error(error))
+    }
 
 })
 
-app.get('/get-api-key', (req, res) => {
-    res.send(apiKey);
-    res.end();
 
+//  <======== DO NOT DELETE THIS ROUTE =========>
+
+//this route can be used to create a new entry in the database if not present
+
+// app.post('/post-api-key', async (req, res) => {
+//     try {
+//         const key = new ApiKeysModel(req.body);
+//         const apiKey = await key.save();
+//         res.json(apiKey);
+//         res.status(201).send()
+//     } catch (error) {
+//         res.status(500).send(error);
+//     }
+// })
+
+//  <======== DO NOT DELETE THIS =========>
+
+
+
+//connection to the apikeys database to retrieve the key
+app.get("/get-api-key", async (req, res, next) => {
+    try {
+        var apiKey = await ApiKeysModel.findOne({}, { key: "key" }).exec();
+        res.send(apiKey);
+    } catch (error) {
+        res.status(500).send(error);
+        return next(new Error(error))
+    }
 });
+
+
+// app.get('/get-api-key', (req, res) => {
+//     res.send(apiKey);
+//     res.end();
+
+// });
+
+
+// app.post('/post-api-key', function (req, res) {
+//     var key = req.body;
+//     apiKey = key.key.slice(0)
+//     res.send(req.body);
+
+// })
+
+
+
+
+
+// var apiKey = ['test'];
+
+// app.post('/post-api-key', function (req, res) {
+//     var key = req.body;
+//     apiKey = key.key.slice(0)
+//     res.send(req.body);
+
+// })
+
+// app.get('/get-api-key', (req, res) => {
+//     res.send(apiKey);
+//     res.end();
+
+// });
 
 
 

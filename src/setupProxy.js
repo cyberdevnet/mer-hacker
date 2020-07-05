@@ -94,6 +94,13 @@ module.exports = function (app) {
   // END Mongodb Part
 
   app.use(
+    "/error_handling",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
     "/flash",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",

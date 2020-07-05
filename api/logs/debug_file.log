@@ -1357,3 +1357,109 @@
 2020-07-05 08:16:26,360 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 200 None
 2020-07-05 08:16:26,360 - meraki - INFO - Organizations, getOrganizations - 200 OK
 2020-07-05 08:16:26,362 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:16:26] "[37mGET /organizations HTTP/1.1[0m" 200 -
+2020-07-05 08:26:21,938 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:26:21] "[37mPOST /organizations HTTP/1.1[0m" 200 -
+2020-07-05 08:26:21,972 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fa706210220>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-05 08:26:21,973 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
+2020-07-05 08:26:21,975 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-05 08:26:22,123 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 302 None
+2020-07-05 08:26:22,127 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-07-05 08:26:22,482 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 200 None
+2020-07-05 08:26:22,483 - meraki - INFO - Organizations, getOrganizations - 200 OK
+2020-07-05 08:26:22,484 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:26:22] "[37mGET /organizations HTTP/1.1[0m" 200 -
+2020-07-05 08:26:25,283 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:26:25] "[37mPOST /organizations HTTP/1.1[0m" 200 -
+2020-07-05 08:26:25,310 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fa7061c9df0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-05 08:26:25,311 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
+2020-07-05 08:26:25,312 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-05 08:26:25,450 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 302 None
+2020-07-05 08:26:25,463 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-07-05 08:26:25,831 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 200 None
+2020-07-05 08:26:25,832 - meraki - INFO - Organizations, getOrganizations - 200 OK
+2020-07-05 08:26:25,833 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:26:25] "[37mGET /organizations HTTP/1.1[0m" 200 -
+2020-07-05 08:26:26,983 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fa7061a2d00>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-05 08:26:26,985 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:26:26] "[37mPOST /networks HTTP/1.1[0m" 200 -
+2020-07-05 08:26:26,988 - meraki - DEBUG - {'tags': ['Networks'], 'operation': 'getOrganizationNetworks', 'method': 'GET', 'url': '/organizations/631744/networks', 'params': {}}
+2020-07-05 08:26:26,990 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-05 08:26:27,112 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/631744/networks HTTP/1.1" 302 None
+2020-07-05 08:26:27,115 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n326.meraki.com:443
+2020-07-05 08:26:27,534 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/organizations/631744/networks HTTP/1.1" 200 None
+2020-07-05 08:26:27,553 - meraki - INFO - Networks, getOrganizationNetworks - 200 OK
+2020-07-05 08:26:27,556 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:26:27] "[37mGET /networks HTTP/1.1[0m" 200 -
+2020-07-05 08:26:29,069 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:26:29] "[37mPOST /clients HTTP/1.1[0m" 200 -
+2020-07-05 08:26:29,073 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fa7061b5d00>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-05 08:26:29,075 - meraki - DEBUG - {'tags': ['Clients'], 'operation': 'getNetworkClients', 'page': 1}
+2020-07-05 08:26:29,076 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-05 08:26:29,108 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fa706210250>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-05 08:26:29,115 - meraki - DEBUG - {'tags': ['Devices'], 'operation': 'getNetworkDevices', 'method': 'GET', 'url': '/networks/L_595038100766337509/devices', 'params': None}
+2020-07-05 08:26:29,116 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-05 08:26:29,204 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_595038100766337509/clients?perPage=1000&timespan=3600 HTTP/1.1" 302 None
+2020-07-05 08:26:29,208 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n326.meraki.com:443
+2020-07-05 08:26:29,251 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_595038100766337509/devices HTTP/1.1" 302 None
+2020-07-05 08:26:29,254 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n326.meraki.com:443
+2020-07-05 08:26:29,481 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_595038100766337509/devices HTTP/1.1" 200 None
+2020-07-05 08:26:29,482 - meraki - INFO - Devices, getNetworkDevices - 200 OK
+2020-07-05 08:26:29,483 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:26:29] "[37mGET /devices HTTP/1.1[0m" 200 -
+2020-07-05 08:26:29,595 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_595038100766337509/clients?perPage=1000&timespan=3600&perPage=1000&timespan=3600 HTTP/1.1" 200 None
+2020-07-05 08:26:29,596 - meraki - INFO - Clients, getNetworkClients; page 1 - 200 OK
+2020-07-05 08:26:29,597 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:26:29] "[37mGET /clients HTTP/1.1[0m" 200 -
+2020-07-05 08:26:34,622 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:26:34] "[37mPOST /traffic_analysis/ HTTP/1.1[0m" 200 -
+2020-07-05 08:26:34,647 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fa7061c93d0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-05 08:26:34,647 - meraki - DEBUG - {'tags': ['Networks'], 'operation': 'getNetworkTraffic', 'method': 'GET', 'url': '/networks/L_595038100766337509/traffic', 'params': {'timespan': 7200, 'deviceType': 'combined'}}
+2020-07-05 08:26:34,649 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-05 08:26:34,781 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_595038100766337509/traffic?timespan=7200&deviceType=combined HTTP/1.1" 302 None
+2020-07-05 08:26:34,784 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n326.meraki.com:443
+2020-07-05 08:26:35,171 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_595038100766337509/traffic?timespan=7200&deviceType=combined&timespan=7200&deviceType=combined HTTP/1.1" 200 None
+2020-07-05 08:26:35,172 - meraki - INFO - Networks, getNetworkTraffic - 200 OK
+2020-07-05 08:26:35,176 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:26:35] "[37mGET /traffic_analysis/ HTTP/1.1[0m" 200 -
+2020-07-05 08:26:45,791 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:26:45] "[37mPOST /traffic_analysis/ HTTP/1.1[0m" 200 -
+2020-07-05 08:26:45,795 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fa70623cf70>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-05 08:26:45,796 - meraki - DEBUG - {'tags': ['Networks'], 'operation': 'getNetworkTraffic', 'method': 'GET', 'url': '/networks/L_595038100766337509/traffic', 'params': {'timespan': 2592000, 'deviceType': 'combined'}}
+2020-07-05 08:26:45,797 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-05 08:26:45,920 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_595038100766337509/traffic?timespan=2592000&deviceType=combined HTTP/1.1" 302 None
+2020-07-05 08:26:45,923 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n326.meraki.com:443
+2020-07-05 08:26:47,651 - urllib3.connectionpool - DEBUG - https://n326.meraki.com:443 "GET /api/v0/networks/L_595038100766337509/traffic?timespan=2592000&deviceType=combined&timespan=2592000&deviceType=combined HTTP/1.1" 200 None
+2020-07-05 08:26:47,694 - meraki - INFO - Networks, getNetworkTraffic - 200 OK
+2020-07-05 08:26:47,782 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:26:47] "[37mGET /traffic_analysis/ HTTP/1.1[0m" 200 -
+2020-07-05 08:37:00,721 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:37:00] "[37mPOST /organizations HTTP/1.1[0m" 200 -
+2020-07-05 08:37:00,725 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fa7059786a0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-05 08:37:00,727 - meraki - DEBUG - {'tags': ['Organizations'], 'operation': 'getOrganizations', 'method': 'GET', 'url': '/organizations', 'params': None}
+2020-07-05 08:37:00,730 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-05 08:37:00,877 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 302 None
+2020-07-05 08:37:00,880 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-07-05 08:37:01,188 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations HTTP/1.1" 200 None
+2020-07-05 08:37:01,189 - meraki - INFO - Organizations, getOrganizations - 200 OK
+2020-07-05 08:37:01,191 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:37:01] "[37mGET /organizations HTTP/1.1[0m" 200 -
+2020-07-05 08:37:02,619 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:37:02] "[37mPOST /networks HTTP/1.1[0m" 200 -
+2020-07-05 08:37:02,622 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fa705979bb0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-05 08:37:02,623 - meraki - DEBUG - {'tags': ['Networks'], 'operation': 'getOrganizationNetworks', 'method': 'GET', 'url': '/organizations/764320/networks', 'params': {}}
+2020-07-05 08:37:02,625 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-05 08:37:02,747 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/organizations/764320/networks HTTP/1.1" 302 None
+2020-07-05 08:37:02,750 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-07-05 08:37:03,082 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/organizations/764320/networks HTTP/1.1" 200 None
+2020-07-05 08:37:03,082 - meraki - INFO - Networks, getOrganizationNetworks - 200 OK
+2020-07-05 08:37:03,083 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:37:03] "[37mGET /networks HTTP/1.1[0m" 200 -
+2020-07-05 08:37:04,481 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:37:04] "[37mPOST /clients HTTP/1.1[0m" 200 -
+2020-07-05 08:37:04,485 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fa706a6a5b0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-05 08:37:04,487 - meraki - DEBUG - {'tags': ['Clients'], 'operation': 'getNetworkClients', 'page': 1}
+2020-07-05 08:37:04,489 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-05 08:37:04,526 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fa7059768e0>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-05 08:37:04,527 - meraki - DEBUG - {'tags': ['Devices'], 'operation': 'getNetworkDevices', 'method': 'GET', 'url': '/networks/L_681169443639788368/devices', 'params': None}
+2020-07-05 08:37:04,530 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-05 08:37:04,637 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/clients?perPage=1000&timespan=3600 HTTP/1.1" 302 None
+2020-07-05 08:37:04,639 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-07-05 08:37:04,666 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 302 None
+2020-07-05 08:37:04,669 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-07-05 08:37:05,063 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/clients?perPage=1000&timespan=3600&perPage=1000&timespan=3600 HTTP/1.1" 200 None
+2020-07-05 08:37:05,063 - meraki - INFO - Clients, getNetworkClients; page 1 - 200 OK
+2020-07-05 08:37:05,065 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:37:05] "[37mGET /clients HTTP/1.1[0m" 200 -
+2020-07-05 08:37:05,140 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 200 None
+2020-07-05 08:37:05,141 - meraki - INFO - Devices, getNetworkDevices - 200 OK
+2020-07-05 08:37:05,143 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:37:05] "[37mGET /devices HTTP/1.1[0m" 200 -
+2020-07-05 08:37:06,251 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:37:06] "[37mPOST /devices HTTP/1.1[0m" 200 -
+2020-07-05 08:37:06,255 - meraki - INFO - Meraki dashboard API session initialized with these parameters: {'self': <meraki.rest_session.RestSession object at 0x7fa7061c9f40>, 'logger': <Logger meraki (DEBUG)>, 'api_key': '************************************e774', 'base_url': 'https://api.meraki.com/api/v0', 'single_request_timeout': 60, 'certificate_path': '', 'requests_proxy': '', 'wait_on_rate_limit': True, 'nginx_429_retry_wait_time': 60, 'action_batch_retry_wait_time': 60, 'retry_4xx_error': False, 'retry_4xx_error_wait_time': 60, 'maximum_retries': 2, 'simulate': False, 'be_geo_id': None, 'caller': None, '__class__': <class 'meraki.rest_session.RestSession'>}
+2020-07-05 08:37:06,256 - meraki - DEBUG - {'tags': ['Devices'], 'operation': 'getNetworkDevices', 'method': 'GET', 'url': '/networks/L_681169443639788368/devices', 'params': None}
+2020-07-05 08:37:06,258 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.meraki.com:443
+2020-07-05 08:37:06,386 - urllib3.connectionpool - DEBUG - https://api.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 302 None
+2020-07-05 08:37:06,391 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): n210.meraki.com:443
+2020-07-05 08:37:06,804 - urllib3.connectionpool - DEBUG - https://n210.meraki.com:443 "GET /api/v0/networks/L_681169443639788368/devices HTTP/1.1" 200 None
+2020-07-05 08:37:06,805 - meraki - INFO - Devices, getNetworkDevices - 200 OK
+2020-07-05 08:37:06,807 - werkzeug - INFO - 127.0.0.1 - - [05/Jul/2020 08:37:06] "[37mGET /devices HTTP/1.1[0m" 200 -

@@ -168,8 +168,11 @@ export default function GetAllDevicesIP(ac) {
                   </div>
                   <div id="collapseOne" className="panel-collapse collapse">
                     <div className="panel-body">
-                      This scripts iterates through all networks in an
-                      organization and returns all the IPs, serial-numbers and models of all devices.
+                      <dl>
+                        <dt>This scripts iterates through all networks in an
+                      organization and returns all the IPs, serial-numbers and models of all devices.</dt>
+                      </dl>
+
                     </div>
                   </div>
                 </div>

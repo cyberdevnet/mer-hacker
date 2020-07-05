@@ -174,11 +174,15 @@ export default function GetAllOrganizationSubnets(ac) {
                   </div>
                   <div id="collapseOne" className="panel-collapse collapse">
                     <div className="panel-body">
-                      This scripts iterates through all networks in an
-                      organization and returns all the subnets and VLANs
-                      associated with every network. The script works only
-                      on MX and Z3 devices, does not work on VPN HUBs, the
-                      network must be reachable in the Meraki Dashboard.
+                      <dl>
+                        <dt>This scripts iterates through all networks in an
+                        organization and returns all the subnets and VLANs
+                      associated with every network.</dt>
+                        <dt>The script works only
+                        on MX and Z3 devices, does not work on VPN HUBs, the
+                      network must be reachable in the Meraki Dashboard.</dt>
+                      </dl>
+
                     </div>
                   </div>
                 </div>

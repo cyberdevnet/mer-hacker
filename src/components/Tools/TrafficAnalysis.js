@@ -247,9 +247,11 @@ export default function TrafficAnalysis(ac) {
                   </div>
                   <div id="collapseOne" className="panel-collapse collapse">
                     <div className="panel-body">
-                      This is script gets the top 10 heaviest bandwidth users of
-                      an MX security appliance for the last 10, 30 and 60
-                      minutes.
+                      <dl>
+                        <dt>This script aggregates all of the detected applications for a given time frame or device type.</dt>
+                        <dt>Time frame options for hourly, weekly, daily and monthly are available.</dt>
+                        <dt>Device type options for combined, switch, wireless and appliance are available(default combined).</dt>
+                      </dl>
                     </div>
                   </div>
                 </div>

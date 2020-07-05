@@ -150,10 +150,12 @@ export default function GetAllSubnets(ac) {
                   </div>
                   <div id="collapseOne" className="panel-collapse collapse">
                     <div className="panel-body">
-                      This scripts returns all VLANs configured in a network
-                      The script works only
-                      on MX and Z3 devices, does not work on VPN HUBs, the
-                      network must be reachable in the Meraki Dashboard.
+                      <dl>
+                        <dt>This scripts returns all VLANs configured in a network.</dt>
+                        <dt>The script works only
+                        on MX and Z3 devices, does not work on VPN HUBs, the
+                      network must be reachable in the Meraki Dashboard.</dt>
+                      </dl>
                     </div>
                   </div>
                 </div>

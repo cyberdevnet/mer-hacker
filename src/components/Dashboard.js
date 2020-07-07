@@ -131,7 +131,6 @@ export default function Dashboard(ac) {
         fetch("/devices", { signal: signal })
           .then((res) => res.json())
           .then((data) => {
-            console.log("callDevices -> data.devices", data.devices)
             if (data.error) {
               ac.setflashMessages(<div className="form-input-error-msg alert alert-danger">
                 <span className="glyphicon glyphicon-exclamation-sign"></span>

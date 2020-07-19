@@ -13,6 +13,8 @@ import find_ports
 import top_report
 from backup_restore import meraki_backup_network
 from backup_restore import meraki_restore_network
+from cisco_meraki_migrate_tool import ios_to_meraki
+from cisco_meraki_migrate_tool import build_meraki_switchconfig
 import logging
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
@@ -64,17 +66,17 @@ CORS(app)
 
 # flask will check if raised exception is of type 'SomeException' (or lower)
 # if so, will just execute this method
-@app.errorhandler(Exception)
-def handle_error(e):
-    code = 500
-    if isinstance(e, HTTPException):
-        code = e.code
-    return jsonify(error=str(e)), code
+# @app.errorhandler(Exception)
+# def handle_error(e):
+#     code = 500
+#     if isinstance(e, HTTPException):
+#         code = e.code
+#     return jsonify(error=str(e)), code
 
-# An exception will be raised, hopefully to be caught by 'handle_error'    
-@app.route('/error_handling', methods=['GET'])
-def error_handling():
-    return (1 / 'ciao')
+# # An exception will be raised, hopefully to be caught by 'handle_error'    
+# @app.route('/error_handling', methods=['GET'])
+# def error_handling():
+#     return (1 / 'ciao')
 
 
 
@@ -358,6 +360,7 @@ def run_backup():
     #     return {'error' : [render_template('flash_template.html'),err.status]}
 
 
+
 @ app.route('/run_restore/', methods=['GET', 'POST'])
 def run_restore():
     try:
@@ -380,6 +383,7 @@ def run_restore():
         return  {'error': err}
 
 
+
 @ app.route('/run_restore_switch/', methods=['GET', 'POST'])
 def run_restore_switch():
     try:
@@ -400,6 +404,45 @@ def run_restore_switch():
     except Exception as err:
         print('Error: ', err)
         return  {'error': err}
+
+
+
+
+
+@ app.route('/ios_to_meraki/', methods=['GET', 'POST'])
+def ios2meraki():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json()
+            serial_numbers = data['serial_numbers']
+            print(serial_numbers)
+
+            return {'ios_to_meraki': ios_to_meraki.ios_to_meraki(serial_numbers)}
+        else:
+
+            return {'ios_to_meraki': 'ios_to_meraki'}
+    except Exception as err:
+        print('Exception: ',err)
+        flash(err)
+        return {'error' : [render_template('flash_template.html')]}
+
+
+@ app.route('/run_migrate_switch_config/', methods=['GET', 'POST'])
+def migrate_switch_config():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json()
+            ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
+
+            return {'ios_to_meraki': build_meraki_switchconfig.build_switchports(ARG_APIKEY)}
+        else:
+            return {'ios_to_meraki': 'ios_to_meraki'}
+    except Exception as err:
+        print('Exception: ',err)
+        flash(err)
+        return {'error' : [render_template('flash_template.html')]}
 
 
 

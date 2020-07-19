@@ -1,0 +1,28 @@
+interface {{ interface }}
+ description {{ description | ORPHRASE }}
+ switchport access vlan {{ switchport_access_vlan }}
+ switchport mode {{ switchport_mode }}
+ switchport trunk native vlan {{ switchport_native_vlan}}
+ switchport trunk allowed vlan {{ switchport_trunk_vlans }}
+ switchport voice vlan {{ switchport_voice_vlan }}
+ switchport {{switchport}}
+ srr-queue bandwidth share {{bandwidth_share | ORPHRASE}}
+ srr-queue bandwidth shape {{bandwidth_shape | ORPHRASE}}
+ priority-queue {{priority_queue}}
+ authentication control-direction {{auth_control_direction}}
+ authentication event fail action {{auth_event_fail_action}}
+ authentication event server dead action {{auth_event_server_dead_action | ORPHRASE}}
+ authentication event server dead action {{auth_event_server_dead_action | ORPHRASE}}
+ authentication event server alive action {{auth_event_server_alive_action}}
+ authentication host-mode {{auth_host_mode}}
+ authentication order {{auth_order | ORPHRASE}}
+ authentication priority {{auth_priority | ORPHRASE}}
+ authentication port-control {{auth_port_control}}
+ authentication {{authentication}}
+ mab {{mab}}
+ mls qos trust {{mls_qos_trust}}
+ macro description {{macro_description}}
+ no macro auto processing {{macro_auto_processing}}
+ dot1x pae {{dot1x_pae}}
+ spanning-tree {{spanning_tree}}
+ spanning-tree bpduguard {{spanning_tree_bpduguard}}

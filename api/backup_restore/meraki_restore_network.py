@@ -30,7 +30,7 @@ def restore_network(ARG_ORGID, ARG_APIKEY):
 	print('Checking Administrator',file=f)
 	f.flush()
 	posturl = 'https://api.meraki.com/api/v0/organizations/{0}/admins'.format(str(ARG_ORGID))
-	dashboard = session.post(posturl, json={'accountStatus': 'ok', 'authenticationMethod': 'Email', 'email': 'fabrizio.rollo@nts.eu', 'hasApiKey': True, 'id': '967931', 'lastActive': 1593934910, 'name': 'Fabrizio Rollo', 'networks': [], 'orgAccess': 'full', 'tags': [], 'twoFactorAuthEnabled': True}, headers=headers)
+	dashboard = session.post(posturl, json={'accountStatus': 'ok', 'authenticationMethod': 'Email', 'email': 'fabrizio.rollo@nts.eu', 'hasApiKey': True, 'id': '967931', 'lastActive': 1595188218, 'name': 'Fabrizio Rollo', 'networks': [], 'orgAccess': 'full', 'tags': [], 'twoFactorAuthEnabled': True}, headers=headers)
 
 # MX VPN firewall
 # https://dashboard.meraki.com/api_docs#mx-vpn-firewall
@@ -249,35 +249,35 @@ def restore_switchports(ARG_APIKEY):
 		print('Starting restoring switchports',file=f)
 		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/1'
 		print('Restoring configuration Port1 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 1, "name": null, "tags": null, "enabled": true, "poeEnabled": true, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		payload = '{"number": 1, "name": "802.1X DOWN", "tags": null, "enabled": true, "poeEnabled": true, "type": "access", "vlan": 999, "voiceVlan": 998, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "bpdu guard", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": 1}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
 		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/2'
 		print('Restoring configuration Port2 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 2, "name": null, "tags": null, "enabled": true, "poeEnabled": true, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		payload = '{"number": 2, "name": "802.1X DOWN", "tags": null, "enabled": true, "poeEnabled": true, "type": "access", "vlan": 999, "voiceVlan": 998, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "bpdu guard", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": 1}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
 		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/3'
 		print('Restoring configuration Port3 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 3, "name": null, "tags": null, "enabled": true, "poeEnabled": true, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		payload = '{"number": 3, "name": "802.1X DOWN", "tags": null, "enabled": true, "poeEnabled": true, "type": "access", "vlan": 999, "voiceVlan": 998, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "bpdu guard", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": 1}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
 		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/4'
 		print('Restoring configuration Port4 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 4, "name": null, "tags": null, "enabled": true, "poeEnabled": true, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		payload = '{"number": 4, "name": "Client / Voice", "tags": null, "enabled": true, "poeEnabled": true, "type": "access", "vlan": 999, "voiceVlan": 998, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "bpdu guard", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": 1}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
 		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/5'
 		print('Restoring configuration Port5 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 5, "name": null, "tags": null, "enabled": true, "poeEnabled": true, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		payload = '{"number": 5, "name": "Client / Voice", "tags": null, "enabled": true, "poeEnabled": true, "type": "access", "vlan": 999, "voiceVlan": 998, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "bpdu guard", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": 1}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
 		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/6'
 		print('Restoring configuration Port6 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 6, "name": null, "tags": null, "enabled": true, "poeEnabled": true, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		payload = '{"number": 6, "name": "802.1X DOWN", "tags": null, "enabled": true, "poeEnabled": true, "type": "access", "vlan": 999, "voiceVlan": 998, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "bpdu guard", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": 1}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
 		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/7'
 		print('Restoring configuration Port7 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 7, "name": null, "tags": null, "enabled": true, "poeEnabled": true, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		payload = '{"number": 7, "name": "Client / Voice", "tags": null, "enabled": true, "poeEnabled": true, "type": "access", "vlan": 999, "voiceVlan": 998, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "bpdu guard", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": 1}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
 		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/8'
 		print('Restoring configuration Port8 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 8, "name": null, "tags": null, "enabled": true, "poeEnabled": true, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		payload = '{"number": 8, "name": "Client / Voice", "tags": null, "enabled": true, "poeEnabled": true, "type": "access", "vlan": 999, "voiceVlan": 998, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "bpdu guard", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": 1}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
 		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/9'
 		print('Restoring configuration Port9 switch Q2HP-QSVT-LBLV',file=f)

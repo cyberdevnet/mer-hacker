@@ -1,10 +1,14 @@
 const express = require('express');
 const app = express();
 const multer = require('multer')
+const uuid = require("uuid");
+const morgan = require("morgan");
+const fileUpload = require("express-fileupload")
 const cors = require('cors');
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 const Mongoose = require("mongoose");
+const fs = require('fs');
 
 app.use(cors())
 app.use(express.json())
@@ -237,6 +241,16 @@ app.get("/api/backup_restore/", function (req, res) {
 
 });
 
+// serve static files for ios_to_meraki script
+
+app.use("/api/cisco_meraki_migrate_tool/", express.static(__dirname + '/api/cisco_meraki_migrate_tool/'));
+
+app.get("/api/cisco_meraki_migrate_tool/", function (req, res) {
+
+    express.static(__dirname + '/api/cisco_meraki_migrate_tool/')(req, res)
+
+});
+
 // serve static files for live logs
 app.use("/api/logs/", express.static(__dirname + '/api/logs/'));
 
@@ -259,6 +273,8 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage }).single('file')
 
+// upload restore script if modified from GUI
+
 app.post('/upload', function (req, res) {
 
     upload(req, res, function (err) {
@@ -272,6 +288,92 @@ app.post('/upload', function (req, res) {
     })
 
 });
+
+
+// download build_meraki_switchconfig script
+var storage2 = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './api/cisco_meraki_migrate_tool/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
+    }
+})
+
+// upload build_meraki_switchconfig script if modified from GUI
+
+var upload2 = multer({ storage2: storage2 }).single('file')
+
+app.post('/upload_build_meraki_switchconfig', function (req, res) {
+
+    upload2(req, res, function (err) {
+        if (err instanceof multer.MulterError) {
+            return res.status(500).json(err)
+        } else if (err) {
+            return res.status(500).json(err)
+        }
+        return res.status(200).send(req.file)
+
+    })
+
+});
+
+
+// upload backupfile for build_meraki_switchconfig
+
+app.use(fileUpload({
+    createParentPath: true
+}))
+
+app.post("/upload_backupfile", async (req, res) => {
+    console.log(req.files.backup.mimetype); // the uploaded file object
+    try {
+        if (!req.files) {
+            res.send({
+                status: false,
+                message: "No file uploaded"
+            })
+        } else {
+            if (req.files.backup.mimetype === 'text/plain') {
+                const { backup } = req.files
+
+                backup.mv("/home/cyberdevnet/mer-hacker-dev/api/cisco_meraki_migrate_tool/config_backups/backups/backup.txt")
+
+                res.send({
+                    status: true,
+                    message: "Backupfile uploaded"
+                })
+            } else {
+                res.send({
+                    status: false,
+                    message: "Invalid File, please upload a valid .txt file containing the configuration"
+                })
+            }
+
+        }
+    } catch (e) {
+        res.status(500).send(e)
+    }
+})
+
+
+// DELETE backupfile for build_meraki_switchconfig
+
+app.post("/delete_backupfile", async (req, res) => {
+    try {
+        // delete file named 'sample.txt'
+        fs.unlink("/home/cyberdevnet/mer-hacker-dev/api/cisco_meraki_migrate_tool/config_backups/backups/backup.txt", function (err) {
+            if (err) {
+                console.log(err);
+            }
+
+            // if no error, file has been deleted successfully
+            console.log('Backupfile deleted!');
+        });
+    } catch (e) {
+        res.status(500).send(e)
+    }
+})
 
 
 const HOST = "localhost";

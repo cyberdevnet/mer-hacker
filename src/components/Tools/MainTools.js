@@ -6,6 +6,7 @@ import NetworkTopUsers from "./NetworkTopUsers";
 import FindPorts from "./FindPorts";
 import TrafficAnalysis from "./TrafficAnalysis";
 import BackupRestore from "./BackupRestore";
+import MigrateTool from "./MigrateTool";
 import "../../styles/MainTools.css";
 
 export default function MainTools(ac) {
@@ -43,6 +44,11 @@ export default function MainTools(ac) {
         )}
       {ac.dc.switchAllTools[7] ? (
         <BackupRestore dc={ac.dc} />
+      ) : (
+          <div></div>
+        )}
+      {ac.dc.switchAllTools[8] ? (
+        <MigrateTool dc={ac.dc} />
       ) : (
           <div></div>
         )}

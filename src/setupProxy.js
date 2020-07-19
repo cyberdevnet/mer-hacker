@@ -11,6 +11,13 @@ module.exports = function (app) {
     })
   );
   app.use(
+    "/api/cisco_meraki_migrate_tool/",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
     "/api/logs/",
     createProxyMiddleware({
       target: "http://127.0.0.1:3001",
@@ -19,6 +26,20 @@ module.exports = function (app) {
   );
   app.use(
     "/upload",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/upload_build_meraki_switchconfig",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/upload_backupfile",
     createProxyMiddleware({
       target: "http://127.0.0.1:3001",
       changeOrigin: true,
@@ -200,6 +221,20 @@ module.exports = function (app) {
   );
   app.use(
     "/run_restore_switch/",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/ios_to_meraki/",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/run_migrate_switch_config/",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,

@@ -408,7 +408,7 @@ export default function BackupRestore(ac) {
                       <dl>
                         <dt>This script makes a snapshot of a network and creates a downloadable python file used to restore the configuration.</dt>
                         <dt>The configuration will be restored creating a new network with name "your-new-network-restore"</dt>
-                        <dt>Since the Switchs configuration is lost when a device is moved to another network, the backup process must be run in two parts.</dt>
+                        <dt>Since the Switchs configuration is lost when a device is moved to another network, the backup process must be run in two steps.</dt>
                       </dl>
                       <ul>
                         <li>Run Backup.</li>

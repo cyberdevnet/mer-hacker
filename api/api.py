@@ -413,6 +413,7 @@ def run_restore_switch():
 def ios2meraki():
     try:
         if request.method == 'POST':
+            importlib.reload(build_meraki_switchconfig)
             global data
             data = request.get_json()
             serial_numbers = data['serial_numbers']
@@ -432,6 +433,7 @@ def ios2meraki():
 def migrate_switch_config():
     try:
         if request.method == 'POST':
+            importlib.reload(build_meraki_switchconfig)
             global data
             data = request.get_json()
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']

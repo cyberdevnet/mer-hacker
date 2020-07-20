@@ -575,24 +575,14 @@ interface GigabitEthernet1/0/2
  spanning-tree bpduguard enable
 !
 interface GigabitEthernet1/0/3
- description 802.1X DOWN
- switchport access vlan 999
- switchport mode access
- switchport voice vlan 998
- authentication control-direction in
- authentication event fail action next-method
- authentication event server dead action authorize vlan 60
- authentication event server dead action authorize voice
- authentication event server alive action reinitialize 
- authentication host-mode multi-auth
- authentication order mab dot1x
- authentication priority dot1x mab
- authentication port-control auto
- authentication periodic
- mab
- dot1x pae authenticator
- spanning-tree portfast
- spanning-tree bpduguard enable
+ description UPLINK SINET00-1
+ switchport mode trunk
+ ip device tracking maximum 0
+ srr-queue bandwidth share 1 10 60 10
+ srr-queue bandwidth shape  4 0 0 0
+ priority-queue out 
+ mls qos trust dscp
+ no macro auto processing
 !
 interface GigabitEthernet1/0/4
  description Client / Voice
@@ -619,28 +609,14 @@ interface GigabitEthernet1/0/4
  spanning-tree portfast
 !
 interface GigabitEthernet1/0/5
- description Client / Voice
- switchport access vlan 999
- switchport mode access
- switchport voice vlan 998
- srr-queue bandwidth share 1 10 70 10
+ description UPLINK SINET00-1
+ switchport mode trunk
+ ip device tracking maximum 0
+ srr-queue bandwidth share 1 10 60 10
  srr-queue bandwidth shape  4 0 0 0
  priority-queue out 
- authentication control-direction in
- authentication event fail action next-method
- authentication event server dead action authorize vlan 60
- authentication event server dead action authorize voice
- authentication event server alive action reinitialize 
- authentication host-mode multi-auth
- authentication order mab dot1x
- authentication priority dot1x mab
- authentication port-control auto
- authentication periodic
- mab
  mls qos trust dscp
- macro description ASP_ClientVoice
- dot1x pae authenticator
- spanning-tree portfast
+ no macro auto processing
 !
 interface GigabitEthernet1/0/6
  description 802.1X DOWN
@@ -687,6 +663,64 @@ interface GigabitEthernet1/0/7
  spanning-tree portfast
 !
 interface GigabitEthernet1/0/8
+ description Client / Voice
+ switchport access vlan 999
+ switchport mode access
+ switchport voice vlan 998
+ srr-queue bandwidth share 1 10 70 10
+ srr-queue bandwidth shape  4 0 0 0
+ priority-queue out 
+ authentication control-direction in
+ authentication event fail action next-method
+ authentication event server dead action authorize vlan 60
+ authentication event server dead action authorize voice
+ authentication event server alive action reinitialize 
+ authentication host-mode multi-auth
+ authentication order mab dot1x
+ authentication priority dot1x mab
+ authentication port-control auto
+ authentication periodic
+ mab
+ mls qos trust dscp
+ macro description ASP_ClientVoice
+ dot1x pae authenticator
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/9
+ description UPLINK SINET00-1
+ switchport mode trunk
+ ip device tracking maximum 0
+ srr-queue bandwidth share 1 10 60 10
+ srr-queue bandwidth shape  4 0 0 0
+ priority-queue out 
+ mls qos trust dscp
+ no macro auto processing
+!
+interface GigabitEthernet1/0/10
+ description Client / Voice
+ switchport access vlan 999
+ switchport mode access
+ switchport voice vlan 998
+ srr-queue bandwidth share 1 10 70 10
+ srr-queue bandwidth shape  4 0 0 0
+ priority-queue out 
+ authentication control-direction in
+ authentication event fail action next-method
+ authentication event server dead action authorize vlan 60
+ authentication event server dead action authorize voice
+ authentication event server alive action reinitialize 
+ authentication host-mode multi-auth
+ authentication order mab dot1x
+ authentication priority dot1x mab
+ authentication port-control auto
+ authentication periodic
+ mab
+ mls qos trust dscp
+ macro description ASP_ClientVoice
+ dot1x pae authenticator
+ spanning-tree portfast
+!
+interface GigabitEthernet1/0/11
  description Client / Voice
  switchport access vlan 999
  switchport mode access

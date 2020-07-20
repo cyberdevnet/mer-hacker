@@ -84,6 +84,16 @@ export default function MigrateTool(ac) {
         console.log(JSON.stringify(res))
     }
 
+    // function used to upload the build_meraki_switchconfig file on the xpress server
+    // after has been modified by the AceEditor GUI
+    const UploadModifiedScript = (value) => {
+        const data = new FormData()
+        const file = new Blob([value], { type: 'text/plain' });
+        data.append('file', file, 'build_meraki_switchconfig.py')
+        axios.post("/upload_build_meraki_switchconfig", data)
+
+    }
+
 
     const handleConvertConfig = (e) => {
         e.stopPropagation()
@@ -168,7 +178,6 @@ export default function MigrateTool(ac) {
                         const SNformat = /^((^|,)([a-zA-Z\d]{4}-[a-zA-Z\d]{4}-[a-zA-Z\d]{4}|[a-zA-Z\d]{4}-[a-zA-Z\d]{4}-[a-zA-Z\d]{4}|[a-zA-Z\d]{4}-[a-zA-Z\d]{4}-[a-zA-Z\d]{4}|[a-zA-Z\d]{4}-[a-zA-Z\d]{4}-[a-zA-Z\d]{4}))+$/;
                         if (serialNumbers.match(SNformat)) {
                             ac.dc.setAlertModalError(null);
-                            const validSN = serialNumbers;
 
                             setloadingButtonConvertConfig(true);
                             setshowLiveLogs(true)
@@ -290,11 +299,19 @@ export default function MigrateTool(ac) {
             setloadingButtonMigrateSwitchConfig(true);
             setshowswitchPortScript(false)
 
-            const data = new FormData()
-            const file = new Blob([switchPortScript], { type: 'text/plain' });
-            data.append('file', file, 'build_meraki_switchconfig.py')
+            // const data = new FormData()
+            // const file = new Blob([switchPortScript], { type: 'text/plain' });
+            // data.append('file', file, 'build_meraki_switchconfig.py')
 
-            axios.post("/upload_build_meraki_switchconfig", data, {})
+            // // axios.post("/upload_build_meraki_switchconfig", data, {})
+            // await fetch("/upload_build_meraki_switchconfig", {
+            //     method: "POST",
+            //     body: data
+            // }).then(res => {
+            //     console.log("MigrateSwitchConfig -> res", res)
+
+            //     res.json()
+            // })
 
             fetch("/run_migrate_switch_config/", {
                 signal: signal,
@@ -307,6 +324,7 @@ export default function MigrateTool(ac) {
             })
 
                 .then((res) => {
+                    console.log('POST response: ', res);
                 })
 
 
@@ -524,6 +542,7 @@ export default function MigrateTool(ac) {
                     className="Modal-restore"
                     overlayClassName="Overlay-restore"
                     onRequestClose={CancelRestore}
+                    ariaHideApp={false}
                 >
                     <div>
                         <p>Are you sure you want to restore the Network {ac.dc.network}? </p>
@@ -539,11 +558,14 @@ export default function MigrateTool(ac) {
                 <div className="col-xs-12">
                     <div className="panel panel-default">
                         {showLiveLogs ? (<div style={{ height: 700 }}>
-                            <LazyLog extraLines={1} enableSearch
+                            <LazyLog
+                                extraLines={1}
+                                enableSearch={true}
                                 text={liveLogs}
-                                stream
-                                caseInsensitive
-                                selectableLines />
+                                stream={true}
+                                caseInsensitive={true}
+                                selectableLines={true}
+                            />
                         </div>) : (<div></div>)}
 
                         {showswitchPortScript ? (
@@ -553,7 +575,7 @@ export default function MigrateTool(ac) {
                                     // ref="aceEditor"
                                     mode="python"
                                     theme="twilight"
-                                    onChange={value => setswitchPortScript(value)}
+                                    onChange={value => { setswitchPortScript(value); UploadModifiedScript(value) }}
                                     name="ace-editor"
                                     id="ace-editor"
                                     width='auto'

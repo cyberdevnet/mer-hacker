@@ -40,7 +40,7 @@ def build_switchports(ARG_APIKEY):
 		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/3'
 		print('Building configuration SwitchPort3 switch Q2HP-QSVT-LBLV',file=f)
 		f.flush()
-		payload = '{"name": "802.1X DOWN", "tags": null, "enabled": "true", "poeEnabled": "true", "type": "access", "vlan": "999", "voiceVlan": "998", "allowedVlans": "all", "isolationEnabled": "false", "rstpEnabled": "true", "stpGuard": "bpdu guard", "accessPolicyNumber": 1, "linkNegotiation": "Auto negotiate", "number": "3"}'
+		payload = '{"name": "UPLINK SINET00-1", "tags": null, "enabled": "true", "poeEnabled": "true", "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": "false", "rstpEnabled": "true", "stpGuard": "bpdu guard", "accessPolicyNumber": null, "linkNegotiation": "Auto negotiate", "number": "3"}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
 		print('Response: ',response.status_code,file=f)
 		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/4'
@@ -52,7 +52,7 @@ def build_switchports(ARG_APIKEY):
 		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/5'
 		print('Building configuration SwitchPort5 switch Q2HP-QSVT-LBLV',file=f)
 		f.flush()
-		payload = '{"name": "Client / Voice", "tags": null, "enabled": "true", "poeEnabled": "true", "type": "access", "vlan": "999", "voiceVlan": "998", "allowedVlans": "all", "isolationEnabled": "false", "rstpEnabled": "true", "stpGuard": "bpdu guard", "accessPolicyNumber": 1, "linkNegotiation": "Auto negotiate", "number": "5"}'
+		payload = '{"name": "UPLINK SINET00-1", "tags": null, "enabled": "true", "poeEnabled": "true", "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": "false", "rstpEnabled": "true", "stpGuard": "bpdu guard", "accessPolicyNumber": null, "linkNegotiation": "Auto negotiate", "number": "5"}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
 		print('Response: ',response.status_code,file=f)
 		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/6'
@@ -71,6 +71,24 @@ def build_switchports(ARG_APIKEY):
 		print('Building configuration SwitchPort8 switch Q2HP-QSVT-LBLV',file=f)
 		f.flush()
 		payload = '{"name": "Client / Voice", "tags": null, "enabled": "true", "poeEnabled": "true", "type": "access", "vlan": "999", "voiceVlan": "998", "allowedVlans": "all", "isolationEnabled": "false", "rstpEnabled": "true", "stpGuard": "bpdu guard", "accessPolicyNumber": 1, "linkNegotiation": "Auto negotiate", "number": "8"}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		print('Response: ',response.status_code,file=f)
+		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/9'
+		print('Building configuration SwitchPort9 switch Q2HP-QSVT-LBLV',file=f)
+		f.flush()
+		payload = '{"name": "UPLINK SINET00-1", "tags": null, "enabled": "true", "poeEnabled": "true", "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": "false", "rstpEnabled": "true", "stpGuard": "bpdu guard", "accessPolicyNumber": null, "linkNegotiation": "Auto negotiate", "number": "9"}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		print('Response: ',response.status_code,file=f)
+		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/10'
+		print('Building configuration SwitchPort10 switch Q2HP-QSVT-LBLV',file=f)
+		f.flush()
+		payload = '{"name": "Client / Voice", "tags": null, "enabled": "true", "poeEnabled": "true", "type": "access", "vlan": "999", "voiceVlan": "998", "allowedVlans": "all", "isolationEnabled": "false", "rstpEnabled": "true", "stpGuard": "bpdu guard", "accessPolicyNumber": 1, "linkNegotiation": "Auto negotiate", "number": "10"}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		print('Response: ',response.status_code,file=f)
+		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/11'
+		print('Building configuration SwitchPort11 switch Q2HP-QSVT-LBLV',file=f)
+		f.flush()
+		payload = '{"name": "Client / Voice", "tags": null, "enabled": "true", "poeEnabled": "true", "type": "access", "vlan": "999", "voiceVlan": "998", "allowedVlans": "all", "isolationEnabled": "false", "rstpEnabled": "true", "stpGuard": "bpdu guard", "accessPolicyNumber": 1, "linkNegotiation": "Auto negotiate", "number": "11"}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
 		print('Response: ',response.status_code,file=f)
 	except requests.exceptions.HTTPError as err:

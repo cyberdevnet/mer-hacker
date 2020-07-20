@@ -507,6 +507,7 @@ export default function BackupRestore(ac) {
           className="Modal-restore"
           overlayClassName="Overlay-restore"
           onRequestClose={CancelRestore}
+          ariaHideApp={false}
         >
           <div>
             <p>Are you sure you want to restore the Network {ac.dc.network}? </p>
@@ -523,6 +524,7 @@ export default function BackupRestore(ac) {
           className="Modal-restore-switch"
           overlayClassName="Overlay-restore-switch"
           onRequestClose={CancelRestoreSwitch}
+          ariaHideApp={false}
         >
           <div>
             <p>Are you sure you want to restore the switch configuration? </p>

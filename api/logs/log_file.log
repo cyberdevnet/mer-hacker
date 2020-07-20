@@ -1,12 +1,24 @@
-Checking Administrator
-Restoring mx_vpn_firewall_rules
-Restoring SNMP Settings
-Restoring non_meraki_vpn_peers
-Restoring network Heisenberg-Lab in new network Heisenberg-Lab-restore
-Restoring mx_vlans
-Restoring mx_cellular_fw_rules
-Restoring mx_l3_fw_rules
-Restoring VPN Settings
-Restoring SSIDs
-Restoring devices properties
-Restoring Complete, move your switchs to the new network and restore the switch configuration.
+Starting configuration switchports
+Building configuration SwitchPort1 switch Q2HP-QSVT-LBLV
+Response:  200
+Building configuration SwitchPort2 switch Q2HP-QSVT-LBLV
+Response:  200
+Building configuration SwitchPort3 switch Q2HP-QSVT-LBLV
+Response:  200
+Building configuration SwitchPort4 switch Q2HP-QSVT-LBLV
+Response:  200
+Building configuration SwitchPort5 switch Q2HP-QSVT-LBLV
+Response:  200
+Building configuration SwitchPort6 switch Q2HP-QSVT-LBLV
+Response:  200
+Building configuration SwitchPort7 switch Q2HP-QSVT-LBLV
+Response:  200
+Building configuration SwitchPort8 switch Q2HP-QSVT-LBLV
+Response:  200
+Building configuration SwitchPort9 switch Q2HP-QSVT-LBLV
+Response:  200
+Building configuration SwitchPort10 switch Q2HP-QSVT-LBLV
+Response:  200
+Building configuration SwitchPort11 switch Q2HP-QSVT-LBLV
+Response:  404
+Switch configuration complete.

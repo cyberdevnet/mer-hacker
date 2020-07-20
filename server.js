@@ -304,19 +304,19 @@ var storage2 = multer.diskStorage({
 
 var upload2 = multer({ storage2: storage2 }).single('file')
 
-app.post('/upload_build_meraki_switchconfig', function (req, res) {
+// app.post('/upload_build_meraki_switchconfig', function (req, res) {
 
-    upload2(req, res, function (err) {
-        if (err instanceof multer.MulterError) {
-            return res.status(500).json(err)
-        } else if (err) {
-            return res.status(500).json(err)
-        }
-        return res.status(200).send(req.file)
+//     upload2(req, res, function (err) {
+//         if (err instanceof multer.MulterError) {
+//             return res.status(500).json(err)
+//         } else if (err) {
+//             return res.status(500).json(err)
+//         }
+//         return res.status(200).send(req.file)
 
-    })
+//     })
 
-});
+// });
 
 
 // upload backupfile for build_meraki_switchconfig
@@ -326,7 +326,6 @@ app.use(fileUpload({
 }))
 
 app.post("/upload_backupfile", async (req, res) => {
-    console.log(req.files.backup.mimetype); // the uploaded file object
     try {
         if (!req.files) {
             res.send({
@@ -352,6 +351,33 @@ app.post("/upload_backupfile", async (req, res) => {
 
         }
     } catch (e) {
+        res.status(500).send(e)
+    }
+})
+
+
+// upload build_meraki_switchconfig script if modified from GUI
+
+app.post("/upload_build_meraki_switchconfig", async (req, res) => {
+    try {
+        if (!req.files) {
+            res.send({
+                status: false,
+                message: "No file uploaded"
+            })
+        } else {
+            const file = req.files.file
+
+            file.mv("/home/cyberdevnet/mer-hacker-dev/api/cisco_meraki_migrate_tool/build_meraki_switchconfig.py")
+
+            res.send({
+                status: true,
+                message: "Backupfile uploaded"
+            })
+
+        }
+    } catch (e) {
+        console.log("e", e)
         res.status(500).send(e)
     }
 })

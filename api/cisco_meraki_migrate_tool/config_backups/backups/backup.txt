@@ -1,68 +1,68 @@
-DUENET06#sho run
+LBZ-NT-AS002#sho run
 Building configuration...
 
-Current configuration : 44199 bytes
+Current configuration : 9493 bytes
 !
-! Last configuration change at 11:04:28 CEST Sat Jul 11 2020
-! NVRAM config last updated at 11:04:02 CEST Sat Jul 11 2020 by ntsadmin
+! Last configuration change at 07:21:57 CET Mon Dec 16 2019 by Master
+! NVRAM config last updated at 07:21:57 CET Mon Dec 16 2019 by Master
 !
 version 15.2
 no service pad
-service timestamps debug datetime msec
-service timestamps log datetime msec
+service tcp-keepalives-in
+service tcp-keepalives-out
+service timestamps debug datetime msec localtime show-timezone
+service timestamps log datetime msec localtime show-timezone
 service password-encryption
+service sequence-numbers
 !
-hostname DUENET06
+hostname LBZ-NT-AS002
 !
 boot-start-marker
 boot-end-marker
 !
-shell trigger ASP_ATA ASP_ATA
-shell trigger ASP_Bluesocket ASP_Bluesocket
-shell trigger ASP_ClientVoice ASP_ClientVoice
-shell trigger ASP_Meraki ASP_Meraki
-shell trigger ASP_Multimedia ASP_Multimedia
-shell trigger ASP_Printer ASP_Printer
-shell trigger ASP_Security ASP_Security
-shell trigger ASP_VC ASP_VC
-enable secret 5 $1$jDkS$0si6pus3RX4yIwLk793aC.
 !
-username ntsadmin privilege 15 secret 5 $1$LHb.$VcRh/hbJnJo7R/72srL5e0
-username signa privilege 15 secret 5 $1$CEs/$d7dn3PhmvCkbwjjy8qhJR0
+logging buffered 512000
+logging console errors
+enable password 7 060A00204F450C0B
+!
+username master password 7 153E040D07217A767B
 aaa new-model
 !
 !
 aaa group server radius ISE
- server name ISE1
- server name ISE2
+ server name LOA-SR-ISEPSN01
+ server name LHF-SR-ISEPSN01
+ server name DOM-SR-ISEPSN01
+ ip radius source-interface Vlan900
+ deadtime 10
 !
-aaa authentication login default group ISE local
+aaa authentication login default local
 aaa authentication dot1x default group ISE
-aaa authorization exec default group ISE local 
+aaa authorization exec default local 
 aaa authorization network default group ISE 
 aaa accounting dot1x default start-stop group ISE
 !
 !
 !
 !
-!
+!         
 aaa server radius dynamic-author
- client 10.1.100.3 server-key 7 023402585A5F5E790D
- client 10.1.100.4 server-key 7 133711115A5555726A
+ client 10.10.90.12 server-key 7 096041081A0E464058
+ client 10.40.90.12 server-key 7 143B1D0A0F0F7B7977
+ client 10.80.10.12 server-key 7 143B1D0A0F0F7B7977
 !
 aaa session-id common
 clock timezone CET 1 0
 clock summer-time CEST recurring last Sun Mar 2:00 last Sun Oct 3:00
-switch 1 provision ws-c2960x-48fps-l
+system mtu routing 1500
+no ip source-route
 !
 !
-ip domain-name signa.local
-ip name-server 10.1.1.8
-ip device tracking probe count 5
-ip device tracking probe interval 300
-ip device tracking probe auto-source override
-ip device tracking probe delay 10
-vtp mode transparent
+!
+no ip domain-lookup
+ip domain-name net.loacker.com
+ip name-server 10.10.10.60
+ip name-server 10.10.10.61
 !
 !
 !
@@ -70,139 +70,78 @@ vtp mode transparent
 !
 authentication mac-move permit
 access-session acl default passthrough
-epm logging
 !
-mls qos map policed-dscp  24 26 46 to 0
-mls qos map cos-dscp 0 8 16 24 32 46 48 56
-mls qos srr-queue output cos-map queue 1 threshold 3 5
-mls qos srr-queue output cos-map queue 2 threshold 3 3 6 7
-mls qos srr-queue output cos-map queue 3 threshold 3 2 4
-mls qos srr-queue output cos-map queue 4 threshold 2 1
-mls qos srr-queue output cos-map queue 4 threshold 3 0
-mls qos srr-queue output dscp-map queue 1 threshold 3 40 41 42 43 44 45 46 47
-mls qos srr-queue output dscp-map queue 2 threshold 3 24 25 26 27 28 29 30 31
-mls qos srr-queue output dscp-map queue 2 threshold 3 48 49 50 51 52 53 54 55
-mls qos srr-queue output dscp-map queue 2 threshold 3 56 57 58 59 60 61 62 63
-mls qos srr-queue output dscp-map queue 3 threshold 3 16 17 18 19 20 21 22 23
-mls qos srr-queue output dscp-map queue 3 threshold 3 32 33 34 35 36 37 38 39
-mls qos srr-queue output dscp-map queue 4 threshold 1 8
-mls qos srr-queue output dscp-map queue 4 threshold 2 9 10 11 12 13 14 15
-mls qos srr-queue output dscp-map queue 4 threshold 3 0 1 2 3 4 5 6 7
-mls qos queue-set output 1 threshold 1 138 138 92 138
-mls qos queue-set output 1 threshold 2 138 138 92 400
-mls qos queue-set output 1 threshold 3 36 77 100 318
-mls qos queue-set output 1 threshold 4 20 50 67 400
-mls qos queue-set output 2 threshold 1 149 149 100 149
-mls qos queue-set output 2 threshold 2 118 118 100 235
-mls qos queue-set output 2 threshold 3 41 68 100 272
-mls qos queue-set output 2 threshold 4 42 72 100 242
-mls qos queue-set output 1 buffers 10 10 26 54
-mls qos queue-set output 2 buffers 16 6 17 61
-mls qos
+no setup express
 !
-crypto pki trustpoint TP-self-signed-3046827136
+crypto pki trustpoint TP-self-signed-4109841152
  enrollment selfsigned
- subject-name cn=IOS-Self-Signed-Certificate-3046827136
+ subject-name cn=IOS-Self-Signed-Certificate-4109841152
  revocation-check none
- rsakeypair TP-self-signed-3046827136
+ rsakeypair TP-self-signed-4109841152
 !
 !
-crypto pki certificate chain TP-self-signed-3046827136
+crypto pki certificate chain TP-self-signed-4109841152
  certificate self-signed 01
-  3082022B 30820194 A0030201 02020101 300D0609 2A864886 F70D0101 05050030 
+  3082024C 308201B5 A0030201 02020101 300D0609 2A864886 F70D0101 04050030 
   31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274 
-  69666963 6174652D 33303436 38323731 3336301E 170D3138 30363236 30373431 
-  32385A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649 
-  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D33 30343638 
-  32373133 3630819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281 
-  8100D268 C3E7E8ED 491AD319 2D605A63 EE20EA4A B2491FB4 97E856D6 23B14963 
-  28FEC744 22D63774 AA6EC49C CBC17F51 5AA5E50E 9E51F26C 7F4795AC 27E6941D 
-  911E5C5D FF31D392 2C42CC0D DCCBDE85 67865D11 FFF27E27 3431B3EF 863F21DD 
-  F7E25599 E3EAF9F3 FA840A9A B5A6D9E8 0B9F2B88 E60CF78B A3370FA9 B692A9C6 
-  91170203 010001A3 53305130 0F060355 1D130101 FF040530 030101FF 301F0603 
-  551D2304 18301680 14D40241 D62F37C0 301F7E6F AFBCDBDF 321857BA 6B301D06 
-  03551D0E 04160414 D40241D6 2F37C030 1F7E6FAF BCDBDF32 1857BA6B 300D0609 
-  2A864886 F70D0101 05050003 81810061 B0443C29 643E7874 0682BA5F 8F0A5B59 
-  D21CB7A0 008308AF F6530639 071FF7A8 161D4D46 47B715BA 6FFDDE0E B38C3C7E 
-  6B5A071C 58B4B344 434AA03B 399B2CF6 3924529A CA035AD9 DAF3E3D4 D25F9573 
-  EBE682E8 DF74E2F9 7A18C357 15FCEF5D A065DBC2 84C466DA 5A7D58A2 DFF2CE80 
-  C458C48F A7FA11E3 F8D4F357 86BF83
+  69666963 6174652D 34313039 38343131 3532301E 170D3933 30333031 30303130 
+  33355A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649 
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D34 31303938 
+  34313135 3230819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281 
+  8100ED10 E80F4C36 E0676E0B E90DC139 61A38CC4 AF983DCB 40933DE9 87B469D0 
+  8F455503 140A04B2 80D1B103 2408E790 E2126954 F0655AC9 56160E34 66287E22 
+  B531D7A3 69FAEB3B 8464ED2C DFBB16DA 4F2C97BA 643B5218 19BC9095 432850BD 
+  ECE8A03D 03F24144 F9507391 AFF8EC1C 429DFAB8 17EBBCD3 241C138A 14687934 
+  7D250203 010001A3 74307230 0F060355 1D130101 FF040530 030101FF 301F0603 
+  551D1104 18301682 144C3134 312E6E65 742E6C6F 61636B65 722E636F 6D301F06 
+  03551D23 04183016 8014BDDF B62B0A3C B865F062 01C1C9DC F189C2C4 CD09301D 
+  0603551D 0E041604 14BDDFB6 2B0A3CB8 65F06201 C1C9DCF1 89C2C4CD 09300D06 
+  092A8648 86F70D01 01040500 03818100 169F0EF7 951DC160 D5724A68 19466946 
+  AC4EE67A D41D14FE 5D95E908 F8EB4418 98B89708 9C939ECF B3A6031A 51F703E6 
+  7FB82B2F 35EC734C 5EC0E431 C2DA65B5 4AF7C57E 45B8F9B4 B06BB7DE 5664263C 
+  2F7A412B 830304FC 7245D518 8C0F4A80 F0CD63AD BF1CCF2C 3691B0B4 940B9088 
+  8F67181D 37755614 35AE7DC7 21F981B0
         quit
 archive
  log config
   logging enable
-  notify syslog contenttype plaintext
+  logging size 1000
   hidekeys
- path ftp://ftp:1iJYmeQHNUCp@10.1.101.10/config/$h-$t
- write-memory
 dot1x system-auth-control
-dot1x critical eapol
 !
 spanning-tree mode rapid-pvst
-spanning-tree loopguard default
+spanning-tree portfast default
+spanning-tree portfast bpduguard default
 spanning-tree extend system-id
+no errdisable detect cause loopback
+no errdisable detect cause gbic-invalid
+no errdisable detect cause pagp-flap
+no errdisable detect cause dtp-flap
+no errdisable detect cause link-flap
+no errdisable detect cause dhcp-rate-limit
+no errdisable detect cause arp-inspection
 errdisable recovery cause udld
-errdisable recovery cause bpduguard
 errdisable recovery cause security-violation
 errdisable recovery cause channel-misconfig
 errdisable recovery cause pagp-flap
 errdisable recovery cause dtp-flap
 errdisable recovery cause link-flap
-errdisable recovery cause sfp-config-mismatch
 errdisable recovery cause gbic-invalid
 errdisable recovery cause psecure-violation
-errdisable recovery cause port-mode-failure
 errdisable recovery cause dhcp-rate-limit
-errdisable recovery cause pppoe-ia-rate-limit
-errdisable recovery cause mac-limit
 errdisable recovery cause vmps
 errdisable recovery cause storm-control
-errdisable recovery cause inline-power
 errdisable recovery cause arp-inspection
 errdisable recovery cause loopback
-errdisable recovery cause small-frame
-errdisable recovery cause psp
-errdisable recovery interval 600
-device classifier
+errdisable recovery interval 120
 !
-!
+!         
 !
 !
 vlan internal allocation policy ascending
 !
-vlan 10
- name Server
-!
-vlan 20
- name Security
-!
-vlan 30
- name Multimedia
-!
-vlan 40
- name Voice
-!
-vlan 50
- name Client
-!
-vlan 60
- name Drucker
-!
-vlan 90
- name WLAN
-!
-vlan 91
- name Guest-WLAN
-!
-vlan 100
- name Management
-!
-vlan 998
- name DummyVoiceVLAN
-!
-vlan 999
- name DummyVLAN
-!
+ip tcp path-mtu-discovery
+lldp run
 !
 ! 
 !
@@ -210,340 +149,137 @@ vlan 999
 !
 !
 !
-!         
 !
-macro auto execute ASP_ATA  {
- if [[ $LINKUP == YES ]]
-  then conf t
-  interface  $INTERFACE
-  macro description $TRIGGER
-  description ASP_ATA
-  srr-queue bandwidth share 1 10 70 10
-  srr-queue bandwidth shape 4 0 0 0
-  priority-queue out 
-  mls qos trust dscp
-  exit
-  end
- fi      
- if [[ $LINKUP == NO ]]
-  then conf t
-  default interface $INTERFACE
-  interface  $INTERFACE
-  description 802.1X DOWN
-  switchport mode access
-  switchport acces vlan 999
-  switchport voice vlan 998
-  authentication control-direction in
-  authentication event fail action next-method
-  authentication event server dead action authorize vlan 60
-  authentication event server dead action authorize voice
-  authentication event server alive action reinitialize 
-  authentication host-mode multi-auth
-  authentication order mab dot1x
-  authentication priority dot1x mab
-  authentication port-control auto
-  authentication periodic
-  mab
-  dot1x pae authenticator
-  spanning-tree portfast
-  exit
-  end
- fi
-}
-macro auto execute ASP_Bluesocket  {
- if [[ $LINKUP == YES ]]
-  then conf t
-  default interface  $INTERFACE
-  interface  $INTERFACE
-  macro description $TRIGGER
-  description Bluesocket
-  switchport trunk native vlan 100
-  switchport trunk allowed vlan 40,50,90,91,92,100
-  switchport mode trunk
-  no macro auto control detection
-  no macro auto control device
-  no macro auto global control trigger
-  exit
-  end
- fi
- if [[ $LINKUP == NO ]]
-  then conf t
-  default interface $INTERFACE
-  interface  $INTERFACE
-  description 802.1X DOWN
-  switchport mode access
-  switchport acces vlan 999
-  switchport voice vlan 998
-  authentication control-direction in
-  authentication event fail action next-method
-  authentication event server dead action authorize vlan 60
-  authentication event server dead action authorize voice
-  authentication event server alive action reinitialize 
-  authentication host-mode multi-auth
-  authentication order mab dot1x
-  authentication priority dot1x mab
-  authentication port-control auto
-  authentication periodic
-  mab
-  dot1x pae authenticator
-  spanning-tree portfast
-  spanning-tree bpduguard enable
-  exit
-  end
- fi
-}
-macro auto execute ASP_ClientVoice  {
- if [[ $LINKUP == YES ]]
-  then conf t
-  interface  $INTERFACE
-  macro description $TRIGGER
-  description Client / Voice
-  srr-queue bandwidth share 1 10 70 10
-  srr-queue bandwidth shape 4 0 0 0
-  priority-queue out 
-  mls qos trust dscp
-  exit
-  end
- fi      
- if [[ $LINKUP == NO ]]
-  then conf t
-  default interface $INTERFACE
-  interface  $INTERFACE
-  description 802.1X DOWN
-  switchport mode access
-  switchport acces vlan 999
-  switchport voice vlan 998
-  authentication control-direction in
-  authentication event fail action next-method
-  authentication event server dead action authorize vlan 60
-  authentication event server dead action authorize voice
-  authentication event server alive action reinitialize 
-  authentication host-mode multi-auth
-  authentication order mab dot1x
-  authentication priority dot1x mab
-  authentication port-control auto
-  authentication periodic
-  mab
-  dot1x pae authenticator
-  spanning-tree portfast
-  spanning-tree bpduguard enable
-  exit
-  end
- fi
-}
-macro auto execute ASP_Meraki  {
- if [[ $LINKUP == YES ]]
-  then conf t
-  default interface  $INTERFACE
-  interface  $INTERFACE
-  macro description $TRIGGER
-  description Meraki-AP
-  switchport trunk native vlan 100
-  switchport trunk allowed vlan 10,40,50,60,90,91,92,100
-  switchport mode trunk
-  exit
-  end
- fi
- if [[ $LINKUP == NO ]]
-  then conf t
-  default interface $INTERFACE
-  interface  $INTERFACE
-  description 802.1X DOWN
-  switchport mode access
-  switchport acces vlan 999
-  switchport voice vlan 998
-  authentication control-direction in
-  authentication event fail action next-method
-  authentication event server dead action authorize vlan 60
-  authentication event server dead action authorize voice
-  authentication event server alive action reinitialize 
-  authentication host-mode multi-auth
-  authentication order mab dot1x
-  authentication priority dot1x mab
-  authentication port-control auto
-  authentication periodic
-  mab     
-  dot1x pae authenticator
-  spanning-tree portfast
-  spanning-tree bpduguard enable
-  exit
-  end
- fi
-}
-macro auto execute ASP_Multimedia  {
- if [[ $LINKUP == YES ]]
-  then conf t
-  interface  $INTERFACE
-  macro description $TRIGGER
-  description ASP_Multimedia
-  srr-queue bandwidth share 1 10 70 10
-  srr-queue bandwidth shape 4 0 0 0
-  priority-queue out 
-  mls qos trust dscp
-  exit
-  end
- fi      
- if [[ $LINKUP == NO ]]
-  then conf t
-  default interface $INTERFACE
-  interface  $INTERFACE
-  description 802.1X DOWN
-  switchport mode access
-  switchport acces vlan 999
-  switchport voice vlan 998
-  authentication control-direction in
-  authentication event fail action next-method
-  authentication event server dead action authorize vlan 60
-  authentication event server dead action authorize voice
-  authentication event server alive action reinitialize 
-  authentication host-mode multi-auth
-  authentication order mab dot1x
-  authentication priority dot1x mab
-  authentication port-control auto
-  authentication periodic
-  mab
-  dot1x pae authenticator
-  spanning-tree portfast
-  exit
-  end
- fi
-}
-macro auto execute ASP_Printer  {
- if [[ $LINKUP == YES ]]
-  then conf t
-  interface  $INTERFACE
-  macro description $TRIGGER
-  description ASP_Printer
-  exit
-  end
- fi      
- if [[ $LINKUP == NO ]]
-  then conf t
-  default interface $INTERFACE
-  interface  $INTERFACE
-  description 802.1X DOWN
-  switchport mode access
-  switchport acces vlan 999
-  switchport voice vlan 998
-  authentication control-direction in
-  authentication event fail action next-method
-  authentication event server dea ci uhrzeva 0 uhniao vn sre ed cinathrz oe ateiainen evrlv ci entaz  atniain host-mode multi-auth
-  authentication order mab dot1x
-  authentication priority dot1x mab
-  authentication port-control auto
-  authentication periodic
-  mab     
-  dot1x pae authenticator
-  spanning-tree portfast
-  exit
-  end
- fi
-}
-macro auto execute ASP_Security  {
- if [[ $LINKUP == YES ]]
-  then conf t
-  interface  $INTERFACE
-  macro description $TRIGGER
-  description ASP_Security
-  exit
-  end
- fi      
- if [[ $LINKUP == NO ]]
-  then conf t
-  default interface $INTERFACE
-  interface  $INTERFACE
-  description 802.1X DOWN
-  switchport mode access
-  switchport acces vlan 999
-  switchport voice vlan 998
-  authentication control-direction in
-  authentication event fail action next-method
-  authentication event server dead action authorize vlan 60
-  authentication event server dead action authorize voice
-  authentication event server alive action reinitialize 
-  authentication host-mode multi-auth
-  authentication order mab dot1x
-  authentication priority dot1x mab
-  authentication port-control auto
-  authentication periodic
-  mab
-  dot1x pae authenticator
-  spanning-tree portfast
-  exit
-  end
- fi
-}
-macro auto execute ASP_VC  {
- if [[ $LINKUP == YES ]]
-  then conf t
-  interface  $INTERFACE
-  macro description $TRIGGER
-  description ASP_VC
-  srr-queue bandwidth share 1 10 70 10
-  srr-queue bandwidth shape 4 0 0 0
-  priority-queue out 
-  mls qos trust dscp
-  exit
-  end
- fi      
- if [[ $LINKUP == NO ]]
-  then conf t
-  default interface $INTERFACE
-  interface  $INTERFACE
-  description 802.1X DOWN
-  switchport mode access
-  switchport acces vlan 999
-  switchport voice vlan 998
-  authentication control-direction in
-  authentication event fail action next-method
-  authentication event server dead action authorize vlan 60
-  authentication event server dead action authorize voice
-  authentication event server alive action reinitialize 
-  authentication host-mode multi-auth
-  authentication order mab dot1x
-  authentication priority dot1x mab
-  authentication port-control auto
-  authentication periodic
-  mab
-  dot1x pae authenticator
-  spanning-tree portfast
-  exit
-  end
- fi
-}
-macro auto global processing 
-no macro auto global control device
-no macro auto global control trigger
 !
-interface Port-channel3
- description UPLINK to DUENET03 - Po1
+!
+interface FastEthernet0/1
+ switchport mode access
+ switchport voice vlan 192
+ no logging event link-status
+ authentication host-mode multi-auth
+ authentication order mab dot1x
+ authentication priority dot1x mab
+ authentication port-control auto
+ authentication periodic
+ mab
+ dot1x pae authenticator
+ storm-control broadcast level 10.00
+ storm-control multicast level 10.00
+ spanning-tree portfast
+!
+interface FastEthernet0/2
+ switchport mode access
+ switchport voice vlan 192
+ no logging event link-status
+ authentication host-mode multi-auth
+ authentication order mab dot1x
+ authentication priority dot1x mab
+ authentication port-control auto
+ authentication periodic
+ mab
+ dot1x pae authenticator
+ storm-control broadcast level 10.00
+ storm-control multicast level 10.00
+ spanning-tree portfast
+!
+interface FastEthernet0/3
+ switchport mode access
+ switchport voice vlan 192
+ no logging event link-status
+ authentication host-mode multi-auth
+ authentication order mab dot1x
+ authentication priority dot1x mab
+ authentication port-control auto
+ authentication periodic
+ mab
+ dot1x pae authenticator
+ storm-control broadcast level 10.00
+ storm-control multicast level 10.00
+ spanning-tree portfast
+!
+interface FastEthernet0/4
+ switchport mode access
+ switchport voice vlan 192
+ no logging event link-status
+ authentication host-mode multi-auth
+ authentication order mab dot1x
+ authentication priority dot1x mab
+ authentication port-control auto
+ authentication periodic
+ mab
+ dot1x pae authenticator
+ storm-control broadcast level 10.00
+ storm-control multicast level 10.00
+ spanning-tree portfast
+!
+interface FastEthernet0/5
+ switchport mode access
+ switchport voice vlan 192
+ no logging event link-status
+ authentication host-mode multi-auth
+ authentication order mab dot1x
+ authentication priority dot1x mab
+ authentication port-control auto
+ authentication periodic
+ mab
+ dot1x pae authenticator
+ storm-control broadcast level 10.00
+ storm-control multicast level 10.00
+ spanning-tree portfast
+!
+interface FastEthernet0/6
+ switchport mode access
+ switchport voice vlan 192
+ no logging event link-status
+ authentication host-mode multi-auth
+ authentication order mab dot1x
+ authentication priority dot1x mab
+ authentication port-control auto
+ authentication periodic
+ mab
+ dot1x pae authenticator
+ storm-control broadcast level 10.00
+ storm-control multicast level 10.00
+ spanning-tree portfast
+!
+interface FastEthernet0/7
+ switchport mode access
+ switchport voice vlan 192
+ no logging event link-status
+ authentication host-mode multi-auth
+ authentication order mab dot1x
+ authentication priority dot1x mab
+ authentication port-control auto
+ authentication periodic
+ mab
+ dot1x pae authenticator
+ storm-control broadcast level 10.00
+ storm-control multicast level 10.00
+ spanning-tree portfast
+!
+interface FastEthernet0/8
+ switchport mode access
+ switchport voice vlan 192
+ no logging event link-status
+ authentication host-mode multi-auth
+ authentication order mab dot1x
+ authentication priority dot1x mab
+ authentication port-control auto
+ authentication periodic
+ mab
+ dot1x pae authenticator
+ storm-control broadcast level 10.00
+ storm-control multicast level 10.00
+ spanning-tree portfast
+!
+interface GigabitEthernet0/1
+ description to LBZ-NT-AS001
  switchport mode trunk
- load-interval 30
+ switchport nonegotiate
 !
-interface Port-channel4
- description UPLINK to DUENET04 - Po1
- switchport mode trunk
- load-interval 30
-!
-interface Port-channel5
- description UPLINK to DUENET05 - Po6
- switchport mode trunk
- load-interval 30
-!
-interface FastEthernet0
- no ip address
- shutdown
-!
-interface GigabitEthernet1/0/1
- description 802.1X DOWN
- switchport access vlan 999
+interface GigabitEthernet0/2
  switchport mode access
- switchport voice vlan 998
- authentication control-direction in
- authentication event fail action next-method
- authentication event server dead action authorize vlan 60
- authentication event server dead action authorize voice
- authentication event server alive action reinitialize 
+ no logging event link-status
  authentication host-mode multi-auth
  authentication order mab dot1x
  authentication priority dot1x mab
@@ -551,258 +287,65 @@ interface GigabitEthernet1/0/1
  authentication periodic
  mab
  dot1x pae authenticator
- spanning-tree portfast
- spanning-tree bpduguard enable
-!
-interface GigabitEthernet1/0/2
- description 802.1X DOWN
- switchport access vlan 999
- switchport mode access
- switchport voice vlan 998
- authentication control-direction in
- authentication event fail action next-method
- authentication event server dead action authorize vlan 60
- authentication event server dead action authorize voice
- authentication event server alive action reinitialize 
- authentication host-mode multi-auth
- authentication order mab dot1x
- authentication priority dot1x mab
- authentication port-control auto
- authentication periodic
- mab
- dot1x pae authenticator
- spanning-tree portfast
- spanning-tree bpduguard enable
-!
-interface GigabitEthernet1/0/3
- description UPLINK SINET00-1
- switchport mode trunk
- ip device tracking maximum 0
- srr-queue bandwidth share 1 10 60 10
- srr-queue bandwidth shape  4 0 0 0
- priority-queue out 
- mls qos trust dscp
- no macro auto processing
-!
-interface GigabitEthernet1/0/4
- description Client / Voice
- switchport access vlan 999
- switchport mode access
- switchport voice vlan 998
- srr-queue bandwidth share 1 10 70 10
- srr-queue bandwidth shape  4 0 0 0
- priority-queue out 
- authentication control-direction in
- authentication event fail action next-method
- authentication event server dead action authorize vlan 60
- authentication event server dead action authorize voice
- authentication event server alive action reinitialize 
- authentication host-mode multi-auth
- authentication order mab dot1x
- authentication priority dot1x mab
- authentication port-control auto
- authentication periodic
- mab
- mls qos trust dscp
- macro description ASP_ClientVoice
- dot1x pae authenticator
+ storm-control broadcast level 10.00
+ storm-control multicast level 10.00
  spanning-tree portfast
 !
-interface GigabitEthernet1/0/5
- description UPLINK SINET00-1
- switchport mode trunk
- ip device tracking maximum 0
- srr-queue bandwidth share 1 10 60 10
- srr-queue bandwidth shape  4 0 0 0
- priority-queue out 
- mls qos trust dscp
- no macro auto processing
-!
-interface GigabitEthernet1/0/6
- description 802.1X DOWN
- switchport access vlan 999
- switchport mode access
- switchport voice vlan 998
- authentication control-direction in
- authentication event fail action next-method
- authentication event server dead action authorize vlan 60
- authentication event server dead action authorize voice
- authentication event server alive action reinitialize 
- authentication host-mode multi-auth
- authentication order mab dot1x
- authentication priority dot1x mab
- authentication port-control auto
- authentication periodic
- mab
- dot1x pae authenticator
- spanning-tree portfast
- spanning-tree bpduguard enable
-!
-interface GigabitEthernet1/0/7
- description Client / Voice
- switchport access vlan 999
- switchport mode access
- switchport voice vlan 998
- srr-queue bandwidth share 1 10 70 10
- srr-queue bandwidth shape  4 0 0 0
- priority-queue out 
- authentication control-direction in
- authentication event fail action next-method
- authentication event server dead action authorize vlan 60
- authentication event server dead action authorize voice
- authentication event server alive action reinitialize 
- authentication host-mode multi-auth
- authentication order mab dot1x
- authentication priority dot1x mab
- authentication port-control auto
- authentication periodic
- mab
- mls qos trust dscp
- macro description ASP_ClientVoice
- dot1x pae authenticator
- spanning-tree portfast
-!
-interface GigabitEthernet1/0/8
- description Client / Voice
- switchport access vlan 999
- switchport mode access
- switchport voice vlan 998
- srr-queue bandwidth share 1 10 70 10
- srr-queue bandwidth shape  4 0 0 0
- priority-queue out 
- authentication control-direction in
- authentication event fail action next-method
- authentication event server dead action authorize vlan 60
- authentication event server dead action authorize voice
- authentication event server alive action reinitialize 
- authentication host-mode multi-auth
- authentication order mab dot1x
- authentication priority dot1x mab
- authentication port-control auto
- authentication periodic
- mab
- mls qos trust dscp
- macro description ASP_ClientVoice
- dot1x pae authenticator
- spanning-tree portfast
-!
-interface GigabitEthernet1/0/9
- description UPLINK SINET00-1
- switchport mode trunk
- ip device tracking maximum 0
- srr-queue bandwidth share 1 10 60 10
- srr-queue bandwidth shape  4 0 0 0
- priority-queue out 
- mls qos trust dscp
- no macro auto processing
-!
-interface GigabitEthernet1/0/10
- description Client / Voice
- switchport access vlan 999
- switchport mode access
- switchport voice vlan 998
- srr-queue bandwidth share 1 10 70 10
- srr-queue bandwidth shape  4 0 0 0
- priority-queue out 
- authentication control-direction in
- authentication event fail action next-method
- authentication event server dead action authorize vlan 60
- authentication event server dead action authorize voice
- authentication event server alive action reinitialize 
- authentication host-mode multi-auth
- authentication order mab dot1x
- authentication priority dot1x mab
- authentication port-control auto
- authentication periodic
- mab
- mls qos trust dscp
- macro description ASP_ClientVoice
- dot1x pae authenticator
- spanning-tree portfast
-!
-interface GigabitEthernet1/0/11
- description Client / Voice
- switchport access vlan 999
- switchport mode access
- switchport voice vlan 998
- srr-queue bandwidth share 1 10 70 10
- srr-queue bandwidth shape  4 0 0 0
- priority-queue out 
- authentication control-direction in
- authentication event fail action next-method
- authentication event server dead action authorize vlan 60
- authentication event server dead action authorize voice
- authentication event server alive action reinitialize 
- authentication host-mode multi-auth
- authentication order mab dot1x
- authentication priority dot1x mab
- authentication port-control auto
- authentication periodic
- mab
- mls qos trust dscp
- macro description ASP_ClientVoice
- dot1x pae authenticator
- spanning-tree portfast
-!
-
 interface Vlan1
  no ip address
- shutdown
 !
-interface Vlan100
- description Management
- ip address 10.7.100.106 255.255.255.0
+interface Vlan900
+ description MGMT
+ ip address 10.65.255.2 255.255.255.0
 !
-ip default-gateway 10.7.100.100
-no ip http server
-ip http authentication local
-no ip http secure-server
+ip default-gateway 10.65.255.254
+ip http server
+ip http secure-server
 !
-ip route 0.0.0.0 0.0.0.0 10.7.100.100
+ip ssh version 2
 !
-ip access-list extended RED-ACL
+ip access-list extended ACL-WEBAUTH-REDIRECT
  permit tcp any any eq www
  permit tcp any any eq 443
-access-list 47 permit 10.1.1.76
-access-list 48 permit 10.1.101.0 0.0.0.255
-access-list 48 permit 10.1.1.0 0.0.0.255
-access-list 49 permit 10.1.100.4
-access-list 49 permit 10.1.100.3
-!
-snmp-server view backup ccCopyTable included
-snmp-server view backup ciscoFlashCopyEntry included
-snmp-server community prtg RO 47
-snmp-server community NTS.Y4uiRKs27pxSjk RO 48
-snmp-server community NTS.aRXsFT3jTxQWvKSu view backup RW 48
-snmp-server enable traps snmp linkdown linkup
-snmp-server enable traps mac-notification change move
-snmp-server host 10.1.100.3 ISE-SNMP-CHECK 
-snmp-server host 10.1.100.4 ISE-SNMP-CHECK 
+logging host 10.10.90.20
+access-list 50 permit 10.10.90.22
+access-list 50 permit 10.10.90.10
+access-list 50 permit 10.10.90.20 0.0.0.1
+snmp-server view monitor ccCopyTable included
+snmp-server view monitor ciscoFlashCopyEntry included
+snmp-server community NTS.monitoring RO 50
+snmp-server community NTS.managed view monitor RW 50
+snmp-server location Bozen/Magazin Stapler/Parterre/Buero/BZ-GmbH-Magazin
 !
 radius-server attribute 6 on-for-login-auth
 radius-server attribute 8 include-in-access-req
 radius-server attribute 25 access-request include
-radius-server dead-criteria time 10 tries 3
-radius-server deadtime 10
 radius-server vsa send cisco-nas-port
 !
-radius server ISE1
- address ipv4 10.1.100.3 auth-port 1812 acct-port 1813
- key 7 097E480A485C464A4A
-!         
-radius server ISE2
- address ipv4 10.1.100.4 auth-port 1812 acct-port 1813
- key 7 15200D0F55737A7C69
+radius server LOA-SR-ISEPSN01
+ address ipv4 10.10.90.12 auth-port 1812 acct-port 1813
+ key 7 062A00204F45584B56
+!
+radius server LHF-SR-ISEPSN01
+ address ipv4 10.40.90.12 auth-port 1812 acct-port 1813
+ key 7 132918130807557878
+!
+radius server DOM-SR-ISEPSN01
+ address ipv4 10.80.10.12 auth-port 1812 acct-port 1813
+ key 7 132918130807557878
+!
 !
 no vstack
 !
 line con 0
+ logging synchronous
 line vty 0 4
- exec-timeout 0 0
- transport input telnet ssh
+ logging synchronous
+ length 0
 line vty 5 15
- exec-timeout 0 0
- transport input telnet ssh
+ logging synchronous
 !
-ntp server ntp.signa.at
+ntp source Vlan900
+ntp server 10.10.10.60 prefer
+ntp server 10.10.10.61
 end

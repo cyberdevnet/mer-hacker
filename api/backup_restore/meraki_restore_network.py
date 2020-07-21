@@ -30,14 +30,14 @@ def restore_network(ARG_ORGID, ARG_APIKEY):
 	print('Checking Administrator',file=f)
 	f.flush()
 	posturl = 'https://api.meraki.com/api/v0/organizations/{0}/admins'.format(str(ARG_ORGID))
-	dashboard = session.post(posturl, json={'accountStatus': 'ok', 'authenticationMethod': 'Email', 'email': 'fabrizio.rollo@nts.eu', 'hasApiKey': True, 'id': '967931', 'lastActive': 1595188218, 'name': 'Fabrizio Rollo', 'networks': [], 'orgAccess': 'full', 'tags': [], 'twoFactorAuthEnabled': True}, headers=headers)
+	dashboard = session.post(posturl, json={'accountStatus': 'ok', 'authenticationMethod': 'Email', 'email': 'fabrizio.rollo@nts.eu', 'hasApiKey': True, 'id': '967931', 'lastActive': 1595249923, 'name': 'Fabrizio Rollo', 'networks': [], 'orgAccess': 'full', 'tags': [], 'twoFactorAuthEnabled': True}, headers=headers)
 
 # MX VPN firewall
 # https://dashboard.meraki.com/api_docs#mx-vpn-firewall
 	print('Restoring mx_vpn_firewall_rules',file=f)
 	f.flush()
 	puturl = 'https://api.meraki.com/api/v0/organizations/{0}/vpnFirewallRules'.format(str(ARG_ORGID))
-	dashboard = session.put(puturl, json={'rules': [{'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'Any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}], 'syslogEnabled': True}, headers=headers)
+	dashboard = session.put(puturl, json={'rules': [{'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'Any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}], 'syslogEnabled': True}, headers=headers)
 
 # SNMP Settings
 # https://dashboard.meraki.com/api_docs#update-the-snmp-settings-for-an-organization
@@ -257,7 +257,7 @@ def restore_switchports(ARG_APIKEY):
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
 		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/3'
 		print('Restoring configuration Port3 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 3, "name": "802.1X DOWN", "tags": null, "enabled": true, "poeEnabled": true, "type": "access", "vlan": 999, "voiceVlan": 998, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "bpdu guard", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": 1}'
+		payload = '{"number": 3, "name": "UPLINK SINET00-1", "tags": null, "enabled": true, "poeEnabled": true, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "bpdu guard", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
 		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/4'
 		print('Restoring configuration Port4 switch Q2HP-QSVT-LBLV',file=f)
@@ -265,7 +265,7 @@ def restore_switchports(ARG_APIKEY):
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
 		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/5'
 		print('Restoring configuration Port5 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 5, "name": "Client / Voice", "tags": null, "enabled": true, "poeEnabled": true, "type": "access", "vlan": 999, "voiceVlan": 998, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "bpdu guard", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": 1}'
+		payload = '{"number": 5, "name": "UPLINK SINET00-1", "tags": null, "enabled": true, "poeEnabled": true, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "bpdu guard", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
 		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/6'
 		print('Restoring configuration Port6 switch Q2HP-QSVT-LBLV',file=f)
@@ -281,11 +281,11 @@ def restore_switchports(ARG_APIKEY):
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
 		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/9'
 		print('Restoring configuration Port9 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 9, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		payload = '{"number": 9, "name": "UPLINK SINET00-1", "tags": null, "enabled": true, "poeEnabled": true, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "bpdu guard", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
 		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/10'
 		print('Restoring configuration Port10 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 10, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		payload = '{"number": 10, "name": "Client / Voice", "tags": null, "enabled": true, "poeEnabled": true, "type": "access", "vlan": 999, "voiceVlan": 998, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "bpdu guard", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": 1}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
 	except requests.exceptions.HTTPError as err:
 		print(err,file=f)

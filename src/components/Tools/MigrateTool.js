@@ -416,25 +416,29 @@ export default function MigrateTool(ac) {
                                     </div>
                                     <div id="collapseOne" className="panel-collapse collapse in">
                                         <div className="panel-body">
-                                            <p><strong>Please read carefully before starting the Backup & Restore.</strong></p>
+                                            <p><strong>Please read carefully before starting the migration.</strong></p>
 
                                             <dl>
-                                                <dt>This script makes a snapshot of a network and creates a downloadable python file used to restore the configuration.</dt>
-                                                <dt>The configuration will be restored creating a new network with name "your-new-network-restore"</dt>
-                                                <dt>Since the Switchs configuration is lost when a device is moved to another network, the backup process must be run in two parts.</dt>
+                                                <dt>This script converts a cisco running-config into a Meraki Switch-Port configuration and creates a downloadable python file used to push the new switchport configuration.</dt>
+                                                <dt>Before to convert and push the configuration be sure to:</dt>
+                                                <br />
+                                                <dt>Check if the switch serial-number has been claimed for you Organization</dt>
+                                                <dt>Check if the new switch has been added to the right Network</dt>
+                                                <dt>Check if the an Access Policy is configured</dt>
+                                                <br />
+                                                <dt>Instructions:</dt>
+
                                             </dl>
                                             <ul>
-                                                <li>Run Backup.</li>
-                                                <li>Review the script snapshot before starting the restore.</li>
+                                                <li>Insert the serial number or a list of comma-separated serial-numbers</li>
+                                                <li>Load the Cisco running-config, the file must be in .txt format</li>
+                                                <li>Convert the configuration</li>
+                                                <li>Check the script</li>
+                                                <dt>The script can be modified before the pushing the configuration (basic knowledge of python required).</dt>
                                                 <li>Download the script(optional).</li>
-                                                <li>Restore the configuration (a new network with name "your-new-network-restore" will be created).</li>
-                                                <li>Go to your Meraki dashboard and move your devices to the newly created network.</li>
-                                                <li>Restore the switchports configuration.</li>
+                                                <li>Push the configuration to the meraki Switch</li>
+                                                <li>Go to your Meraki dashboard and check if the configuration is successfully uploaded</li>
                                             </ul>
-                                            <dl>
-                                                <dt>Note that the Restore will not overwrite existing networks but creates a new one.</dt>
-                                                <dt>The script can be modified before the Restore process (basic knowledge of python required).</dt>
-                                            </dl>
                                         </div>
                                     </div>
                                 </div>
@@ -526,8 +530,8 @@ export default function MigrateTool(ac) {
                                         style={{ marginRight: "5px" }}
                                     />
                                 )}
-                                {loadingButtonMigrateSwitchConfig && <span>Restoring</span>}
-                                {!loadingButtonMigrateSwitchConfig && <span>Restore</span>}
+                                {loadingButtonMigrateSwitchConfig && <span>Pushing Config</span>}
+                                {!loadingButtonMigrateSwitchConfig && <span>Push Config</span>}
                             </button>
                         </div>
 
@@ -545,11 +549,12 @@ export default function MigrateTool(ac) {
                     ariaHideApp={false}
                 >
                     <div>
-                        <p>Are you sure you want to restore the Network {ac.dc.network}? </p>
-                        <p className="text-secondary"><small>a new network with name {ac.dc.network}-restore will be created</small></p>
+                        <p>Are you sure you want to push the configuration to the switch {serialNumbers}? </p>
+                        <p className="text-secondary"><small>before pushing the configuration be sure the switch has been added to the right network
+                            and Access Policy is configured</small></p>
                     </div>
                     <button onClick={CancelRestore} type="button" className="btn btn-secondary" >Cancel</button>
-                    <button onClick={ConfirmRestore} type="button" className="btn btn-danger">Restore</button>
+                    <button onClick={ConfirmRestore} type="button" className="btn btn-danger">Push Config</button>
                 </ReactModal>
             </div>
 

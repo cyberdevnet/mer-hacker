@@ -20,6 +20,9 @@ const expressPino = require('express-pino-logger');
 
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' });
 const expressLogger = expressPino({ logger });
+app.use(fileUpload({
+    createParentPath: true
+}))
 
 app.use(expressLogger);
 
@@ -273,24 +276,36 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage }).single('file')
 
-// upload restore script if modified from GUI
+// upload meraki_restore_network script if modified by the AceEditor GUI
 
-app.post('/upload', function (req, res) {
+app.post("/upload", async (req, res) => {
+    try {
+        if (!req.files) {
+            res.send({
+                status: false,
+                message: "No file uploaded"
+            })
+        } else {
+            const file = req.files.file
 
-    upload(req, res, function (err) {
-        if (err instanceof multer.MulterError) {
-            return res.status(500).json(err)
-        } else if (err) {
-            return res.status(500).json(err)
+            file.mv("/home/cyberdevnet/mer-hacker-dev/api/backup_restore/meraki_restore_network.py")
+
+            res.send({
+                status: true,
+                message: "Backupfile uploaded"
+            })
+
         }
-        return res.status(200).send(req.file)
+    } catch (e) {
+        console.log("e", e)
+        res.status(500).send(e)
+    }
+})
 
-    })
-
-});
 
 
-// download build_meraki_switchconfig script
+
+// download build_meraki_switchconfig script 
 var storage2 = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, './api/cisco_meraki_migrate_tool/')
@@ -304,26 +319,10 @@ var storage2 = multer.diskStorage({
 
 var upload2 = multer({ storage2: storage2 }).single('file')
 
-// app.post('/upload_build_meraki_switchconfig', function (req, res) {
-
-//     upload2(req, res, function (err) {
-//         if (err instanceof multer.MulterError) {
-//             return res.status(500).json(err)
-//         } else if (err) {
-//             return res.status(500).json(err)
-//         }
-//         return res.status(200).send(req.file)
-
-//     })
-
-// });
 
 
 // upload backupfile for build_meraki_switchconfig
 
-app.use(fileUpload({
-    createParentPath: true
-}))
 
 app.post("/upload_backupfile", async (req, res) => {
     try {
@@ -356,7 +355,7 @@ app.post("/upload_backupfile", async (req, res) => {
 })
 
 
-// upload build_meraki_switchconfig script if modified from GUI
+// upload build_meraki_switchconfig script if modified by the AceEditor GUI
 
 app.post("/upload_build_meraki_switchconfig", async (req, res) => {
     try {

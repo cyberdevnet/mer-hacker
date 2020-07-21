@@ -58,8 +58,6 @@ def ios_to_meraki(serial_numbers):
                 file.write("#!/usr/bin/env python3\n")
                 file.write("#-*- coding: utf-8 -*-\n")
                 file.write("#\n")
-                file.write(
-                    "# Search for \"#restored\" and edit below that to control what is restored.\n")
                 file.write("#\n")
                 file.write("import os\n")
                 file.write("import argparse\n")
@@ -79,6 +77,10 @@ def ios_to_meraki(serial_numbers):
                 file.write("\t\t}\n")
                 file.write("\n")
                 file.write("\tsession = requests.Session()\n")
+                file.write("\n")
+                file.write("\n")
+                file.write(
+                    "# Configuring Meraki Switchport from a Cisco Ios running-config\n")
                 file.write("\n")
                 file.write("\n")
                 file.write("\ttry:\n")

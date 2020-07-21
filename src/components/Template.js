@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Switch, Route, NavLink } from "react-router-dom";
 import Select from "react-select";
 import ProtectedRoute from '../ProtectedRoute'
@@ -11,12 +11,15 @@ import PageNotFound from '../PageNotFound'
 import ToolsTemplate from "./ToolsTemplate";
 import AlertModal from "./AlertsModal";
 import Countdown from 'react-countdown';
+import ReactTooltip from 'react-tooltip'
 import "../styles/Template.css";
 
 
 
 
 export default function Template(ac, dc) {
+
+  const [navLinkStyle, setnavLinkStyle] = useState({ pointerEvents: 'none' })
 
   const ORGANIZATIONS = ac.dc.organizationList.map((opt, index) => ({
     label: opt.name,
@@ -47,7 +50,6 @@ export default function Template(ac, dc) {
     ac.dc.setisNetSelected(true);
     ac.dc.settriggerTopReports(ac.dc.triggerTopReports + 1);
   };
-
 
   return (
     <Router>
@@ -110,15 +112,30 @@ export default function Template(ac, dc) {
                   <i className="fa fa-desktop"></i> Home
                 </NavLink>
               </li>
-              <li>
-                <NavLink
-                  exact
-                  to='dashboard'
-                  href="#dashboard"
-                >
-                  <i className="fa fa-dashboard"></i> Dashboard
+
+              {ac.dc.isOrgSelected && ac.dc.isNetSelected ? (
+                <li >
+                  <ReactTooltip place="right" type="warning" effect="float" />
+                  <NavLink
+                    exact
+                    to='dashboard'
+                    href="#dashboard"
+                  >
+                    <i className="fa fa-dashboard"></i> Dashboard
                   </NavLink>
-              </li>
+                </li>) :
+                (<li data-tip="Select Organization and Network">
+                  <ReactTooltip place="right" type="warning" effect="float" />
+                  <NavLink
+                    style={navLinkStyle}
+                    exact
+                    to='dashboard'
+                    href="#dashboard"
+                  >
+                    <i className="fa fa-dashboard"></i> Dashboard
+                  </NavLink>
+                </li>)}
+
               <div className="select-organization">
                 <p>ORGANIZATION</p>
               </div>
@@ -140,16 +157,28 @@ export default function Template(ac, dc) {
                 classNamePrefix="foo"
               />
 
-
-              <li>
-                <NavLink
-                  exact
-                  to='tools'
-                  href="#null"
-                >
-                  <i className="fa fa-wrench"></i> Tools
+              {ac.dc.organizationID !== 0 && ac.dc.networkID !== 0 ? (
+                <li >
+                  <ReactTooltip place="right" type="warning" effect="float" />
+                  <NavLink
+                    exact
+                    to='tools'
+                    href="#null"
+                  >
+                    <i className="fa fa-wrench"></i> Tools
                   </NavLink>
-              </li>
+                </li>) :
+                (<li data-tip="Select Organization and Network">
+                  <ReactTooltip place="right" type="warning" effect="float" />
+                  <NavLink
+                    style={navLinkStyle}
+                    exact
+                    to='tools'
+                    href="#null"
+                  >
+                    <i className="fa fa-wrench"></i> Tools
+                  </NavLink>
+                </li>)}
             </ul>
           </div>
         </nav>

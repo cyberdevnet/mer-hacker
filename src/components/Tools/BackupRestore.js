@@ -127,6 +127,16 @@ export default function BackupRestore(ac) {
     element.click();
   }
 
+  // function used to upload the meraki_restore_network.py file on the xpress server
+  // after has been modified by the AceEditor GUI
+  const UploadModifiedScript = (value) => {
+    const data = new FormData()
+    const file = new Blob([value], { type: 'text/plain' });
+    data.append('file', file, 'meraki_restore_network.py')
+    axios.post("/upload", data)
+
+  }
+
 
 
   const isFirstRun = useRef(true);
@@ -228,14 +238,6 @@ export default function BackupRestore(ac) {
       setloadingButtonRestore(true);
       ac.dc.setshowRestorescript(false)
 
-      const data = new FormData()
-      const file = new Blob([ac.dc.restoreScript], { type: 'text/plain' });
-      data.append('file', file, 'meraki_restore_network.py')
-
-      axios.post("/upload", data, { // receive two parameter endpoint url ,form data 
-      })
-
-
       fetch("/run_restore/", {
         signal: signal,
         method: ["POST"],
@@ -283,14 +285,6 @@ export default function BackupRestore(ac) {
 
       setloadingButtonRestoreSwitch(true);
       ac.dc.setshowRestorescript(false)
-
-      const data = new FormData()
-      const file = new Blob([ac.dc.restoreScript], { type: 'text/plain' });
-      data.append('file', file, 'meraki_restore_network.py')
-
-      axios.post("/upload", data, { // receive two parameter endpoint url ,form data 
-      })
-
 
       fetch("/run_restore_switch/", {
         signal: signal,
@@ -556,7 +550,7 @@ export default function BackupRestore(ac) {
                   // ref="aceEditor"
                   mode="python"
                   theme="twilight"
-                  onChange={value => ac.dc.setrestoreScript(value)}
+                  onChange={value => { ac.dc.setrestoreScript(value); UploadModifiedScript(value) }}
                   name="ace-editor"
                   id="ace-editor"
                   width='auto'

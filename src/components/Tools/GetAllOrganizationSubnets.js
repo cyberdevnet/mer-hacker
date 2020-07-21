@@ -61,6 +61,7 @@ export default function GetAllOrganizationSubnets(ac) {
                 Nameobjects[x] = data.result[x].networkname;
               }
               const VLANS = Object.values(Vlanobjects);
+              console.log("APIcall -> VLANS", VLANS)
 
               let row = [];
               // eslint-disable-next-line

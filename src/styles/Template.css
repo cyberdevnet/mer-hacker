@@ -48,6 +48,15 @@ a {
   font-family: "Open Sans", sans-serif;
 }
 
+.sel_org {
+  width: 250px;
+  margin-left: 4px;
+}
+.sel_net {
+  width: 250px;
+  margin-left: 4px;
+}
+
 .foo__control.css-yk16xz-control {
   background-color: hsl(0, 0%, 24%);
 }

@@ -150,7 +150,7 @@ def get_devices():
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
             devices = dashboard.devices.getNetworkDevices(
-                data['networkId'])
+                data['NET_ID'])
             return {'devices': devices}
     except meraki.APIError as err:
         print('Error: ', err)
@@ -170,7 +170,7 @@ def get_subnets():
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
             vlans = dashboard.vlans.getNetworkVlans(
-                data['networkId'])
+                data['NET_ID'])
             return {'vlans': vlans}
     except meraki.APIError as err:
         print('Error: ', err)
@@ -186,11 +186,11 @@ def clients():
             global data
             data = request.get_json()
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
-            NET_ID = data['networkId']
+            NET_ID = data['NET_ID']
             return data
         else:
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
-            NET_ID = data['networkId']
+            NET_ID = data['NET_ID']
             dashboard = meraki.DashboardAPI(ARG_APIKEY)
             clients = dashboard.clients.getNetworkClients(NET_ID, perPage=1000,timespan=3600)
             return {'clients': clients}
@@ -499,6 +499,31 @@ def device_clients():
             dashboard = meraki.DashboardAPI(ARG_APIKEY)
             device_clients = dashboard.clients.getDeviceClients(SERIAL_NUM,timespan=1000)
             return {'device_clients': device_clients}
+    except meraki.APIError as err:
+        print('Error: ', err)
+        error = (err.message['errors'][0])
+        flash(error)
+        return {'error' : [render_template('flash_template.html'),err.status]}
+
+
+
+
+
+
+@ app.route('/client', methods=['GET', 'POST'])
+def client():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json()
+            return data
+        else:
+            ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
+            NET_ID = data['NET_ID']
+            CLIENT_ID = data['CLIENT_ID']
+            dashboard = meraki.DashboardAPI(ARG_APIKEY)
+            client = dashboard.clients.getNetworkClient(NET_ID, CLIENT_ID)
+            return {'client': client}
     except meraki.APIError as err:
         print('Error: ', err)
         error = (err.message['errors'][0])

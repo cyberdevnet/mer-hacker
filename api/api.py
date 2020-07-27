@@ -83,6 +83,18 @@ CORS(app)
 
 
 
+#  CLEAR debug_file after user has been logged out
+@app.route('/delete_debugfile', methods=['POST'])
+def delete_debugfile():
+    try:
+        with open(debug_file,'w'):
+            pass
+    except Exception as error:
+        print(error)
+    return {'delete_debugfile': 'Debugfile cleared!'}
+
+
+
 
 @app.route('/organizations', methods=['GET', 'POST'])
 def get_organizations():
@@ -187,6 +199,9 @@ def clients():
         error = (err.message['errors'][0])
         flash(error)
         return {'error' : [render_template('flash_template.html'),err.status]}
+
+
+
 
 
 @app.route('/device_status', methods=['GET', 'POST'])
@@ -353,11 +368,7 @@ def run_backup():
         # error = (err.message['errors'][0])
         flash(err)
         return {'error' : [render_template('flash_template.html')]}
-    # except meraki.APIError as err:
-    #     print('Error: ', err)
-    #     error = (err.message['errors'][0])
-    #     flash(error)
-    #     return {'error' : [render_template('flash_template.html'),err.status]}
+
 
 
 
@@ -447,6 +458,52 @@ def migrate_switch_config():
         return {'error' : [render_template('flash_template.html')]}
 
 
+@ app.route('/lldp_cdp/', methods=['GET', 'POST'])
+def lldp_cdp():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json()
+            return {'data': 'ciao'}
+        else:
+            NET_ID = data['NET_ID']
+            ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
+            SERIAL_NUM = data['SERIAL_NUM']
+            TIME_SPAN = 7200
+            dashboard = meraki.DashboardAPI(ARG_APIKEY, output_log=False)
+
+            lldp_cdp = dashboard.devices.getNetworkDeviceLldp_cdp(
+                    NET_ID,SERIAL_NUM, timespan=TIME_SPAN)
+            return {'lldp_cdp': lldp_cdp}
+    # except Exception as err:
+    #     print('Exception: ',err)
+    #     flash(err)
+    #     return {'error' : [render_template('flash_template.html')]}
+    except meraki.APIError as err:
+        print('Error: ', err)
+        error = (err.message['errors'][0])
+        flash(error)
+        return {'error' : [render_template('flash_template.html'),err.status]}
+
+
+@ app.route('/device_clients', methods=['GET', 'POST'])
+def device_clients():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json()
+            return data
+        else:
+            ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
+            SERIAL_NUM = data['SERIAL_NUM']
+            dashboard = meraki.DashboardAPI(ARG_APIKEY)
+            device_clients = dashboard.clients.getDeviceClients(SERIAL_NUM,timespan=1000)
+            return {'device_clients': device_clients}
+    except meraki.APIError as err:
+        print('Error: ', err)
+        error = (err.message['errors'][0])
+        flash(error)
+        return {'error' : [render_template('flash_template.html'),err.status]}
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000)

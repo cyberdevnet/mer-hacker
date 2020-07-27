@@ -198,39 +198,6 @@ app.get("/get-api-key", async (req, res, next) => {
 });
 
 
-// app.get('/get-api-key', (req, res) => {
-//     res.send(apiKey);
-//     res.end();
-
-// });
-
-
-// app.post('/post-api-key', function (req, res) {
-//     var key = req.body;
-//     apiKey = key.key.slice(0)
-//     res.send(req.body);
-
-// })
-
-
-
-
-
-// var apiKey = ['test'];
-
-// app.post('/post-api-key', function (req, res) {
-//     var key = req.body;
-//     apiKey = key.key.slice(0)
-//     res.send(req.body);
-
-// })
-
-// app.get('/get-api-key', (req, res) => {
-//     res.send(apiKey);
-//     res.end();
-
-// });
-
 
 
 
@@ -382,11 +349,12 @@ app.post("/upload_build_meraki_switchconfig", async (req, res) => {
 })
 
 
+
 // DELETE backupfile for build_meraki_switchconfig
 
 app.post("/delete_backupfile", async (req, res) => {
     try {
-        // delete file named 'sample.txt'
+        // delete file named 'backup.txt'
         fs.unlink("/home/cyberdevnet/mer-hacker-dev/api/cisco_meraki_migrate_tool/config_backups/backups/backup.txt", function (err) {
             if (err) {
                 console.log(err);

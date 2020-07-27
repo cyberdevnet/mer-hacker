@@ -84,6 +84,12 @@ export default function Dashboard(ac) {
                   }
                 }
 
+                // const [deviceTypeData, setdeviceTypeData] = useState([
+                //   { id: 1, device_type: 5, fill: "#f36a5a", label: 5 },
+                //   { id: 2, device_type: 10, fill: "#FABE28", label: 10 },
+                //   { id: 3, device_type: 20, fill: "#1ABC9C", label: 20 },
+                // ])
+
                 //Find index of specific object using findIndex method.    
                 const objID1 = deviceTypeData.findIndex((obj => obj.id === 1));
                 const objID2 = deviceTypeData.findIndex((obj => obj.id === 2));

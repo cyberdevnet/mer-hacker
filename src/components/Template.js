@@ -10,7 +10,8 @@ import Logout from "./Logout";
 import PageNotFound from '../PageNotFound'
 import ToolsTemplate from "./ToolsTemplate";
 import AlertModal from "./AlertsModal";
-import Countdown from 'react-countdown';
+import Topology from './Topology'
+// import Countdown from 'react-countdown';
 import ReactTooltip from 'react-tooltip'
 import "../styles/Template.css";
 
@@ -77,7 +78,7 @@ export default function Template(ac, dc) {
               <i className="fa fa-bars icon" style={ac.dc.collapseButton}></i>
             </div>
           </div>
-          <div className="nav navbar-top-links navbar-right">
+          {/* <div className="nav navbar-top-links navbar-right">
             {ac.dc.isSignedIn ? (
               <div>
                 <div className='timeout-wrapper'>
@@ -86,7 +87,7 @@ export default function Template(ac, dc) {
                 <i className="fa fa-gear fa-spin" style={{ fontSize: "24px" }}></i>
               </div>
             ) : (<div></div>)}
-          </div>
+          </div> */}
 
         </nav>
 
@@ -113,7 +114,7 @@ export default function Template(ac, dc) {
                 </NavLink>
               </li>
 
-              {ac.dc.isOrgSelected && ac.dc.isNetSelected ? (
+              {ac.dc.organizationID && ac.dc.networkID ? (
                 <li >
                   <ReactTooltip place="right" type="warning" effect="float" />
                   <NavLink
@@ -140,6 +141,7 @@ export default function Template(ac, dc) {
                 <p>ORGANIZATION</p>
               </div>
               <Select
+                className='sel_org'
                 options={ORGANIZATIONS}
                 placeholder={ac.dc.organization}
                 onChange={HandleOrganization}
@@ -151,6 +153,7 @@ export default function Template(ac, dc) {
                 <p>NETWORK</p>
               </div>
               <Select
+                className='sel_net'
                 options={NETWORKS}
                 placeholder={ac.dc.network}
                 onChange={HandleNetwork}
@@ -179,6 +182,28 @@ export default function Template(ac, dc) {
                     <i className="fa fa-wrench"></i> Tools
                   </NavLink>
                 </li>)}
+              {ac.dc.organizationID !== 0 && ac.dc.networkID !== 0 ? (
+                <li >
+                  <ReactTooltip place="right" type="warning" effect="float" />
+                  <NavLink
+                    exact
+                    to='topology'
+                    href="#topology"
+                  >
+                    <i className="fa fa-desktop"></i> Clients Topology
+                  </NavLink>
+                </li>) :
+                (<li data-tip="Select Organization and Network">
+                  <ReactTooltip place="right" type="warning" effect="float" />
+                  <NavLink
+                    style={navLinkStyle}
+                    exact
+                    to='topology'
+                    href="#topology"
+                  >
+                    <i className="fa fa-desktop"></i> Clients Topology
+                  </NavLink>
+                </li>)}
             </ul>
           </div>
         </nav>
@@ -196,6 +221,7 @@ export default function Template(ac, dc) {
             <ProtectedRoute exact path='/home' component={Home} {...ac.dc} dc={dc} />
             <ProtectedRoute exact path='/dashboard' component={Dashboard} {...ac.dc} dc={dc} />
             <ProtectedRoute exact path='/tools' component={ToolsTemplate} {...ac.dc} dc={dc} />
+            <ProtectedRoute exact path='/topology' component={Topology} {...ac.dc} dc={dc} />
             <ProtectedRoute exact path='/logout' component={Logout} {...ac.dc} dc={dc} />
 
 

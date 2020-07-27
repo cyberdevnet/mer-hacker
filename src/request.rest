@@ -61,4 +61,4 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:3001/upload_build_meraki_switchconfig
+POST http://localhost:3001/delete_debugfile

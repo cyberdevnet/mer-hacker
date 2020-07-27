@@ -25,6 +25,13 @@ module.exports = function (app) {
     })
   );
   app.use(
+    "/delete_backupfile",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
     "/upload",
     createProxyMiddleware({
       target: "http://127.0.0.1:3001",
@@ -157,6 +164,13 @@ module.exports = function (app) {
     })
   );
   app.use(
+    "/device_clients",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
     "/device_status",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
@@ -235,6 +249,20 @@ module.exports = function (app) {
   );
   app.use(
     "/run_migrate_switch_config/",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/delete_debugfile",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/lldp_cdp/",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,

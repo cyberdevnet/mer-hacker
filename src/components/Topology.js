@@ -8,18 +8,28 @@ import Select from "react-select";
 export default function Topology(ac) {
     const [switchTopologyModal, setswitchTopologyModal] = useState(false);
     const [trigger, settrigger] = useState(1)
+    const [triggerClient, settriggerClient] = useState(1)
     const [loading, setloading] = useState(false);
     const [deviceSerial, setdeviceSerial] = useState([])
     const [sourceDeviceName, setsourceDeviceName] = useState([])
     const [isDeviceSelected, setisDeviceSelected] = useState(false)
     const [sourceDeviceIp, setsourceDeviceIp] = useState([])
     const [sourceDeviceMac, setsourceDeviceMac] = useState([])
+    const [sourceDeviceModel, setsourceDeviceModel] = useState([])
     const [graph, setgraph] = useState([])
     const [modalModel, setmodalModel] = useState([])
-
+    console.log("Topology -> modalModel", modalModel)
     const [model, setmodel] = useState([])
-
     const [data, setdata] = useState({ 'nodes': [], 'links': [] })
+    const [nodeslist, setnodeslist] = useState([])
+    const [clientID, setclientID] = useState([])
+    console.log("Topology -> clientID", clientID)
+
+    const firewallSVG = 'https://img.icons8.com/office/52/000000/firewall.png'
+    const switchSVG = 'https://img.icons8.com/dusk/64/000000/switch.png'
+    const apSVG = 'https://img.icons8.com/plasticine/100/000000/wifi.png'
+    const nodeSVG = 'https://img.icons8.com/dusk/48/000000/filled-circle.png'
+
 
 
     const DEVICELIST = ac.deviceList.map((opt, index) => ({
@@ -29,7 +39,20 @@ export default function Topology(ac) {
         serial: opt.serial,
         ipaddress: opt.lanIp,
         mac: opt.mac,
+        model: opt.model
     }));
+
+    const NODESLIST = nodeslist.map((opt, index) => ({
+        label: opt.dhcpHostname,
+        // value: index,
+        id: index,
+        // serial: opt.serial,
+        // ipaddress: opt.lanIp,
+        // mac: opt.mac,
+        // model: opt.model
+    }));
+
+
 
     const isFirstRun = useRef(true);
     useEffect(() => {
@@ -48,12 +71,6 @@ export default function Topology(ac) {
                 setmodalModel([])
                 setloading(true);
                 let Device_Row = []
-                // let serials = []
-                // for (let i = 0; i < ac.deviceList.length; i++) {
-                //     const serial = ac.deviceList[i].serial
-                //     console.log("APIcall -> ac.deviceList[i]", ac.deviceList[i])
-                //     serials.push(serial)
-                // }
                 try {
                     await fetch("/device_clients", {
                         method: ["POST"],
@@ -79,10 +96,23 @@ export default function Topology(ac) {
                                 </div>)
                             } else {
                                 const DEVICE_OBJ = Object.values(device_clients.device_clients)
+                                setnodeslist(device_clients.device_clients)
                                 Device_Row.push(DEVICE_OBJ)
 
                                 //push source nodes
-                                data.nodes.push({ id: 0, name: sourceDeviceName });
+
+                                if (sourceDeviceModel.startsWith("MX") || sourceDeviceModel.startsWith("Z")) {
+                                    data.nodes.push({ id: 0, name: sourceDeviceName, size: 700, svg: firewallSVG })
+                                }
+
+                                else if (sourceDeviceModel.startsWith("MS")) {
+                                    data.nodes.push({ id: 0, name: sourceDeviceName, size: 700, svg: switchSVG })
+                                }
+                                else if (sourceDeviceModel.startsWith("MR")) {
+                                    data.nodes.push({ id: 0, name: sourceDeviceName, size: 700, svg: apSVG })
+                                }
+
+                                // data.nodes.push({ id: 0, name: sourceDeviceName, svg: firewallSVG });
                                 modalModel.push({
                                     description: sourceDeviceName,
                                     name: sourceDeviceName,
@@ -100,7 +130,7 @@ export default function Topology(ac) {
                                 Device_Row.map((item) => {
                                     item.forEach((device, index) => {
                                         let id = index + 1
-                                        data.nodes.push({ id: id, name: device.dhcpHostname });
+                                        data.nodes.push({ id: id, name: device.dhcpHostname, svg: nodeSVG });
                                         data.links.push({ source: 0, target: id });
                                         modalModel.push({
                                             description: device.description,
@@ -116,7 +146,12 @@ export default function Topology(ac) {
 
                                     })
                                 })
+
+
+                                // console.log("Topology -> modalModel", modalModel)
+
                             }
+                            setmodalModel(modalModel)
                         })
                         .then(() => {
                             setgraph(
@@ -160,10 +195,68 @@ export default function Topology(ac) {
         // eslint-disable-next-line
     }, [trigger]);
 
+
+
+
+
+
+    const isFirstRunClient = useRef(true);
+    useEffect(() => {
+        const abortController = new AbortController()
+        const signal = abortController.signal
+        if (isFirstRunClient.current) {
+            isFirstRunClient.current = false;
+            return;
+        }
+        async function APIcallClient() {
+            try {
+                await fetch("/client", {
+                    method: ["POST"],
+                    cache: "no-cache",
+                    headers: {
+                        content_type: "application/json",
+                    },
+                    body: JSON.stringify({
+                        "X-Cisco-Meraki-API-Key": `${ac.apiKey}`,
+                        NET_ID: `${ac.networkID}`,
+                        CLIENT_ID: `${clientID}`
+                    })
+                }).then((response) => {
+                    return response.json;
+                });
+                await fetch("/client", { signal: signal })
+                    .then((res) => { return res.json() })
+                    .then((client) => {
+                        if (client.error) {
+                            ac.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+                                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                                {client.error[0]}
+                            </div>)
+                        } else {
+
+                            console.log("APIcallClient -> client", client.client)
+
+                        }
+                    })
+
+            } catch (err) {
+                console.log("This is the error:", err);
+            }
+
+        }
+        APIcallClient();
+        return function cleanup() {
+            abortController.abort()
+            console.log("cleanup -> abortController APIcallClient")
+        }
+        // eslint-disable-next-line
+    }, [triggerClient]);
+
+
+
+
     // the graph configuration, you only need to pass down properties
     // that you want to override, otherwise default ones will be used
-
-
     const myConfig = {
         nodeHighlightBehavior: true,
         panAndZoom: true,
@@ -178,10 +271,13 @@ export default function Topology(ac) {
         },
         node: {
             color: "lightgreen",
-            size: 800,
+            size: 300,
             highlightStrokeColor: "blue",
             labelProperty: "name",
             renderLabel: true,
+            fontSize: 12,
+            highlightFontSize: 14,
+            highlightFontWeight: 'bold',
             // viewGenerator: node => <CustomNode person={node} />,
         },
         link: {
@@ -200,7 +296,9 @@ export default function Topology(ac) {
     const onClickNode = function (nodeId) {
         console.log(`Clicked node ${nodeId}`);
         setswitchTopologyModal(true)
-        setmodel(modalModel[`${nodeId}`])
+        setmodel(modalModel[nodeId])
+        setclientID(modalModel[nodeId].id)
+        // setmodel(modalModel[`${nodeId}`])
 
     };
 
@@ -243,19 +341,32 @@ export default function Topology(ac) {
         console.log(`Node ${nodeId} is moved to new position. New position is x= ${x} y= ${y}`);
     };
 
-    const dc = {
-        data, setdata, switchTopologyModal,
-        setswitchTopologyModal, modalModel, setmodalModel, model, setmodel, sourceDeviceName
-    }
+
 
     const HandleDevices = (opt) => {
         setdeviceSerial(opt.serial);
         setsourceDeviceName(opt.label)
         setsourceDeviceIp(opt.ipaddress)
         setsourceDeviceMac(opt.mac)
+        setsourceDeviceModel(opt.model)
         setisDeviceSelected(true)
 
     };
+    const HandleNodes = (opt) => {
+        let index = opt.id + 1
+        setmodel(modalModel[index])
+        setclientID(modalModel[index].id)
+        setswitchTopologyModal(true)
+
+
+
+    };
+
+    const dc = {
+        data, setdata, switchTopologyModal,
+        setswitchTopologyModal, modalModel, setmodalModel,
+        model, setmodel, sourceDeviceName
+    }
 
     return (
         <div id="page-inner-tool-templates">
@@ -329,6 +440,16 @@ export default function Topology(ac) {
                                 // onMenuOpen={() => ac.dc.settriggerSelectOrg(ac.dc.triggerSelectOrg + 1)}
                                 />
                             </div>
+                            <div>
+                                <Select
+                                    className='select-tolopology'
+                                    options={NODESLIST}
+                                    placeholder='Filter Node'
+                                    onChange={HandleNodes}
+                                    classNamePrefix="topology"
+                                // onMenuOpen={() => ac.dc.settriggerSelectOrg(ac.dc.triggerSelectOrg + 1)}
+                                />
+                            </div>
                             <button
                                 className="btn btn-primary"
                                 onClick={!loading ? (e) => settrigger(trigger + 1) : null}
@@ -351,6 +472,7 @@ export default function Topology(ac) {
                         </div>
                     </div>
                 </div>
+                <button onClick={(e) => settriggerClient(triggerClient + 1)}>CALL CLIENT</button>
                 {graph}
                 {switchTopologyModal ? (<TopologyModal dc={dc} />) : (<div></div>)}
             </div>

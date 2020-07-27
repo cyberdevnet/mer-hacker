@@ -32,7 +32,7 @@ export default function Dashboard(ac) {
   const APIbody = {
     "X-Cisco-Meraki-API-Key": `${ac.apiKey}`,
     organizationId: `${ac.organizationID}`,
-    networkId: `${ac.networkID}`,
+    NET_ID: `${ac.networkID}`,
   };
 
 

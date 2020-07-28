@@ -9,7 +9,7 @@ export default function TopologyModal(ac) {
     return (
         <Dialog
             open={true}
-        // fullWidth
+            fullWidth
         // onClose={handleClose}
         // aria-labelledby="alert-dialog-title"
         // aria-describedby="alert-dialog-description"
@@ -28,7 +28,8 @@ export default function TopologyModal(ac) {
                                 <span>&times;</span>
                             </button>
                         </div>
-                        <div className="modal-body text-center">
+                        <div className="modal-body text-center"
+                            style={{ fontSize: '11px', color: 'darkslategray' }}>
                             <h4>Client Details</h4>
                             <table className="table table-striped">
                                 <thead >
@@ -70,8 +71,55 @@ export default function TopologyModal(ac) {
                                     <tr>
                                         <th scope="row">MAC address</th>
                                         <td>{ac.dc.model.mac}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">CDP</th>
+                                        <td>{ac.dc.model.cdp}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">clientVpnConnections</th>
+                                        <td>{ac.dc.model.clientVpnConnections}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">ip6</th>
+                                        <td>{ac.dc.model.ip6}</td>
+                                    </tr>
 
-
+                                    <tr>
+                                        <th scope="row">lldp</th>
+                                        <td>{ac.dc.model.lldp}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">manufacturer</th>
+                                        <td>{ac.dc.model.manufacturer}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">os</th>
+                                        <td>{ac.dc.model.os}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">recentDeviceMac</th>
+                                        <td>{ac.dc.model.recentDeviceMac}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">smInstalled</th>
+                                        <td>{ac.dc.model.smInstalled}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">ssid</th>
+                                        <td>{ac.dc.model.ssid}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">status</th>
+                                        <td>{ac.dc.model.status}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">user</th>
+                                        <td>{ac.dc.model.user}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">wirelessCapabilities</th>
+                                        <td>{ac.dc.model.wirelessCapabilities}</td>
                                     </tr>
                                 </tbody>
                             </table>

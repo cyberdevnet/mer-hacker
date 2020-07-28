@@ -506,10 +506,6 @@ def device_clients():
         return {'error' : [render_template('flash_template.html'),err.status]}
 
 
-
-
-
-
 @ app.route('/client', methods=['GET', 'POST'])
 def client():
     try:
@@ -524,6 +520,40 @@ def client():
             dashboard = meraki.DashboardAPI(ARG_APIKEY)
             client = dashboard.clients.getNetworkClient(NET_ID, CLIENT_ID)
             return {'client': client}
+    except Exception as err:
+        print('Exception: ',err)
+        # flash(err)
+        # return {'error' : [render_template('flash_template.html')]}
+
+
+@ app.route('/site2site', methods=['GET', 'POST'])
+def site2site():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json()
+            return data
+        else:
+            ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
+            NET_ID_LIST = data['NET_ID_LIST']
+            site2site=[]
+            for ID in NET_ID_LIST:
+                print("CALLED ID", ID)
+                headers = {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "X-Cisco-Meraki-API-Key": ARG_APIKEY
+                        }
+                NET_ID = ID
+                url = f"https://api.meraki.com/api/v0/networks/{NET_ID}/siteToSiteVpn"
+                response = requests.request('GET', url, headers=headers)
+                print(json.loads(response.text))
+                # dashboard = meraki.DashboardAPI(ARG_APIKEY)
+                # site2sitecall = dashboard.networks.getNetworkSiteToSiteVpn(NET_ID)
+                print(response.text.encode('utf8'))
+                site2site.append(json.loads(response.text))
+                # print(json.loads(response.text))
+            return {'site2site': site2site}
     except meraki.APIError as err:
         print('Error: ', err)
         error = (err.message['errors'][0])

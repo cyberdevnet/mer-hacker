@@ -275,5 +275,12 @@ module.exports = function (app) {
       changeOrigin: true,
     })
   );
+  app.use(
+    "/site2site",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
 
 };

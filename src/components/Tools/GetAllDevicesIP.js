@@ -13,7 +13,7 @@ export default function GetAllDevicesIP(ac) {
   const APIbody = {
     "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
     organizationId: `${ac.dc.organizationID}`,
-    networkId: `${ac.dc.networkID}`,
+    NET_ID: `${ac.dc.networkID}`,
   };
 
   const isFirstRun = useRef(true);

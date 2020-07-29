@@ -19,7 +19,7 @@ import "../styles/Template.css";
 
 
 export default function Template(ac, dc) {
-
+  // eslint-disable-next-line
   const [navLinkStyle, setnavLinkStyle] = useState({ pointerEvents: 'none' })
 
   const ORGANIZATIONS = ac.dc.organizationList.map((opt, index) => ({

@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { Graph } from "react-d3-graph";
 import TopologyModal from "./TopologyModal";
+import TopologyVPNModal from './TopologyVPNModal'
 import Select from "react-select";
 
 
 export default function Topology(ac) {
     const [switchTopologyModal, setswitchTopologyModal] = useState(false);
+    const [switchTopologyVPNModal, setswitchTopologyVPNModal] = useState(false);
     const [trigger, settrigger] = useState(1)
     const [loading, setloading] = useState(false);
     const [deviceSerial, setdeviceSerial] = useState([])
@@ -16,16 +18,18 @@ export default function Topology(ac) {
     const [sourceDeviceModel, setsourceDeviceModel] = useState([])
     const [graph, setgraph] = useState([])
     const [showFilter, setshowFilter] = useState(false)
+    const [showVPNFilter, setshowVPNFilter] = useState(false)
     const [modalModel, setmodalModel] = useState([])
-    const [VPNModel, setVPNModel] = useState([])
-    console.log("Topology -> VPNModel", VPNModel)
+    let VPNModelInitial = []
+    const [VPNModel, setVPNModel] = useState(VPNModelInitial)
+    // eslint-disable-next-line
     const [ClientModel, setClientModel] = useState([])
     const [model, setmodel] = useState([])
+    const [modelVPN, setmodelVPN] = useState([])
     const [data, setdata] = useState({ 'nodes': [], 'links': [] })
-    // const dataVpn = { 'nodes': [], 'links': [] }
     const [dataVpn, setdataVpn] = useState({ 'nodes': [], 'links': [] })
-    console.log("Topology -> dataVpn", dataVpn)
     const [nodeslist, setnodeslist] = useState([])
+    // eslint-disable-next-line
     const [clientID, setclientID] = useState([])
     const [vpnTopology, setvpnTopology] = useState(false)
     const [clientTopology, setclientTopology] = useState(false)
@@ -44,15 +48,11 @@ export default function Topology(ac) {
             setclientTopology(true);
             setvpnTopology(false);
             setgraph([])
-            // setclientTopology({ 1: true });
-            // setvpnTopology({ 2: false });
 
         } else if (selectedValue === "2") {
             setvpnTopology(true);
             setclientTopology(false);
             setgraph([])
-            // setvpnTopology({ 2: true });
-            // setclientTopology({ 1: false });
 
         }
     };
@@ -75,6 +75,13 @@ export default function Topology(ac) {
         // ipaddress: opt.lanIp,
         // mac: opt.mac,
         // model: opt.model
+    }));
+
+
+    const VPNNODESLIST = dataVpn.nodes.map((opt, index) => ({
+        label: opt.name,
+        id: index,
+
     }));
 
 
@@ -188,16 +195,6 @@ export default function Topology(ac) {
                                         data={data}
                                         config={myConfig}
                                         onClickNode={onClickNode}
-                                    // onDoubleClickNode={onDoubleClickNode}
-                                    // onRightClickNode={onRightClickNode}
-                                    // onClickGraph={onClickGraph}
-                                    // onClickLink={onClickLink}
-                                    // onRightClickLink={onRightClickLink}
-                                    // onMouseOverNode={onMouseOverNode}
-                                    // onMouseOutNode={onMouseOutNode}
-                                    // onMouseOverLink={onMouseOverLink}
-                                    // onMouseOutLink={onMouseOutLink}
-                                    // onNodePositionChange={onNodePositionChange}
                                     />)
                                 setshowFilter(true)
                                 setloading(false)
@@ -216,7 +213,6 @@ export default function Topology(ac) {
                 let NET_ID_LIST = []
                 let NET_NAME_LIST = []
                 let VPN_Row = []
-                let VPN = []
                 ac.combindeNetworksIDList.map(async (item, index) => {
                     NET_ID_LIST.push(item.id)
                     NET_NAME_LIST.push(item.name)
@@ -253,10 +249,6 @@ export default function Topology(ac) {
                                 return function cleanup() {
                                     abortController.abort()
                                     console.log("cleanup -> abortController")
-                                    // setdataVpn({
-                                    //     'nodes': [],
-                                    //     'links': []
-                                    // })
                                 }
 
                             } else {
@@ -264,31 +256,34 @@ export default function Topology(ac) {
                                 const VPN_OBJ = Object.values(site2site.site2site)
                                 VPN_Row.push(VPN_OBJ)
 
-
-                                VPN_Row.map((item) => {
+                                // eslint-disable-next-line
+                                VPN_Row.map((item, x) => {
                                     item.forEach((node, index) => {
-
 
 
                                         if (node.mode === "hub") {
                                             dataVpn.nodes.push({ id: 0, name: NET_NAME_LIST[index], size: 700, svg: firewallSVG })
-                                            // dataVpn.links.push({ source: 0, target: index });
+                                            VPNModel.push({
+                                                subnets: node.subnets,
+                                                mode: node.mode,
+                                                name: NET_NAME_LIST[index],
+                                                index: index
+                                            }
+                                            )
                                         } else if (node.mode === "spoke") {
                                             dataVpn.nodes.push({ id: index, name: NET_NAME_LIST[index], svg: nodeSVG });
                                             dataVpn.links.push({ source: 0, target: index });
+                                            VPNModel.push({
+                                                subnets: node.subnets,
+                                                mode: node.mode,
+                                                name: NET_NAME_LIST[index],
+                                                index: index
+                                            }
+                                            )
 
                                         } else {
                                             console.log('non Meraki VPN');
                                         }
-
-                                        VPNModel.push({
-                                            subnets: node.subnets,
-                                            mode: node.mode,
-                                            name: NET_NAME_LIST[index],
-                                            index: index
-                                        }
-                                        )
-
                                     })
                                 })
 
@@ -302,9 +297,10 @@ export default function Topology(ac) {
                                     id="graph-id" // id is mandatory, if no id is defined rd3g will throw an error
                                     data={dataVpn}
                                     config={myConfig}
-                                    onClickNode={onClickNode}
+                                    onClickNode={onClickNodeVPN}
                                 />)
                             setloading(false)
+                            setshowVPNFilter(true)
                         })
 
                 } catch (err) {
@@ -314,10 +310,6 @@ export default function Topology(ac) {
                             abortController.abort()
                             console.log("cleanup -> abortController")
                             setloading(false)
-                            // setdataVpn({
-                            //     'nodes': [],
-                            //     'links': []
-                            // })
                         }
                     }
 
@@ -332,24 +324,12 @@ export default function Topology(ac) {
                 'nodes': [],
                 'links': []
             })
-            // setdataVpn({
-            //     'nodes': [],
-            //     'links': []
-            // })
         }
         // eslint-disable-next-line
     }, [trigger]);
 
-
-
-
-
-
-
-
     async function APIcallClient(index) {
         //clearing the ClientModel array to avoid duplicate
-        // ClientModel.pop()
         setclientID(modalModel[index].id)
 
         try {
@@ -460,58 +440,16 @@ export default function Topology(ac) {
     };
 
 
-    // graph event callbacks
-    // const onClickGraph = function () {
-    //     console.log(`Clicked the graph background`);
-
-    // };
-
     const onClickNode = function (nodeId) {
-        console.log(`Clicked node ${nodeId}`);
         let index = nodeId
         APIcallClient(index)
     };
 
 
-    // const onDoubleClickNode = function (nodeId) {
-    //     console.log(`Double clicked node ${nodeId}`);
-    // };
-
-    // const onRightClickNode = function (event, nodeId) {
-    //     console.log(`Right clicked node ${nodeId}`);
-    // };
-
-    // const onMouseOverNode = function (nodeId) {
-    //     console.log(`Mouse over node ${nodeId}`);
-
-    // };
-
-    // const onMouseOutNode = function (nodeId) {
-    //     console.log(`Mouse out node ${nodeId}`);
-
-    // };
-
-    // const onClickLink = function (source, target) {
-    //     console.log(`Clicked link between ${source} and ${target}`);
-    // };
-
-    // const onRightClickLink = function (event, source, target) {
-    //     console.log(`Right clicked link between ${source} and ${target}`);
-    // };
-
-    // const onMouseOverLink = function (source, target) {
-    //     console.log(`Mouse over in link between ${source} and ${target}`);
-    // };
-
-    // const onMouseOutLink = function (source, target) {
-    //     console.log(`Mouse out link between ${source} and ${target}`);
-    // };
-
-    // const onNodePositionChange = function (nodeId, x, y) {
-    //     console.log(`Node ${nodeId} is moved to new position. New position is x= ${x} y= ${y}`);
-    // };
-
-
+    const onClickNodeVPN = function (nodeId) {
+        setmodelVPN(VPNModel[nodeId])
+        setswitchTopologyVPNModal(true)
+    };
 
     const HandleDevices = (opt) => {
         setdeviceSerial(opt.serial);
@@ -526,38 +464,40 @@ export default function Topology(ac) {
         setshowFilter(false)
 
     };
+
     const HandleNodes = (opt) => {
         let index = opt.id + 1
         APIcallClient(index)
     };
 
 
+    const HandleVPNNodes = (opt) => {
+        onClickNodeVPN(opt.id)
+    };
 
 
 
-    const LoadTopology = (prevState) => {
+
+
+    const LoadTopology = (prevState, id) => {
         settrigger(trigger + 1)
         setdataVpn((prevState) => ({
             ...prevState,
             'nodes': [], 'links': []
 
         }));
-        // setVPNModel((prevState) => ({
-        //     ...prevState,
-        //     subnets: '',
-        //     mode: '',
-        //     name: '',
-        //     index: ''
-
-
-        // }));
+        const newList = VPNModel.filter((item) => item.id !== id)
+        setVPNModel(newList)
+        setshowVPNFilter(false)
 
     };
 
     const dc = {
         data, setdata, switchTopologyModal,
         setswitchTopologyModal, modalModel, setmodalModel,
-        model, setmodel, sourceDeviceName
+        model, setmodel, sourceDeviceName, VPNModel, setVPNModel,
+        switchTopologyVPNModal, setswitchTopologyVPNModal,
+        modelVPN, setmodelVPN
     }
 
     return (
@@ -582,8 +522,8 @@ export default function Topology(ac) {
                     <div className="board">
                         <div className="panel panel-primary">
                             <div className="number">
-                                <h3 className="h3-dashboard">{ac.organizationID}</h3>
-                                <small>Organization ID</small>
+                                <h3 className="h3-dashboard">{ac.organization}</h3>
+                                <small>Organization</small>
                             </div>
                             <div className="icon">
                                 <i className="fa fa-id-card-o fa-5x blue"></i>
@@ -635,6 +575,21 @@ export default function Topology(ac) {
                                     <option value="2">VPN Topology</option>
                                 </select>
                             </div>
+                            {vpnTopology ? (
+                                <div>
+                                    <div>
+                                        {showVPNFilter ? (
+                                            <Select
+                                                className='select-tolopology'
+                                                options={VPNNODESLIST}
+                                                placeholder='Filter Node'
+                                                onChange={HandleVPNNodes}
+                                                classNamePrefix="topology"
+                                            />) : (<div></div>)}
+
+                                    </div>
+                                </div>
+                            ) : (<div></div>)}
                             {clientTopology ? (
                                 <div>
                                     <Select
@@ -679,6 +634,7 @@ export default function Topology(ac) {
                 </div>
                 {graph}
                 {switchTopologyModal ? (<TopologyModal dc={dc} />) : (<div></div>)}
+                {switchTopologyVPNModal ? (<TopologyVPNModal dc={dc} />) : (<div></div>)}
             </div>
         </div>
     )

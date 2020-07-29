@@ -155,6 +155,7 @@ export default function TrafficAnalysis(ac) {
       setmapROW1([]);
       setshowtable(false);
       ac.dc.setflashMessages(null);
+      ac.dc.setloadingButton(false);
     };
     // eslint-disable-next-line
   }, [trigger]);

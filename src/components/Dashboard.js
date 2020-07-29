@@ -207,7 +207,7 @@ export default function Dashboard(ac) {
                       wan1Ip: item.wan1Ip,
                       wan2Ip: item.wan2Ip,
                       serial: item.serial,
-                      usingCellularFailover: <span className="glyphicon glyphicon-check"></span>
+                      usingCellularFailover: <span className="glyphicon glyphicon-check" style={{ color: '#1ABC9C' }}></span>
                     })
                   } else {
                     row.push({

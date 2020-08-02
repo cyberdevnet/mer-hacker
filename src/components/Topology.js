@@ -3,6 +3,10 @@ import { Graph } from "react-d3-graph";
 import TopologyModal from "./TopologyModal";
 import TopologyVPNModal from './TopologyVPNModal'
 import Select from "react-select";
+import Tree from 'react-d3-tree';
+import ReactTooltip from 'react-tooltip'
+import 'react-tree-graph/dist/style.css'
+import '../styles/Topology.css'
 
 
 export default function Topology(ac) {
@@ -17,6 +21,7 @@ export default function Topology(ac) {
     const [sourceDeviceMac, setsourceDeviceMac] = useState([])
     const [sourceDeviceModel, setsourceDeviceModel] = useState([])
     const [graph, setgraph] = useState([])
+    const [tree, settree] = useState([])
     const [showFilter, setshowFilter] = useState(false)
     const [showVPNFilter, setshowVPNFilter] = useState(false)
     const [modalModel, setmodalModel] = useState([])
@@ -33,29 +38,28 @@ export default function Topology(ac) {
     const [clientID, setclientID] = useState([])
     const [vpnTopology, setvpnTopology] = useState(false)
     const [clientTopology, setclientTopology] = useState(false)
+    const [switchGraph, setswitchGraph] = useState(false)
+    const [myTreeData, setmyTreeData] = useState([])
+    const [pathType, setpathType] = useState('elbow')
+    console.log("Topology -> pathType", pathType)
 
 
     const firewallSVG = 'https://img.icons8.com/office/52/000000/firewall.png'
     const switchSVG = 'https://img.icons8.com/dusk/64/000000/switch.png'
     const apSVG = 'https://img.icons8.com/plasticine/100/000000/wifi.png'
     const nodeSVG = 'https://img.icons8.com/dusk/48/000000/filled-circle.png'
+    const nonVPNnode = 'https://img.icons8.com/emoji/48/000000/red-circle-emoji.png'
 
-    const TopologyType = () => {
-        ac.setswitchMainTools(true);
-        let selectBox = document.getElementById("selectTopology");
-        let selectedValue = selectBox.options[selectBox.selectedIndex].value;
-        if (selectedValue === "1") {
-            setclientTopology(true);
-            setvpnTopology(false);
-            setgraph([])
+    const nodeSvgShape = {
+        shape: 'circle',
+        shapeProps: {
+            r: 10,
+            fill: '#67b346',
+        },
+    }
 
-        } else if (selectedValue === "2") {
-            setvpnTopology(true);
-            setclientTopology(false);
-            setgraph([])
 
-        }
-    };
+
 
     const DEVICELIST = ac.deviceList.map((opt, index) => ({
         label: opt.name,
@@ -66,6 +70,21 @@ export default function Topology(ac) {
         mac: opt.mac,
         model: opt.model
     }));
+
+
+
+
+
+    const pathTypeList = [{ type: 'diagonal' }, { type: 'elbow' }, { type: 'straight' }]
+
+
+    const PATHTYPE = pathTypeList.map((opt) => ({
+        label: opt.type,
+        type: opt.type,
+
+    }));
+
+
 
     const NODESLIST = nodeslist.map((opt, index) => ({
         label: opt.dhcpHostname,
@@ -102,6 +121,8 @@ export default function Topology(ac) {
                         'nodes': [],
                         'links': []
                     })
+                    setmyTreeData([]);
+                    setmodalModel([])
                     setloading(true);
                     let Device_Row = []
                     try {
@@ -132,8 +153,9 @@ export default function Topology(ac) {
                                     setnodeslist(device_clients.device_clients)
                                     Device_Row.push(DEVICE_OBJ)
 
-                                    //push source nodes
 
+
+                                    //push source nodes
                                     if (sourceDeviceModel.startsWith("MX") || sourceDeviceModel.startsWith("Z")) {
                                         data.nodes.push({ id: 0, name: sourceDeviceName, size: 700, svg: firewallSVG, x: 70, y: 280 })
                                     }
@@ -156,20 +178,22 @@ export default function Topology(ac) {
                                         switchport: '',
                                         vlan: '',
                                         usage: '',
+                                        index: 0,
                                     });
+
+                                    myTreeData.push({
+                                        name: sourceDeviceName,
+                                        children: [],
+                                        nodeData: modalModel[0]
+                                    })
 
                                     //push nodes connected to source node
                                     // eslint-disable-next-line
                                     Device_Row.map((item) => {
-                                        // let initialx = 856
-                                        // let initialy = 117
 
                                         item.forEach((device, index) => {
                                             let id = index + 1
-                                            // let i = 50
-                                            // initialy = initialy + i;
                                             data.nodes.push({ id: id, name: device.dhcpHostname, svg: nodeSVG });
-                                            // data.nodes.push({ id: id, name: device.dhcpHostname, svg: nodeSVG, x: initialx, y: initialy });
                                             data.links.push({ source: 0, target: id });
                                             modalModel.push({
                                                 description: device.description,
@@ -180,11 +204,18 @@ export default function Topology(ac) {
                                                 ipaddress: device.ip,
                                                 mac: device.mac,
                                                 vlan: device.vlan,
-                                                usage: { recv: device.usage.recv, sent: device.usage.sent }
+                                                usage: { recv: device.usage.recv, sent: device.usage.sent },
+                                                index: id,
                                             });
+
+                                            myTreeData[0].children.push({
+                                                name: device.dhcpHostname,
+                                                nodeData: modalModel[id]
+                                            })
 
                                         })
                                     })
+
                                 }
                                 setmodalModel(modalModel)
                             })
@@ -196,11 +227,28 @@ export default function Topology(ac) {
                                         config={myConfig}
                                         onClickNode={onClickNode}
                                     />)
+                                settree(
+                                    <div id="treeWrapper" style={{ width: '1500px', height: '969px' }} className='custom-tree'>
+                                        <Tree
+                                            data={myTreeData}
+                                            nodeSize={{ x: 1000, y: 140 }}
+                                            nodeSvgShape={nodeSvgShape}
+                                            separation={{ siblings: 0.3, nonSiblings: 2 }}
+                                            collapsible={false}
+                                            pathFunc={pathType}
+                                            onClick={onClickNodeTree}
+                                            onLinkMouseOver={onLinkMouseOverTree}
+                                            onLinkMouseOut={onLinkMouseOutTree}
+                                        />
+
+                                    </div>
+                                )
                                 setshowFilter(true)
                                 setloading(false)
                             })
                     } catch (err) {
                         console.log("This is the error:", err);
+                        setloading(false)
                     }
 
                 } else {
@@ -210,116 +258,138 @@ export default function Topology(ac) {
                 }
 
             } else if (vpnTopology) {
-                let NET_ID_LIST = []
-                let NET_NAME_LIST = []
-                let VPN_Row = []
-                ac.combindeNetworksIDList.map(async (item, index) => {
-                    NET_ID_LIST.push(item.id)
-                    NET_NAME_LIST.push(item.name)
-                })
-                setloading(true);
-                // setdataVpn({
-                //     'nodes': [],
-                //     'links': []
-                // })
+                if (ac.isOrgSelected) {
+                    let NET_ID_LIST = []
+                    let NET_NAME_LIST = []
+                    let VPN_Row = []
+                    ac.combindeNetworksIDList.map(async (item, index) => {
+                        NET_ID_LIST.push(item.id)
+                        NET_NAME_LIST.push(item.name)
+                    })
+                    setloading(true);
+                    // setdataVpn({
+                    //     'nodes': [],
+                    //     'links': []
+                    // })
 
-                try {
-                    await fetch("/site2site", {
-                        method: ["POST"],
-                        cache: "no-cache",
-                        headers: {
-                            content_type: "application/json",
-                        },
-                        body: JSON.stringify({
-                            "X-Cisco-Meraki-API-Key": `${ac.apiKey}`,
-                            NET_ID_LIST: NET_ID_LIST,
-                        })
-                    }).then((response) => {
-                        return response.json;
-                    });
-                    await fetch("/site2site", { signal: signal })
-                        .then((res) => { return res.json() })
-                        .then((site2site) => {
-                            if (site2site.error) {
-                                ac.setflashMessages(<div className="form-input-error-msg alert alert-danger">
-                                    <span className="glyphicon glyphicon-exclamation-sign"></span>
-                                    {site2site.error[0]}
+                    try {
+                        await fetch("/site2site", {
+                            method: ["POST"],
+                            cache: "no-cache",
+                            headers: {
+                                content_type: "application/json",
+                            },
+                            body: JSON.stringify({
+                                "X-Cisco-Meraki-API-Key": `${ac.apiKey}`,
+                                NET_ID_LIST: NET_ID_LIST,
+                            })
+                        }).then((response) => {
+                            return response.json;
+                        });
+                        await fetch("/site2site", { signal: signal })
+                            .then((res) => { return res.json() })
+                            .then((site2site) => {
+                                if (site2site.error) {
+                                    ac.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+                                        <span className="glyphicon glyphicon-exclamation-sign"></span>
+                                        {site2site.error[0]}
+                                    </div>)
+                                    setloading(false)
+                                    return function cleanup() {
+                                        abortController.abort()
+                                    }
+
+                                } else {
+
+                                    const VPN_OBJ = Object.values(site2site.site2site)
+                                    VPN_Row.push(VPN_OBJ)
+
+                                    // eslint-disable-next-line
+                                    VPN_Row.map((item, x) => {
+                                        item.forEach((node, index) => {
+                                            if (node.mode === "hub") {
+                                                dataVpn.nodes.push({ id: 0, name: NET_NAME_LIST[index], size: 700, svg: firewallSVG, label: 'label text' })
+                                                VPNModel.push({
+                                                    subnets: node.subnets,
+                                                    mode: node.mode,
+                                                    name: NET_NAME_LIST[index],
+                                                    index: index
+                                                }
+                                                )
+                                            } else if (node.mode === "spoke") {
+                                                dataVpn.nodes.push({ id: index, name: NET_NAME_LIST[index], svg: nodeSVG, label: 'label text' });
+                                                dataVpn.links.push({ source: 0, target: index, label: 'label text' });
+                                                VPNModel.push({
+                                                    subnets: node.subnets,
+                                                    mode: node.mode,
+                                                    name: NET_NAME_LIST[index],
+                                                    index: index
+                                                }
+                                                )
+
+                                            } else {
+                                                dataVpn.nodes.push({ id: index, name: NET_NAME_LIST[index], svg: nonVPNnode, label: 'label text' });
+                                                dataVpn.links.push({ source: 0, target: index, label: 'label text' });
+                                                VPNModel.push({
+                                                    subnets: [],
+                                                    mode: [],
+                                                    name: NET_NAME_LIST[index],
+                                                    index: index
+                                                }
+                                                )
+                                            }
+
+                                        })
+                                    })
+
+                                }
+                            })
+                            .then(() => {
+                                if (dataVpn.nodes.length !== 0) {
+                                    setgraph(
+                                        <Graph
+                                            id="graph-id" // id is mandatory, if no id is defined rd3g will throw an error
+                                            data={dataVpn}
+                                            config={myConfig}
+                                            onClickNode={onClickNodeVPN}
+                                        />)
+                                    setloading(false)
+                                    setshowVPNFilter(true)
+                                } else {
+                                    setloading(false)
+                                    ac.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+                                        <span className="glyphicon glyphicon-exclamation-sign"></span>
+                                    No available VPN nodes in this Organization
                                 </div>)
-                                setloading(false)
-                                return function cleanup() {
-                                    abortController.abort()
-                                    console.log("cleanup -> abortController")
+
                                 }
 
-                            } else {
+                            })
 
-                                const VPN_OBJ = Object.values(site2site.site2site)
-                                VPN_Row.push(VPN_OBJ)
-
-                                // eslint-disable-next-line
-                                VPN_Row.map((item, x) => {
-                                    item.forEach((node, index) => {
-
-
-                                        if (node.mode === "hub") {
-                                            dataVpn.nodes.push({ id: 0, name: NET_NAME_LIST[index], size: 700, svg: firewallSVG })
-                                            VPNModel.push({
-                                                subnets: node.subnets,
-                                                mode: node.mode,
-                                                name: NET_NAME_LIST[index],
-                                                index: index
-                                            }
-                                            )
-                                        } else if (node.mode === "spoke") {
-                                            dataVpn.nodes.push({ id: index, name: NET_NAME_LIST[index], svg: nodeSVG });
-                                            dataVpn.links.push({ source: 0, target: index });
-                                            VPNModel.push({
-                                                subnets: node.subnets,
-                                                mode: node.mode,
-                                                name: NET_NAME_LIST[index],
-                                                index: index
-                                            }
-                                            )
-
-                                        } else {
-                                            console.log('non Meraki VPN');
-                                        }
-                                    })
-                                })
-
-
-
+                    } catch (err) {
+                        console.log("This is the error:", err)
+                        if (err) {
+                            return function cleanup() {
+                                abortController.abort()
+                                setloading(false)
                             }
-                        })
-                        .then(() => {
-                            setgraph(
-                                <Graph
-                                    id="graph-id" // id is mandatory, if no id is defined rd3g will throw an error
-                                    data={dataVpn}
-                                    config={myConfig}
-                                    onClickNode={onClickNodeVPN}
-                                />)
-                            setloading(false)
-                            setshowVPNFilter(true)
-                        })
-
-                } catch (err) {
-                    console.log("This is the error:", err)
-                    if (err) {
-                        return function cleanup() {
-                            abortController.abort()
-                            console.log("cleanup -> abortController")
-                            setloading(false)
                         }
-                    }
 
+                    }
+                } else {
+                    ac.setswitchAlertModal(true);
+                    ac.setAlertModalError("Please select Organization.");
+                    ac.setswitchToolsTemplate(false);
                 }
+
+
             }
+
         }
         APIcall();
         return function cleanup() {
             abortController.abort()
-            console.log("cleanup -> abortController")
+            setloading(false)
             setdata({
                 'nodes': [],
                 'links': []
@@ -331,7 +401,6 @@ export default function Topology(ac) {
     async function APIcallClient(index) {
         //clearing the ClientModel array to avoid duplicate
         setclientID(modalModel[index].id)
-
         try {
             await fetch("/client", {
                 method: ["POST"],
@@ -385,6 +454,11 @@ export default function Topology(ac) {
 
         } catch (err) {
             console.log("This is the error:", err);
+            ac.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+                <span className="glyphicon glyphicon-exclamation-sign"></span>
+            Not a valid Client
+        </div>)
+
         }
     }
 
@@ -439,16 +513,37 @@ export default function Topology(ac) {
         },
     };
 
+    const onClickNodeTree = (nodeData) => {
+        let index = nodeData.nodeData.index
+        APIcallClient(index)
+        ac.setflashMessages([])
+
+    }
+    const onLinkMouseOverTree = (linkSource, linkTarget) => {
+
+
+    }
+    const onLinkMouseOutTree = (linkSource, linkTarget) => {
+
+
+    }
+
+
+
+
+
 
     const onClickNode = function (nodeId) {
         let index = nodeId
         APIcallClient(index)
+        ac.setflashMessages([])
     };
 
 
     const onClickNodeVPN = function (nodeId) {
         setmodelVPN(VPNModel[nodeId])
         setswitchTopologyVPNModal(true)
+        ac.setflashMessages([])
     };
 
     const HandleDevices = (opt) => {
@@ -459,12 +554,20 @@ export default function Topology(ac) {
         setsourceDeviceModel(opt.model)
         setisDeviceSelected(true)
         setgraph([])
+        settree([])
         setmodalModel([])
         setmodel([])
         setshowFilter(false)
+        setmyTreeData([]);
 
     };
 
+
+
+    const HandlePathType = (opt) => {
+        setpathType(opt.type)
+        LoadTopology()
+    };
     const HandleNodes = (opt) => {
         let index = opt.id + 1
         APIcallClient(index)
@@ -475,12 +578,29 @@ export default function Topology(ac) {
         onClickNodeVPN(opt.id)
     };
 
+    const TopologyType = () => {
+        ac.setflashMessages([])
+        ac.setswitchMainTools(true);
+        let selectBox = document.getElementById("selectTopology");
+        let selectedValue = selectBox.options[selectBox.selectedIndex].value;
+        if (selectedValue === "1") {
+            setclientTopology(true);
+            setvpnTopology(false);
+            setgraph([])
 
+        } else if (selectedValue === "2") {
+            setvpnTopology(true);
+            setclientTopology(false);
+            setgraph([])
+
+        }
+    };
 
 
 
     const LoadTopology = (prevState, id) => {
         settrigger(trigger + 1)
+        setmodalModel([])
         setdataVpn((prevState) => ({
             ...prevState,
             'nodes': [], 'links': []
@@ -489,6 +609,7 @@ export default function Topology(ac) {
         const newList = VPNModel.filter((item) => item.id !== id)
         setVPNModel(newList)
         setshowVPNFilter(false)
+        ac.setflashMessages([])
 
     };
 
@@ -602,13 +723,26 @@ export default function Topology(ac) {
                                     />
                                     <div>
                                         {showFilter ? (
-                                            <Select
-                                                className='select-tolopology'
-                                                options={NODESLIST}
-                                                placeholder='Filter Node'
-                                                onChange={HandleNodes}
-                                                classNamePrefix="topology"
-                                            />) : (<div></div>)}
+                                            <div>
+                                                <Select
+                                                    className='select-tolopology'
+                                                    options={NODESLIST}
+                                                    placeholder='Filter Node'
+                                                    onChange={HandleNodes}
+                                                    classNamePrefix="topology"
+                                                />
+                                                <button onClick={() => setswitchGraph(!switchGraph)}>Topology mode</button>
+                                                {switchGraph ? (<Select
+                                                    className='select-tolopology'
+                                                    options={PATHTYPE}
+                                                    placeholder='Path Type'
+                                                    onChange={HandlePathType}
+                                                    classNamePrefix="pathType"
+                                                />) : (<div></div>)}
+
+                                            </div>
+
+                                        ) : (<div></div>)}
 
                                     </div>
                                 </div>
@@ -632,7 +766,13 @@ export default function Topology(ac) {
                         </div>
                     </div>
                 </div>
-                {graph}
+                {switchGraph ? (tree) : (graph)}
+                {/* {graph}
+                {tree} */}
+
+
+
+
                 {switchTopologyModal ? (<TopologyModal dc={dc} />) : (<div></div>)}
                 {switchTopologyVPNModal ? (<TopologyVPNModal dc={dc} />) : (<div></div>)}
             </div>

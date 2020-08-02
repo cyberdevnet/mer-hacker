@@ -522,8 +522,8 @@ def client():
             return {'client': client}
     except Exception as err:
         print('Exception: ',err)
-        # flash(err)
-        # return {'error' : [render_template('flash_template.html')]}
+        flash(err)
+        return {'error' : [render_template('flash_template.html')]}
 
 
 @ app.route('/site2site', methods=['GET', 'POST'])

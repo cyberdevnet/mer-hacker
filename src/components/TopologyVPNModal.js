@@ -8,6 +8,22 @@ export default function TopologyVPNModal(ac) {
         ac.dc.setswitchTopologyVPNModal(false);
     };
 
+    let IDList = Number(ac.dc.nodeVPNListID)
+
+    const handleVPNnodeUp = () => {
+        if (IDList < ac.dc.VPNModel.length - 1) {
+            ac.dc.setnodeVPNListID(IDList + 1)
+            ac.dc.setmodelVPN(ac.dc.VPNModel[IDList])
+        }
+    };
+
+    const handleVPNnodeDown = () => {
+        if (IDList > 0) {
+            ac.dc.setnodeVPNListID(IDList - 1)
+            ac.dc.setmodelVPN(ac.dc.VPNModel[IDList])
+        }
+    };
+
     let subnets = []
     let glyphicon = []
     // eslint-disable-next-line
@@ -32,9 +48,6 @@ export default function TopologyVPNModal(ac) {
         <Dialog
             open={true}
             fullWidth
-        // onClose={handleClose}
-        // aria-labelledby="alert-dialog-title"
-        // aria-describedby="alert-dialog-description"
         >
             <div >
                 <div className="modal-dialog modal-confirm">
@@ -46,8 +59,30 @@ export default function TopologyVPNModal(ac) {
                                 className="close"
                                 data-dismiss="modal"
                                 aria-hidden="true"
+                                style={{ top: '0px', right: '-55px', outline: 'none' }}
+
                             >
                                 <span>&times;</span>
+                            </button>
+                            <button
+                                onClick={handleVPNnodeUp}
+                                type="button"
+                                className="close"
+                                data-dismiss="modal"
+                                aria-hidden="true"
+                                style={{ top: '65px', right: '-45px', fontSize: '23px', color: 'black', outline: 'none' }}
+                            >
+                                <span className="glyphicon glyphicon-circle-arrow-right"></span>
+                            </button>
+                            <button
+                                onClick={handleVPNnodeDown}
+                                type="button"
+                                className="close"
+                                data-dismiss="modal"
+                                aria-hidden="true"
+                                style={{ top: '65px', left: '-45px', fontSize: '23px', color: 'black', outline: 'none' }}
+                            >
+                                <span className="glyphicon glyphicon-circle-arrow-left" ></span>
                             </button>
                         </div>
                         <div className="modal-body text-center"

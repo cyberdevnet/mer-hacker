@@ -3,16 +3,31 @@ import Dialog from '@material-ui/core/Dialog';
 import "../styles/TopologyModal.css";
 
 export default function TopologyModal(ac) {
+
+    let IDList = Number(ac.dc.nodeListID)
+
     const handleTopologyModal = () => {
         ac.dc.setswitchTopologyModal(false);
+    };
+
+    const handleClientUp = () => {
+        if (IDList < ac.dc.nodeslist.length) {
+            ac.dc.setnodeListID(IDList + 1)
+            ac.dc.APIcallClient(IDList)
+        }
+
+    };
+
+    const handleClientDown = () => {
+        if (IDList > 0) {
+            ac.dc.setnodeListID(IDList - 1)
+            ac.dc.APIcallClient(IDList)
+        }
     };
     return (
         <Dialog
             open={true}
             fullWidth
-        // onClose={handleClose}
-        // aria-labelledby="alert-dialog-title"
-        // aria-describedby="alert-dialog-description"
         >
             <div >
                 <div className="modal-dialog modal-confirm">
@@ -24,8 +39,29 @@ export default function TopologyModal(ac) {
                                 className="close"
                                 data-dismiss="modal"
                                 aria-hidden="true"
+                                style={{ top: '0px', right: '-55px', outline: 'none' }}
                             >
                                 <span>&times;</span>
+                            </button>
+                            <button
+                                onClick={handleClientUp}
+                                type="button"
+                                className="close"
+                                data-dismiss="modal"
+                                aria-hidden="true"
+                                style={{ top: '65px', right: '-45px', fontSize: '23px', color: 'black', outline: 'none' }}
+                            >
+                                <span className="glyphicon glyphicon-circle-arrow-right"></span>
+                            </button>
+                            <button
+                                onClick={handleClientDown}
+                                type="button"
+                                className="close"
+                                data-dismiss="modal"
+                                aria-hidden="true"
+                                style={{ top: '65px', left: '-45px', fontSize: '23px', color: 'black', outline: 'none' }}
+                            >
+                                <span className="glyphicon glyphicon-circle-arrow-left" ></span>
                             </button>
                         </div>
                         <div className="modal-body text-center"

@@ -41,6 +41,8 @@ export default function Topology(ac) {
     const [switchRadioCheck, setswitchRadioCheck] = useState(true)
     const [myTreeData, setmyTreeData] = useState([])
     const [myVPNTreeData, setmyVPNTreeData] = useState([])
+    const [nodeListID, setnodeListID] = useState([])
+    const [nodeVPNListID, setnodeVPNListID] = useState([])
 
 
 
@@ -75,6 +77,8 @@ export default function Topology(ac) {
         id: index,
 
     }));
+
+
 
 
     const VPNNODESLIST = dataVpn.nodes.map((opt, index) => ({
@@ -530,6 +534,7 @@ export default function Topology(ac) {
     const onClickVPNNodeTree = (nodeData) => {
         let index = nodeData.nodeData.index
         setmodelVPN(VPNModel[index])
+        setnodeVPNListID(index)
         setswitchTopologyVPNModal(true)
         ac.setflashMessages([])
 
@@ -538,12 +543,14 @@ export default function Topology(ac) {
     const onClickNode = function (nodeId) {
         let index = nodeId
         APIcallClient(index)
+        setnodeListID(index)
         ac.setflashMessages([])
     };
 
 
     const onClickNodeVPN = function (nodeId) {
         setmodelVPN(VPNModel[nodeId])
+        setnodeVPNListID(nodeId)
         setswitchTopologyVPNModal(true)
         ac.setflashMessages([])
     };
@@ -569,11 +576,13 @@ export default function Topology(ac) {
     const HandleNodes = (opt) => {
         let index = opt.id + 1
         APIcallClient(index)
+        setnodeListID(index)
     };
 
 
     const HandleVPNNodes = (opt) => {
         onClickNodeVPN(opt.id)
+        setnodeVPNListID(opt.id)
     };
 
     const TopologyType = () => {
@@ -617,7 +626,8 @@ export default function Topology(ac) {
         setswitchTopologyModal, modalModel, setmodalModel,
         model, setmodel, sourceDeviceName, VPNModel, setVPNModel,
         switchTopologyVPNModal, setswitchTopologyVPNModal,
-        modelVPN, setmodelVPN
+        modelVPN, setmodelVPN, APIcallClient, nodeslist, setnodeslist,
+        NODESLIST, nodeListID, setnodeListID, nodeVPNListID, setnodeVPNListID, dataVpn
     }
 
     return (

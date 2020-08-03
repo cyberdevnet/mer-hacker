@@ -4,7 +4,6 @@ import TopologyModal from "./TopologyModal";
 import TopologyVPNModal from './TopologyVPNModal'
 import Select from "react-select";
 import Tree from 'react-d3-tree';
-import ReactTooltip from 'react-tooltip'
 import 'react-tree-graph/dist/style.css'
 import '../styles/Topology.css'
 
@@ -38,10 +37,11 @@ export default function Topology(ac) {
     const [clientID, setclientID] = useState([])
     const [vpnTopology, setvpnTopology] = useState(false)
     const [clientTopology, setclientTopology] = useState(false)
-    const [switchGraph, setswitchGraph] = useState(false)
+    const [switchGraph, setswitchGraph] = useState('Fluid')
+    const [switchRadioCheck, setswitchRadioCheck] = useState(true)
     const [myTreeData, setmyTreeData] = useState([])
-    const [pathType, setpathType] = useState('elbow')
-    console.log("Topology -> pathType", pathType)
+    const [myVPNTreeData, setmyVPNTreeData] = useState([])
+
 
 
     const firewallSVG = 'https://img.icons8.com/office/52/000000/firewall.png'
@@ -59,8 +59,6 @@ export default function Topology(ac) {
     }
 
 
-
-
     const DEVICELIST = ac.deviceList.map((opt, index) => ({
         label: opt.name,
         value: index,
@@ -72,28 +70,10 @@ export default function Topology(ac) {
     }));
 
 
-
-
-
-    const pathTypeList = [{ type: 'diagonal' }, { type: 'elbow' }, { type: 'straight' }]
-
-
-    const PATHTYPE = pathTypeList.map((opt) => ({
-        label: opt.type,
-        type: opt.type,
-
-    }));
-
-
-
     const NODESLIST = nodeslist.map((opt, index) => ({
         label: opt.dhcpHostname,
-        // value: index,
         id: index,
-        // serial: opt.serial,
-        // ipaddress: opt.lanIp,
-        // mac: opt.mac,
-        // model: opt.model
+
     }));
 
 
@@ -181,11 +161,7 @@ export default function Topology(ac) {
                                         index: 0,
                                     });
 
-                                    myTreeData.push({
-                                        name: sourceDeviceName,
-                                        children: [],
-                                        nodeData: modalModel[0]
-                                    })
+                                    myTreeData.push({ name: sourceDeviceName, children: [], nodeData: modalModel[0] })
 
                                     //push nodes connected to source node
                                     // eslint-disable-next-line
@@ -228,19 +204,19 @@ export default function Topology(ac) {
                                         onClickNode={onClickNode}
                                     />)
                                 settree(
-                                    <div id="treeWrapper" style={{ width: '1500px', height: '969px' }} className='custom-tree'>
+                                    <div
+                                        id="treeWrapper"
+                                        style={{ width: '1500px', height: '969px' }}
+                                        className='custom-tree'>
                                         <Tree
                                             data={myTreeData}
                                             nodeSize={{ x: 1000, y: 140 }}
                                             nodeSvgShape={nodeSvgShape}
                                             separation={{ siblings: 0.3, nonSiblings: 2 }}
+                                            translate={{ x: 40, y: 400 }}
                                             collapsible={false}
-                                            pathFunc={pathType}
                                             onClick={onClickNodeTree}
-                                            onLinkMouseOver={onLinkMouseOverTree}
-                                            onLinkMouseOut={onLinkMouseOutTree}
                                         />
-
                                     </div>
                                 )
                                 setshowFilter(true)
@@ -267,10 +243,6 @@ export default function Topology(ac) {
                         NET_NAME_LIST.push(item.name)
                     })
                     setloading(true);
-                    // setdataVpn({
-                    //     'nodes': [],
-                    //     'links': []
-                    // })
 
                     try {
                         await fetch("/site2site", {
@@ -304,6 +276,10 @@ export default function Topology(ac) {
                                     const VPN_OBJ = Object.values(site2site.site2site)
                                     VPN_Row.push(VPN_OBJ)
 
+                                    //initialize tree array
+                                    myVPNTreeData.push({ name: '', nodeData: '', children: [] })
+
+
                                     // eslint-disable-next-line
                                     VPN_Row.map((item, x) => {
                                         item.forEach((node, index) => {
@@ -316,6 +292,9 @@ export default function Topology(ac) {
                                                     index: index
                                                 }
                                                 )
+                                                myVPNTreeData[0].name = NET_NAME_LIST[index]
+                                                myVPNTreeData[0].nodeData = VPNModel[index]
+
                                             } else if (node.mode === "spoke") {
                                                 dataVpn.nodes.push({ id: index, name: NET_NAME_LIST[index], svg: nodeSVG, label: 'label text' });
                                                 dataVpn.links.push({ source: 0, target: index, label: 'label text' });
@@ -326,6 +305,10 @@ export default function Topology(ac) {
                                                     index: index
                                                 }
                                                 )
+                                                myVPNTreeData[0].children.push({
+                                                    name: NET_NAME_LIST[index],
+                                                    nodeData: VPNModel[index]
+                                                })
 
                                             } else {
                                                 dataVpn.nodes.push({ id: index, name: NET_NAME_LIST[index], svg: nonVPNnode, label: 'label text' });
@@ -337,6 +320,14 @@ export default function Topology(ac) {
                                                     index: index
                                                 }
                                                 )
+                                                myVPNTreeData[0].children.push({
+                                                    name: NET_NAME_LIST[index],
+                                                    nodeSvgShape: {
+                                                        shape: 'circle',
+                                                        shapeProps: { r: 10, fill: 'red' }
+                                                    },
+                                                    nodeData: VPNModel[index]
+                                                })
                                             }
 
                                         })
@@ -353,6 +344,22 @@ export default function Topology(ac) {
                                             config={myConfig}
                                             onClickNode={onClickNodeVPN}
                                         />)
+                                    settree(
+                                        <div
+                                            id="treeWrapper"
+                                            style={{ width: '1500px', height: '969px' }}
+                                            className='custom-tree'>
+                                            <Tree
+                                                data={myVPNTreeData}
+                                                nodeSize={{ x: 1000, y: 140 }}
+                                                nodeSvgShape={nodeSvgShape}
+                                                separation={{ siblings: 0.3, nonSiblings: 2 }}
+                                                translate={{ x: 40, y: 400 }}
+                                                collapsible={false}
+                                                onClick={onClickVPNNodeTree}
+                                            />
+                                        </div>
+                                    )
                                     setloading(false)
                                     setshowVPNFilter(true)
                                 } else {
@@ -368,10 +375,10 @@ export default function Topology(ac) {
 
                     } catch (err) {
                         console.log("This is the error:", err)
+                        setloading(false)
                         if (err) {
                             return function cleanup() {
                                 abortController.abort()
-                                setloading(false)
                             }
                         }
 
@@ -519,19 +526,14 @@ export default function Topology(ac) {
         ac.setflashMessages([])
 
     }
-    const onLinkMouseOverTree = (linkSource, linkTarget) => {
 
+    const onClickVPNNodeTree = (nodeData) => {
+        let index = nodeData.nodeData.index
+        setmodelVPN(VPNModel[index])
+        setswitchTopologyVPNModal(true)
+        ac.setflashMessages([])
 
     }
-    const onLinkMouseOutTree = (linkSource, linkTarget) => {
-
-
-    }
-
-
-
-
-
 
     const onClickNode = function (nodeId) {
         let index = nodeId
@@ -564,10 +566,6 @@ export default function Topology(ac) {
 
 
 
-    const HandlePathType = (opt) => {
-        setpathType(opt.type)
-        LoadTopology()
-    };
     const HandleNodes = (opt) => {
         let index = opt.id + 1
         APIcallClient(index)
@@ -606,6 +604,7 @@ export default function Topology(ac) {
             'nodes': [], 'links': []
 
         }));
+        setmyVPNTreeData([])
         const newList = VPNModel.filter((item) => item.id !== id)
         setVPNModel(newList)
         setshowVPNFilter(false)
@@ -622,157 +621,122 @@ export default function Topology(ac) {
     }
 
     return (
-        <div id="page-inner-tool-templates">
+        <div id="page-inner-tool-templates" style={{ margin: "-65px 20px 10px 0px" }}>
             <div>{ac.flashMessages && <span>{ac.flashMessages}</span>}</div>
             <div className="row">
-                <div className="col-md-3 col-sm-12 col-xs-12">
-                    <div className="board">
-                        <div className="panel panel-primary">
-                            <div className="number">
-                                <h3 className="h3-dashboard">{ac.network}</h3>
-                                <small>Network</small>
-                            </div>
-                            <div className="icon">
-                                <i className="fa fa-sitemap fa-5x red"></i>
-                            </div>
-                        </div>
+                <div className="panel-group" id="accordion">
+                    <div className="panel-heading">
+                        <h4 className="panel-title-description">
+                            <a
+                                data-toggle="collapse"
+                                data-parent="#accordion"
+                                href="#collapseOne"
+                                className="collapsed"
+                            >
+                                <span className="glyphicon glyphicon-circle-arrow-down"></span>
+                            </a>
+                        </h4>
                     </div>
-                </div>
-
-                <div className="col-md-3 col-sm-12 col-xs-12">
-                    <div className="board">
-                        <div className="panel panel-primary">
-                            <div className="number">
-                                <h3 className="h3-dashboard">{ac.organization}</h3>
-                                <small>Organization</small>
-                            </div>
-                            <div className="icon">
-                                <i className="fa fa-id-card-o fa-5x blue"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="col-md-3 col-sm-12 col-xs-12">
-                    <div className="board">
-                        <div className="panel panel-primary">
-                            <div className="number">
-                                <h3 className="h3-dashboard">{ac.timeZone}</h3>
-                                <small>Time Zone</small>
-                            </div>
-                            <div className="icon">
-                                <i className="fa fa-clock-o fa-5x green"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="col-md-3 col-sm-12 col-xs-12">
-                    <div className="board">
-                        <div className="panel panel-primary">
-                            <div className="number">
-                                <h3 className="h3-dashboard">{ac.totalDevices}</h3>
-                                <small>Total Devices</small>
-                            </div>
-                            <div className="icon">
-                                <i className="fa fa-server fa-5x yellow"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-xs-12">
-                    <div className="panel panel-default">
-                        <div className="panel-body">
-                            <div>
-                                <select
-                                    onChange={TopologyType}
-                                    id="selectTopology"
-                                    className="btn btn-default dropdown-toggle-tools"
-                                >
-                                    <option className="option-tools-disabled" value="0">
-                                        Select Topology
+                    <div id="collapseOne" className="panel-collapse">
+                        <div className="col-xs-12">
+                            <div className="panel panel-default">
+                                <div className="panel-body">
+                                    <div>
+                                        <select
+                                            onChange={TopologyType}
+                                            id="selectTopology"
+                                            className="btn btn-default dropdown-toggle-tools"
+                                        >
+                                            <option className="option-tools-disabled" value="0">
+                                                Select Topology
                                             </option>
-                                    <option value="1">Client Topology</option>
-                                    <option value="2">VPN Topology</option>
-                                </select>
-                            </div>
-                            {vpnTopology ? (
-                                <div>
-                                    <div>
-                                        {showVPNFilter ? (
-                                            <Select
-                                                className='select-tolopology'
-                                                options={VPNNODESLIST}
-                                                placeholder='Filter Node'
-                                                onChange={HandleVPNNodes}
-                                                classNamePrefix="topology"
-                                            />) : (<div></div>)}
-
+                                            <option value="1">Client Topology</option>
+                                            <option value="2">VPN Topology</option>
+                                        </select>
                                     </div>
-                                </div>
-                            ) : (<div></div>)}
-                            {clientTopology ? (
-                                <div>
-                                    <Select
-                                        className='select-tolopology'
-                                        options={DEVICELIST}
-                                        placeholder='Devices'
-                                        onChange={HandleDevices}
-                                        classNamePrefix="topology"
-                                    // onMenuOpen={() => ac.dc.settriggerSelectOrg(ac.dc.triggerSelectOrg + 1)}
-                                    />
-                                    <div>
-                                        {showFilter ? (
+                                    {vpnTopology ? (
+                                        <div>
                                             <div>
-                                                <Select
-                                                    className='select-tolopology'
-                                                    options={NODESLIST}
-                                                    placeholder='Filter Node'
-                                                    onChange={HandleNodes}
-                                                    classNamePrefix="topology"
-                                                />
-                                                <button onClick={() => setswitchGraph(!switchGraph)}>Topology mode</button>
-                                                {switchGraph ? (<Select
-                                                    className='select-tolopology'
-                                                    options={PATHTYPE}
-                                                    placeholder='Path Type'
-                                                    onChange={HandlePathType}
-                                                    classNamePrefix="pathType"
-                                                />) : (<div></div>)}
+                                                {showVPNFilter ? (
+                                                    <div>
+                                                        <Select
+                                                            className='select-tolopology'
+                                                            options={VPNNODESLIST}
+                                                            placeholder='Filter Node'
+                                                            onChange={HandleVPNNodes}
+                                                            classNamePrefix="topology"
+                                                        />
+                                                        <label className="radio-inline">
+                                                            <input checked={switchRadioCheck} onChange={() => { setswitchGraph('Fluid'); setswitchRadioCheck(!switchRadioCheck) }} type="radio" name="survey" id="Radios1" value="Fluid" />
+                                                                Fluid
+                                                        </label>
+                                                        <label className="radio-inline">
+                                                            <input checked={!switchRadioCheck} onChange={() => { setswitchGraph('Tree'); setswitchRadioCheck(!switchRadioCheck) }} type="radio" name="survey" id="Radios2" value="Tree" />
+                                                                Tree
+                                                        </label>
+                                                    </div>
+                                                ) : (<div></div>)}
 
                                             </div>
+                                        </div>
+                                    ) : (<div></div>)}
+                                    {clientTopology ? (
+                                        <div>
+                                            <Select
+                                                className='select-tolopology'
+                                                options={DEVICELIST}
+                                                placeholder='Devices'
+                                                onChange={HandleDevices}
+                                                classNamePrefix="topology"
+                                            />
+                                            <div>
+                                                {showFilter ? (
+                                                    <div>
+                                                        <Select
+                                                            className='select-tolopology'
+                                                            options={NODESLIST}
+                                                            placeholder='Filter Node'
+                                                            onChange={HandleNodes}
+                                                            classNamePrefix="topology"
+                                                        />
+                                                        <label className="radio-inline">
+                                                            <input checked={switchRadioCheck} onChange={() => { setswitchGraph('Fluid'); setswitchRadioCheck(!switchRadioCheck) }} type="radio" name="survey" id="Radios1" value="Fluid" />
+                                                                Fluid
+                                                        </label>
+                                                        <label className="radio-inline">
+                                                            <input checked={!switchRadioCheck} onChange={() => { setswitchGraph('Tree'); setswitchRadioCheck(!switchRadioCheck) }} type="radio" name="survey" id="Radios2" value="Tree" />
+                                                                Tree
+                                                        </label>
 
-                                        ) : (<div></div>)}
+                                                    </div>
 
-                                    </div>
+                                                ) : (<div></div>)}
+
+                                            </div>
+                                        </div>
+                                    ) : (<div></div>)}
+
+
+                                    <button
+                                        className="btn btn-primary"
+                                        onClick={!loading ? () => LoadTopology() : null}
+                                        disabled={loading}
+                                    >
+                                        {loading && (
+                                            <i
+                                                className="fa fa-refresh fa-spin"
+                                                style={{ marginRight: "5px" }}
+                                            />
+                                        )}
+                                        {loading && <span>Loading Topology</span>}
+                                        {!loading && <span>Load Topology</span>}
+                                    </button>
                                 </div>
-                            ) : (<div></div>)}
-
-
-                            <button
-                                className="btn btn-primary"
-                                onClick={!loading ? () => LoadTopology() : null}
-                                disabled={loading}
-                            >
-                                {loading && (
-                                    <i
-                                        className="fa fa-refresh fa-spin"
-                                        style={{ marginRight: "5px" }}
-                                    />
-                                )}
-                                {loading && <span>Loading Topology</span>}
-                                {!loading && <span>Load Topology</span>}
-                            </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                {switchGraph ? (tree) : (graph)}
-                {/* {graph}
-                {tree} */}
-
-
-
-
+                {switchGraph === 'Tree' ? (tree) : (graph)}
                 {switchTopologyModal ? (<TopologyModal dc={dc} />) : (<div></div>)}
                 {switchTopologyVPNModal ? (<TopologyVPNModal dc={dc} />) : (<div></div>)}
             </div>

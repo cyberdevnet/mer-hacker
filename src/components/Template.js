@@ -70,8 +70,9 @@ export default function Template(ac, dc) {
             </button>
             <a className="navbar-brand" href="/">
               <strong>
-                <i className="icon fa fa-plane" ></i> MER-HACKER
-            </strong>
+                <img src="https://i.ibb.co/0C8DMq5/Mer-Haker-big.png" alt="Mer-Haker-big" border="0" /> MER-HACKER
+                {/* <i class="fa fa-rocket" aria-hidden="true"></i> MER-HACKER */}
+              </strong>
             </a>
 
             <div id="sideNav" href="" >
@@ -100,7 +101,8 @@ export default function Template(ac, dc) {
                   to='logout'
                   href="#logout"
                 >
-                  <i className="fa fa-desktop"></i>Logout
+                  <i className="fa fa-sign-out" aria-hidden="true"></i> Logout
+                  {/* <i className="fa fa-desktop"></i>Logout */}
                 </NavLink>) : (<div></div>)}
 
               </li>
@@ -110,7 +112,7 @@ export default function Template(ac, dc) {
                   to='home'
                   href="#home"
                 >
-                  <i className="fa fa-desktop"></i> Home
+                  <i className="fa fa-home" aria-hidden="true"></i> Home
                 </NavLink>
               </li>
 
@@ -122,7 +124,7 @@ export default function Template(ac, dc) {
                     to='dashboard'
                     href="#dashboard"
                   >
-                    <i className="fa fa-dashboard"></i> Dashboard
+                    <i className="fa fa-bar-chart"></i> Dashboard
                   </NavLink>
                 </li>) :
                 (<li data-tip="Select Organization and Network">
@@ -133,7 +135,7 @@ export default function Template(ac, dc) {
                     to='dashboard'
                     href="#dashboard"
                   >
-                    <i className="fa fa-dashboard"></i> Dashboard
+                    <i className="fa fa-bar-chart"></i> Dashboard
                   </NavLink>
                 </li>)}
 
@@ -190,7 +192,7 @@ export default function Template(ac, dc) {
                     to='topology'
                     href="#topology"
                   >
-                    <i className="fa fa-desktop"></i> Clients Topology
+                    <i className="fa fa-connectdevelop" aria-hidden="true"></i> Topology
                   </NavLink>
                 </li>) :
                 (<li data-tip="Select Organization and Network">
@@ -201,7 +203,7 @@ export default function Template(ac, dc) {
                     to='topology'
                     href="#topology"
                   >
-                    <i className="fa fa-desktop"></i> Clients Topology
+                    <i className="fa fa-connectdevelop" aria-hidden="true"></i> Topology
                   </NavLink>
                 </li>)}
             </ul>

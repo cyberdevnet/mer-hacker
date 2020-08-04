@@ -173,7 +173,11 @@ export default function Topology(ac) {
 
                                         item.forEach((device, index) => {
                                             let id = index + 1
-                                            data.nodes.push({ id: id, name: device.dhcpHostname, svg: nodeSVG });
+                                            if (device.dhcpHostname !== null) {
+                                                data.nodes.push({ id: id, name: device.dhcpHostname, svg: nodeSVG });
+                                            } else {
+                                                data.nodes.push({ id: id, name: device.mac, svg: nodeSVG });
+                                            }
                                             data.links.push({ source: 0, target: id });
                                             modalModel.push({
                                                 description: device.description,
@@ -187,11 +191,17 @@ export default function Topology(ac) {
                                                 usage: { recv: device.usage.recv, sent: device.usage.sent },
                                                 index: id,
                                             });
-
-                                            myTreeData[0].children.push({
-                                                name: device.dhcpHostname,
-                                                nodeData: modalModel[id]
-                                            })
+                                            if (device.dhcpHostname !== null) {
+                                                myTreeData[0].children.push({
+                                                    name: device.dhcpHostname,
+                                                    nodeData: modalModel[id]
+                                                })
+                                            } else {
+                                                myTreeData[0].children.push({
+                                                    name: device.mac,
+                                                    nodeData: modalModel[id]
+                                                })
+                                            }
 
                                         })
                                     })

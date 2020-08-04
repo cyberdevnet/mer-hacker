@@ -5,7 +5,8 @@ import { LazyLog } from "react-lazylog";
 import "../styles/LiveLog.css";
 
 export default function LiveLog(ac) {
-  const [debug_logs, setdebug_logs] = useState([]);
+  // const [debug_logs, setdebug_logs] = useState([]);
+  const [lazyLog, setlazyLog] = useState([]);
   const [showDebug, setshowDebug] = useState(false)
   const [buttonPHolder, setbuttonPHolder] = useState('Debug')
 
@@ -26,8 +27,9 @@ export default function LiveLog(ac) {
               return response.text();
             })
             .then((data) => {
-              setdebug_logs(data)
-
+              // setdebug_logs(data)
+              setlazyLog(<LazyLog extraLines={1} enableSearch text={data} stream caseInsensitive selectableLines />
+              )
             })
 
         } catch (err) {
@@ -78,7 +80,8 @@ export default function LiveLog(ac) {
             <div className="panel panel-default">
               <div className="panel-body">
                 <div style={{ height: 800 }}>
-                  <LazyLog extraLines={1} enableSearch text={debug_logs} stream caseInsensitive selectableLines />
+                  {lazyLog}
+                  {/* <LazyLog extraLines={1} enableSearch text={debug_logs} stream caseInsensitive selectableLines /> */}
                 </div>
 
               </div>

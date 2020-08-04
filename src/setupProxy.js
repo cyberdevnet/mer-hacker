@@ -138,27 +138,40 @@ module.exports = function (app) {
   app.use(
     "/organizations",
     createProxyMiddleware({
+<<<<<<< HEAD
       target: "http://127.0.0.1:5000",
+=======
+      target: "http://172.19.85.214:5000",
+>>>>>>> 3781214aac9f2c094cc5c253a8ea52e84701ce92
       changeOrigin: true,
     })
   );
   app.use(
     "/networks",
     createProxyMiddleware({
+<<<<<<< HEAD
       target: "http://127.0.0.1:5000",
+=======
+      target: "http://172.19.85.214:5000",
+>>>>>>> 3781214aac9f2c094cc5c253a8ea52e84701ce92
       changeOrigin: true,
     })
   );
   app.use(
     "/devices",
     createProxyMiddleware({
+<<<<<<< HEAD
       target: "http://127.0.0.1:5000",
+=======
+      target: "http://172.19.85.214:5000",
+>>>>>>> 3781214aac9f2c094cc5c253a8ea52e84701ce92
       changeOrigin: true,
     })
   );
   app.use(
     "/clients",
     createProxyMiddleware({
+<<<<<<< HEAD
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
@@ -174,12 +187,16 @@ module.exports = function (app) {
     "/device_clients",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
+=======
+      target: "http://172.19.85.214:5000",
+>>>>>>> 3781214aac9f2c094cc5c253a8ea52e84701ce92
       changeOrigin: true,
     })
   );
   app.use(
     "/device_status",
     createProxyMiddleware({
+<<<<<<< HEAD
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
@@ -188,48 +205,75 @@ module.exports = function (app) {
     "/uplink_loss",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
+=======
+      target: "http://172.19.85.214:5000",
+>>>>>>> 3781214aac9f2c094cc5c253a8ea52e84701ce92
       changeOrigin: true,
     })
   );
   app.use(
     "/vlans",
     createProxyMiddleware({
+<<<<<<< HEAD
       target: "http://127.0.0.1:5000",
+=======
+      target: "http://172.19.85.214:5000",
+>>>>>>> 3781214aac9f2c094cc5c253a8ea52e84701ce92
       changeOrigin: true,
     })
   );
   app.use(
     "/allVlans",
     createProxyMiddleware({
+<<<<<<< HEAD
       target: "http://127.0.0.1:5000",
+=======
+      target: "http://172.19.85.214:5000",
+>>>>>>> 3781214aac9f2c094cc5c253a8ea52e84701ce92
       changeOrigin: true,
     })
   );
   app.use(
     "/find_ports",
     createProxyMiddleware({
+<<<<<<< HEAD
       target: "http://127.0.0.1:5000",
+=======
+      target: "http://172.19.85.214:5000",
+>>>>>>> 3781214aac9f2c094cc5c253a8ea52e84701ce92
       changeOrigin: true,
     })
   );
   app.use(
     "/topuserdata/",
     createProxyMiddleware({
+<<<<<<< HEAD
       target: "http://127.0.0.1:5000",
+=======
+      target: "http://172.19.85.214:5000",
+>>>>>>> 3781214aac9f2c094cc5c253a8ea52e84701ce92
       changeOrigin: true,
     })
   );
   app.use(
     "/traffic_analysis/",
     createProxyMiddleware({
+<<<<<<< HEAD
       target: "http://127.0.0.1:5000",
+=======
+      target: "http://172.19.85.214:5000",
+>>>>>>> 3781214aac9f2c094cc5c253a8ea52e84701ce92
       changeOrigin: true,
     })
   );
   app.use(
     "/run_backup/",
     createProxyMiddleware({
+<<<<<<< HEAD
       target: "http://127.0.0.1:5000",
+=======
+      target: "http://172.19.85.214:5000",
+>>>>>>> 3781214aac9f2c094cc5c253a8ea52e84701ce92
       changeOrigin: true,
     })
   );

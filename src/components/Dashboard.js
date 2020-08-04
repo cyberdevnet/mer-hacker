@@ -611,8 +611,8 @@ export default function Dashboard(ac) {
           <div className="board">
             <div className="panel panel-primary">
               <div className="number">
-                <h3 className="h3-dashboard">{ac.totaldeviceStatusList}</h3>
-                <small>Customers</small>
+                <h3 className="h3-dashboard">{ac.networkID}</h3>
+                <small>Network ID</small>
               </div>
               <div className="icon">
                 <i className="fa fa-sitemap fa-5x red"></i>

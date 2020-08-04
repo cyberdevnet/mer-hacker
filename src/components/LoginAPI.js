@@ -136,7 +136,8 @@ export default function LoginAPI(ac) {
     <div style={ac.hideLogin} className="container register">
       <div className="row">
         <div className="col-md-3 register-left">
-          <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt="" />
+          <img src="https://i.ibb.co/1XQKfyd/Mer-Haker-white.png" alt="Mer-Haker-big" style={{ width: '230px' }} />
+          {/* <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt="" /> */}
           <h3>Welcome</h3>
           <br />
         </div>

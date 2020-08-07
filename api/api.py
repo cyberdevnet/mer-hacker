@@ -560,6 +560,25 @@ def site2site():
         flash(error)
         return {'error' : [render_template('flash_template.html'),err.status]}
 
+
+@ app.route('/device_switchports', methods=['GET', 'POST'])
+def device_switchports():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json()
+            return data
+        else:
+            ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
+            SERIAL_NUM = data['SERIAL_NUM']
+            dashboard = meraki.DashboardAPI(ARG_APIKEY)
+            switchports = dashboard.switch_ports.getDeviceSwitchPorts(SERIAL_NUM)
+            return {'switchports': switchports}
+    except Exception as err:
+        print('Exception: ',err)
+        flash(err)
+        return {'error' : [render_template('flash_template.html')]}
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000)
 

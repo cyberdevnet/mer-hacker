@@ -644,24 +644,22 @@ export default function Topology(ac) {
         <div id="page-inner-tool-templates" style={{ margin: "-65px 20px 10px 0px" }}>
             <div>{ac.flashMessages && <span>{ac.flashMessages}</span>}</div>
             <div className="row">
-                <div className="panel-group" id="accordion">
-                    <div className="panel-heading">
-                        <h4 className="panel-title-description">
-                            <a
-                                data-toggle="collapse"
-                                data-parent="#accordion"
-                                href="#collapseOne"
-                                className="collapsed"
-                            >
-                                <span className="glyphicon glyphicon-circle-arrow-down"></span>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseOne" className="panel-collapse">
-                        <div className="col-xs-12">
-                            <div className="panel panel-default">
-                                <div className="panel-body">
-                                    <div>
+                <div>
+                    <div className="col-xs-12">
+                        <div className="panel panel-default">
+                            <div className="panel-body" style={{ height: "85px" }}>
+                                <div className="panel-group" id="accordion">
+                                    <div className="panel-heading">
+                                        {/* <h4 className="panel-title-description"> */}
+                                        <a
+                                            data-toggle="collapse"
+                                            data-parent="#accordion"
+                                            href="#collapseOne"
+                                            className="collapsed"
+                                            style={{ float: "right" }}
+                                        >
+                                            <span className="glyphicon glyphicon-circle-arrow-down"></span>
+                                        </a>
                                         <select
                                             onChange={TopologyType}
                                             id="selectTopology"
@@ -674,6 +672,14 @@ export default function Topology(ac) {
                                             <option value="2">VPN Topology</option>
                                         </select>
                                     </div>
+                                </div>
+                            </div>
+                            {/* </div> */}
+                            <div id="collapseOne" className="panel-collapse">
+
+                                {/* <div className="panel panel-default"> */}
+                                <div className="panel-body">
+
                                     {vpnTopology ? (
                                         <div>
                                             <div>
@@ -752,6 +758,7 @@ export default function Topology(ac) {
                                         {!loading && <span>Load Topology</span>}
                                     </button>
                                 </div>
+                                {/* </div> */}
                             </div>
                         </div>
                     </div>
@@ -760,6 +767,6 @@ export default function Topology(ac) {
                 {switchTopologyModal ? (<TopologyModal dc={dc} />) : (<div></div>)}
                 {switchTopologyVPNModal ? (<TopologyVPNModal dc={dc} />) : (<div></div>)}
             </div>
-        </div>
+        </div >
     )
 }

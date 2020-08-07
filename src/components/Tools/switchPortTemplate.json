@@ -1,0 +1,46 @@
+[
+  {
+    "enabled": "Enabled",
+    "stacking": "Disabled",
+    "poeEnabled": "Enabled",
+    "port": {
+      "type": "Access"
+    },
+    "policy": {
+      "accessPolicyNumber": "HybridAuthISE"
+    },
+    "linkNegotiation": "Auto negotiate",
+    "stpGuard": "Disabled",
+    "portScheduleId": "Unscheduled",
+    "rstpEnabled": "Enabled",
+    "isolationEnabled": "Enabled",
+    "trusted": "Enabled",
+    "stormControlEnabled": "Alert Only",
+    "udld": "Enabled",
+    "templateName": "Fabrizio",
+    "id": 5542,
+    "name": "CIAO",
+    "tags": "boh"
+  },
+  {
+    "enabled": "Enabled",
+    "stacking": "Disabled",
+    "poeEnabled": "Enabled",
+    "port": {
+      "type": "Access"
+    },
+    "policy": {
+      "accessPolicyNumber": "HybridAuthISE"
+    },
+    "linkNegotiation": "Auto negotiate",
+    "stpGuard": "Disabled",
+    "portScheduleId": "Unscheduled",
+    "rstpEnabled": "Enabled",
+    "isolationEnabled": "Enabled",
+    "trusted": "Enabled",
+    "stormControlEnabled": "Alert Only",
+    "udld": "Enabled",
+    "templateName": "Matcha2",
+    "id": 4683
+  }
+]

@@ -67,3 +67,32 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* remove headcheckbox to avoid multiselect */
+.selection-cell-header {
+  /* display: none; */
+}
+
+.react-bootstrap-table-editing-cell.edit-cell-class {
+  font-family: 'Open Sans', sans-serif;
+
+}
+
+/* form in dataTable */
+.form-control {
+  /* width: 232px; */
+  width: 100%;
+  margin: 0px;
+
+}
+
+.form-control.editor.edit-select{
+  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.42857143;
+    margin-left: 2px;
+    margin-right: 2px;
+    top: 50%;
+
+
+}

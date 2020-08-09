@@ -42,5 +42,49 @@
     "udld": "Enabled",
     "templateName": "Matcha2",
     "id": 4683
+  },
+  {
+    "enabled": "Enabled",
+    "stacking": "Disabled",
+    "poeEnabled": "Enabled",
+    "port": {
+      "type": "Access"
+    },
+    "policy": {
+      "accessPolicyNumber": "HybridAuthISE"
+    },
+    "linkNegotiation": "Auto negotiate",
+    "stpGuard": "Disabled",
+    "portScheduleId": "Unscheduled",
+    "rstpEnabled": "Enabled",
+    "isolationEnabled": "Enabled",
+    "trusted": "Enabled",
+    "stormControlEnabled": "Alert Only",
+    "udld": "Enabled",
+    "templateName": "test2",
+    "id": 2053
+  },
+  {
+    "enabled": "Enabled",
+    "stacking": "Disabled",
+    "poeEnabled": "Enabled",
+    "port": {
+      "type": "Access"
+    },
+    "policy": {
+      "accessPolicyNumber": "Open"
+    },
+    "linkNegotiation": "Auto negotiate",
+    "stpGuard": "Disabled",
+    "portScheduleId": "Unscheduled",
+    "rstpEnabled": "Enabled",
+    "isolationEnabled": "Enabled",
+    "trusted": "Enabled",
+    "stormControlEnabled": "Enabled",
+    "udld": "Alert only",
+    "templateName": "Modifica2",
+    "name": "CIAO",
+    "tags": "boh",
+    "id": 3773
   }
 ]

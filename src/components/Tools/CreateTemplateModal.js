@@ -241,19 +241,19 @@ export default function CreateTemplateModal(ac) {
                 "type": "string",
                 "title": "Storm Control",
                 "enum": [
-                    "Alert Only",
-                    "Enforce"
+                    "Enabled",
+                    "Disabled"
                 ],
-                "default": "Alert Only"
+                "default": "Enabled"
             },
             "udld": {
                 "type": "string",
                 "title": "UDLD",
                 "enum": [
-                    "Enabled",
-                    "Disabled"
+                    "Alert only",
+                    "Enforce"
                 ],
-                "default": "Enabled"
+                "default": "Alert only"
             },
             "id": {
                 "type": "number"

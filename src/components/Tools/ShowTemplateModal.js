@@ -5,7 +5,6 @@ import "../../styles/CreateTemplateModal.css";
 
 
 export default function ShowTemplateModal(ac) {
-    console.log("ShowTemplateModal -> ac", ac)
     const [loading, setloading] = useState(false);
     const [loadingSubmit, setloadingSubmit] = useState(false);
 
@@ -243,19 +242,19 @@ export default function ShowTemplateModal(ac) {
                 "type": "string",
                 "title": "Storm Control",
                 "enum": [
-                    "Alert Only",
-                    "Enforce"
+                    "Enabled",
+                    "Disabled"
                 ],
-                "default": "Alert Only"
+                "default": ""
             },
             "udld": {
                 "type": "string",
                 "title": "UDLD",
                 "enum": [
-                    "Enabled",
-                    "Disabled"
+                    "Alert only",
+                    "Enforce"
                 ],
-                "default": "Enabled"
+                "default": "Alert only"
             },
             "id": {
                 "type": "number"

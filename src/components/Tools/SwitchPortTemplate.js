@@ -1,8 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { MDBDataTableV5 } from "mdbreact";
 import Select from "react-select";
 import CreateTemplateModal from './CreateTemplateModal'
 import ShowTemplateModal from './ShowTemplateModal'
+import BootstrapTable from "react-bootstrap-table-next";
+import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
 
 export default function SwitchPortTemplate(ac) {
@@ -12,6 +15,7 @@ export default function SwitchPortTemplate(ac) {
     const [loading, setloading] = useState(false);
     const [loadingDevices, setloadingDevices] = useState(false);
     const [mapRows, setmapRows] = useState([]);
+    const [errorMessage, seterrorMessage] = useState([]);
     const [switchSerial, setswitchSerial] = useState([])
     const [switchDeviceName, setswitchDeviceName] = useState([])
     const [switchDeviceIp, setswitchDeviceIp] = useState([])
@@ -28,6 +32,12 @@ export default function SwitchPortTemplate(ac) {
     const initialFormTemplatesState = { mySelectKey: null }
     const [switchesSelectKey, setswitchesSelectKey] = useState(initialFormSwitchesState);
     const [templatesSelectKey, settemplatesSelectKey] = useState(initialFormTemplatesState);
+    const [selecttemplates, setselectTemplates] = useState([])
+    const [dataPorts, setdataPorts] = useState([])
+    const [allSelectedPorts, setallSelectedPorts] = useState([])
+
+
+
 
     async function readTemplate() {
         try {
@@ -35,11 +45,20 @@ export default function SwitchPortTemplate(ac) {
                 .then(res => res.json())
                 .then((data) => {
                     const TEMPLATELIST = data.map((opt, index) => ({
+                        value: opt.templateName,
+                        label: opt.templateName,
+                        templateID: index
+
+                    }))
+                    const TEMPLATELIST2 = data.map((opt, index) => ({
+                        value: index,
                         label: opt.templateName,
                         index: index
+
                     }))
 
                     setTemplates(TEMPLATELIST)
+                    setselectTemplates(TEMPLATELIST2)
 
                     const TEMPLATEPROPS = data.map((opt, index) => ({
                         opt
@@ -62,12 +81,6 @@ export default function SwitchPortTemplate(ac) {
             abortController.abort()
         }
     }, [])
-
-
-    const showLogs2 = (e) => {
-        setCheckbox1(e);
-    };
-
 
 
     let Switches = []
@@ -95,9 +108,6 @@ export default function SwitchPortTemplate(ac) {
         SERIAL_NUM: `${switchSerial}`,
     };
 
-    const callTemplate = () => {
-        settriggerTemplate(triggerTemplate + 1);
-    };
 
     const isFirstRunreadTemplate = useRef(true);
     useEffect(() => {
@@ -116,6 +126,7 @@ export default function SwitchPortTemplate(ac) {
     }, [triggerTemplate])
 
 
+
     const isFirstRun = useRef(true);
     useEffect(() => {
         const abortController = new AbortController()
@@ -126,6 +137,7 @@ export default function SwitchPortTemplate(ac) {
         }
         async function APIcall() {
             if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
+
                 setshowtable(false)
                 fetch("/device_switchports", {
                     method: ["POST"],
@@ -149,47 +161,28 @@ export default function SwitchPortTemplate(ac) {
                                 {data.error[0]}
                             </div>)
                         } else {
-
                             let switchports = []
                             let row = [];
-                            data.switchports.map((opt) => {
+
+                            data.switchports.map((opt, index) => {
                                 var portModel = {
-                                    label: opt.number,
-                                    accessPolicyNumber: opt.accessPolicyNumber,
-                                    allowedVlans: opt.allowedVlans,
-                                    enabled: opt.enabled,
-                                    isolationEnabled: opt.isolationEnabled,
-                                    linkNegotiation: opt.linkNegotiation,
-                                    macWhitelist: opt.macWhitelist,
                                     name: opt.name,
                                     number: opt.number,
-                                    poeEnabled: opt.poeEnabled,
-                                    portScheduleId: opt.portScheduleId,
-                                    rstpEnabled: opt.rstpEnabled,
-                                    stickyMacWhitelist: opt.stickyMacWhitelist,
-                                    stickyMacWhitelistLimit: opt.stickyMacWhitelistLimit,
-                                    stpGuard: opt.stpGuard,
-                                    tags: opt.tags,
                                     type: opt.type,
-                                    udld: opt.udld,
                                     vlan: opt.vlan,
-                                    voiceVlan: opt.voiceVlan,
-                                    template: <Select
-                                        className='select-tolopology'
-                                        options={templates}
-                                        placeholder='Select Template'
-                                        onChange={selectTemplate}
-                                        onMenuOpen={callTemplate}
-                                        classNamePrefix="topology"
-                                    />
+                                    template: 'Select Template',
+                                    templateID: []
                                 }
+
 
                                 switchports.push(portModel)
                                 row.push(portModel);
                                 setmapRows(row);
                                 setDatatable({ ...datatable, rows: row })
+                                setdataPorts({ ...datatable, rows: row })
 
                             })
+
 
                         }
 
@@ -218,6 +211,7 @@ export default function SwitchPortTemplate(ac) {
     }, [trigger]);
 
 
+
     const [datatable, setDatatable] = React.useState({
         columns: [
             {
@@ -242,12 +236,6 @@ export default function SwitchPortTemplate(ac) {
                 sort: "asc",
                 width: 200,
             },
-            // {
-            //     label: "Voice VLAN",
-            //     field: "voiceVlan",
-            //     sort: "asc",
-            //     width: 200,
-            // },
             {
                 label: "Type",
                 field: "type",
@@ -259,101 +247,12 @@ export default function SwitchPortTemplate(ac) {
                 field: "template",
                 sort: "asc",
                 width: 200,
-            },
-            // {
-            //     label: "accessPolicyNumber",
-            //     field: "accessPolicyNumber",
-            //     sort: "asc",
-            //     width: 200,
-            // },
-            // {
-            //     label: "allowedVlans",
-            //     field: "allowedVlans",
-            //     sort: "asc",
-            //     width: 200,
-            // },
-            // {
-            //     label: "enabled",
-            //     field: "enabled",
-            //     sort: "asc",
-            //     width: 200,
-            // },
-            // {
-            //     label: "isolationEnabled",
-            //     field: "isolationEnabled",
-            //     sort: "asc",
-            //     width: 200,
-            // },
-            // {
-            //     label: "linkNegotiation",
-            //     field: "linkNegotiation",
-            //     sort: "asc",
-            //     width: 200,
-            // },
-            // {
-            //     label: "macWhitelist",
-            //     field: "macWhitelist",
-            //     sort: "asc",
-            //     width: 200,
-            // },
-            // {
-            //     label: "poeEnabled",
-            //     field: "poeEnabled",
-            //     sort: "asc",
-            //     width: 200,
-            // },
-            // {
-            //     label: "portScheduleId",
-            //     field: "portScheduleId",
-            //     sort: "asc",
-            //     width: 200,
-            // },
-            // {
-            //     label: "rstpEnabled",
-            //     field: "rstpEnabled",
-            //     sort: "asc",
-            //     width: 200,
-            // },
-            // {
-            //     label: "stickyMacWhitelist",
-            //     field: "stickyMacWhitelist",
-            //     sort: "asc",
-            //     width: 200,
-            // },
-            // {
-            //     label: "stickyMacWhitelistLimit",
-            //     field: "stickyMacWhitelistLimit",
-            //     sort: "asc",
-            //     width: 200,
-            // },
-            // {
-            //     label: "STP Guard",
-            //     field: "stpGuard",
-            //     sort: "asc",
-            //     width: 200,
-            // },
-            // {
-            //     label: "tags",
-            //     field: "tags",
-            //     sort: "asc",
-            //     width: 200,
-            // },
-            // {
-            //     label: "udld",
-            //     field: "udld",
-            //     sort: "asc",
-            //     width: 200,
-            // },
-
+            }
         ],
         rows: []
 
     });
 
-    const handleIPs = (e) => {
-        e.preventDefault();
-        settrigger(trigger + 1);
-    };
 
     const HandleDevices = (opt) => {
         setswitchesSelectKey({ ...switchesSelectKey, mySelectKey: opt.value });
@@ -366,12 +265,6 @@ export default function SwitchPortTemplate(ac) {
         setswitchDeviceMac(opt.mac)
         setswitchDeviceModel(opt.model)
     };
-
-    const selectTemplate = (opt) => {
-        console.log("selectTemplate -> opt", opt)
-
-    };
-
 
     const createTemplate = () => {
         setcreateTemplateModal(true)
@@ -388,6 +281,130 @@ export default function SwitchPortTemplate(ac) {
         setshowtable(false)
         setswitchesSelectKey(initialFormSwitchesState);
         setshowSwitchInfo(false)
+    };
+
+
+    const clearSelectedTemplate = (row, rowIndex) => {
+        console.log("clearSelectedTemplate -> rowIndex", rowIndex)
+        console.log("clearSelectedTemplate -> row", row)
+
+        row.template = 'Select Template'
+
+    };
+
+
+
+    function rankFormatter(cell, row, rowIndex, formatExtraData) {
+        return (
+            < div
+                style={{
+                    textAlign: "center",
+                    cursor: "pointer",
+                    lineHeight: "normal"
+                }}>
+
+                <button onClick={() => clearSelectedTemplate(row, rowIndex)} type="button" className="btn btn-default" style={{ width: '39px', marginLeft: '-3px' }}>
+                    <span className="glyphicon glyphicon-remove"></span>
+                </button>
+            </div>
+        );
+    }
+
+
+    const columns = [
+        {
+            dataField: "number",
+            text: "Port",
+            editable: false
+        },
+        {
+            dataField: "name",
+            text: "Name",
+            editable: false
+        },
+        {
+            dataField: "vlan",
+            text: "VLAN",
+            editable: false
+        },
+        {
+            dataField: "type",
+            text: "Type",
+            editable: false
+        },
+        {
+            dataField: "templateID",
+            text: "templateID",
+            editable: false,
+            hidden: true
+        },
+        {
+            dataField: "template",
+            text: "Template",
+            editCellClasses: 'edit-cell-class',
+            editor: {
+                type: Type.SELECT,
+                options: templates
+            }
+        },
+        {
+            dataField: "X",
+            editable: false,
+            text: "",
+            sort: false,
+            formatter: rankFormatter,
+            headerAttrs: { width: 50 },
+            // attrs: { width: 50, class: "EditRow" }
+        }
+    ];
+
+
+    const selectRow = {
+        mode: 'checkbox',
+        hideSelectAll: true,
+
+        onSelect: (row, isSelect, rowIndex) => {
+            if (isSelect === true) {
+                setallSelectedPorts([...allSelectedPorts, row])
+
+            } else if (isSelect === false) {
+                const index = allSelectedPorts.findIndex(i => i.number === row.number)
+                allSelectedPorts.splice(index, 1)
+
+            }
+
+
+        }
+    };
+
+    const ConfigurePorts = () => {
+        seterrorMessage([])
+
+        console.log("ConfigurePorts -> allSelectedPorts", allSelectedPorts)
+
+        if (allSelectedPorts.length === 0) {
+            seterrorMessage(<div className="form-input-error-msg alert alert-danger">
+                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                {`No Port selected, select at least one port to configure.`}
+            </div>)
+        } else {
+
+            allSelectedPorts.map((port) => {
+                console.log("ConfigurePorts -> port", port)
+                const templateID = templateProperty.findIndex(i => i.opt.templateName === port.template)
+
+                if (templateID > -1) {
+                    console.log(`configuring port${port.number} with template ${port.template} amd templateID`, templateID)
+
+                } else {
+                    seterrorMessage(<div className="form-input-error-msg alert alert-danger">
+                        <span className="glyphicon glyphicon-exclamation-sign"></span>
+                        {`No Template selected on checked Port ${port.number}`}
+                    </div>)
+                }
+            })
+
+        }
 
     };
 
@@ -457,12 +474,12 @@ export default function SwitchPortTemplate(ac) {
                                 </button>
                                 <Select
                                     className='select-tolopology'
-                                    options={templates}
+                                    options={selecttemplates}
                                     placeholder="Show Templates"
                                     onChange={showTemplate}
                                     classNamePrefix="topology"
                                     onMenuOpen={readTemplate}
-                                    value={templates.filter(({ value }) => value === templatesSelectKey.mySelectKey)}
+                                    value={selecttemplates.filter(({ value }) => value === templatesSelectKey.mySelectKey)}
                                     getOptionLabel={({ label }) => label}
                                     getOptionValue={({ value }) => value}
                                 />
@@ -483,10 +500,11 @@ export default function SwitchPortTemplate(ac) {
                                         <li className="list-group-item-template"><strong>IP:</strong> {switchDeviceIp}</li>
                                         <li className="list-group-item-template"><strong>Model:</strong> {switchDeviceModel}</li>
                                     </ul>) : (<div></div>)}
-
+                                {errorMessage}
+                                {/* <button onClick={test}>Test</button> */}
                                 <button
                                     className="btn btn-primary"
-                                    onClick={!loading ? handleIPs : null}
+                                    onClick={!loading ? ConfigurePorts : null}
                                     disabled={loading}
                                 >
                                     {loading && (
@@ -508,27 +526,28 @@ export default function SwitchPortTemplate(ac) {
                     <div className="panel panel-default">
                         {showtable ? (
                             <div className="panel-body">
-                                <MDBDataTableV5
-                                    paging={false}
-                                    searchTop
+                                <BootstrapTable
+                                    keyField="number"
+                                    data={dataPorts.rows}
+                                    columns={columns}
+                                    selectRow={selectRow}
+                                    tabIndexCell
+                                    striped
                                     hover
-                                    data={datatable}
-                                    checkbox="true"
-                                    headCheckboxID='id6'
-                                    bodyCheckboxID='checkboxes6'
-                                    getValueCheckBox={(e) => {
-                                        showLogs2(e);
-                                    }}
-                                    getValueAllCheckBoxes={(e) => {
-                                        showLogs2(e);
-                                    }}
-                                    multipleCheckboxes
-                                    scrollX
+                                    // rowEvents={rowEvents}
+
+                                    cellEdit={cellEditFactory({
+                                        mode: "click",
+                                        blurToSave: true,
+                                        afterSaveCell: selectRow
+                                    })}
                                 />
                             </div>
+
                         ) : (
                                 <div></div>
                             )}
+
                     </div>
                 </div>
             </div>
@@ -538,3 +557,5 @@ export default function SwitchPortTemplate(ac) {
         </div>
     );
 }
+
+

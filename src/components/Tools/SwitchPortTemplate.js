@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { MDBDataTableV5 } from "mdbreact";
 import Select from "react-select";
 import CreateTemplateModal from './CreateTemplateModal'
@@ -25,13 +25,16 @@ export default function SwitchPortTemplate(ac) {
     const [createTemplateModal, setcreateTemplateModal] = useState(false);
     const [showTemplateModal, setshowTemplateModal] = useState(false);
     const [templates, setTemplates] = useState([])
+    console.log("SwitchPortTemplate -> templates", templates)
     const [templateProperty, setTemplateProperty] = useState([])
     const [formData, setformData] = useState([])
     const [showSwitchInfo, setshowSwitchInfo] = useState(false)
     const initialFormSwitchesState = { mySelectKey: null }
     const initialFormTemplatesState = { mySelectKey: null }
+    // const initialSelectTemplatesState = { mySelectKey: null }
     const [switchesSelectKey, setswitchesSelectKey] = useState(initialFormSwitchesState);
     const [templatesSelectKey, settemplatesSelectKey] = useState(initialFormTemplatesState);
+    // const [selectKey, setselectKey] = useState(initialSelectTemplatesState);
     const [selecttemplates, setselectTemplates] = useState([])
     const [dataPorts, setdataPorts] = useState([])
     const [allSelectedPorts, setallSelectedPorts] = useState([])
@@ -47,7 +50,8 @@ export default function SwitchPortTemplate(ac) {
                     const TEMPLATELIST = data.map((opt, index) => ({
                         value: opt.templateName,
                         label: opt.templateName,
-                        templateID: index
+                        templateID: index,
+                        template: opt.templateName
 
                     }))
                     const TEMPLATELIST2 = data.map((opt, index) => ({
@@ -275,6 +279,7 @@ export default function SwitchPortTemplate(ac) {
     };
 
     const showTemplate = (opt) => {
+        console.log("showTemplate -> opt", opt)
         settemplatesSelectKey({ ...templatesSelectKey, mySelectKey: opt.value });
         setshowTemplateModal(true)
         setformData(templateProperty[opt.index])
@@ -288,9 +293,22 @@ export default function SwitchPortTemplate(ac) {
         console.log("clearSelectedTemplate -> rowIndex", rowIndex)
         console.log("clearSelectedTemplate -> row", row)
 
+
         row.template = 'Select Template'
 
+        // columns[5].editor.options
+
     };
+
+
+    // const selectTemplate = (opt) => {
+    //     console.log("selectTemplate -> opt", opt)
+    //     const value = opt === null ? [] : opt.value
+    //     setselectKey({ ...selectKey, mySelectKey: value });
+
+
+
+    // };
 
 
 
@@ -309,6 +327,25 @@ export default function SwitchPortTemplate(ac) {
             </div>
         );
     }
+
+    // function SelectEditor() {
+    //     return [
+    //         <Select
+    //             isClearable
+    //             key="select"
+    //             className='select-templates-table'
+    //             options={templates}
+    //             placeholder="Show Templates"
+    //             onChange={selectRow}
+    //             classNamePrefix="topology"
+    //             // onMenuOpen={readTemplate}
+    //             value={templates.find(({ value }) => value === selectKey.mySelectKey)}
+    //             getOptionLabel={({ label }) => label}
+    //             getOptionValue={({ value }) => value}
+    //         />
+    //     ];
+
+    // }
 
 
     const columns = [
@@ -344,7 +381,8 @@ export default function SwitchPortTemplate(ac) {
             editCellClasses: 'edit-cell-class',
             editor: {
                 type: Type.SELECT,
-                options: templates
+                getOptions: () => templates
+                // options: templates
             }
         },
         {
@@ -359,11 +397,14 @@ export default function SwitchPortTemplate(ac) {
     ];
 
 
+
+
     const selectRow = {
         mode: 'checkbox',
         hideSelectAll: true,
 
         onSelect: (row, isSelect, rowIndex) => {
+            console.log("SwitchPortTemplate -> row", row)
             if (isSelect === true) {
                 setallSelectedPorts([...allSelectedPorts, row])
 
@@ -372,6 +413,8 @@ export default function SwitchPortTemplate(ac) {
                 allSelectedPorts.splice(index, 1)
 
             }
+
+
 
 
         }
@@ -407,6 +450,8 @@ export default function SwitchPortTemplate(ac) {
         }
 
     };
+
+
 
     const dc = {
         showtable,

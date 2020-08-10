@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { MDBDataTableV5 } from "mdbreact";
 import Select from "react-select";
+import { Select as Selector } from "react-dropdown-select";
 import CreateTemplateModal from './CreateTemplateModal'
 import ShowTemplateModal from './ShowTemplateModal'
+import SwitchPortTemplateSummary from './SwitchPortTemplateSummary'
 import BootstrapTable from "react-bootstrap-table-next";
 import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
@@ -21,23 +23,24 @@ export default function SwitchPortTemplate(ac) {
     const [switchDeviceIp, setswitchDeviceIp] = useState([])
     const [switchDeviceMac, setswitchDeviceMac] = useState([])
     const [switchDeviceModel, setswitchDeviceModel] = useState([])
-    const [checkbox1, setCheckbox1] = useState([])
     const [createTemplateModal, setcreateTemplateModal] = useState(false);
     const [showTemplateModal, setshowTemplateModal] = useState(false);
+    const [showSummary, setshowSummary] = useState(false);
     const [templates, setTemplates] = useState([])
-    console.log("SwitchPortTemplate -> templates", templates)
     const [templateProperty, setTemplateProperty] = useState([])
     const [formData, setformData] = useState([])
     const [showSwitchInfo, setshowSwitchInfo] = useState(false)
     const initialFormSwitchesState = { mySelectKey: null }
     const initialFormTemplatesState = { mySelectKey: null }
-    // const initialSelectTemplatesState = { mySelectKey: null }
     const [switchesSelectKey, setswitchesSelectKey] = useState(initialFormSwitchesState);
     const [templatesSelectKey, settemplatesSelectKey] = useState(initialFormTemplatesState);
-    // const [selectKey, setselectKey] = useState(initialSelectTemplatesState);
     const [selecttemplates, setselectTemplates] = useState([])
     const [dataPorts, setdataPorts] = useState([])
+
     const [allSelectedPorts, setallSelectedPorts] = useState([])
+    console.log("SwitchPortTemplate -> allSelectedPorts", allSelectedPorts)
+
+
 
 
 
@@ -51,7 +54,8 @@ export default function SwitchPortTemplate(ac) {
                         value: opt.templateName,
                         label: opt.templateName,
                         templateID: index,
-                        template: opt.templateName
+                        template: opt.templateName,
+                        id: index
 
                     }))
                     const TEMPLATELIST2 = data.map((opt, index) => ({
@@ -191,10 +195,21 @@ export default function SwitchPortTemplate(ac) {
                         }
 
                     })
-                    .then(() => setshowtable(true))
+                    .then(() => {
+                        if (dataPorts.length !== 0) {
+                            setshowtable(true)
+                            ac.dc.setflashMessages([])
+                        } else {
+                            ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+                                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                                There was an error loading the data, please try again.
+                            </div>)
+                        }
+                    })
+                    // .then(() => setshowtable(true))
                     .then(() => setloadingDevices(false))
                     .then(() => setshowSwitchInfo(true))
-                    .then(() => ac.dc.setflashMessages([]))
+                // .then(() => ac.dc.setflashMessages([]))
 
 
 
@@ -279,7 +294,6 @@ export default function SwitchPortTemplate(ac) {
     };
 
     const showTemplate = (opt) => {
-        console.log("showTemplate -> opt", opt)
         settemplatesSelectKey({ ...templatesSelectKey, mySelectKey: opt.value });
         setshowTemplateModal(true)
         setformData(templateProperty[opt.index])
@@ -289,63 +303,42 @@ export default function SwitchPortTemplate(ac) {
     };
 
 
-    const clearSelectedTemplate = (row, rowIndex) => {
-        console.log("clearSelectedTemplate -> rowIndex", rowIndex)
-        console.log("clearSelectedTemplate -> row", row)
+    // const clearSelectedTemplate = (row, rowIndex) => {
+    //     // console.log("clearSelectedTemplate -> row", row)
 
+    //     if (row.template !== 'Select Template') {
+    //         let newArray = [...dataPorts.rows]
+    //         newArray[rowIndex] = { ...newArray[rowIndex], template: 'Select Template' }
+    //         setdataPorts({ ...dataPorts, rows: newArray })
+    //     } else {
+    //         console.log('PORCO DIO');
+    //     }
 
-        row.template = 'Select Template'
-
-        // columns[5].editor.options
-
-    };
-
-
-    // const selectTemplate = (opt) => {
-    //     console.log("selectTemplate -> opt", opt)
-    //     const value = opt === null ? [] : opt.value
-    //     setselectKey({ ...selectKey, mySelectKey: value });
-
-
-
+    //     // const elementsIndex = dataPorts.rows.findIndex(element => element.number === row.number)
+    //     // const notSelectedTemplate = dataPorts.rows.findIndex(element => element.template === 'Select Template')
     // };
 
 
 
-    function rankFormatter(cell, row, rowIndex, formatExtraData) {
-        return (
-            < div
-                style={{
-                    textAlign: "center",
-                    cursor: "pointer",
-                    lineHeight: "normal"
-                }}>
 
-                <button onClick={() => clearSelectedTemplate(row, rowIndex)} type="button" className="btn btn-default" style={{ width: '39px', marginLeft: '-3px' }}>
-                    <span className="glyphicon glyphicon-remove"></span>
-                </button>
-            </div>
-        );
-    }
 
-    // function SelectEditor() {
-    //     return [
-    //         <Select
-    //             isClearable
-    //             key="select"
-    //             className='select-templates-table'
-    //             options={templates}
-    //             placeholder="Show Templates"
-    //             onChange={selectRow}
-    //             classNamePrefix="topology"
-    //             // onMenuOpen={readTemplate}
-    //             value={templates.find(({ value }) => value === selectKey.mySelectKey)}
-    //             getOptionLabel={({ label }) => label}
-    //             getOptionValue={({ value }) => value}
-    //         />
-    //     ];
 
+    // function rankFormatter(cell, row, rowIndex, formatExtraData) {
+    //     return (
+    //         < div
+    //             style={{
+    //                 textAlign: "center",
+    //                 cursor: "pointer",
+    //                 lineHeight: "normal"
+    //             }}>
+
+    //             <button onClick={() => clearSelectedTemplate(row, rowIndex)} type="button" className="btn btn-default" style={{ width: '39px', marginLeft: '-3px' }}>
+    //                 <span className="glyphicon glyphicon-remove"></span>
+    //             </button>
+    //         </div>
+    //     );
     // }
+
 
 
     const columns = [
@@ -385,15 +378,15 @@ export default function SwitchPortTemplate(ac) {
                 // options: templates
             }
         },
-        {
-            dataField: "X",
-            editable: false,
-            text: "",
-            sort: false,
-            formatter: rankFormatter,
-            headerAttrs: { width: 50 },
-            // attrs: { width: 50, class: "EditRow" }
-        }
+        // {
+        //     dataField: "X",
+        //     editable: false,
+        //     text: "",
+        //     sort: false,
+        //     formatter: rankFormatter,
+        //     headerAttrs: { width: 50 },
+        //     // attrs: { width: 50, class: "EditRow" }
+        // }
     ];
 
 
@@ -404,7 +397,6 @@ export default function SwitchPortTemplate(ac) {
         hideSelectAll: true,
 
         onSelect: (row, isSelect, rowIndex) => {
-            console.log("SwitchPortTemplate -> row", row)
             if (isSelect === true) {
                 setallSelectedPorts([...allSelectedPorts, row])
 
@@ -421,33 +413,33 @@ export default function SwitchPortTemplate(ac) {
     };
 
     const ConfigurePorts = () => {
-        seterrorMessage([])
 
-        console.log("ConfigurePorts -> allSelectedPorts", allSelectedPorts)
+        setshowSummary(true)
+        // seterrorMessage([])
 
-        if (allSelectedPorts.length === 0) {
-            seterrorMessage(<div className="form-input-error-msg alert alert-danger">
-                <span className="glyphicon glyphicon-exclamation-sign"></span>
-                {`No Port selected, select at least one port to configure.`}
-            </div>)
-        } else {
 
-            allSelectedPorts.map((port) => {
-                console.log("ConfigurePorts -> port", port)
-                const templateID = templateProperty.findIndex(i => i.opt.templateName === port.template)
+        // if (allSelectedPorts.length === 0) {
+        //     seterrorMessage(<div className="form-input-error-msg alert alert-danger">
+        //         <span className="glyphicon glyphicon-exclamation-sign"></span>
+        //         {`No Port selected, select at least one port to configure.`}
+        //     </div>)
+        // } else {
 
-                if (templateID > -1) {
-                    console.log(`configuring port${port.number} with template ${port.template} amd templateID`, templateID)
+        //     allSelectedPorts.map((port) => {
+        //         const templateID = templateProperty.findIndex(i => i.opt.templateName === port.template)
 
-                } else {
-                    seterrorMessage(<div className="form-input-error-msg alert alert-danger">
-                        <span className="glyphicon glyphicon-exclamation-sign"></span>
-                        {`No Template selected on checked Port ${port.number}`}
-                    </div>)
-                }
-            })
+        //         if (templateID > -1) {
+        //             console.log(`configuring port${port.number} with template ${port.template} amd templateID`, templateID)
 
-        }
+        //         } else {
+        //             seterrorMessage(<div className="form-input-error-msg alert alert-danger">
+        //                 <span className="glyphicon glyphicon-exclamation-sign"></span>
+        //                 {`No Template selected on checked Port ${port.number}`}
+        //             </div>)
+        //         }
+        //     })
+
+        // }
 
     };
 
@@ -470,7 +462,11 @@ export default function SwitchPortTemplate(ac) {
         switchesSelectKey,
         setswitchesSelectKey,
         initialFormSwitchesState,
-        initialFormTemplatesState
+        initialFormTemplatesState,
+        showSummary,
+        setshowSummary,
+        allSelectedPorts,
+        setallSelectedPorts
     }
 
     return (
@@ -586,7 +582,9 @@ export default function SwitchPortTemplate(ac) {
                                         blurToSave: true,
                                         afterSaveCell: selectRow
                                     })}
-                                />
+                                >
+                                    <div className="well">There are no items to show</div>
+                                </BootstrapTable>
                             </div>
 
                         ) : (
@@ -598,6 +596,7 @@ export default function SwitchPortTemplate(ac) {
             </div>
             {createTemplateModal ? (<CreateTemplateModal dc={dc} cc={ac.dc} />) : (<div></div>)}
             {showTemplateModal ? (<ShowTemplateModal dc={dc} cc={ac.dc} />) : (<div></div>)}
+            {showSummary ? (<SwitchPortTemplateSummary dc={dc} cc={ac.dc} />) : (<div></div>)}
 
         </div>
     );

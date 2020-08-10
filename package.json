@@ -44,6 +44,7 @@
     "react-d3-graph": "^2.5.0",
     "react-d3-tree": "^1.16.1",
     "react-dom": "^16.13.1",
+    "react-dropdown-select": "^4.4.2",
     "react-full-screen": "^0.2.4",
     "react-hook-form": "^6.0.7",
     "react-idle-timer": "^4.2.12",

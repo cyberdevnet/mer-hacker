@@ -62,6 +62,7 @@ export default function SwitchPortTemplateSummary(ac) {
                     <div >
                         <div className="modal-header">
                             <h4>Configuration Summary</h4>
+                            {ac.dc.responseMessage}
                         </div>
                         <div className="modal-body text-center"
                             style={{ fontSize: '11px', color: 'darkslategray' }}>

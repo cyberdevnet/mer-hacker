@@ -6,6 +6,7 @@
 
 import requests
 import json
+from flask import jsonify
 
 
 def deploy(ARG_APIKEY,SERIAL_NUM,payload):
@@ -20,6 +21,8 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
     try:
         data = []
         for x in payload:
+
+            # print(json.dumps(x,indent=2))
             
             # delete not necessary entries from payload
             del x['payload']['id']
@@ -67,55 +70,82 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
 
 
             
-            if x['payload']['port']['type'] == "Access":
-                del x['payload']['port']
+            if x['payload']['Port']['type'] == "Access":
+                del x['payload']['Port']['type']
                 x['payload'].update({"type": "access"})
-            elif x['payload']['port']['type'] == "Trunk":
+
+            elif x['payload']['Port']['type'] == "Trunk":
+                print(x['payload'])
                 x['payload'].update({"type": "trunk"})
-                x['payload'].update({"allowedVlans": x['payload']['port']['allowedVlans']})
-                del x['payload']['port']
+                x['payload'].update({"allowedVlans": x['payload']['Port']['allowedVlans']})
+                del x['payload']['Port']['type']
+                del x['payload']['Port']['Policy']
+                del x['payload']['Port']
+                print()
+                print()
+                print()
+                print(x['payload'])
+                # del x['payload']['Port']['type']
+                # del x['payload']['Port']['Policy']
 
 
             
             # change accessPolicyNumber from Name to number
-            if x['payload']['policy']['accessPolicyNumber'] == "HybridAuthISE":
-                del x['payload']['policy']
-                x['payload'].update({"accessPolicyNumber": 0})
-            elif x['payload']['policy']['accessPolicyNumber'] == "Open":
-                del x['payload']['policy']
+            if x['payload']['Port']['Policy']['accessPolicyNumber'] == "HybridAuthISE":
+
                 x['payload'].update({"accessPolicyNumber": 1})
-            elif x['payload']['policy']['accessPolicyNumber'] == "MAC Whitelist":
+                x['payload'].update({"vlan": x['payload']['Port']['Policy']['vlan']})
+                x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})
+                del x['payload']['Port']['Policy']
+
+            elif x['payload']['Port']['Policy']['accessPolicyNumber'] == "Open":
+                x['payload'].update({"accessPolicyNumber": 0})
+                x['payload'].update({"vlan": x['payload']['Port']['Policy']['vlan']})
+                x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})
+                del x['payload']['Port']['Policy']
+            elif x['payload']['Port']['Policy']['accessPolicyNumber'] == "MAC Whitelist":
                 # convert macaddresses to list
-                macs = x['payload']['policy']['macWhitelist']
+                macs = x['payload']['Port']['Policy']['macWhitelist']
                 maclist = macs.split(sep=",", maxsplit=-1)
                 x['payload'].update({"macWhitelist": maclist})
-                del x['payload']['policy']
-                x['payload'].update({"accessPolicyNumber": 2})
-            elif x['payload']['policy']['accessPolicyNumber'] == "Sticky MAC Whitelist":
+                x['payload'].update({"vlan": x['payload']['Port']['Policy']['vlan']})
+                x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})
+                del x['payload']['Port']['Policy']
+                # x['payload'].update({"accessPolicyNumber": 2})
+            elif x['payload']['Port']['Policy']['accessPolicyNumber'] == "Sticky MAC Whitelist":
                 # convert macaddresses to list
-                macs = x['payload']['policy']['macWhitelist']
+                macs = x['payload']['Port']['Policy']['macWhitelist']
                 maclist = macs.split(sep=",", maxsplit=-1)
-                x['payload'].update({"macWhitelist": maclist})
-                x['payload'].update({"stickyMacWhitelistLimit": x['payload']['policy']['stickyMacWhitelistLimit']})
-                del x['payload']['policy']
-                x['payload'].update({"accessPolicyNumber": 3})
+                x['payload'].update({"vlan": x['payload']['Port']['Policy']['vlan']})
+                x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})
+                x['payload'].update({"stickyMacWhitelist": maclist})
+                x['payload'].update({"stickyMacWhitelistLimit": x['payload']['Port']['Policy']['stickyMacWhitelistLimit']})
+                del x['payload']['Port']['Policy']
+                # x['payload'].update({"accessPolicyNumber": 3})
                 
             # print(json.dumps(x['payload'],indent=2))
             
-            data.append({'port' : x['payload'], 'number' : x['number']} )
+            data.append({'config' : x['payload'], 'number' : x['number']} )
+
+            print(data)
 
         for x in data:
             number = x['number']
-            config = json.dumps(x['port'])
+            config = json.dumps(x['config'])
+
+            print(json.dumps(data,indent=2))
 
             url = f"https://api.meraki.com/api/v0/devices/{SERIAL_NUM}/switchPorts/{number}"
             response = requests.request('PUT', url, headers=headers, data=config)
-            print(response.text.encode('utf8'))
-            
+            response_data =response.json()
+            print(response_data)
+        return (response_data)
+            # return {'error' : response.text.encode('utf8')}
 
 
     except Exception as err:
         print('Exception: ',err)
+        # return(err)
         
 
     

@@ -39,6 +39,7 @@ export default function SwitchPortTemplate(ac) {
     const [templatesSelectKey, settemplatesSelectKey] = useState(initialFormTemplatesState);
     const [selecttemplates, setselectTemplates] = useState([])
     const [dataPorts, setdataPorts] = useState([])
+    const [responseMessage, setresponseMessage] = useState([])
 
     const [allSelectedPorts, setallSelectedPorts] = useState([])
     console.log("SwitchPortTemplate -> allSelectedPorts", allSelectedPorts)
@@ -151,6 +152,7 @@ export default function SwitchPortTemplate(ac) {
 
                 setshowtable(false)
                 fetch("/device_switchports", {
+                    signal: signal,
                     method: ["POST"],
                     cache: "no-cache",
                     headers: {
@@ -426,6 +428,8 @@ export default function SwitchPortTemplate(ac) {
 
 
         seterrorMessage([])
+        setresponseMessage([])
+
 
 
         if (allSelectedPorts.length === 0) {
@@ -494,17 +498,26 @@ export default function SwitchPortTemplate(ac) {
         }
         async function Deploy() {
             // if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
-
+            setresponseMessage([])
             fetch("/deploy_device_switchports", {
                 method: ["POST"],
                 cache: "no-cache",
                 headers: {
                     content_type: "application/json",
+                    Accept: 'application/json'
                 },
                 body: JSON.stringify(APIbody2),
-            }).then((response) => {
-                return response.json;
-            });
+            }).then((response) => response.json())
+                .then((data) => {
+                    // if (data.switchporttemplate.errors) {
+
+                    //     setresponseMessage(<div className="form-input-error-msg alert alert-danger">
+                    //         <span className="glyphicon glyphicon-exclamation-sign"></span>
+                    //         {data.switchporttemplate.errors} please check your Template and try again.
+                    //     </div>)
+                    // }
+
+                })
             fetch("/deploy_device_switchports", { signal: signal })
                 .then((res) => res.json())
                 .then((data) => {
@@ -570,7 +583,8 @@ export default function SwitchPortTemplate(ac) {
         setshowSummary,
         allSelectedPorts,
         setallSelectedPorts,
-        triggerDeploy, settriggerDeploy
+        triggerDeploy, settriggerDeploy,
+        responseMessage, setresponseMessage
     }
 
     return (

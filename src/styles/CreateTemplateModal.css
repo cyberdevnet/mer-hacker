@@ -3,6 +3,10 @@
   text-align: -webkit-center
 } */
 
+.form-group.field.field-object {
+  text-align: -webkit-center;
+}
+
 .control-label {
   /* float: left; */
   /* margin: 5px; */
@@ -11,7 +15,9 @@
 
 .inputs-template {
   /* margin-bottom: -2px; */
-  text-align: -webkit-center;
+  /* text-align: -webkit-center; */
+  width: 299px;
+  margin: 10px;
 }
 
 .form-group.field.field-string.radio.radio-inline {
@@ -92,6 +98,4 @@
     margin-left: 2px;
     margin-right: 2px;
     top: 50%;
-
-
 }

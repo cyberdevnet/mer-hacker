@@ -204,11 +204,7 @@ export default function CreateTemplateModal(ac) {
             },
             "portScheduleId": {
                 "type": "string",
-                "title": "Port schedule",
-                "enum": [
-                    "Unscheduled"
-                ],
-                "default": "Unscheduled"
+                "title": "Port schedule"
             },
             "rstpEnabled": {
                 "type": "string",

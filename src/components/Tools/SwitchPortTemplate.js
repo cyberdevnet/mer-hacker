@@ -13,6 +13,7 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 export default function SwitchPortTemplate(ac) {
     const [showtable, setshowtable] = useState(false);
     const [trigger, settrigger] = useState(0);
+    const [triggerDeploy, settriggerDeploy] = useState(0);
     const [triggerTemplate, settriggerTemplate] = useState(0);
     const [retryCounter, setretryCounter] = useState(0);
     const [loading, setloading] = useState(false);
@@ -446,7 +447,6 @@ export default function SwitchPortTemplate(ac) {
 
 
                     let templatePayload = templateProperty[templateID].opt
-                    console.log("ConfigurePorts -> templatePayload", templatePayload)
 
 
                     newArray[index] = { ...newArray[index], payload: templatePayload }
@@ -476,6 +476,76 @@ export default function SwitchPortTemplate(ac) {
 
     };
 
+    const APIbody2 = {
+        "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
+        SERIAL_NUM: `${switchSerial}`,
+        PAYLOAD: allSelectedPorts
+    };
+    console.log("SwitchPortTemplate -> APIbody2", APIbody2)
+
+
+    const isFirstRunDeploy = useRef(true);
+    useEffect(() => {
+        const abortController = new AbortController()
+        const signal = abortController.signal
+        if (isFirstRunDeploy.current) {
+            isFirstRunDeploy.current = false;
+            return;
+        }
+        async function Deploy() {
+            // if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
+
+            fetch("/deploy_device_switchports", {
+                method: ["POST"],
+                cache: "no-cache",
+                headers: {
+                    content_type: "application/json",
+                },
+                body: JSON.stringify(APIbody2),
+            }).then((response) => {
+                return response.json;
+            });
+            fetch("/deploy_device_switchports", { signal: signal })
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.error) {
+
+                        ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+                            <span className="glyphicon glyphicon-exclamation-sign"></span>
+                            {data.error[0]}
+                        </div>)
+                    } else {
+
+                        console.log("SwitchPortTemplate -> data", data)
+
+
+                    }
+
+                })
+
+            // } else {
+            //     ac.dc.setswitchAlertModal(true);
+            //     ac.dc.setAlertModalError("Please set Organization and Network.");
+            //     ac.dc.setswitchToolsTemplate(false);
+            // }
+        }
+
+        Deploy()
+        return () => {
+            abortController.abort()
+            // setmapRows([]);
+            // setshowtable(false);
+        };
+        // eslint-disable-next-line
+    }, [triggerDeploy]);
+
+
+
+
+
+
+
+
 
 
     const dc = {
@@ -499,7 +569,8 @@ export default function SwitchPortTemplate(ac) {
         showSummary,
         setshowSummary,
         allSelectedPorts,
-        setallSelectedPorts
+        setallSelectedPorts,
+        triggerDeploy, settriggerDeploy
     }
 
     return (

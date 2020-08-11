@@ -58,21 +58,22 @@ export default function SwitchPortTemplateSummary(ac) {
             fullWidth
         >
             <div >
-                <div className="modal-dialog modal-confirm">
+                <div className="modal-dialog-summary modal-confirm-summary">
                     <div >
                         <div className="modal-header">
+                            <h4>Configuration Summary</h4>
                         </div>
                         <div className="modal-body text-center"
                             style={{ fontSize: '11px', color: 'darkslategray' }}>
-                            <h4>Configuration Summary</h4>
+                            {/* <h4>Configuration Summary</h4> */}
                             <table className="table table-striped" id="table1">
                                 <thead >
                                     <tr>
                                         <th id='col1' scope="col">Number</th>
                                         <th id='col2' scope="col">Name</th>
-                                        <th id='col3' scope="col">Type</th>
-                                        <th id='col4' scope="col">VLAN</th>
-                                        <th id='col5' scope="col">Template</th>
+                                        {/* <th id='col3' scope="col">Type</th> */}
+                                        {/* <th id='col4' scope="col">VLAN</th> */}
+                                        <th id='col5' scope="col">Template selected</th>
                                     </tr>
                                 </thead>
                                 {/* <tbody> */}
@@ -81,8 +82,8 @@ export default function SwitchPortTemplateSummary(ac) {
                                         <tr>
                                             <th scope="row">{port.number}</th>
                                             <td>{port.name}</td>
-                                            <td>{port.vlan}</td>
-                                            <td>{port.type}</td>
+                                            {/* <td>{port.type}</td> */}
+                                            {/* <td>{port.vlan}</td> */}
                                             <td>{port.template}</td>
                                         </tr>
                                     </tbody>
@@ -93,7 +94,8 @@ export default function SwitchPortTemplateSummary(ac) {
                         </div>
                         <div className="modal-footer text-center">
                             <button
-                                className="btn btn-primary"
+                                onClick={() => ac.dc.settriggerDeploy(ac.dc.triggerDeploy + 1)}
+                                className="btn-summary btn-primary"
                                 disabled={loading}
                             >
                                 {loading && (
@@ -105,7 +107,7 @@ export default function SwitchPortTemplateSummary(ac) {
                                 {loading && <span>Deploy</span>}
                                 {!loading && <span>Deploy</span>}
                             </button>
-                            <button type="button" onClick={Cancel} className="btn btn-danger" data-dismiss="modal">Cancel</button>
+                            <button style={{ float: 'left' }} type="button" onClick={Cancel} className="btn-summary btn-danger" data-dismiss="modal">Cancel</button>
                         </div>
                     </div>
                 </div>

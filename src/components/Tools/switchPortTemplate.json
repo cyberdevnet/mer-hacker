@@ -11,79 +11,38 @@
     },
     "linkNegotiation": "Auto negotiate",
     "stpGuard": "Disabled",
-    "portScheduleId": "Unscheduled",
     "rstpEnabled": "Enabled",
     "isolationEnabled": "Enabled",
     "trusted": "Enabled",
-    "stormControlEnabled": "Alert Only",
-    "udld": "Enabled",
-    "templateName": "Matcha2",
-    "id": 4683
+    "udld": "Alert only",
+    "templateName": "TEST_1",
+    "name": "TEST_2",
+    "vlan": 10,
+    "voiceVlan": 90,
+    "id": 3203,
+    "stormControlEnabled": "Disabled"
   },
   {
     "enabled": "Enabled",
     "stacking": "Disabled",
-    "poeEnabled": "Enabled",
+    "poeEnabled": "Disabled",
     "port": {
-      "type": "Access"
+      "type": "Trunk",
+      "allowedVlans": "all"
     },
     "policy": {
       "accessPolicyNumber": "HybridAuthISE"
     },
     "linkNegotiation": "Auto negotiate",
     "stpGuard": "Disabled",
-    "portScheduleId": "Unscheduled",
     "rstpEnabled": "Enabled",
     "isolationEnabled": "Enabled",
     "trusted": "Enabled",
-    "stormControlEnabled": "Alert Only",
-    "udld": "Enabled",
-    "templateName": "test2",
-    "id": 2053
-  },
-  {
-    "enabled": "Enabled",
-    "stacking": "Disabled",
-    "poeEnabled": "Enabled",
-    "port": {
-      "type": "Access"
-    },
-    "policy": {
-      "accessPolicyNumber": "Open"
-    },
-    "linkNegotiation": "Auto negotiate",
-    "stpGuard": "Disabled",
-    "portScheduleId": "Unscheduled",
-    "rstpEnabled": "Enabled",
-    "isolationEnabled": "Enabled",
-    "trusted": "Enabled",
-    "stormControlEnabled": "Enabled",
     "udld": "Alert only",
-    "templateName": "Modifica2",
-    "name": "CIAO",
-    "tags": "boh",
-    "id": 3773
-  },
-  {
-    "enabled": "Enabled",
-    "stacking": "Disabled",
-    "poeEnabled": "Enabled",
-    "port": {
-      "type": "Access"
-    },
-    "policy": {
-      "accessPolicyNumber": "HybridAuthISE"
-    },
-    "linkNegotiation": "Auto negotiate",
-    "stpGuard": "Disabled",
-    "portScheduleId": "Unscheduled",
-    "rstpEnabled": "Enabled",
-    "isolationEnabled": "Enabled",
-    "trusted": "Enabled",
-    "stormControlEnabled": "Enabled",
-    "udld": "Alert only",
-    "templateName": "Fabrizio",
-    "name": "CIAO",
-    "id": 3911
+    "templateName": "TEST_3",
+    "name": "TEST_3",
+    "tags": "TEST_3",
+    "id": 2045,
+    "stormControlEnabled": "Disabled"
   }
 ]

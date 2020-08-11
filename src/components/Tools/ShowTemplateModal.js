@@ -205,11 +205,7 @@ export default function ShowTemplateModal(ac) {
             },
             "portScheduleId": {
                 "type": "string",
-                "title": "Port schedule",
-                "enum": [
-                    "Unscheduled"
-                ],
-                "default": "Unscheduled"
+                "title": "Port schedule"
             },
             "rstpEnabled": {
                 "type": "string",
@@ -245,7 +241,7 @@ export default function ShowTemplateModal(ac) {
                     "Enabled",
                     "Disabled"
                 ],
-                "default": ""
+                "default": "Enabled"
             },
             "udld": {
                 "type": "string",

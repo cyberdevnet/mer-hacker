@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import Dialog from '@material-ui/core/Dialog';
 import "../../styles/CreateTemplateModal.css";
 
 
 export default function SwitchPortTemplateSummary(ac) {
-    console.log("SwitchPortTemplateSummary -> ac", ac)
+    const [loading, setloading] = useState(false)
 
     const Cancel = () => {
         ac.dc.setshowSummary(false);
@@ -77,7 +77,7 @@ export default function SwitchPortTemplateSummary(ac) {
                                 </thead>
                                 {/* <tbody> */}
                                 {ac.dc.allSelectedPorts.map((port) =>
-                                    <tbody>
+                                    <tbody key={port.number}>
                                         <tr>
                                             <th scope="row">{port.number}</th>
                                             <td>{port.name}</td>
@@ -85,55 +85,26 @@ export default function SwitchPortTemplateSummary(ac) {
                                             <td>{port.type}</td>
                                             <td>{port.template}</td>
                                         </tr>
-                                        {/* <tr>
-                                            <th scope="row">Number</th>
-                                            <td>{port.number}</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Name</th>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Type</th>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">VLAN</th>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Template</th>
-                                            <td></td>
-                                        </tr> */}
                                     </tbody>
 
                                 )}
-                                {/* <tr>
-                                        <th scope="row">Number</th>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Name</th>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Type</th>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">VLAN</th>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Template</th>
-                                        <td></td>
-                                    </tr> */}
-                                {/* </tbody> */}
                             </table>
 
                         </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-primary">Deploy</button>
+                        <div className="modal-footer text-center">
+                            <button
+                                className="btn btn-primary"
+                                disabled={loading}
+                            >
+                                {loading && (
+                                    <i
+                                        className="fa fa-refresh fa-spin"
+                                        style={{ marginRight: "5px" }}
+                                    />
+                                )}
+                                {loading && <span>Deploy</span>}
+                                {!loading && <span>Deploy</span>}
+                            </button>
                             <button type="button" onClick={Cancel} className="btn btn-danger" data-dismiss="modal">Cancel</button>
                         </div>
                     </div>

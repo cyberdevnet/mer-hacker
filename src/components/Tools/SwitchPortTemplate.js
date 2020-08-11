@@ -14,7 +14,9 @@ export default function SwitchPortTemplate(ac) {
     const [showtable, setshowtable] = useState(false);
     const [trigger, settrigger] = useState(0);
     const [triggerTemplate, settriggerTemplate] = useState(0);
+    const [retryCounter, setretryCounter] = useState(0);
     const [loading, setloading] = useState(false);
+    const [configureDisabled, setconfigureDisabled] = useState(true);
     const [loadingDevices, setloadingDevices] = useState(false);
     const [mapRows, setmapRows] = useState([]);
     const [errorMessage, seterrorMessage] = useState([]);
@@ -179,7 +181,8 @@ export default function SwitchPortTemplate(ac) {
                                     type: opt.type,
                                     vlan: opt.vlan,
                                     template: 'Select Template',
-                                    templateID: []
+                                    templateID: [],
+                                    payload: []
                                 }
 
 
@@ -200,10 +203,16 @@ export default function SwitchPortTemplate(ac) {
                             setshowtable(true)
                             ac.dc.setflashMessages([])
                         } else {
-                            ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
-                                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                            if (retryCounter < 4) {
+                                settrigger(trigger + 1)
+                                setretryCounter(retryCounter + 1)
+                            } else {
+                                ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+                                    <span className="glyphicon glyphicon-exclamation-sign"></span>
                                 There was an error loading the data, please try again.
                             </div>)
+                            }
+
                         }
                     })
                     // .then(() => setshowtable(true))
@@ -287,7 +296,7 @@ export default function SwitchPortTemplate(ac) {
 
     const createTemplate = () => {
         setcreateTemplateModal(true)
-        setshowtable(false)
+        // setshowtable(false)
         setswitchesSelectKey(initialFormSwitchesState);
         setshowSwitchInfo(false)
 
@@ -297,7 +306,7 @@ export default function SwitchPortTemplate(ac) {
         settemplatesSelectKey({ ...templatesSelectKey, mySelectKey: opt.value });
         setshowTemplateModal(true)
         setformData(templateProperty[opt.index])
-        setshowtable(false)
+        // setshowtable(false)
         setswitchesSelectKey(initialFormSwitchesState);
         setshowSwitchInfo(false)
     };
@@ -307,9 +316,9 @@ export default function SwitchPortTemplate(ac) {
     //     // console.log("clearSelectedTemplate -> row", row)
 
     //     if (row.template !== 'Select Template') {
-    //         let newArray = [...dataPorts.rows]
-    //         newArray[rowIndex] = { ...newArray[rowIndex], template: 'Select Template' }
-    //         setdataPorts({ ...dataPorts, rows: newArray })
+    // let newArray = [...dataPorts.rows]
+    // newArray[rowIndex] = { ...newArray[rowIndex], template: 'Select Template' }
+    // setdataPorts({ ...dataPorts, rows: newArray })
     //     } else {
     //         console.log('PORCO DIO');
     //     }
@@ -399,47 +408,71 @@ export default function SwitchPortTemplate(ac) {
         onSelect: (row, isSelect, rowIndex) => {
             if (isSelect === true) {
                 setallSelectedPorts([...allSelectedPorts, row])
+                setconfigureDisabled(false)
 
             } else if (isSelect === false) {
                 const index = allSelectedPorts.findIndex(i => i.number === row.number)
                 allSelectedPorts.splice(index, 1)
+                if (allSelectedPorts.length === 0) {
+                    setconfigureDisabled(true)
+                }
 
             }
-
-
-
-
         }
     };
 
     const ConfigurePorts = () => {
 
-        setshowSummary(true)
-        // seterrorMessage([])
+
+        seterrorMessage([])
 
 
-        // if (allSelectedPorts.length === 0) {
-        //     seterrorMessage(<div className="form-input-error-msg alert alert-danger">
-        //         <span className="glyphicon glyphicon-exclamation-sign"></span>
-        //         {`No Port selected, select at least one port to configure.`}
-        //     </div>)
-        // } else {
+        if (allSelectedPorts.length === 0) {
+            seterrorMessage(<div className="form-input-error-msg alert alert-danger">
+                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                {`No Port selected, select at least one port to configure.`}
+            </div>)
+        } else {
 
-        //     allSelectedPorts.map((port) => {
-        //         const templateID = templateProperty.findIndex(i => i.opt.templateName === port.template)
+            let newArray = [...allSelectedPorts]
+            allSelectedPorts.map((port, index) => {
+                const templateID = templateProperty.findIndex(i => i.opt.templateName === port.template)
+                const notSelectedTemplate = allSelectedPorts.findIndex(element => element.template === 'Select Template')
+                console.log("ConfigurePorts -> notSelectedTemplate", notSelectedTemplate)
 
-        //         if (templateID > -1) {
-        //             console.log(`configuring port${port.number} with template ${port.template} amd templateID`, templateID)
+                if (templateID > -1) {
+                    // console.log(`configuring port${port.number} with template ${port.template} amd templateID`, templateID)
 
-        //         } else {
-        //             seterrorMessage(<div className="form-input-error-msg alert alert-danger">
-        //                 <span className="glyphicon glyphicon-exclamation-sign"></span>
-        //                 {`No Template selected on checked Port ${port.number}`}
-        //             </div>)
-        //         }
-        //     })
 
-        // }
+
+                    let templatePayload = templateProperty[templateID].opt
+                    console.log("ConfigurePorts -> templatePayload", templatePayload)
+
+
+                    newArray[index] = { ...newArray[index], payload: templatePayload }
+
+                    setallSelectedPorts(newArray)
+                    // setallSelectedPorts({ ...allSelectedPorts, newArray })
+                    // console.log("ConfigurePorts -> allSelectedPorts", allSelectedPorts)
+
+                    if (notSelectedTemplate === -1) {
+                        setshowSummary(true)
+                    }
+
+
+
+                } else {
+                    seterrorMessage(<div className="form-input-error-msg alert alert-danger">
+                        <span className="glyphicon glyphicon-exclamation-sign"></span>
+                        {`No Template selected on checked Port ${port.number}`}
+                    </div>)
+                }
+
+
+
+            })
+
+        }
 
     };
 
@@ -546,7 +579,7 @@ export default function SwitchPortTemplate(ac) {
                                 <button
                                     className="btn btn-primary"
                                     onClick={!loading ? ConfigurePorts : null}
-                                    disabled={loading}
+                                    disabled={configureDisabled}
                                 >
                                     {loading && (
                                         <i

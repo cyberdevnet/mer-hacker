@@ -55,7 +55,7 @@ export default function CreateTemplateModal(ac) {
                 ],
                 "default": "Enabled"
             },
-            "port": {
+            "Port": {
                 "type": "object",
                 "properties": {
                     "type": {
@@ -77,11 +77,91 @@ export default function CreateTemplateModal(ac) {
                                         "enum": [
                                             "Access"
                                         ]
-                                    }
+                                    },
+                                    "Policy": {
+                                        "type": "object",
+                                        "properties": {
+                                            "vlan": {
+                                                "type": "number",
+                                                "title": "VLAN"
+                                            },
+                                            "voiceVlan": {
+                                                "type": "number",
+                                                "title": "Voice VLAN"
+                                            },
+                                            "accessPolicyNumber": {
+                                                "type": "string",
+                                                "title": "Access Policy",
+                                                "enum": [
+                                                    "HybridAuthISE",
+                                                    "Open",
+                                                    "MAC Whitelist",
+                                                    "Sticky MAC Whitelist"
+                                                ],
+                                                "default": "HybridAuthISE"
+                                            },
+                                        },
+                                        "dependencies": {
+                                            "accessPolicyNumber": {
+                                                "oneOf": [
+                                                    {
+                                                        "properties": {
+                                                            "accessPolicyNumber": {
+                                                                "enum": [
+                                                                    "HybridAuthISE"
+                                                                ]
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        "properties": {
+                                                            "accessPolicyNumber": {
+                                                                "enum": [
+                                                                    "Open"
+                                                                ]
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        "properties": {
+                                                            "accessPolicyNumber": {
+                                                                "enum": [
+                                                                    "MAC Whitelist"
+                                                                ]
+                                                            },
+                                                            "macWhitelist": {
+                                                                "type": "string",
+                                                                "title": "Whitelisted MACs"
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        "properties": {
+                                                            "accessPolicyNumber": {
+                                                                "enum": [
+                                                                    "Sticky MAC Whitelist"
+                                                                ]
+                                                            },
+                                                            "stickyMacWhitelistLimit": {
+                                                                "type": "number",
+                                                                "title": "Whitelist size limit"
+                                                            },
+                                                            "macWhitelist": {
+                                                                "type": "string",
+                                                                "title": "Whitelisted MACs"
+                                                            }
+                                                        },
+                                                    },
+                                                ]
+                                            }
+                                        },
+
+                                    },
                                 }
                             },
                             {
                                 "properties": {
+                                    // "required": "allowedVlans",
                                     "type": {
                                         "enum": [
                                             "Trunk"
@@ -89,77 +169,8 @@ export default function CreateTemplateModal(ac) {
                                     },
                                     "allowedVlans": {
                                         "type": "string",
-                                        "title": "Allowed VLANs"
-                                    }
-                                },
-                            },
-                        ]
-                    }
-                }
-            },
-            "policy": {
-                "type": "object",
-                "properties": {
-                    "accessPolicyNumber": {
-                        "type": "string",
-                        "title": "Access Policy",
-                        "enum": [
-                            "HybridAuthISE",
-                            "Open",
-                            "MAC Whitelist",
-                            "Sticky MAC Whitelist"
-                        ],
-                        "default": "HybridAuthISE"
-                    },
-                },
-                "dependencies": {
-                    "accessPolicyNumber": {
-                        "oneOf": [
-                            {
-                                "properties": {
-                                    "accessPolicyNumber": {
-                                        "enum": [
-                                            "HybridAuthISE"
-                                        ]
-                                    }
-                                }
-                            },
-                            {
-                                "properties": {
-                                    "accessPolicyNumber": {
-                                        "enum": [
-                                            "Open"
-                                        ]
-                                    }
-                                }
-                            },
-                            {
-                                "properties": {
-                                    "accessPolicyNumber": {
-                                        "enum": [
-                                            "MAC Whitelist"
-                                        ]
-                                    },
-                                    "macWhitelist": {
-                                        "type": "string",
-                                        "title": "Whitelisted MACs"
-                                    }
-                                }
-                            },
-                            {
-                                "properties": {
-                                    "accessPolicyNumber": {
-                                        "enum": [
-                                            "Sticky MAC Whitelist"
-                                        ]
-                                    },
-                                    "stickyMacWhitelistLimit": {
-                                        "type": "number",
-                                        "title": "Whitelist size limit"
-                                    },
-                                    "macWhitelist": {
-                                        "type": "string",
-                                        "title": "Whitelisted MACs"
+                                        "title": "Allowed VLANs",
+                                        // "required": true
                                     }
                                 },
                             },
@@ -168,24 +179,16 @@ export default function CreateTemplateModal(ac) {
                 }
             },
 
-            "vlan": {
-                "type": "number",
-                "title": "VLAN"
-            },
-            "voiceVlan": {
-                "type": "number",
-                "title": "Voice VLAN"
-            },
             "linkNegotiation": {
                 "type": "string",
                 "title": "Link",
                 "enum": [
                     "Auto negotiate",
                     "1 Gigabit full duplex (forced)",
-                    "100 Megabit auto",
+                    "100 Megabit (auto)",
                     "100 Megabit half duplex (forced)",
                     "100 Megabit full duplex (forced)",
-                    "10 Megabit auto",
+                    "10 Megabit (auto)",
                     "10 Megabit half duplex (forced)",
                     "10 Megabit full duplex (forced)"
                 ],
@@ -240,7 +243,7 @@ export default function CreateTemplateModal(ac) {
                     "Enabled",
                     "Disabled"
                 ],
-                "default": "Enabled"
+                "default": "Disabled"
             },
             "udld": {
                 "type": "string",
@@ -259,7 +262,7 @@ export default function CreateTemplateModal(ac) {
     }
 
     const uiSchema = {
-        "port": {
+        "Port": {
             "type": {
                 "ui:widget": "radio",
                 classNames: "radio radio-inline"
@@ -267,18 +270,25 @@ export default function CreateTemplateModal(ac) {
             "allowedVlans": {
                 classNames: "inputs-template"
             },
-        },
-        "policy": {
-            "accessPolicyNumber": {
-                classNames: "inputs-template"
-            },
-            "macWhitelist": {
-                "ui:widget": "textarea",
-                classNames: "inputs-template"
-            },
-            "stickyMacWhitelistLimit": {
-                classNames: "inputs-template"
-            },
+            "Policy": {
+                "accessPolicyNumber": {
+                    classNames: "inputs-template"
+                },
+                "macWhitelist": {
+                    "ui:widget": "textarea",
+                    classNames: "inputs-template"
+                },
+                "stickyMacWhitelistLimit": {
+                    classNames: "inputs-template"
+                },
+                "vlan": {
+                    classNames: "inputs-template"
+                },
+                "voiceVlan": {
+                    classNames: "inputs-template"
+                },
+            }
+
         },
         "enabled": {
             "ui:widget": "radio",
@@ -321,12 +331,6 @@ export default function CreateTemplateModal(ac) {
         "tags": {
             classNames: "inputs-template"
         },
-        "vlan": {
-            classNames: "inputs-template"
-        },
-        "voiceVlan": {
-            classNames: "inputs-template"
-        },
         "linkNegotiation": {
             classNames: "inputs-template"
         },
@@ -344,10 +348,15 @@ export default function CreateTemplateModal(ac) {
 
     function transformErrors(errors) {
         return errors.map(error => {
-            if (error.name === "required") {
+            if (error.name === "required" && error.property === ".templateName") {
                 error.stack = "Template name is required"
                 setloadingSubmit(false)
-            } else if (error.name === "minLength") {
+            } else if (error.name === "required" && error.property === ".allowedVlans") {
+                error.stack = "Allowed VLANs is a required property"
+                setloadingSubmit(false)
+            }
+
+            else if (error.name === "minLength") {
                 error.stack = "Template name should NOT be shorter than 4 characters"
                 setloadingSubmit(false)
             }

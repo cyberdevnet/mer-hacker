@@ -3,46 +3,26 @@
     "enabled": "Enabled",
     "stacking": "Disabled",
     "poeEnabled": "Enabled",
-    "port": {
-      "type": "Access"
-    },
-    "policy": {
-      "accessPolicyNumber": "HybridAuthISE"
-    },
-    "linkNegotiation": "Auto negotiate",
-    "stpGuard": "Disabled",
-    "rstpEnabled": "Enabled",
-    "isolationEnabled": "Enabled",
-    "trusted": "Enabled",
-    "udld": "Alert only",
-    "templateName": "TEST_1",
-    "name": "TEST_2",
-    "vlan": 10,
-    "voiceVlan": 90,
-    "id": 3203,
-    "stormControlEnabled": "Disabled"
-  },
-  {
-    "enabled": "Enabled",
-    "stacking": "Disabled",
-    "poeEnabled": "Disabled",
-    "port": {
-      "type": "Trunk",
+    "Port": {
+      "type": "Access",
+      "Policy": {
+        "accessPolicyNumber": "MAC Whitelist",
+        "vlan": 10,
+        "voiceVlan": 90,
+        "macWhitelist": "00-50-FC-A0-67-2C,00-50-FC-A0-67-2C,00-50-FC-A0-67-2C,00-50-FC-A0-67-2C"
+      },
       "allowedVlans": "all"
     },
-    "policy": {
-      "accessPolicyNumber": "HybridAuthISE"
-    },
     "linkNegotiation": "Auto negotiate",
     "stpGuard": "Disabled",
     "rstpEnabled": "Enabled",
     "isolationEnabled": "Enabled",
     "trusted": "Enabled",
+    "stormControlEnabled": "Disabled",
     "udld": "Alert only",
-    "templateName": "TEST_3",
-    "name": "TEST_3",
-    "tags": "TEST_3",
-    "id": 2045,
-    "stormControlEnabled": "Disabled"
+    "templateName": "TEST_ACCESS",
+    "name": "TEST_ACCESS",
+    "tags": "TEST_ACCESS1 TEST_ACCESS2",
+    "id": 4174
   }
 ]

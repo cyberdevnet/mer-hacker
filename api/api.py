@@ -593,7 +593,7 @@ def deploy_device_switchports():
             payload = data['PAYLOAD']
             return {'switchporttemplate': switchporttemplate.deploy(ARG_APIKEY,SERIAL_NUM,payload)}
         else:
-            return {'switchporttemplate': 'ciao'}
+            return {'switchporttemplate': 'boh'}
     except Exception as err:
         print('Exception: ',err)
         flash(err)

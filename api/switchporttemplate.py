@@ -17,11 +17,9 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
     'x-cisco-meraki-api-key': ARG_APIKEY,
     }
 
-
     try:
         data = []
         for x in payload:
-
             # print(json.dumps(x,indent=2))
             
             # delete not necessary entries from payload
@@ -74,66 +72,59 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
                 del x['payload']['Port']['type']
                 x['payload'].update({"type": "access"})
 
+                # change accessPolicyNumber from Name to number
+                if x['payload']['Port']['Policy']['accessPolicyNumber'] == "HybridAuthISE":
+
+                    x['payload'].update({"accessPolicyNumber": 1})
+                    x['payload'].update({"vlan": x['payload']['Port']['Policy']['vlan']})
+                    x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})
+                    del x['payload']['Port']['Policy']
+
+                elif x['payload']['Port']['Policy']['accessPolicyNumber'] == "Open":
+                    x['payload'].update({"accessPolicyNumber": 0})
+                    x['payload'].update({"vlan": x['payload']['Port']['Policy']['vlan']})
+                    x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})
+                    del x['payload']['Port']['Policy']
+                elif x['payload']['Port']['Policy']['accessPolicyNumber'] == "MAC Whitelist":
+                    # convert macaddresses to list
+                    macs = x['payload']['Port']['Policy']['macWhitelist']
+                    maclist = macs.split(sep=",", maxsplit=-1)
+                    x['payload'].update({"macWhitelist": maclist})
+                    x['payload'].update({"vlan": x['payload']['Port']['Policy']['vlan']})
+                    x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})
+                    del x['payload']['Port']['Policy']
+                    # x['payload'].update({"accessPolicyNumber": 2})
+                elif x['payload']['Port']['Policy']['accessPolicyNumber'] == "Sticky MAC Whitelist":
+                    # convert macaddresses to list
+                    macs = x['payload']['Port']['Policy']['macWhitelist']
+                    maclist = macs.split(sep=",", maxsplit=-1)
+                    x['payload'].update({"vlan": x['payload']['Port']['Policy']['vlan']})
+                    x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})
+                    x['payload'].update({"stickyMacWhitelist": maclist})
+                    x['payload'].update({"stickyMacWhitelistLimit": x['payload']['Port']['Policy']['stickyMacWhitelistLimit']})
+                    del x['payload']['Port']['Policy']
+                del x['payload']['Port']
+
+                data.append({'config' : x['payload'], 'number' : x['number']} )
+ 
+
+
             elif x['payload']['Port']['type'] == "Trunk":
-                print(x['payload'])
                 x['payload'].update({"type": "trunk"})
                 x['payload'].update({"allowedVlans": x['payload']['Port']['allowedVlans']})
-                del x['payload']['Port']['type']
-                del x['payload']['Port']['Policy']
-                del x['payload']['Port']
-                print()
-                print()
-                print()
-                print(x['payload'])
+                x['payload'].update({"vlan": x['payload']['Port']['vlan']})
                 # del x['payload']['Port']['type']
                 # del x['payload']['Port']['Policy']
+                del x['payload']['Port']
 
-
-            
-            # change accessPolicyNumber from Name to number
-            if x['payload']['Port']['Policy']['accessPolicyNumber'] == "HybridAuthISE":
-
-                x['payload'].update({"accessPolicyNumber": 1})
-                x['payload'].update({"vlan": x['payload']['Port']['Policy']['vlan']})
-                x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})
-                del x['payload']['Port']['Policy']
-
-            elif x['payload']['Port']['Policy']['accessPolicyNumber'] == "Open":
-                x['payload'].update({"accessPolicyNumber": 0})
-                x['payload'].update({"vlan": x['payload']['Port']['Policy']['vlan']})
-                x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})
-                del x['payload']['Port']['Policy']
-            elif x['payload']['Port']['Policy']['accessPolicyNumber'] == "MAC Whitelist":
-                # convert macaddresses to list
-                macs = x['payload']['Port']['Policy']['macWhitelist']
-                maclist = macs.split(sep=",", maxsplit=-1)
-                x['payload'].update({"macWhitelist": maclist})
-                x['payload'].update({"vlan": x['payload']['Port']['Policy']['vlan']})
-                x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})
-                del x['payload']['Port']['Policy']
-                # x['payload'].update({"accessPolicyNumber": 2})
-            elif x['payload']['Port']['Policy']['accessPolicyNumber'] == "Sticky MAC Whitelist":
-                # convert macaddresses to list
-                macs = x['payload']['Port']['Policy']['macWhitelist']
-                maclist = macs.split(sep=",", maxsplit=-1)
-                x['payload'].update({"vlan": x['payload']['Port']['Policy']['vlan']})
-                x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})
-                x['payload'].update({"stickyMacWhitelist": maclist})
-                x['payload'].update({"stickyMacWhitelistLimit": x['payload']['Port']['Policy']['stickyMacWhitelistLimit']})
-                del x['payload']['Port']['Policy']
-                # x['payload'].update({"accessPolicyNumber": 3})
-                
-            # print(json.dumps(x['payload'],indent=2))
-            
+        
             data.append({'config' : x['payload'], 'number' : x['number']} )
-
-            print(data)
 
         for x in data:
             number = x['number']
             config = json.dumps(x['config'])
 
-            print(json.dumps(data,indent=2))
+            # print(json.dumps(data,indent=2))
 
             url = f"https://api.meraki.com/api/v0/devices/{SERIAL_NUM}/switchPorts/{number}"
             response = requests.request('PUT', url, headers=headers, data=config)

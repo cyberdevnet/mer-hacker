@@ -167,6 +167,11 @@ export default function ShowTemplateModal(ac) {
                                             "Trunk"
                                         ]
                                     },
+                                    "vlan": {
+                                        "type": "number",
+                                        "title": "Native VLAN",
+                                        // "required": true
+                                    },
                                     "allowedVlans": {
                                         "type": "string",
                                         "title": "Allowed VLANs"
@@ -267,6 +272,9 @@ export default function ShowTemplateModal(ac) {
                 classNames: "radio radio-inline"
             },
             "allowedVlans": {
+                classNames: "inputs-template"
+            },
+            "vlan": {
                 classNames: "inputs-template"
             },
             "Policy": {

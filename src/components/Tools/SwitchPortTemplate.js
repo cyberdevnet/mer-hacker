@@ -40,9 +40,8 @@ export default function SwitchPortTemplate(ac) {
     const [selecttemplates, setselectTemplates] = useState([])
     const [dataPorts, setdataPorts] = useState([])
     const [responseMessage, setresponseMessage] = useState([])
-
+    const [loadingSummaryBtn, setloadingSummaryBtn] = useState(false)
     const [allSelectedPorts, setallSelectedPorts] = useState([])
-    console.log("SwitchPortTemplate -> allSelectedPorts", allSelectedPorts)
 
 
 
@@ -299,7 +298,8 @@ export default function SwitchPortTemplate(ac) {
 
     const createTemplate = () => {
         setcreateTemplateModal(true)
-        // setshowtable(false)
+        setshowtable(false)
+        setallSelectedPorts([])
         setswitchesSelectKey(initialFormSwitchesState);
         setshowSwitchInfo(false)
 
@@ -309,7 +309,8 @@ export default function SwitchPortTemplate(ac) {
         settemplatesSelectKey({ ...templatesSelectKey, mySelectKey: opt.value });
         setshowTemplateModal(true)
         setformData(templateProperty[opt.index])
-        // setshowtable(false)
+        setshowtable(false)
+        setallSelectedPorts([])
         setswitchesSelectKey(initialFormSwitchesState);
         setshowSwitchInfo(false)
     };
@@ -443,41 +444,24 @@ export default function SwitchPortTemplate(ac) {
             allSelectedPorts.map((port, index) => {
                 const templateID = templateProperty.findIndex(i => i.opt.templateName === port.template)
                 const notSelectedTemplate = allSelectedPorts.findIndex(element => element.template === 'Select Template')
-                console.log("ConfigurePorts -> notSelectedTemplate", notSelectedTemplate)
 
                 if (templateID > -1) {
-                    // console.log(`configuring port${port.number} with template ${port.template} amd templateID`, templateID)
-
-
-
                     let templatePayload = templateProperty[templateID].opt
-
-
                     newArray[index] = { ...newArray[index], payload: templatePayload }
-
                     setallSelectedPorts(newArray)
                     // setallSelectedPorts({ ...allSelectedPorts, newArray })
                     // console.log("ConfigurePorts -> allSelectedPorts", allSelectedPorts)
-
                     if (notSelectedTemplate === -1) {
                         setshowSummary(true)
                     }
-
-
-
                 } else {
                     seterrorMessage(<div className="form-input-error-msg alert alert-danger">
                         <span className="glyphicon glyphicon-exclamation-sign"></span>
                         {`No Template selected on checked Port ${port.number}`}
                     </div>)
                 }
-
-
-
             })
-
         }
-
     };
 
     const APIbody2 = {
@@ -485,8 +469,6 @@ export default function SwitchPortTemplate(ac) {
         SERIAL_NUM: `${switchSerial}`,
         PAYLOAD: allSelectedPorts
     };
-    console.log("SwitchPortTemplate -> APIbody2", APIbody2)
-
 
     const isFirstRunDeploy = useRef(true);
     useEffect(() => {
@@ -497,9 +479,10 @@ export default function SwitchPortTemplate(ac) {
             return;
         }
         async function Deploy() {
-            // if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
+            setloadingSummaryBtn(true)
             setresponseMessage([])
             fetch("/deploy_device_switchports", {
+                signal: signal,
                 method: ["POST"],
                 cache: "no-cache",
                 headers: {
@@ -509,44 +492,36 @@ export default function SwitchPortTemplate(ac) {
                 body: JSON.stringify(APIbody2),
             }).then((response) => response.json())
                 .then((data) => {
-                    // if (data.switchporttemplate.errors) {
 
-                    //     setresponseMessage(<div className="form-input-error-msg alert alert-danger">
-                    //         <span className="glyphicon glyphicon-exclamation-sign"></span>
-                    //         {data.switchporttemplate.errors} please check your Template and try again.
-                    //     </div>)
-                    // }
-
-                })
-            fetch("/deploy_device_switchports", { signal: signal })
-                .then((res) => res.json())
-                .then((data) => {
-                    if (data.error) {
-
-                        ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+                    if (data.switchporttemplate === null) {
+                        console.log("Deploy -> data.switchporttemplate", data.switchporttemplate)
+                        setresponseMessage(<div className="form-input-error-msg alert alert-danger">
                             <span className="glyphicon glyphicon-exclamation-sign"></span>
-                            {data.error[0]}
-                        </div>)
+                        ERROR see logs for more informations.
+                    </div>)
+
                     } else {
+                        if (data.switchporttemplate.errors) {
 
-                        console.log("SwitchPortTemplate -> data", data)
-
-
+                            setresponseMessage(<div className="form-input-error-msg alert alert-danger">
+                                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                                {data.switchporttemplate.errors} please check your Template and try again.
+                            </div>)
+                        } else {
+                            setresponseMessage(<div className="form-input-error-msg alert alert-success">
+                                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                            Ports configured successfully.
+                        </div>)
+                        }
                     }
-
                 })
-
-            // } else {
-            //     ac.dc.setswitchAlertModal(true);
-            //     ac.dc.setAlertModalError("Please set Organization and Network.");
-            //     ac.dc.setswitchToolsTemplate(false);
-            // }
+                .then(() => setloadingSummaryBtn(false))
         }
 
         Deploy()
         return () => {
             abortController.abort()
-            // setmapRows([]);
+            console.log("SwitchPortTemplate -> abortController")
             // setshowtable(false);
         };
         // eslint-disable-next-line
@@ -580,11 +555,17 @@ export default function SwitchPortTemplate(ac) {
         initialFormSwitchesState,
         initialFormTemplatesState,
         showSummary,
+        switchDeviceModel,
+        switchDeviceIp,
+        switchDeviceName,
         setshowSummary,
         allSelectedPorts,
         setallSelectedPorts,
         triggerDeploy, settriggerDeploy,
-        responseMessage, setresponseMessage
+        responseMessage, setresponseMessage,
+        loadingSummaryBtn, setloadingSummaryBtn,
+        configureDisabled, setconfigureDisabled
+
     }
 
     return (

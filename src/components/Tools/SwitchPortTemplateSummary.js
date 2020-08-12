@@ -4,53 +4,14 @@ import "../../styles/CreateTemplateModal.css";
 
 
 export default function SwitchPortTemplateSummary(ac) {
-    const [loading, setloading] = useState(false)
+
 
     const Cancel = () => {
         ac.dc.setshowSummary(false);
+        ac.dc.setallSelectedPorts([])
+        ac.dc.setconfigureDisabled(true)
+        ac.dc.settrigger(ac.dc.trigger + 1);
     };
-
-    // let IDList = Number(ac.dc.nodeVPNListID)
-
-    // const handleVPNnodeUp = () => {
-    //     if (IDList < ac.dc.VPNModel.length - 1) {
-    //         ac.dc.setnodeVPNListID(IDList + 1)
-    //         ac.dc.setmodelVPN(ac.dc.VPNModel[IDList])
-    //     }
-    // };
-
-    // const handleVPNnodeDown = () => {
-    //     if (IDList > 0) {
-    //         ac.dc.setnodeVPNListID(IDList - 1)
-    //         ac.dc.setmodelVPN(ac.dc.VPNModel[IDList])
-    //     }
-    // };
-
-    // let subnets = []
-    // let glyphicon = []
-    // // eslint-disable-next-line
-    // ac.dc.modelVPN.subnets.map((item, index) => {
-    //     if (item.useVpn) {
-    //         glyphicon.push(<span className="glyphicon glyphicon-check" style={{ color: '#1ABC9C' }}></span>)
-    //     } else {
-    //         glyphicon.push(<span className="glyphicon glyphicon-check" style={{ color: '#f36a5a' }}></span>)
-
-    //     }
-
-    //     subnets.push(
-    //         <tr key={index}>
-    //             <th scope="row">{index}</th>
-    //             <td style={{ textAlign: 'left' }} >{item.localSubnet}</td>
-    //             <td style={{ textAlign: 'left' }} >{item.useVpn}{glyphicon[index]}</td>
-    //         </tr>
-    //     )
-    // }
-    // )
-
-    // ac.dc.allSelectedPorts.map(() => {
-
-    // })
-
 
     return (
         <Dialog
@@ -63,6 +24,26 @@ export default function SwitchPortTemplateSummary(ac) {
                         <div className="modal-header">
                             <h4>Configuration Summary</h4>
                             {ac.dc.responseMessage}
+                        </div>
+                        <div className="modal-body text-center"
+                            style={{ fontSize: '11px', color: 'darkslategray' }}>
+                            <table className="table table-striped" id="table2">
+                                <thead >
+                                    <tr>
+                                        <th id='col11' scope="col">Hostname</th>
+                                        <th id='col21' scope="col">IP address</th>
+                                        <th id='col31' scope="col">Model</th>
+                                    </tr>
+                                </thead>
+                                <tbody key='2'>
+                                    <tr>
+                                        <th scope="row">{ac.dc.switchDeviceName}</th>
+                                        <td>{ac.dc.switchDeviceIp}</td>
+                                        <td>{ac.dc.switchDeviceModel}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
                         </div>
                         <div className="modal-body text-center"
                             style={{ fontSize: '11px', color: 'darkslategray' }}>
@@ -97,18 +78,18 @@ export default function SwitchPortTemplateSummary(ac) {
                             <button
                                 onClick={() => ac.dc.settriggerDeploy(ac.dc.triggerDeploy + 1)}
                                 className="btn-summary btn-primary"
-                                disabled={loading}
+                                disabled={ac.dc.loadingSummaryBtn}
                             >
-                                {loading && (
+                                {ac.dc.loadingSummaryBtn && (
                                     <i
                                         className="fa fa-refresh fa-spin"
                                         style={{ marginRight: "5px" }}
                                     />
                                 )}
-                                {loading && <span>Deploy</span>}
-                                {!loading && <span>Deploy</span>}
+                                {ac.dc.loadingSummaryBtn && <span>Deploy</span>}
+                                {!ac.dc.loadingSummaryBtn && <span>Deploy</span>}
                             </button>
-                            <button style={{ float: 'left' }} type="button" onClick={Cancel} className="btn-summary btn-danger" data-dismiss="modal">Cancel</button>
+                            <button style={{ float: 'left' }} type="button" onClick={Cancel} className="btn-summary btn-danger" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>

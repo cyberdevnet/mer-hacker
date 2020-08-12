@@ -16,6 +16,7 @@
 .inputs-template {
   /* margin-bottom: -2px; */
   /* text-align: -webkit-center; */
+  /* display: inline-block; */
   width: 299px;
   margin: 10px;
 }

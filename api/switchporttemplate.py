@@ -20,11 +20,17 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
     try:
         data = []
         for x in payload:
-            # print(json.dumps(x,indent=2))
+
+            if x['payload']['tags'] == '':
+                x['payload'].update({'tags': None})
+            # if x['payload']['Port']['Policy']['voiceVlan'] == '':
+            #     x['payload'].update({'voiceVlan': None})
+
             
             # delete not necessary entries from payload
             del x['payload']['id']
             del x['payload']['templateName']
+
 
             # change condition from enabled/disabled to true/false boolean
             if x['payload']['enabled'] == "Enabled":
@@ -55,10 +61,11 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
             if x['payload']['trusted'] == "Enabled":
                 x['payload'].update({'trusted':True})
             else:
-                x['payload'].update({'enabled':False})
+                x['payload'].update({'trusted':False})
 
             # workaround: remove stormControlEnabled if "Storm control is currently not supported in this network"
             # NOT SURE IF WORKS PROPERLY
+
             stormControlEnabled = x['payload']['stormControlEnabled']
             if stormControlEnabled == "Enabled":
                 x['payload'].update({'stormControlEnabled':True})
@@ -74,10 +81,9 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
 
                 # change accessPolicyNumber from Name to number
                 if x['payload']['Port']['Policy']['accessPolicyNumber'] == "HybridAuthISE":
-
                     x['payload'].update({"accessPolicyNumber": 1})
                     x['payload'].update({"vlan": x['payload']['Port']['Policy']['vlan']})
-                    x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})
+                    x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})   
                     del x['payload']['Port']['Policy']
 
                 elif x['payload']['Port']['Policy']['accessPolicyNumber'] == "Open":
@@ -93,7 +99,6 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
                     x['payload'].update({"vlan": x['payload']['Port']['Policy']['vlan']})
                     x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})
                     del x['payload']['Port']['Policy']
-                    # x['payload'].update({"accessPolicyNumber": 2})
                 elif x['payload']['Port']['Policy']['accessPolicyNumber'] == "Sticky MAC Whitelist":
                     # convert macaddresses to list
                     macs = x['payload']['Port']['Policy']['macWhitelist']
@@ -105,7 +110,7 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
                     del x['payload']['Port']['Policy']
                 del x['payload']['Port']
 
-                data.append({'config' : x['payload'], 'number' : x['number']} )
+                # data.append({'config' : x['payload'], 'number' : x['number']} )
  
 
 
@@ -123,15 +128,26 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
         for x in data:
             number = x['number']
             config = json.dumps(x['config'])
-
-            # print(json.dumps(data,indent=2))
-
+            print('Iteration number',number)
             url = f"https://api.meraki.com/api/v0/devices/{SERIAL_NUM}/switchPorts/{number}"
             response = requests.request('PUT', url, headers=headers, data=config)
             response_data =response.json()
             print(response_data)
         return (response_data)
-            # return {'error' : response.text.encode('utf8')}
+
+        #     if response_data['errors'][0] == 'Storm control is currently not supported in this network':
+        #         x['config'].pop('stormControlEnabled')
+        #         nostormControlEnabled = json.dumps(x['config'])
+        #         for x in data:
+        #             number = x['number']
+        #             config = json.dumps(x['config'])
+
+        #             url = f"https://api.meraki.com/api/v0/devices/{SERIAL_NUM}/switchPorts/{number}"
+        #             response = requests.request('PUT', url, headers=headers, data=nostormControlEnabled)
+        #             response_data =response.json()
+        #         print(response_data)
+        # return (response_data)
+            
 
 
     except Exception as err:

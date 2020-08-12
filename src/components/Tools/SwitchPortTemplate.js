@@ -42,6 +42,7 @@ export default function SwitchPortTemplate(ac) {
     const [responseMessage, setresponseMessage] = useState([])
     const [loadingSummaryBtn, setloadingSummaryBtn] = useState(false)
     const [allSelectedPorts, setallSelectedPorts] = useState([])
+    console.log("SwitchPortTemplate -> allSelectedPorts", allSelectedPorts)
 
 
 
@@ -469,6 +470,7 @@ export default function SwitchPortTemplate(ac) {
         SERIAL_NUM: `${switchSerial}`,
         PAYLOAD: allSelectedPorts
     };
+    console.log("SwitchPortTemplate -> APIbody2", APIbody2)
 
     const isFirstRunDeploy = useRef(true);
     useEffect(() => {
@@ -497,7 +499,7 @@ export default function SwitchPortTemplate(ac) {
                         console.log("Deploy -> data.switchporttemplate", data.switchporttemplate)
                         setresponseMessage(<div className="form-input-error-msg alert alert-danger">
                             <span className="glyphicon glyphicon-exclamation-sign"></span>
-                        ERROR see logs for more informations.
+                        ERROR Please check your Template and the logs.
                     </div>)
 
                     } else {

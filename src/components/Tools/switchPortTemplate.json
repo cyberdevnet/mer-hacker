@@ -1,5 +1,6 @@
 [
   {
+    "tags": "",
     "enabled": "Enabled",
     "stacking": "Disabled",
     "poeEnabled": "Enabled",
@@ -7,69 +8,19 @@
       "type": "Access",
       "Policy": {
         "accessPolicyNumber": "HybridAuthISE",
-        "vlan": 10,
-        "voiceVlan": 90,
-        "macWhitelist": "00-50-FC-A0-67-2C,00-50-FC-A0-67-2C,00-50-FC-A0-67-2C,00-50-FC-A0-67-2C"
-      },
-      "allowedVlans": "all"
-    },
-    "linkNegotiation": "Auto negotiate",
-    "stpGuard": "Disabled",
-    "rstpEnabled": "Enabled",
-    "isolationEnabled": "Enabled",
-    "trusted": "Enabled",
-    "stormControlEnabled": "Disabled",
-    "udld": "Alert only",
-    "templateName": "TEST_ACCESS",
-    "name": "TEST_ACCESS",
-    "tags": "TEST_ACCESS1 TEST_ACCESS2",
-    "id": 4174
-  },
-  {
-    "enabled": "Enabled",
-    "stacking": "Disabled",
-    "poeEnabled": "Enabled",
-    "Port": {
-      "type": "Trunk",
-      "vlan": 666,
-      "allowedVlans": "all"
-    },
-    "linkNegotiation": "Auto negotiate",
-    "stpGuard": "Disabled",
-    "rstpEnabled": "Enabled",
-    "isolationEnabled": "Disabled",
-    "trusted": "Enabled",
-    "stormControlEnabled": "Disabled",
-    "udld": "Alert only",
-    "templateName": "TEST_TRUNK",
-    "id": 5593,
-    "name": "TEST_TRUNK",
-    "tags": "TEST_TRUNK"
-  },
-  {
-    "enabled": "Enabled",
-    "stacking": "Disabled",
-    "poeEnabled": "Enabled",
-    "Port": {
-      "type": "Access",
-      "Policy": {
-        "accessPolicyNumber": "Sticky MAC Whitelist",
-        "vlan": 22,
-        "voiceVlan": 34,
-        "macWhitelist": "34:56:fe:ce:8e:b0,34:56:fe:ce:8e:b0",
-        "stickyMacWhitelistLimit": 10
+        "vlan": 1,
+        "voiceVlan": 3
       }
     },
     "linkNegotiation": "Auto negotiate",
-    "stpGuard": "BPDU guard",
+    "stpGuard": "Disabled",
     "rstpEnabled": "Enabled",
     "isolationEnabled": "Disabled",
     "trusted": "Enabled",
     "stormControlEnabled": "Disabled",
     "udld": "Alert only",
-    "templateName": "TEST_ACCESS_STICKY",
-    "name": "TEST_ACCESS_STICKY",
-    "tags": "TEST_ACCESS_STICKY",
-    "id": 1897
+    "templateName": "test",
+    "name": "test",
+    "id": 5819
   }
 ]

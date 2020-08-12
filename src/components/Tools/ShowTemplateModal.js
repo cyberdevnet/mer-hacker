@@ -10,10 +10,10 @@ export default function ShowTemplateModal(ac) {
 
 
     const schema = {
-        "title": "Modify Template",
+        "title": "Create Template",
         "type": "object",
         "required": [
-            "templateName",
+            "templateName", 'name'
         ],
         "properties": {
             "templateName": {
@@ -23,11 +23,12 @@ export default function ShowTemplateModal(ac) {
             },
             "name": {
                 "type": "string",
-                "title": "Port description"
+                "title": "Port description",
             },
             "tags": {
                 "type": "string",
-                "title": "Tags"
+                "title": "Tags",
+                "default": ""
             },
             "enabled": {
                 "type": "string",
@@ -88,7 +89,7 @@ export default function ShowTemplateModal(ac) {
                                             },
                                             "voiceVlan": {
                                                 "type": "number",
-                                                "title": "Voice VLAN"
+                                                "title": "Voice VLAN",
                                             },
                                             "accessPolicyNumber": {
                                                 "type": "string",
@@ -102,6 +103,7 @@ export default function ShowTemplateModal(ac) {
                                                 "default": "HybridAuthISE"
                                             },
                                         },
+                                        "required": ["vlan"],
                                         "dependencies": {
                                             "accessPolicyNumber": {
                                                 "oneOf": [
@@ -132,7 +134,7 @@ export default function ShowTemplateModal(ac) {
                                                             },
                                                             "macWhitelist": {
                                                                 "type": "string",
-                                                                "title": "Whitelisted MACs"
+                                                                "title": "Whitelisted MACs",
                                                             }
                                                         }
                                                     },
@@ -170,13 +172,14 @@ export default function ShowTemplateModal(ac) {
                                     "vlan": {
                                         "type": "number",
                                         "title": "Native VLAN",
-                                        // "required": true
                                     },
                                     "allowedVlans": {
                                         "type": "string",
                                         "title": "Allowed VLANs"
-                                    }
+                                    },
+
                                 },
+                                "required": ["vlan", "allowedVlans"]
                             },
                         ]
                     }
@@ -229,7 +232,7 @@ export default function ShowTemplateModal(ac) {
                     "Enabled",
                     "Disabled"
                 ],
-                "default": "Enabled"
+                "default": "Disabled"
             },
             "trusted": {
                 "type": "string",
@@ -354,10 +357,44 @@ export default function ShowTemplateModal(ac) {
 
     function transformErrors(errors) {
         return errors.map(error => {
-            if (error.name === "required") {
+            if (error.name === "required" && error.property === ".templateName") {
                 error.stack = "Template name is required"
                 setloadingSubmit(false)
-            } else if (error.name === "minLength") {
+            }
+            else if (error.name === "required" && error.property === ".name") {
+                error.stack = "Port description is a required property"
+                setloadingSubmit(false)
+            }
+            else if (error.name === "required" && error.property === ".allowedVlans") {
+                error.stack = "Allowed VLANs is a required property"
+                setloadingSubmit(false)
+            }
+            else if (error.name === "required" && error.property === ".Port.allowedVlans") {
+                error.stack = "Allowed VLANs is a required property"
+                setloadingSubmit(false)
+            }
+            else if (error.name === "required" && error.property === ".Port.vlan") {
+                error.stack = "VLAN is a required property"
+                setloadingSubmit(false)
+            }
+            else if (error.name === "required" && error.property === ".Port.Policy.vlan") {
+                error.stack = "VLAN is a required property"
+                setloadingSubmit(false)
+            }
+            else if (error.name === "oneOf" && error.property === ".Port") {
+
+                error.stack = null
+                // error.stack = "Please check your template"
+                setloadingSubmit(false)
+            }
+            else if (error.name === "enum" && error.property === ".Port.type") {
+
+                error.stack = null
+                // error.stack = "Please check your template"
+                setloadingSubmit(false)
+            }
+
+            else if (error.name === "minLength") {
                 error.stack = "Template name should NOT be shorter than 4 characters"
                 setloadingSubmit(false)
             }
@@ -493,12 +530,15 @@ export default function ShowTemplateModal(ac) {
             maxWidth="md"
         >
             <div className="modal-body text-center">
+                <button onClick={closeModal} type="button" className="close" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
                 {ac.cc.flashMessages}
                 <Form
                     schema={schema}
                     uiSchema={uiSchema}
                     formData={ac.dc.formData.opt}
-                    className="template-modal"
+                    // className="template-modal"
                     onSubmit={writeTemplate}
                     transformErrors={transformErrors}
                     noHtml5Validate
@@ -522,7 +562,7 @@ export default function ShowTemplateModal(ac) {
                     className="btn btn-danger"
                     onClick={closeModal}
                 >
-                    Cancel
+                    Close
                 </button>
                 <button
                     className="btn btn-danger"

@@ -52,7 +52,7 @@ export default function SwitchPortTemplateSummary(ac) {
                                 <thead >
                                     <tr>
                                         <th id='col1' scope="col">Number</th>
-                                        <th id='col2' scope="col">Name</th>
+                                        <th id='col2' scope="col">New Description</th>
                                         {/* <th id='col3' scope="col">Type</th> */}
                                         {/* <th id='col4' scope="col">VLAN</th> */}
                                         <th id='col5' scope="col">Template selected</th>
@@ -63,7 +63,8 @@ export default function SwitchPortTemplateSummary(ac) {
                                     <tbody key={port.number}>
                                         <tr>
                                             <th scope="row">{port.number}</th>
-                                            <td>{port.name}</td>
+                                            <td>{port.payload.name}</td>
+                                            {/* <td>{port.name}</td> */}
                                             {/* <td>{port.type}</td> */}
                                             {/* <td>{port.vlan}</td> */}
                                             <td>{port.template}</td>

@@ -10,6 +10,51 @@
         "accessPolicyNumber": "HybridAuthISE",
         "vlan": 1,
         "voiceVlan": 3
+      },
+      "allowedVlans": "all"
+    },
+    "linkNegotiation": "Auto negotiate",
+    "stpGuard": "Disabled",
+    "rstpEnabled": "Enabled",
+    "isolationEnabled": "Disabled",
+    "trusted": "Enabled",
+    "udld": "Alert only",
+    "templateName": "ACCESS_PORT",
+    "name": "ACCESS_PORT",
+    "id": 2958
+  },
+  {
+    "tags": "",
+    "enabled": "Enabled",
+    "stacking": "Disabled",
+    "poeEnabled": "Enabled",
+    "Port": {
+      "type": "Trunk",
+      "Policy": {},
+      "allowedVlans": "all"
+    },
+    "linkNegotiation": "Auto negotiate",
+    "stpGuard": "Disabled",
+    "rstpEnabled": "Enabled",
+    "isolationEnabled": "Disabled",
+    "trusted": "Enabled",
+    "udld": "Alert only",
+    "templateName": "TRUNK_PORT",
+    "name": "TRUNK_PORT",
+    "id": 3399
+  },
+  {
+    "tags": "",
+    "enabled": "Enabled",
+    "stacking": "Disabled",
+    "poeEnabled": "Enabled",
+    "Port": {
+      "type": "Access",
+      "Policy": {
+        "vlan": 66,
+        "voiceVlan": 3,
+        "accessPolicyNumber": "MAC Whitelist",
+        "macWhitelist": "34:56:fe:ce:8e:a0,34:56:fe:ce:8e:a0"
       }
     },
     "linkNegotiation": "Auto negotiate",
@@ -17,10 +62,32 @@
     "rstpEnabled": "Enabled",
     "isolationEnabled": "Disabled",
     "trusted": "Enabled",
-    "stormControlEnabled": "Disabled",
     "udld": "Alert only",
-    "templateName": "test",
-    "name": "test",
-    "id": 5819
+    "templateName": "ACCESS_PORT_MAC",
+    "name": "ACCESS_PORT_MAC",
+    "id": 2367
+  },
+  {
+    "enabled": "Enabled",
+    "stacking": "Disabled",
+    "poeEnabled": "Enabled",
+    "Port": {
+      "type": "Access",
+      "Policy": {
+        "accessPolicyNumber": "Open",
+        "vlan": 99,
+        "voiceVlan": 60
+      }
+    },
+    "linkNegotiation": "Auto negotiate",
+    "stpGuard": "Disabled",
+    "rstpEnabled": "Enabled",
+    "isolationEnabled": "Disabled",
+    "trusted": "Enabled",
+    "udld": "Alert only",
+    "templateName": "ACCESS_PORT_TAG",
+    "name": "ACCESS_PORT_TAG",
+    "tags": "TAG1 TAG2",
+    "id": 2723
   }
 ]

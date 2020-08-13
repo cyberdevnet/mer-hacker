@@ -148,3 +148,11 @@ th {
   background-color: #d9534f;
   border-color: #d43f3a;
 }
+
+.help-block {
+  font-size: 10px;
+  /* display: block; */
+  margin-top: -35px;
+  /* margin-bottom: 10px; */
+  color: #737373;
+}

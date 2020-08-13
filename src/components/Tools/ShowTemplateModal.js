@@ -10,7 +10,7 @@ export default function ShowTemplateModal(ac) {
 
 
     const schema = {
-        "title": "Create Template",
+        "title": "Show Template",
         "type": "object",
         "required": [
             "templateName", 'name'
@@ -95,12 +95,12 @@ export default function ShowTemplateModal(ac) {
                                                 "type": "string",
                                                 "title": "Access Policy",
                                                 "enum": [
-                                                    "HybridAuthISE",
+                                                    "CustomPolicy",
                                                     "Open",
                                                     "MAC Whitelist",
                                                     "Sticky MAC Whitelist"
                                                 ],
-                                                "default": "HybridAuthISE"
+                                                "default": "CustomPolicy"
                                             },
                                         },
                                         "required": ["vlan"],
@@ -111,7 +111,7 @@ export default function ShowTemplateModal(ac) {
                                                         "properties": {
                                                             "accessPolicyNumber": {
                                                                 "enum": [
-                                                                    "HybridAuthISE"
+                                                                    "CustomPolicy"
                                                                 ]
                                                             }
                                                         }
@@ -243,14 +243,14 @@ export default function ShowTemplateModal(ac) {
                 ],
                 "default": "Enabled"
             },
-            "stormControlEnabled": {
-                "type": "string",
-                "title": "Storm Control",
-                "enum": [
-                    "Enabled",
-                    "Disabled"
-                ],
-            },
+            // "stormControlEnabled": {
+            //     "type": "string",
+            //     "title": "Storm Control",
+            //     "enum": [
+            //         "Enabled",
+            //         "Disabled"
+            //     ],
+            // },
             "udld": {
                 "type": "string",
                 "title": "UDLD",
@@ -262,6 +262,58 @@ export default function ShowTemplateModal(ac) {
             },
             "id": {
                 "type": "number"
+            },
+
+            "StormControl": {
+                "title": "Storm Control",
+                "type": "object",
+                "properties": {
+                    "Storm Control supported": {
+                        "type": "string",
+                        "enum": [
+                            "No",
+                            "Yes"
+                        ],
+                        "default": "No"
+                    }
+                },
+                "required": [
+                    "Storm Control supported"
+                ],
+                "dependencies": {
+                    "Storm Control supported": {
+                        "oneOf": [
+                            {
+                                "properties": {
+                                    "Storm Control supported": {
+                                        "enum": [
+                                            "No"
+                                        ]
+                                    }
+                                }
+                            },
+                            {
+                                "properties": {
+                                    "Storm Control supported": {
+                                        "enum": [
+                                            "Yes"
+                                        ]
+                                    },
+                                    "stormControlEnabled": {
+                                        "type": "string",
+                                        "title": "Storm Control",
+                                        "enum": [
+                                            "Enabled",
+                                            "Disabled"
+                                        ],
+                                        "default": "Disabled"
+                                    }
+                                },
+
+                            },
+                        ]
+                    }
+                }
             }
 
         },
@@ -323,12 +375,12 @@ export default function ShowTemplateModal(ac) {
             "ui:widget": "radio",
             classNames: "radio radio-inline"
         },
-        "stormControlEnabled": {
-            "ui:widget": "radio",
-            "ui:disabled": true,
-            "ui:help": "Storm Control not available",
-            classNames: "radio radio-inline"
-        },
+        // "stormControlEnabled": {
+        //     "ui:widget": "radio",
+        //     "ui:disabled": true,
+        //     "ui:help": "Storm Control not available",
+        //     classNames: "radio radio-inline"
+        // },
         "udld": {
             "ui:widget": "radio",
             classNames: "radio radio-inline"
@@ -351,8 +403,26 @@ export default function ShowTemplateModal(ac) {
         "portScheduleId": {
             classNames: "inputs-template"
         },
+
         "id":
-            { "ui:widget": "hidden" }
+            { "ui:widget": "hidden" },
+
+        "StormControl": {
+            "stormControlEnabled": {
+                "ui:widget": "radio"
+            },
+            "NOstormControlEnabled": {
+                "ui:widget": "radio",
+                "ui:disabled": true,
+                "ui:help": "Storm Control not available"
+            },
+            "Storm Control supported": {
+                classNames: "inputs-template"
+            },
+
+        }
+
+
 
     }
 

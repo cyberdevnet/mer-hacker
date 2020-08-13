@@ -94,12 +94,12 @@ export default function CreateTemplateModal(ac) {
                                                 "type": "string",
                                                 "title": "Access Policy",
                                                 "enum": [
-                                                    "HybridAuthISE",
+                                                    "CustomPolicy",
                                                     "Open",
                                                     "MAC Whitelist",
                                                     "Sticky MAC Whitelist"
                                                 ],
-                                                "default": "HybridAuthISE"
+                                                "default": "CustomPolicy"
                                             },
                                         },
                                         "required": ["vlan"],
@@ -110,7 +110,7 @@ export default function CreateTemplateModal(ac) {
                                                         "properties": {
                                                             "accessPolicyNumber": {
                                                                 "enum": [
-                                                                    "HybridAuthISE"
+                                                                    "CustomPolicy"
                                                                 ]
                                                             }
                                                         }
@@ -242,14 +242,14 @@ export default function CreateTemplateModal(ac) {
                 ],
                 "default": "Enabled"
             },
-            "stormControlEnabled": {
-                "type": "string",
-                "title": "Storm Control",
-                "enum": [
-                    "Enabled",
-                    "Disabled"
-                ],
-            },
+            // "stormControlEnabled": {
+            //     "type": "string",
+            //     "title": "Storm Control",
+            //     "enum": [
+            //         "Enabled",
+            //         "Disabled"
+            //     ],
+            // },
             "udld": {
                 "type": "string",
                 "title": "UDLD",
@@ -261,6 +261,58 @@ export default function CreateTemplateModal(ac) {
             },
             "id": {
                 "type": "number"
+            },
+
+            "StormControl": {
+                "title": "Storm Control",
+                "type": "object",
+                "properties": {
+                    "Storm Control supported": {
+                        "type": "string",
+                        "enum": [
+                            "No",
+                            "Yes"
+                        ],
+                        "default": "No"
+                    }
+                },
+                "required": [
+                    "Storm Control supported"
+                ],
+                "dependencies": {
+                    "Storm Control supported": {
+                        "oneOf": [
+                            {
+                                "properties": {
+                                    "Storm Control supported": {
+                                        "enum": [
+                                            "No"
+                                        ]
+                                    }
+                                }
+                            },
+                            {
+                                "properties": {
+                                    "Storm Control supported": {
+                                        "enum": [
+                                            "Yes"
+                                        ]
+                                    },
+                                    "stormControlEnabled": {
+                                        "type": "string",
+                                        "title": "Storm Control",
+                                        "enum": [
+                                            "Enabled",
+                                            "Disabled"
+                                        ],
+                                        "default": "Disabled"
+                                    }
+                                },
+
+                            },
+                        ]
+                    }
+                }
             }
 
         },
@@ -322,12 +374,12 @@ export default function CreateTemplateModal(ac) {
             "ui:widget": "radio",
             classNames: "radio radio-inline"
         },
-        "stormControlEnabled": {
-            "ui:widget": "radio",
-            "ui:disabled": true,
-            "ui:help": "Storm Control not available",
-            classNames: "radio radio-inline"
-        },
+        // "stormControlEnabled": {
+        //     "ui:widget": "radio",
+        //     "ui:disabled": true,
+        //     "ui:help": "Storm Control not available",
+        //     classNames: "radio radio-inline"
+        // },
         "udld": {
             "ui:widget": "radio",
             classNames: "radio radio-inline"
@@ -350,8 +402,26 @@ export default function CreateTemplateModal(ac) {
         "portScheduleId": {
             classNames: "inputs-template"
         },
+
         "id":
-            { "ui:widget": "hidden" }
+            { "ui:widget": "hidden" },
+
+        "StormControl": {
+            "stormControlEnabled": {
+                "ui:widget": "radio"
+            },
+            "NOstormControlEnabled": {
+                "ui:widget": "radio",
+                "ui:disabled": true,
+                "ui:help": "Storm Control not available"
+            },
+            "Storm Control supported": {
+                classNames: "inputs-template"
+            },
+
+        }
+
+
 
     }
 

@@ -57,6 +57,18 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
             del x['payload']['templateName']
 
 
+            #storm control section
+            if x['payload']['StormControl']['Storm Control supported'] == 'Yes':
+                if x['payload']['StormControl']['stormControlEnabled'] == 'Disabled':
+                    x['payload'].update({'stormControlEnabled': False})
+                elif x['payload']['StormControl']['stormControlEnabled'] == 'Enabled':
+                    x['payload'].update({'stormControlEnabled': True})
+            # if x['payload']['StormControl']['Storm Control supported'] == 'No':
+            del x['payload']['StormControl']
+
+
+
+
             # change condition from enabled/disabled to true/false boolean
             if x['payload']['enabled'] == "Enabled":
                 x['payload'].update({'enabled':True})
@@ -95,7 +107,7 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
                 x['payload'].update({"type": "access"})
 
                 # change accessPolicyNumber from Name to number
-                if x['payload']['Port']['Policy']['accessPolicyNumber'] == "HybridAuthISE":
+                if x['payload']['Port']['Policy']['accessPolicyNumber'] == "CustomPolicy":
                     x['payload'].update({"accessPolicyNumber": 1})
                     x['payload'].update({"vlan": x['payload']['Port']['Policy']['vlan']})
                     if x['payload']['Port']['Policy'].get('voiceVlan') == True:
@@ -147,6 +159,9 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
             data.append({'config' : x['payload'], 'number' : x['number']} )
 
             print("data", data)
+            print()
+            print()
+            print()
 
         for x in data:
             number = x['number']

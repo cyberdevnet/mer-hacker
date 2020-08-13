@@ -174,6 +174,9 @@ export default function SwitchPortTemplate(ac) {
                                 {data.error[0]}
                             </div>)
                         } else {
+
+                            console.log("APIcall -> data.switchports", data.switchports)
+
                             let switchports = []
                             let row = [];
 
@@ -470,7 +473,6 @@ export default function SwitchPortTemplate(ac) {
         SERIAL_NUM: `${switchSerial}`,
         PAYLOAD: allSelectedPorts
     };
-    console.log("SwitchPortTemplate -> APIbody2", APIbody2)
 
     const isFirstRunDeploy = useRef(true);
     useEffect(() => {
@@ -496,7 +498,6 @@ export default function SwitchPortTemplate(ac) {
                 .then((data) => {
 
                     if (data.switchporttemplate === null) {
-                        console.log("Deploy -> data.switchporttemplate", data.switchporttemplate)
                         setresponseMessage(<div className="form-input-error-msg alert alert-danger">
                             <span className="glyphicon glyphicon-exclamation-sign"></span>
                         ERROR Please check your Template and the logs.

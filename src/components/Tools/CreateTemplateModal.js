@@ -27,7 +27,7 @@ export default function CreateTemplateModal(ac) {
             "tags": {
                 "type": "string",
                 "title": "Tags",
-                "default": ""
+                // "default": ""
             },
             "enabled": {
                 "type": "string",
@@ -178,7 +178,7 @@ export default function CreateTemplateModal(ac) {
                                     },
 
                                 },
-                                "required": ["vlan", "allowedVlans"]
+                                "required": ["allowedVlans"]
                             },
                         ]
                     }
@@ -249,7 +249,6 @@ export default function CreateTemplateModal(ac) {
                     "Enabled",
                     "Disabled"
                 ],
-                "default": "Disabled"
             },
             "udld": {
                 "type": "string",
@@ -325,6 +324,8 @@ export default function CreateTemplateModal(ac) {
         },
         "stormControlEnabled": {
             "ui:widget": "radio",
+            "ui:disabled": true,
+            "ui:help": "Storm Control not available",
             classNames: "radio radio-inline"
         },
         "udld": {
@@ -366,17 +367,17 @@ export default function CreateTemplateModal(ac) {
                 setloadingSubmit(false)
             }
             else if (error.name === "required" && error.property === ".allowedVlans") {
-                error.stack = "Allowed VLANs is a required property"
+                error.stack = "Allowed VLANs must be 'all' or a comma-separated list of VLANs or ranges between 1 and 4094"
                 setloadingSubmit(false)
             }
             else if (error.name === "required" && error.property === ".Port.allowedVlans") {
-                error.stack = "Allowed VLANs is a required property"
+                error.stack = "Allowed VLANs must be 'all' or a comma-separated list of VLANs or ranges between 1 and 4094"
                 setloadingSubmit(false)
             }
-            else if (error.name === "required" && error.property === ".Port.vlan") {
-                error.stack = "VLAN is a required property"
-                setloadingSubmit(false)
-            }
+            // else if (error.name === "required" && error.property === ".Port.vlan") {
+            //     error.stack = "VLAN is a required property"
+            //     setloadingSubmit(false)
+            // }
             else if (error.name === "required" && error.property === ".Port.Policy.vlan") {
                 error.stack = "VLAN is a required property"
                 setloadingSubmit(false)

@@ -11,6 +11,7 @@ from werkzeug.exceptions import BadRequest, HTTPException
 import meraki
 import find_ports
 import top_report
+import switchporttemplate
 from backup_restore import meraki_backup_network
 from backup_restore import meraki_restore_network
 from cisco_meraki_migrate_tool import ios_to_meraki
@@ -559,6 +560,44 @@ def site2site():
         error = (err.message['errors'][0])
         flash(error)
         return {'error' : [render_template('flash_template.html'),err.status]}
+
+
+@ app.route('/device_switchports', methods=['GET', 'POST'])
+def device_switchports():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json()
+            return data
+        else:
+            ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
+            SERIAL_NUM = data['SERIAL_NUM']
+            dashboard = meraki.DashboardAPI(ARG_APIKEY)
+            switchports = dashboard.switch_ports.getDeviceSwitchPorts(SERIAL_NUM)
+            return {'switchports': switchports}
+    except Exception as err:
+        print('Exception: ',err)
+        flash(err)
+        return {'error' : [render_template('flash_template.html')]}
+
+
+@ app.route('/deploy_device_switchports', methods=['GET', 'POST'])
+def deploy_device_switchports():
+    try:
+        if request.method == 'POST':
+            importlib.reload(switchporttemplate)
+            global data
+            data = request.get_json()
+            ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
+            SERIAL_NUM = data['SERIAL_NUM']
+            payload = data['PAYLOAD']
+            return {'switchporttemplate': switchporttemplate.deploy(ARG_APIKEY,SERIAL_NUM,payload)}
+        else:
+            return {'switchporttemplate': 'boh'}
+    except Exception as err:
+        print('Exception: ',err)
+        flash(err)
+        return {'error' : [render_template('flash_template.html')]}
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000)

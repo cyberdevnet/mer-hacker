@@ -3,8 +3,10 @@ import React, { useEffect, useState, useRef } from "react";
 import { LazyLog } from "react-lazylog";
 import "../../styles/BackupRestore.css";
 import axios from 'axios';
+import "ace-builds";
 import AceEditor from "react-ace";
 import ReactModal from 'react-modal'
+import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/theme-twilight";
 import "ace-builds/src-min-noconflict/ext-language_tools";
@@ -25,8 +27,10 @@ export default function BackupRestore(ac) {
   const [triggerRestoreSwitch, settriggerRestoreSwitch] = useState(0);
   // eslint-disable-next-line
   const [errorMessage, seterrorMessage] = useState(null);
+  // eslint-disable-next-line
   const [liveLogs, setliveLogs] = useState('');
   const [showLiveLogs, setshowLiveLogs] = useState(false)
+  const [lazyLog, setlazyLog] = useState([]);
 
 
 
@@ -345,7 +349,13 @@ export default function BackupRestore(ac) {
               return response.text();
             })
             .then((data) => {
-              setliveLogs(data)
+              // setliveLogs(data)
+              setlazyLog(
+                <LazyLog extraLines={1} enableSearch
+                  text={data}
+                  stream
+                  caseInsensitive
+                  selectableLines />)
 
             })
 
@@ -536,11 +546,12 @@ export default function BackupRestore(ac) {
         <div className="col-xs-12">
           <div className="panel panel-default">
             {showLiveLogs ? (<div style={{ height: 350 }}>
-              <LazyLog extraLines={1} enableSearch
+              {lazyLog}
+              {/* <LazyLog extraLines={1} enableSearch
                 text={liveLogs}
                 stream
                 caseInsensitive
-                selectableLines />
+                selectableLines /> */}
             </div>) : (<div></div>)}
 
             {ac.dc.showRestorescript ? (

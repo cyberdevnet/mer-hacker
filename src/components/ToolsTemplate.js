@@ -28,6 +28,8 @@ export default function ToolsTemplate(ac) {
       ac.setswitchAllTools({ 7: true });
     } else if (selectedValue === "8") {
       ac.setswitchAllTools({ 8: true });
+    } else if (selectedValue === "9") {
+      ac.setswitchAllTools({ 9: true });
     }
   };
 
@@ -114,6 +116,7 @@ export default function ToolsTemplate(ac) {
                     <option value="6">Network Analysis</option>
                     <option value="7">Backup & Restore</option>
                     <option value="8">Migrate Tool</option>
+                    <option value="9">Switchport Templates</option>
                   </optgroup>
                 </select>
               </div>

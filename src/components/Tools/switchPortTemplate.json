@@ -1,0 +1,28 @@
+[
+  {
+    "enabled": "Enabled",
+    "stacking": "Disabled",
+    "poeEnabled": "Enabled",
+    "Port": {
+      "type": "Access",
+      "Policy": {
+        "accessPolicyNumber": "Open",
+        "vlan": 2071
+      }
+    },
+    "linkNegotiation": "Auto negotiate",
+    "stpGuard": "BPDU guard",
+    "rstpEnabled": "Enabled",
+    "isolationEnabled": "Disabled",
+    "trusted": "Disabled",
+    "udld": "Alert only",
+    "StormControl": {
+      "Storm Control supported": "Yes",
+      "stormControlEnabled": "Enabled"
+    },
+    "templateName": "AppleTV",
+    "name": "AppleTV",
+    "tags": "SelfService ATV",
+    "id": 1485
+  }
+]

@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { MDBDataTableV5 } from "mdbreact";
 import Select from "react-select";
-import { Select as Selector } from "react-dropdown-select";
 import CreateTemplateModal from './CreateTemplateModal'
 import ShowTemplateModal from './ShowTemplateModal'
 import SwitchPortTemplateSummary from './SwitchPortTemplateSummary'
@@ -14,16 +12,20 @@ export default function SwitchPortTemplate(ac) {
     const [showtable, setshowtable] = useState(false);
     const [trigger, settrigger] = useState(0);
     const [triggerDeploy, settriggerDeploy] = useState(0);
+    // eslint-disable-next-line
     const [triggerTemplate, settriggerTemplate] = useState(0);
     const [retryCounter, setretryCounter] = useState(0);
+    // eslint-disable-next-line
     const [loading, setloading] = useState(false);
     const [configureDisabled, setconfigureDisabled] = useState(true);
     const [loadingDevices, setloadingDevices] = useState(false);
+    // eslint-disable-next-line
     const [mapRows, setmapRows] = useState([]);
     const [errorMessage, seterrorMessage] = useState([]);
     const [switchSerial, setswitchSerial] = useState([])
     const [switchDeviceName, setswitchDeviceName] = useState([])
     const [switchDeviceIp, setswitchDeviceIp] = useState([])
+    // eslint-disable-next-line
     const [switchDeviceMac, setswitchDeviceMac] = useState([])
     const [switchDeviceModel, setswitchDeviceModel] = useState([])
     const [createTemplateModal, setcreateTemplateModal] = useState(false);
@@ -42,7 +44,6 @@ export default function SwitchPortTemplate(ac) {
     const [responseMessage, setresponseMessage] = useState([])
     const [loadingSummaryBtn, setloadingSummaryBtn] = useState(false)
     const [allSelectedPorts, setallSelectedPorts] = useState([])
-    console.log("SwitchPortTemplate -> allSelectedPorts", allSelectedPorts)
 
 
 
@@ -96,6 +97,7 @@ export default function SwitchPortTemplate(ac) {
 
 
     let Switches = []
+    // eslint-disable-next-line
     ac.dc.deviceList.map((opt, index) => {
         let model = opt.model
         if (model.startsWith("MS")) {
@@ -174,12 +176,10 @@ export default function SwitchPortTemplate(ac) {
                                 {data.error[0]}
                             </div>)
                         } else {
-
-                            console.log("APIcall -> data.switchports", data.switchports)
-
                             let switchports = []
                             let row = [];
 
+                            // eslint-disable-next-line
                             data.switchports.map((opt, index) => {
                                 var portModel = {
                                     name: opt.name,
@@ -320,42 +320,6 @@ export default function SwitchPortTemplate(ac) {
     };
 
 
-    // const clearSelectedTemplate = (row, rowIndex) => {
-    //     // console.log("clearSelectedTemplate -> row", row)
-
-    //     if (row.template !== 'Select Template') {
-    // let newArray = [...dataPorts.rows]
-    // newArray[rowIndex] = { ...newArray[rowIndex], template: 'Select Template' }
-    // setdataPorts({ ...dataPorts, rows: newArray })
-    //     } else {
-    //         console.log('PORCO DIO');
-    //     }
-
-    //     // const elementsIndex = dataPorts.rows.findIndex(element => element.number === row.number)
-    //     // const notSelectedTemplate = dataPorts.rows.findIndex(element => element.template === 'Select Template')
-    // };
-
-
-
-
-
-
-    // function rankFormatter(cell, row, rowIndex, formatExtraData) {
-    //     return (
-    //         < div
-    //             style={{
-    //                 textAlign: "center",
-    //                 cursor: "pointer",
-    //                 lineHeight: "normal"
-    //             }}>
-
-    //             <button onClick={() => clearSelectedTemplate(row, rowIndex)} type="button" className="btn btn-default" style={{ width: '39px', marginLeft: '-3px' }}>
-    //                 <span className="glyphicon glyphicon-remove"></span>
-    //             </button>
-    //         </div>
-    //     );
-    // }
-
 
 
     const columns = [
@@ -392,18 +356,9 @@ export default function SwitchPortTemplate(ac) {
             editor: {
                 type: Type.SELECT,
                 getOptions: () => templates
-                // options: templates
             }
         },
-        // {
-        //     dataField: "X",
-        //     editable: false,
-        //     text: "",
-        //     sort: false,
-        //     formatter: rankFormatter,
-        //     headerAttrs: { width: 50 },
-        //     // attrs: { width: 50, class: "EditRow" }
-        // }
+
     ];
 
 
@@ -445,6 +400,7 @@ export default function SwitchPortTemplate(ac) {
         } else {
 
             let newArray = [...allSelectedPorts]
+            // eslint-disable-next-line
             allSelectedPorts.map((port, index) => {
                 const templateID = templateProperty.findIndex(i => i.opt.templateName === port.template)
                 const notSelectedTemplate = allSelectedPorts.findIndex(element => element.template === 'Select Template')
@@ -453,8 +409,6 @@ export default function SwitchPortTemplate(ac) {
                     let templatePayload = templateProperty[templateID].opt
                     newArray[index] = { ...newArray[index], payload: templatePayload }
                     setallSelectedPorts(newArray)
-                    // setallSelectedPorts({ ...allSelectedPorts, newArray })
-                    // console.log("ConfigurePorts -> allSelectedPorts", allSelectedPorts)
                     if (notSelectedTemplate === -1) {
                         setshowSummary(true)
                     }
@@ -644,7 +598,6 @@ export default function SwitchPortTemplate(ac) {
                                         <li className="list-group-item-template"><strong>Model:</strong> {switchDeviceModel}</li>
                                     </ul>) : (<div></div>)}
                                 {errorMessage}
-                                {/* <button onClick={test}>Test</button> */}
                                 <button
                                     className="btn btn-primary"
                                     onClick={!loading ? ConfigurePorts : null}
@@ -677,8 +630,6 @@ export default function SwitchPortTemplate(ac) {
                                     tabIndexCell
                                     striped
                                     hover
-                                    // rowEvents={rowEvents}
-
                                     cellEdit={cellEditFactory({
                                         mode: "click",
                                         blurToSave: true,

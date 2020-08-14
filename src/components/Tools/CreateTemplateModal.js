@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Dialog from '@material-ui/core/Dialog';
-import Select from "react-select";
 import Form from '@rjsf/core';
 import "../../styles/CreateTemplateModal.css";
 
@@ -455,13 +454,11 @@ export default function CreateTemplateModal(ac) {
             else if (error.name === "oneOf" && error.property === ".Port") {
 
                 error.stack = null
-                // error.stack = "Please check your template"
                 setloadingSubmit(false)
             }
             else if (error.name === "enum" && error.property === ".Port.type") {
 
                 error.stack = null
-                // error.stack = "Please check your template"
                 setloadingSubmit(false)
             }
 

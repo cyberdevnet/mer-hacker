@@ -13,7 +13,8 @@ const fs = require('fs');
 app.use(cors())
 app.use(express.json())
 app.use(bodyParser.json());
-// let urlencodedParser = (bodyParser.urlencoded({ extended: true }))
+let urlencodedParser = (bodyParser.urlencoded({ extended: true }))
+var jsonParser = bodyParser.json()
 
 const pino = require('pino');
 const expressPino = require('express-pino-logger');
@@ -367,6 +368,40 @@ app.post("/delete_backupfile", async (req, res) => {
         res.status(500).send(e)
     }
 })
+
+//Reading template file
+
+app.get("/read_templateFile", async (req, res, next) => {
+    const jsonFile = require('fs');
+    try {
+        let rawTemplate = jsonFile.readFileSync('/home/cyberdevnet/mer-hacker-dev/src/components/Tools/switchPortTemplate.json');
+        let templateFile = JSON.parse(rawTemplate);
+        res.send(templateFile);
+        console.log(templateFile);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+        return next(new Error(error))
+    }
+});
+
+// //write template file
+
+app.post("/write_templateFile", async (req, res) => {
+    console.log("REQUESTTTTTTTTTTTTTTTTTTTTTT: ", req.body)
+    const jsonFile = require('fs');
+
+    try {
+        let data = JSON.stringify(req.body, null, 2);
+        jsonFile.writeFileSync('/home/cyberdevnet/mer-hacker-dev/src/components/Tools/switchPortTemplate.json', data);
+        res.send(data)
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+})
+
 
 
 const HOST = "localhost";

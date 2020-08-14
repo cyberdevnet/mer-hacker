@@ -44,6 +44,7 @@ export default function LoggedIn(ac) {
   const isFirstSetKey = useRef(true);
 
   useEffect(() => {
+    const abortController = new AbortController()
     if (isFirstSetKey.current) {
       isFirstSetKey.current = false;
       return;
@@ -57,7 +58,6 @@ export default function LoggedIn(ac) {
 
         )
         // Trigger getOrganization on-login
-        // .then(() => ac.dc.settriggerGetOrg(ac.dc.triggerGetOrg + 1))
         .then(() => {
           setTimeout(() => {
             ac.dc.settriggerGetOrg(ac.dc.triggerGetOrg + 1)
@@ -78,6 +78,10 @@ export default function LoggedIn(ac) {
 
     };
     handleLoginSuccess()
+    return () => {
+      abortController.abort()
+      console.log("cleanup -> abortController")
+    };
     // eslint-disable-next-line
   }, [triggerLogin])
 

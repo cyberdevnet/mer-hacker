@@ -3,9 +3,11 @@ import React, { useEffect, useState, useRef } from "react";
 import { LazyLog } from "react-lazylog";
 import "../../styles/MigrateTool.css";
 import axios from 'axios';
+import "ace-builds";
 import AceEditor from "react-ace";
 import ReactModal from 'react-modal'
 import { useForm } from 'react-hook-form'
+import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/theme-twilight";
 import "ace-builds/src-min-noconflict/ext-language_tools";
@@ -23,8 +25,10 @@ export default function MigrateTool(ac) {
     const [triggerRestore, settriggerRestore] = useState(0);
     // eslint-disable-next-line
     const [errorMessage, seterrorMessage] = useState(null);
+    // eslint-disable-next-line
     const [liveLogs, setliveLogs] = useState('');
     const [showLiveLogs, setshowLiveLogs] = useState(false)
+    const [lazyLog, setlazyLog] = useState([]);
     const [switchPortScript, setswitchPortScript] = useState('')
     const [showswitchPortScript, setshowswitchPortScript] = useState(false)
     const [SNpresent, setSNpresent] = useState(false)
@@ -80,8 +84,6 @@ export default function MigrateTool(ac) {
             setdisplayButtons({ display: 'none' })
 
         }
-        console.log("onSubmitUpload -> res", res.status)
-        console.log(JSON.stringify(res))
     }
 
     // function used to upload the build_meraki_switchconfig file on the xpress server
@@ -201,7 +203,6 @@ export default function MigrateTool(ac) {
                                         setdisplayRestoreButtons({ display: 'none' })
                                         setloadingButtonConvertConfig(false);
                                     } else {
-                                        console.log("validateSerialNumbers -> res", res)
                                         res.json()
                                         setloadingButtonConvertConfig(false);
                                         setdisplayButtons({ display: 'inline-block' })
@@ -299,20 +300,6 @@ export default function MigrateTool(ac) {
             setloadingButtonMigrateSwitchConfig(true);
             setshowswitchPortScript(false)
 
-            // const data = new FormData()
-            // const file = new Blob([switchPortScript], { type: 'text/plain' });
-            // data.append('file', file, 'build_meraki_switchconfig.py')
-
-            // // axios.post("/upload_build_meraki_switchconfig", data, {})
-            // await fetch("/upload_build_meraki_switchconfig", {
-            //     method: "POST",
-            //     body: data
-            // }).then(res => {
-            //     console.log("MigrateSwitchConfig -> res", res)
-
-            //     res.json()
-            // })
-
             fetch("/run_migrate_switch_config/", {
                 signal: signal,
                 method: ["POST"],
@@ -365,8 +352,15 @@ export default function MigrateTool(ac) {
                             return response.text();
                         })
                         .then((data) => {
-                            setliveLogs(data)
-
+                            setlazyLog(
+                                <LazyLog
+                                    extraLines={1}
+                                    enableSearch={true}
+                                    text={data}
+                                    stream={true}
+                                    caseInsensitive={true}
+                                    selectableLines={true}
+                                />)
                         })
 
                 } catch (err) {
@@ -563,14 +557,15 @@ export default function MigrateTool(ac) {
                 <div className="col-xs-12">
                     <div className="panel panel-default">
                         {showLiveLogs ? (<div style={{ height: 700 }}>
-                            <LazyLog
+                            {lazyLog}
+                            {/* <LazyLog
                                 extraLines={1}
                                 enableSearch={true}
                                 text={liveLogs}
                                 stream={true}
                                 caseInsensitive={true}
                                 selectableLines={true}
-                            />
+                            /> */}
                         </div>) : (<div></div>)}
 
                         {showswitchPortScript ? (

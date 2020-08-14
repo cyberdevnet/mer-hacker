@@ -282,6 +282,7 @@ export default function Dashboard(ac) {
                   })[0];
 
 
+
                   const UPLINKOBJ = Object.values(UplinkLossNetObj.timeSeries);
                   let latencyMs = [];
                   let lossPercent = [];

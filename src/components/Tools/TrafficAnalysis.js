@@ -90,6 +90,7 @@ export default function TrafficAnalysis(ac) {
               })
 
               .then((data) => {
+                console.log("APIcall -> data", data)
                 if (data.error) {
                   ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
                     <span className="glyphicon glyphicon-exclamation-sign"></span>
@@ -125,13 +126,14 @@ export default function TrafficAnalysis(ac) {
                     ];
                     R1.push(...rowModel);
                     setmapROW1(R1);
-                  });
+                  })
+                    .then(() => {
+                      setshowtable(true);
+                      ac.dc.setloadingButton(false);
+                    })
                 }
               })
-              .then(() => {
-                setshowtable(true);
-                ac.dc.setloadingButton(false);
-              })
+
           } catch (err) {
             if (err) {
               console.log("This is the error:", err);

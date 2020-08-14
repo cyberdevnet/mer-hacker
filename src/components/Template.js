@@ -149,6 +149,7 @@ export default function Template(ac, dc) {
                 onChange={HandleOrganization}
                 classNamePrefix="foo"
                 onMenuOpen={() => ac.dc.settriggerSelectOrg(ac.dc.triggerSelectOrg + 1)}
+                isLoading={ac.dc.loadingOrg}
               />
 
               <div className="select-network">
@@ -160,6 +161,7 @@ export default function Template(ac, dc) {
                 placeholder={ac.dc.network}
                 onChange={HandleNetwork}
                 classNamePrefix="foo"
+                isLoading={ac.dc.loadingNet}
               />
 
               {ac.dc.organizationID !== 0 && ac.dc.networkID !== 0 ? (

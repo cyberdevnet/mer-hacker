@@ -16,7 +16,7 @@ const ProtectedRoute = ({ component: Component, ac, ...rest }) => {
 
     const readCookie = async () => {
         try {
-            const res = await axios.get('/read-cookie');
+            const res = await axios.get('/node/read-cookie');
 
             if (res.data.signedIn === true) {
                 settempState(res.data.signedIn);

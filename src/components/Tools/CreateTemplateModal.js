@@ -477,7 +477,7 @@ export default function CreateTemplateModal(ac) {
         setflashMessages([])
         setloadingSubmit(true)
         try {
-            fetch('/read_templateFile')
+            fetch('/node/read_templateFile')
                 .then(res => res.json())
                 .then((data) => {
                     let id = Math.floor(Math.random() * 5000) + 1000
@@ -495,7 +495,7 @@ export default function CreateTemplateModal(ac) {
                         //Object does NOT exist
                         newArr.push(e.formData)
                         try {
-                            fetch('/write_templateFile', {
+                            fetch('/node/write_templateFile', {
                                 method: 'POST',
                                 headers: {
                                     'Accept': 'application/json',

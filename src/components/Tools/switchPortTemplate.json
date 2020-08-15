@@ -24,5 +24,30 @@
     "name": "AppleTV",
     "tags": "SelfService ATV",
     "id": 1485
+  },
+  {
+    "enabled": "Enabled",
+    "stacking": "Disabled",
+    "poeEnabled": "Enabled",
+    "Port": {
+      "type": "Access",
+      "Policy": {
+        "accessPolicyNumber": "CustomPolicy",
+        "vlan": 444
+      }
+    },
+    "linkNegotiation": "Auto negotiate",
+    "stpGuard": "Disabled",
+    "rstpEnabled": "Enabled",
+    "isolationEnabled": "Disabled",
+    "trusted": "Enabled",
+    "udld": "Alert only",
+    "StormControl": {
+      "Storm Control supported": "No"
+    },
+    "templateName": "Fabrizio",
+    "name": "CIAO",
+    "tags": "TEST_1 TEST_2",
+    "id": 1888
   }
 ]

@@ -1,20 +1,24 @@
 
 
 ###
-GET http://localhost:3001/clear-cookie
+GET http://localhost:3001/node/clear-cookie
 
 ###
-GET http://localhost:3001/read-cookie
+GET http://localhost:3001/node/read-cookie
 
 ###
-
-
-
-GET http://localhost:3001/set-cookie
+###
+GET http://localhost:3001/node/api/logs/log_file.log
 
 ###
 
-POST http://localhost:3001/hash-users
+
+
+GET http://localhost:3001/node/set-cookie
+
+###
+
+POST http://localhost:3001/node/hash-users
 Content-Type: application/json 
 Accept : */*
 
@@ -25,7 +29,7 @@ Accept : */*
 
 ###
 
-POST http://localhost:3001/authenticate
+POST http://localhost:3001/node/authenticate
 Content-Type: application/json
 
 {
@@ -40,7 +44,7 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:3001/dump
+GET http://localhost:3001/node/dump
 
 
 
@@ -48,11 +52,11 @@ GET http://localhost:3001/dump
 
 
 ###
-GET http://localhost:3001/get-api-key
+GET http://localhost:3001/node/get-api-key
 
 
 ###
-POST http://localhost:3001/post-api-key
+POST http://localhost:3001/node/post-api-key
 Content-Type: application/json
 
 {
@@ -61,4 +65,4 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:3001/delete_debugfile
+POST http://localhost:3001/node/delete_debugfile

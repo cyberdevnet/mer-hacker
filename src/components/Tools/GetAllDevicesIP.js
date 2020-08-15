@@ -27,7 +27,7 @@ export default function GetAllDevicesIP(ac) {
     async function APIcall() {
       if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
         setloading(true);
-        fetch("/devices", {
+        fetch("/flask/devices", {
           method: ["POST"],
           cache: "no-cache",
           headers: {
@@ -37,7 +37,7 @@ export default function GetAllDevicesIP(ac) {
         }).then((response) => {
           return response.json;
         });
-        fetch("/devices", { signal: signal })
+        fetch("/flask/devices", { signal: signal })
           .then((res) => res.json())
           .then((data) => {
             if (data.error) {

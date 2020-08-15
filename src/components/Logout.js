@@ -59,8 +59,8 @@ export default function Logout(ac, props) {
     $('.navbar-side').css({ left: '-260px' });
     $('#page-wrapper').css({ 'margin-left': '0px' });
     ac.sethideLogin({ display: "block" });
-    axios.post("/delete_backupfile", {})
-    axios.post("/delete_debugfile", {})
+    axios.post("/node/delete_backupfile", {})
+    axios.post("/flask/delete_debugfile", {})
     // axios.post("/delete_debugfile", {}).then(res => console.log(res)).catch(error => console.log(error))
   };
 

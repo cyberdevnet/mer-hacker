@@ -85,7 +85,7 @@ CORS(app)
 
 
 #  CLEAR debug_file after user has been logged out
-@app.route('/delete_debugfile', methods=['POST'])
+@app.route('/flask/delete_debugfile', methods=['POST'])
 def delete_debugfile():
     try:
         with open(debug_file,'w'):
@@ -97,7 +97,7 @@ def delete_debugfile():
 
 
 
-@app.route('/organizations', methods=['GET', 'POST'])
+@app.route('/flask/organizations', methods=['GET', 'POST'])
 def get_organizations():
     try:
         if request.method == 'POST':
@@ -119,7 +119,7 @@ def get_organizations():
 
 
 
-@app.route('/networks', methods=['GET', 'POST'])
+@app.route('/flask/networks', methods=['GET', 'POST'])
 def get_networks():
     try:
         if request.method == 'POST':
@@ -140,7 +140,7 @@ def get_networks():
 
 
 
-@ app.route('/devices', methods=['GET', 'POST'])
+@ app.route('/flask/devices', methods=['GET', 'POST'])
 def get_devices():
     try:
         if request.method == 'POST':
@@ -160,7 +160,7 @@ def get_devices():
         return {'error' : [render_template('flash_template.html'),err.status]}
 
 
-@ app.route('/vlans', methods=['GET', 'POST'])
+@ app.route('/flask/vlans', methods=['GET', 'POST'])
 def get_subnets():
     try:
         if request.method == 'POST':
@@ -180,7 +180,7 @@ def get_subnets():
         return {'error' : [render_template('flash_template.html'),err.status]}
 
 
-@ app.route('/clients', methods=['GET', 'POST'])
+@ app.route('/flask/clients', methods=['GET', 'POST'])
 def clients():
     try:
         if request.method == 'POST':
@@ -205,7 +205,7 @@ def clients():
 
 
 
-@app.route('/device_status', methods=['GET', 'POST'])
+@app.route('/flask/device_status', methods=['GET', 'POST'])
 def device_status():
     try:
         if request.method == 'POST':
@@ -224,7 +224,7 @@ def device_status():
         flash(error)
         return {'error' : [render_template('flash_template.html'),err.status]}
 
-@app.route('/uplink_loss', methods=['GET', 'POST'])
+@app.route('/flask/uplink_loss', methods=['GET', 'POST'])
 def uplink_loss():
     try:
         if request.method == 'POST':
@@ -244,7 +244,7 @@ def uplink_loss():
         return {'error' : [render_template('flash_template.html'),err.status]}
 
 
-@ app.route('/allVlans', methods=['GET', 'POST'])
+@ app.route('/flask/allVlans', methods=['GET', 'POST'])
 def get_all_networks_subnets():
     try:
         if request.method == 'POST':
@@ -282,7 +282,7 @@ def get_all_networks_subnets():
 
 
 
-@ app.route('/find_ports', methods=['GET', 'POST'])
+@ app.route('/flask/find_ports', methods=['GET', 'POST'])
 def find_portss():
     try:
         if request.method == 'POST':
@@ -301,7 +301,7 @@ def find_portss():
         return  {'error': error}
 
 
-@ app.route("/topuserdata/", methods=['GET', 'POST'])
+@ app.route("/flask/topuserdata/", methods=['GET', 'POST'])
 def topuserdata():
     try:
         if request.method == 'POST':
@@ -322,7 +322,7 @@ def topuserdata():
 
 
 
-@ app.route('/traffic_analysis/', methods=['GET', 'POST'])
+@ app.route('/flask/traffic_analysis/', methods=['GET', 'POST'])
 def traffic_analysis():
     try:
         if request.method == 'POST':
@@ -348,7 +348,7 @@ def traffic_analysis():
 
 
 
-@ app.route('/run_backup/', methods=['GET', 'POST'])
+@ app.route('/flask/run_backup/', methods=['GET', 'POST'])
 def run_backup():
     try:
         if request.method == 'POST':
@@ -373,7 +373,7 @@ def run_backup():
 
 
 
-@ app.route('/run_restore/', methods=['GET', 'POST'])
+@ app.route('/flask/run_restore/', methods=['GET', 'POST'])
 def run_restore():
     try:
         if request.method == 'POST':
@@ -396,7 +396,7 @@ def run_restore():
 
 
 
-@ app.route('/run_restore_switch/', methods=['GET', 'POST'])
+@ app.route('/flask/run_restore_switch/', methods=['GET', 'POST'])
 def run_restore_switch():
     try:
         if request.method == 'POST':
@@ -421,7 +421,7 @@ def run_restore_switch():
 
 
 
-@ app.route('/ios_to_meraki/', methods=['GET', 'POST'])
+@ app.route('/flask/ios_to_meraki/', methods=['GET', 'POST'])
 def ios2meraki():
     try:
         if request.method == 'POST':
@@ -441,7 +441,7 @@ def ios2meraki():
         return {'error' : [render_template('flash_template.html')]}
 
 
-@ app.route('/run_migrate_switch_config/', methods=['GET', 'POST'])
+@ app.route('/flask/run_migrate_switch_config/', methods=['GET', 'POST'])
 def migrate_switch_config():
     try:
         if request.method == 'POST':
@@ -459,7 +459,7 @@ def migrate_switch_config():
         return {'error' : [render_template('flash_template.html')]}
 
 
-@ app.route('/lldp_cdp/', methods=['GET', 'POST'])
+@ app.route('/flask/lldp_cdp/', methods=['GET', 'POST'])
 def lldp_cdp():
     try:
         if request.method == 'POST':
@@ -487,7 +487,7 @@ def lldp_cdp():
         return {'error' : [render_template('flash_template.html'),err.status]}
 
 
-@ app.route('/device_clients', methods=['GET', 'POST'])
+@ app.route('/flask/device_clients', methods=['GET', 'POST'])
 def device_clients():
     try:
         if request.method == 'POST':
@@ -507,7 +507,7 @@ def device_clients():
         return {'error' : [render_template('flash_template.html'),err.status]}
 
 
-@ app.route('/client', methods=['GET', 'POST'])
+@ app.route('/flask/client', methods=['GET', 'POST'])
 def client():
     try:
         if request.method == 'POST':
@@ -527,7 +527,7 @@ def client():
         return {'error' : [render_template('flash_template.html')]}
 
 
-@ app.route('/site2site', methods=['GET', 'POST'])
+@ app.route('/flask/site2site', methods=['GET', 'POST'])
 def site2site():
     try:
         if request.method == 'POST':
@@ -562,7 +562,7 @@ def site2site():
         return {'error' : [render_template('flash_template.html'),err.status]}
 
 
-@ app.route('/device_switchports', methods=['GET', 'POST'])
+@ app.route('/flask/device_switchports', methods=['GET', 'POST'])
 def device_switchports():
     try:
         if request.method == 'POST':
@@ -581,7 +581,7 @@ def device_switchports():
         return {'error' : [render_template('flash_template.html')]}
 
 
-@ app.route('/deploy_device_switchports', methods=['GET', 'POST'])
+@ app.route('/flask/deploy_device_switchports', methods=['GET', 'POST'])
 def deploy_device_switchports():
     try:
         if request.method == 'POST':

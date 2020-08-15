@@ -4,21 +4,21 @@ module.exports = function (app) {
 
   // START Express-Server Part
   app.use(
-    "/node/api/backup_restore/",
+    "/node/flask/backup_restore/",
     createProxyMiddleware({
       target: "http://127.0.0.1:3001",
       changeOrigin: true,
     })
   );
   app.use(
-    "/node/api/cisco_meraki_migrate_tool/",
+    "/node/flask/cisco_meraki_migrate_tool/",
     createProxyMiddleware({
       target: "http://127.0.0.1:3001",
       changeOrigin: true,
     })
   );
   app.use(
-    "/node/api/logs/",
+    "/node/flask/logs/",
     createProxyMiddleware({
       target: "http://127.0.0.1:3001",
       changeOrigin: true,
@@ -136,175 +136,175 @@ module.exports = function (app) {
   // END Mongodb Part
 
   app.use(
-    "/error_handling",
+    "/flask/error_handling",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/flash",
+    "/flask/flash",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/organizations",
+    "/flask/organizations",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/networks",
+    "/flask/networks",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/devices",
+    "/flask/devices",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/clients",
+    "/flask/clients",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/client",
+    "/flask/client",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/device_clients",
+    "/flask/device_clients",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/device_status",
+    "/flask/device_status",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/uplink_loss",
+    "/flask/uplink_loss",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/vlans",
+    "/flask/vlans",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/allVlans",
+    "/flask/allVlans",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/find_ports",
+    "/flask/find_ports",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/topuserdata/",
+    "/flask/topuserdata/",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/traffic_analysis/",
+    "/flask/traffic_analysis/",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/run_backup/",
+    "/flask/run_backup/",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/run_restore/",
+    "/flask/run_restore/",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/run_restore_switch/",
+    "/flask/run_restore_switch/",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/ios_to_meraki/",
+    "/flask/ios_to_meraki/",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/run_migrate_switch_config/",
+    "/flask/run_migrate_switch_config/",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/delete_debugfile",
+    "/flask/delete_debugfile",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/lldp_cdp/",
+    "/flask/lldp_cdp/",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/site2site",
+    "/flask/site2site",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/device_switchports",
+    "/flask/device_switchports",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,
     })
   );
   app.use(
-    "/deploy_device_switchports",
+    "/flask/deploy_device_switchports",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,

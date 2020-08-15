@@ -73,7 +73,7 @@ export default function TrafficAnalysis(ac) {
           try {
             ac.dc.setloadingButton(true);
 
-            fetch("/traffic_analysis/", {
+            fetch("/flask/traffic_analysis/", {
               method: ["POST"],
               cache: "no-cache",
               headers: {
@@ -84,7 +84,7 @@ export default function TrafficAnalysis(ac) {
               return response.json;
             });
 
-            fetch("/traffic_analysis/", { signal: signal })
+            fetch("/flask/traffic_analysis/", { signal: signal })
               .then((res) => {
                 return res.json();
               })

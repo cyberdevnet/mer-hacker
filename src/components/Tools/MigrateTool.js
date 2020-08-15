@@ -184,7 +184,7 @@ export default function MigrateTool(ac) {
                             setloadingButtonConvertConfig(true);
                             setshowLiveLogs(true)
 
-                            fetch("/ios_to_meraki/", {
+                            fetch("/flask/ios_to_meraki/", {
                                 signal: signal,
                                 method: ["POST"],
                                 cache: "no-cache",
@@ -261,7 +261,7 @@ export default function MigrateTool(ac) {
         }
         async function OpenFile() {
 
-            fetch('/node/api/cisco_meraki_migrate_tool/build_meraki_switchconfig.py', { signal: signal })
+            fetch('/node/flask/cisco_meraki_migrate_tool/build_meraki_switchconfig.py', { signal: signal })
                 .then(response => { return response.text() })
                 .then((data) => {
                     setswitchPortScript(data)
@@ -300,7 +300,7 @@ export default function MigrateTool(ac) {
             setloadingButtonMigrateSwitchConfig(true);
             setshowswitchPortScript(false)
 
-            fetch("/run_migrate_switch_config/", {
+            fetch("/flask/run_migrate_switch_config/", {
                 signal: signal,
                 method: ["POST"],
                 cache: "no-cache",
@@ -346,7 +346,7 @@ export default function MigrateTool(ac) {
         if (showLiveLogs) {
             interval = setInterval(() => {
                 try {
-                    fetch("/node/api/logs/log_file.log", { signal: signal })
+                    fetch("/node/flask/logs/log_file.log", { signal: signal })
                         .then((response) => {
 
                             return response.text();

@@ -43,7 +43,7 @@ export default function NetworkTopUsers(ac) {
           try {
             ac.dc.setloadingButton(true);
 
-            fetch("/topuserdata/", {
+            fetch("/flask/topuserdata/", {
               signal: signal,
               method: ["POST"],
               cache: "no-cache",
@@ -55,7 +55,7 @@ export default function NetworkTopUsers(ac) {
               return response.json;
             });
 
-            fetch("/topuserdata/", {
+            fetch("/flask/topuserdata/", {
               signal: signal,
               method: ["POST"],
               cache: "no-cache",

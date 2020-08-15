@@ -200,36 +200,36 @@ app.get("/node/get-api-key", async (req, res, next) => {
 });
 
 
-console.log('DIRECTORY:', path.join(__dirname, '/../src/components/Tools/switchPortTemplate.json'))
+console.log('DIRECTORY:', path.join(__dirname, '/../flask/logs'))
 
 
 
 // serve static files for backup/restore script
 
-app.use("/node/api/backup_restore/", express.static(path.join(__dirname, '/../api/backup_restore/')))
+app.use("/node/flask/backup_restore/", express.static(path.join(__dirname, '/../flask/backup_restore/')))
 
-app.get("/node/api/backup_restore/", function (req, res) {
+app.get("/node/flask/backup_restore/", function (req, res) {
 
-    express.static(path.join(__dirname, '/../api/backup_restore/'))(req, res)
+    express.static(path.join(__dirname, '/../flask/backup_restore/'))(req, res)
 
 });
 
 // serve static files for ios_to_meraki script
 
-app.use("/node/api/cisco_meraki_migrate_tool/", express.static(path.join(__dirname, '/../api/cisco_meraki_migrate_tool/')))
+app.use("/node/flask/cisco_meraki_migrate_tool/", express.static(path.join(__dirname, '/../flask/cisco_meraki_migrate_tool/')))
 
-app.get("/node/api/cisco_meraki_migrate_tool/", function (req, res) {
+app.get("/node/flask/cisco_meraki_migrate_tool/", function (req, res) {
 
-    express.static(path.join(__dirname, '/../api/cisco_meraki_migrate_tool/'))(req, res)
+    express.static(path.join(__dirname, '/../flask/cisco_meraki_migrate_tool/'))(req, res)
 
 });
 
 // serve static files for live logs
-app.use("/node/api/logs/", express.static(path.join(__dirname, '/../api/logs')))
+app.use("/node/flask/logs/", express.static(path.join(__dirname, '/../flask/logs')))
 
-app.get("/node/api/logs/", function (req, res) {
+app.get("/node/flask/logs", function (req, res) {
 
-    express.static(path.join(__dirname, '/../api/logs'))(req, res)
+    express.static(path.join(__dirname, '/../flask/logs'))(req, res)
 
 });
 
@@ -237,7 +237,7 @@ app.get("/node/api/logs/", function (req, res) {
 // download restore script
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './api/backup_restore/')
+        cb(null, './flask/backup_restore/')
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname)
@@ -259,7 +259,7 @@ app.post("/node/upload", async (req, res) => {
             const file = req.files.file
 
             // file.mv("/home/cyberdevnet/mer-hacker-dev/api/backup_restore/meraki_restore_network.py")
-            file.mv(path.join(__dirname, '/../api/backup_restore/meraki_restore_network.py'))
+            file.mv(path.join(__dirname, '/../flask/backup_restore/meraki_restore_network.py'))
 
             res.send({
                 status: true,
@@ -279,7 +279,7 @@ app.post("/node/upload", async (req, res) => {
 // download build_meraki_switchconfig script 
 var storage2 = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './api/cisco_meraki_migrate_tool/')
+        cb(null, './flask/cisco_meraki_migrate_tool/')
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname)
@@ -307,7 +307,7 @@ app.post("/node/upload_backupfile", async (req, res) => {
                 const { backup } = req.files
 
                 // backup.mv("/home/cyberdevnet/mer-hacker-dev/api/cisco_meraki_migrate_tool/config_backups/backups/backup.txt")
-                backup.mv(path.join(__dirname, '/../api/cisco_meraki_migrate_tool/config_backups/backups/backup.txt'))
+                backup.mv(path.join(__dirname, '/../flask/cisco_meraki_migrate_tool/config_backups/backups/backup.txt'))
 
                 res.send({
                     status: true,
@@ -340,7 +340,7 @@ app.post("/node/upload_build_meraki_switchconfig", async (req, res) => {
             const file = req.files.file
 
             // file.mv("/home/cyberdevnet/mer-hacker-dev/api/cisco_meraki_migrate_tool/build_meraki_switchconfig.py")
-            file.mv(path.join(__dirname, '/../api/cisco_meraki_migrate_tool/build_meraki_switchconfig.py'))
+            file.mv(path.join(__dirname, '/../flask/cisco_meraki_migrate_tool/build_meraki_switchconfig.py'))
 
             res.send({
                 status: true,
@@ -362,7 +362,7 @@ app.post("/node/delete_backupfile", async (req, res) => {
     try {
         // delete file named 'backup.txt'
         // fs.unlink("/home/cyberdevnet/mer-hacker-dev/api/cisco_meraki_migrate_tool/config_backups/backups/backup.txt", function (err) {
-        fs.unlink((path.join(__dirname, '/../api/cisco_meraki_migrate_tool/config_backups/backups/backup.txt')), function (err) {
+        fs.unlink((path.join(__dirname, '/../flask/cisco_meraki_migrate_tool/config_backups/backups/backup.txt')), function (err) {
             if (err) {
                 console.log(err);
             }
@@ -384,7 +384,6 @@ app.get("/node/read_templateFile", async (req, res, next) => {
         let rawTemplate = jsonFile.readFileSync(path.join(__dirname, '/../src/components/Tools/switchPortTemplate.json'));
         let templateFile = JSON.parse(rawTemplate);
         res.send(templateFile);
-        console.log(templateFile);
     } catch (error) {
         console.log(error);
         res.status(500).send(error);

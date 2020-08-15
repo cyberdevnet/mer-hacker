@@ -49,5 +49,31 @@
     "name": "CIAO",
     "tags": "TEST_1 TEST_2",
     "id": 1888
+  },
+  {
+    "enabled": "Enabled",
+    "stacking": "Disabled",
+    "poeEnabled": "Enabled",
+    "Port": {
+      "type": "Access",
+      "Policy": {
+        "accessPolicyNumber": "CustomPolicy",
+        "vlan": 55,
+        "voiceVlan": 44
+      }
+    },
+    "linkNegotiation": "Auto negotiate",
+    "stpGuard": "Disabled",
+    "rstpEnabled": "Enabled",
+    "isolationEnabled": "Disabled",
+    "trusted": "Enabled",
+    "udld": "Alert only",
+    "StormControl": {
+      "Storm Control supported": "No"
+    },
+    "templateName": "Matcha",
+    "name": "TEST_1",
+    "tags": "TEST_1 TEST_2",
+    "id": 5577
   }
 ]

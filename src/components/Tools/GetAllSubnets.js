@@ -25,7 +25,7 @@ export default function GetAllSubnets(ac) {
     async function APIcall() {
       if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
         setloading(true);
-        fetch("/vlans", {
+        fetch("/flask/vlans", {
           method: ["POST"],
           cache: "no-cache",
           headers: {
@@ -35,7 +35,7 @@ export default function GetAllSubnets(ac) {
         }).then((response) => {
           return response.json;
         });
-        fetch("/vlans", { signal: signal })
+        fetch("/flask/vlans", { signal: signal })
           .then((res) => res.json())
           .then((data) => {
             if (data.error) {

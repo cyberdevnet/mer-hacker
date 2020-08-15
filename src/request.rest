@@ -8,7 +8,11 @@ GET http://localhost:3001/node/read-cookie
 
 ###
 ###
-GET http://localhost:3001/node/api/logs/log_file.log
+GET http://localhost:3001/node/flask/logs/log_file.log
+
+###
+###
+GET http://localhost:3001/node/flask/backup_restore/meraki_restore_network.py
 
 ###
 

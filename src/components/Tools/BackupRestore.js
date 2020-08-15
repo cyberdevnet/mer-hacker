@@ -157,7 +157,7 @@ export default function BackupRestore(ac) {
 
         setloadingButtonBackup(true);
 
-        fetch("/run_backup/", {
+        fetch("/flask/run_backup/", {
           signal: signal,
           method: ["POST"],
           cache: "no-cache",
@@ -202,7 +202,7 @@ export default function BackupRestore(ac) {
     }
     async function OpenFile() {
 
-      fetch('/node/api/backup_restore/meraki_restore_network.py', { signal: signal })
+      fetch('/node/flask/backup_restore/meraki_restore_network.py', { signal: signal })
         .then(response => { return response.text() })
         .then((data) => {
           ac.dc.setrestoreScript(data)
@@ -242,7 +242,7 @@ export default function BackupRestore(ac) {
       setloadingButtonRestore(true);
       ac.dc.setshowRestorescript(false)
 
-      fetch("/run_restore/", {
+      fetch("/flask/run_restore/", {
         signal: signal,
         method: ["POST"],
         cache: "no-cache",
@@ -290,7 +290,7 @@ export default function BackupRestore(ac) {
       setloadingButtonRestoreSwitch(true);
       ac.dc.setshowRestorescript(false)
 
-      fetch("/run_restore_switch/", {
+      fetch("/flask/run_restore_switch/", {
         signal: signal,
         method: ["POST"],
         cache: "no-cache",
@@ -335,7 +335,7 @@ export default function BackupRestore(ac) {
     if (showLiveLogs) {
       interval = setInterval(() => {
         try {
-          fetch("/node/api/logs/log_file.log", { signal: signal })
+          fetch("/node/flask/logs/log_file.log", { signal: signal })
             .then((response) => {
 
               return response.text();

@@ -110,7 +110,7 @@ export default function Topology(ac) {
                     setloading(true);
                     let Device_Row = []
                     try {
-                        await fetch("/device_clients", {
+                        await fetch("/flask/device_clients", {
                             method: ["POST"],
                             cache: "no-cache",
                             headers: {
@@ -124,7 +124,7 @@ export default function Topology(ac) {
                         }).then((response) => {
                             return response.json;
                         });
-                        await fetch("/device_clients", { signal: signal })
+                        await fetch("/flask/device_clients", { signal: signal })
                             .then((res) => { return res.json() })
                             .then((device_clients) => {
                                 if (device_clients.error) {
@@ -259,7 +259,7 @@ export default function Topology(ac) {
                     setloading(true);
 
                     try {
-                        await fetch("/site2site", {
+                        await fetch("/flask/site2site", {
                             method: ["POST"],
                             cache: "no-cache",
                             headers: {
@@ -272,7 +272,7 @@ export default function Topology(ac) {
                         }).then((response) => {
                             return response.json;
                         });
-                        await fetch("/site2site", { signal: signal })
+                        await fetch("/flask/site2site", { signal: signal })
                             .then((res) => { return res.json() })
                             .then((site2site) => {
                                 if (site2site.error) {
@@ -423,7 +423,7 @@ export default function Topology(ac) {
         //clearing the ClientModel array to avoid duplicate
         setclientID(modalModel[index].id)
         try {
-            await fetch("/client", {
+            await fetch("/flask/client", {
                 method: ["POST"],
                 cache: "no-cache",
                 headers: {
@@ -437,7 +437,7 @@ export default function Topology(ac) {
             }).then((response) => {
                 return response.json;
             });
-            await fetch("/client")
+            await fetch("/flask/client")
                 .then((res) => { return res.json() })
                 .then((client) => {
                     if (client.error) {

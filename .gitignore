@@ -27,5 +27,5 @@ yarn-error.log*
 #variuos files to ignore
 .log
 meraki_restore_organization.py
-api/logs/debug_file.log
-api/logs/log_file.log
+flask/logs/debug_file.log
+flask/logs/log_file.log

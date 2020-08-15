@@ -8,7 +8,7 @@ export default function SessionTimeout(ac) {
 
     const deleteCookie = async () => {
         try {
-            await axios.get('/clear-cookie');
+            await axios.get('/node/clear-cookie');
             ac.dc.setisSignedIn(false);
 
         } catch (e) {
@@ -19,7 +19,7 @@ export default function SessionTimeout(ac) {
 
     // send a 'leer' string to server on logout to clear the key
     async function postKey() {
-        const rawResponse = await fetch('/post-api-key', {
+        const rawResponse = await fetch('/node/post-api-key', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

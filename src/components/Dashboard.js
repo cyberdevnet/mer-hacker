@@ -43,7 +43,7 @@ export default function Dashboard(ac) {
 
       if (ac.organizationID !== 0 && ac.networkID !== 0) {
         try {
-          fetch("/devices", {
+          fetch("/flask/devices", {
             method: ["POST"],
             cache: "no-cache",
             headers: {
@@ -53,7 +53,7 @@ export default function Dashboard(ac) {
           }).then((response) => {
             return response.json;
           });
-          fetch("/devices", { signal: signal })
+          fetch("/flask/devices", { signal: signal })
             .then((res) => res.json())
             .then((data) => {
               if (data.error) {
@@ -128,7 +128,7 @@ export default function Dashboard(ac) {
 
       if (ac.organizationID !== 0) {
         try {
-          fetch("/device_status", {
+          fetch("/flask/device_status", {
             method: ["POST"],
             cache: "no-cache",
             headers: {
@@ -138,7 +138,7 @@ export default function Dashboard(ac) {
           }).then((response) => {
             return response.json;
           });
-          fetch("/device_status", { signal: signal })
+          fetch("/flask/device_status", { signal: signal })
             .then((res) => res.json())
             .then((data) => {
               if (data.error) {
@@ -250,7 +250,7 @@ export default function Dashboard(ac) {
 
       if (ac.organizationID !== 0 && ac.networkID !== 0) {
         try {
-          fetch("/uplink_loss", {
+          fetch("/flask/uplink_loss", {
             method: ["POST"],
             cache: "no-cache",
             headers: {
@@ -260,7 +260,7 @@ export default function Dashboard(ac) {
           }).then((response) => {
             return response.json;
           });
-          fetch("/uplink_loss", { signal: signal })
+          fetch("/flask/uplink_loss", { signal: signal })
             .then((res) => res.json())
             .then((data) => {
               if (data.error) {

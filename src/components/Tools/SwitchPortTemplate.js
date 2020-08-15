@@ -153,7 +153,7 @@ export default function SwitchPortTemplate(ac) {
             if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
 
                 setshowtable(false)
-                fetch("/device_switchports", {
+                fetch("/flask/device_switchports", {
                     signal: signal,
                     method: ["POST"],
                     cache: "no-cache",
@@ -164,7 +164,7 @@ export default function SwitchPortTemplate(ac) {
                 }).then((response) => {
                     return response.json;
                 });
-                fetch("/device_switchports", { signal: signal })
+                fetch("/flask/device_switchports", { signal: signal })
                     .then((res) => res.json())
                     .then(readTemplate())
                     .then((data) => {
@@ -439,7 +439,7 @@ export default function SwitchPortTemplate(ac) {
         async function Deploy() {
             setloadingSummaryBtn(true)
             setresponseMessage([])
-            fetch("/deploy_device_switchports", {
+            fetch("/flask/deploy_device_switchports", {
                 signal: signal,
                 method: ["POST"],
                 cache: "no-cache",

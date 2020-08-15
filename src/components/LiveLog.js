@@ -21,13 +21,12 @@ export default function LiveLog(ac) {
     if (showDebug) {
       interval = setInterval(() => {
         try {
-          fetch("/api/logs/debug_file.log")
+          fetch("/node/flask/logs/debug_file.log")
             .then((response) => {
 
               return response.text();
             })
             .then((data) => {
-              // setdebug_logs(data)
               setlazyLog(<LazyLog extraLines={1} enableSearch text={data} stream caseInsensitive selectableLines />
               )
             })
@@ -81,7 +80,6 @@ export default function LiveLog(ac) {
               <div className="panel-body">
                 <div style={{ height: 800 }}>
                   {lazyLog}
-                  {/* <LazyLog extraLines={1} enableSearch text={debug_logs} stream caseInsensitive selectableLines /> */}
                 </div>
 
               </div>

@@ -59,7 +59,7 @@ export default function NetworkTopUsers(ac) {
 
             ac.dc.setloadingButton(true);
 
-            fetch("/find_ports", {
+            fetch("/flask/find_ports", {
               signal: signal,
               method: ["POST"],
               cache: "no-cache",
@@ -139,7 +139,7 @@ export default function NetworkTopUsers(ac) {
 
             ac.dc.setloadingButton(true);
 
-            fetch("/find_ports", {
+            fetch("/flask/find_ports", {
               signal: signal,
               method: ["POST"],
               cache: "no-cache",

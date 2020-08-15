@@ -1,320 +1,314 @@
-Writing script file build_meraki_switchConfig.py
-Interface Port-channel3 ignored
-Interface Port-channel4 ignored
-Interface Port-channel5 ignored
-Interface FastEthernet0 ignored
-Writing Switchport GigabitEthernet1/0/1
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/2
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/3
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/4
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/5
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/6
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/7
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/8
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/9
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/10
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/11
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/12
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/13
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/14
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/15
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/16
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/17
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/18
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/19
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/20
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/21
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/22
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/23
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/24
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/25
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/26
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/27
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/28
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/29
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/30
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/31
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/32
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/33
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/34
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/35
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/36
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/37
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/38
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/39
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/40
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/41
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/42
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/43
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/44
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/45
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/46
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/47
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/48
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/49
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/50
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/51
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet1/0/52
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/1
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/2
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/3
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/4
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/5
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/6
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/7
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/8
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/9
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/10
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/11
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/12
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/13
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/14
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/15
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/16
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/17
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/18
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/19
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/20
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/21
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/22
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/23
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/24
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/25
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/26
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/27
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/28
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/29
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/30
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/31
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/32
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/33
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/34
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/35
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/36
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/37
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/38
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/39
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/40
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/41
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/42
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/43
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/44
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/45
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/46
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/47
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/48
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/49
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/50
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/51
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet2/0/52
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/1
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/2
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/3
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/4
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/5
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/6
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/7
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/8
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/9
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/10
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/11
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/12
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/13
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/14
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/15
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/16
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/17
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/18
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/19
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/20
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/21
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/22
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/23
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/24
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/25
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/26
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/27
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/28
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/29
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/30
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/31
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/32
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/33
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/34
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/35
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/36
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/37
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/38
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/39
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/40
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/41
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/42
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/43
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/44
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/45
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/46
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/47
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/48
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/49
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/50
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/51
-Switch AAAA-BBBB-CCCC
-Writing Switchport GigabitEthernet3/0/52
-Switch AAAA-BBBB-CCCC
-Interface Vlan1 ignored
-Interface Vlan100 ignored
-Writing complete, check the script before restore.
+Starting configuration switchports
+Building configuration SwitchPort1 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort2 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort3 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort4 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort5 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort6 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort7 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort8 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort9 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort10 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort11 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort12 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort13 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort14 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort15 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort16 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort17 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort18 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort19 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort20 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort21 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort22 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort23 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort24 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort25 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort26 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort27 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort28 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort29 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort30 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort31 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort32 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort33 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort34 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort35 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort36 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort37 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort38 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort39 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort40 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort41 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort42 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort43 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort44 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort45 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort46 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort47 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort48 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort49 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort50 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort51 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort52 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort1 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort2 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort3 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort4 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort5 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort6 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort7 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort8 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort9 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort10 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort11 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort12 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort13 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort14 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort15 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort16 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort17 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort18 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort19 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort20 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort21 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort22 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort23 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort24 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort25 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort26 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort27 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort28 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort29 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort30 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort31 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort32 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort33 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort34 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort35 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort36 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort37 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort38 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort39 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort40 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort41 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort42 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort43 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort44 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort45 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort46 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort47 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort48 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort49 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort50 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort51 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort52 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort1 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort2 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort3 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort4 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort5 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort6 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort7 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort8 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort9 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort10 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort11 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort12 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort13 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort14 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort15 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort16 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort17 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort18 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort19 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort20 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort21 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort22 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort23 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort24 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort25 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort26 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort27 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort28 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort29 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort30 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort31 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort32 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort33 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort34 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort35 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort36 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort37 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort38 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort39 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort40 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort41 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort42 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort43 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort44 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort45 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort46 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort47 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort48 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort49 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort50 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort51 switch AAAA-BBBB-CCCC
+Response:  404
+Building configuration SwitchPort52 switch AAAA-BBBB-CCCC
+Response:  404
+Switch configuration complete.

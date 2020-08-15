@@ -55,7 +55,7 @@ export default function MigrateTool(ac) {
         const formData = new FormData()
         formData.append("backup", data.backup[0])
 
-        const res = await fetch("/upload_backupfile", {
+        const res = await fetch("/node/upload_backupfile", {
             method: "POST",
             body: formData
         }).then(res => res.json())
@@ -77,7 +77,7 @@ export default function MigrateTool(ac) {
                     <span className="glyphicon glyphicon-exclamation-sign"></span>
                     {res.message}
                 </div>)
-            axios.post("/delete_backupfile", {
+            axios.post("/node/delete_backupfile", {
             })
             setshowLiveLogs(false)
             setdisplayRestoreButtons({ display: 'none' })
@@ -92,7 +92,7 @@ export default function MigrateTool(ac) {
         const data = new FormData()
         const file = new Blob([value], { type: 'text/plain' });
         data.append('file', file, 'build_meraki_switchconfig.py')
-        axios.post("/upload_build_meraki_switchconfig", data)
+        axios.post("/node/upload_build_meraki_switchconfig", data)
 
     }
 
@@ -261,7 +261,7 @@ export default function MigrateTool(ac) {
         }
         async function OpenFile() {
 
-            fetch('api/cisco_meraki_migrate_tool/build_meraki_switchconfig.py', { signal: signal })
+            fetch('/node/api/cisco_meraki_migrate_tool/build_meraki_switchconfig.py', { signal: signal })
                 .then(response => { return response.text() })
                 .then((data) => {
                     setswitchPortScript(data)
@@ -346,7 +346,7 @@ export default function MigrateTool(ac) {
         if (showLiveLogs) {
             interval = setInterval(() => {
                 try {
-                    fetch("/api/logs/log_file.log", { signal: signal })
+                    fetch("/node/api/logs/log_file.log", { signal: signal })
                         .then((response) => {
 
                             return response.text();
@@ -453,12 +453,6 @@ export default function MigrateTool(ac) {
                                     required="required"
                                     data-error="Please enter a valid serial-number."
                                 />
-
-                                {/* {errorMessageMAC && <span>{errorMessageMAC}</span>} */}
-                                {/* </div> */}
-
-
-                                {/* <div className="form-group"> */}
                                 <form
                                     onSubmit={handleSubmit(onSubmitUpload)}
                                     className="btn-file btn-file-primary"
@@ -558,14 +552,6 @@ export default function MigrateTool(ac) {
                     <div className="panel panel-default">
                         {showLiveLogs ? (<div style={{ height: 700 }}>
                             {lazyLog}
-                            {/* <LazyLog
-                                extraLines={1}
-                                enableSearch={true}
-                                text={liveLogs}
-                                stream={true}
-                                caseInsensitive={true}
-                                selectableLines={true}
-                            /> */}
                         </div>) : (<div></div>)}
 
                         {showswitchPortScript ? (

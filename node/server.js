@@ -9,6 +9,7 @@ const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 const Mongoose = require("mongoose");
 const fs = require('fs');
+const path = require('path');
 
 app.use(cors())
 app.use(express.json())
@@ -70,7 +71,7 @@ UserSchema.methods.comparePassword = function (plaintext, callback) {
 const UserModel = new Mongoose.model("user", UserSchema);
 
 //connection to the Mongodb database to check the users
-app.get("/dump", async (req, res) => {
+app.get("/node/dump", async (req, res) => {
     try {
         var result = await UserModel.find().exec();
         res.send(result);
@@ -81,7 +82,7 @@ app.get("/dump", async (req, res) => {
 
 
 //create a new user on Mongodb + password and salt + hash
-app.post('/hash-users', async (req, res) => {
+app.post('/node/hash-users', async (req, res) => {
     try {
         const user = new UserModel(req.body);
         const result = await user.save();
@@ -95,7 +96,7 @@ app.post('/hash-users', async (req, res) => {
 
 
 //login from client checking if user match and password match with salt + hash
-app.post('/authenticate', async (req, res, next) => {
+app.post('/node/authenticate', async (req, res, next) => {
     try {
         var user = await UserModel.findOne({ username: req.body.username }).exec();
         if (!user) {
@@ -114,7 +115,7 @@ app.post('/authenticate', async (req, res, next) => {
 })
 
 //cookie set - read - clear
-app.get('/set-cookie', (req, res) => {
+app.get('/node/set-cookie', (req, res) => {
 
     const options = {
         maxAge: 1000 * 60 * 60, // would expire after 60 minutes
@@ -124,7 +125,7 @@ app.get('/set-cookie', (req, res) => {
     res.cookie('cookie', 'somerandomstuff', options).send({ signedIn: true });
 });
 
-app.get('/read-cookie', (req, res) => {
+app.get('/node/read-cookie', (req, res) => {
     if (req.signedCookies.cookie === 'somerandomstuff') {
         res.send({ signedIn: true });
     } else {
@@ -132,7 +133,7 @@ app.get('/read-cookie', (req, res) => {
     }
 });
 
-app.get('/clear-cookie', (req, res) => {
+app.get('/node/clear-cookie', (req, res) => {
     res.clearCookie('cookie').end();
 });
 
@@ -154,7 +155,7 @@ const ApiKeysModel = new Mongoose.model("apikeys", { key: String });
 //this route updates an existing entry in the database with the api key sent from client
 // if for every reason there were no entry, create a new one with the route above:
 
-app.post('/post-api-key', async (req, res, next) => {
+app.post('/node/post-api-key', async (req, res, next) => {
 
     try {
         const key = ApiKeysModel.findOneAndUpdate({}, { key: req.body.key }, req.body).exec()
@@ -172,7 +173,7 @@ app.post('/post-api-key', async (req, res, next) => {
 
 //this route can be used to create a new entry in the database if not present
 
-// app.post('/post-api-key', async (req, res) => {
+// app.post('/node/post-api-key', async (req, res) => {
 //     try {
 //         const key = new ApiKeysModel(req.body);
 //         const apiKey = await key.save();
@@ -188,7 +189,7 @@ app.post('/post-api-key', async (req, res, next) => {
 
 
 //connection to the apikeys database to retrieve the key
-app.get("/get-api-key", async (req, res, next) => {
+app.get("/node/get-api-key", async (req, res, next) => {
     try {
         var apiKey = await ApiKeysModel.findOne({}, { key: "key" }).exec();
         res.send(apiKey);
@@ -199,35 +200,36 @@ app.get("/get-api-key", async (req, res, next) => {
 });
 
 
+console.log('DIRECTORY:', path.join(__dirname, '/../src/components/Tools/switchPortTemplate.json'))
 
 
 
 // serve static files for backup/restore script
 
-app.use("/api/backup_restore/", express.static(__dirname + '/api/backup_restore/'));
+app.use("/node/api/backup_restore/", express.static(path.join(__dirname, '/../api/backup_restore/')))
 
-app.get("/api/backup_restore/", function (req, res) {
+app.get("/node/api/backup_restore/", function (req, res) {
 
-    express.static(__dirname + '/api/backup_restore/')(req, res)
+    express.static(path.join(__dirname, '/../api/backup_restore/'))(req, res)
 
 });
 
 // serve static files for ios_to_meraki script
 
-app.use("/api/cisco_meraki_migrate_tool/", express.static(__dirname + '/api/cisco_meraki_migrate_tool/'));
+app.use("/node/api/cisco_meraki_migrate_tool/", express.static(path.join(__dirname, '/../api/cisco_meraki_migrate_tool/')))
 
-app.get("/api/cisco_meraki_migrate_tool/", function (req, res) {
+app.get("/node/api/cisco_meraki_migrate_tool/", function (req, res) {
 
-    express.static(__dirname + '/api/cisco_meraki_migrate_tool/')(req, res)
+    express.static(path.join(__dirname, '/../api/cisco_meraki_migrate_tool/'))(req, res)
 
 });
 
 // serve static files for live logs
-app.use("/api/logs/", express.static(__dirname + '/api/logs/'));
+app.use("/node/api/logs/", express.static(path.join(__dirname, '/../api/logs')))
 
-app.get("/api/logs/", function (req, res) {
+app.get("/node/api/logs/", function (req, res) {
 
-    express.static(__dirname + '/api/logs/')(req, res)
+    express.static(path.join(__dirname, '/../api/logs'))(req, res)
 
 });
 
@@ -246,7 +248,7 @@ var upload = multer({ storage: storage }).single('file')
 
 // upload meraki_restore_network script if modified by the AceEditor GUI
 
-app.post("/upload", async (req, res) => {
+app.post("/node/upload", async (req, res) => {
     try {
         if (!req.files) {
             res.send({
@@ -256,7 +258,8 @@ app.post("/upload", async (req, res) => {
         } else {
             const file = req.files.file
 
-            file.mv("/home/cyberdevnet/mer-hacker-dev/api/backup_restore/meraki_restore_network.py")
+            // file.mv("/home/cyberdevnet/mer-hacker-dev/api/backup_restore/meraki_restore_network.py")
+            file.mv(path.join(__dirname, '/../api/backup_restore/meraki_restore_network.py'))
 
             res.send({
                 status: true,
@@ -292,7 +295,7 @@ var upload2 = multer({ storage2: storage2 }).single('file')
 // upload backupfile for build_meraki_switchconfig
 
 
-app.post("/upload_backupfile", async (req, res) => {
+app.post("/node/upload_backupfile", async (req, res) => {
     try {
         if (!req.files) {
             res.send({
@@ -303,7 +306,8 @@ app.post("/upload_backupfile", async (req, res) => {
             if (req.files.backup.mimetype === 'text/plain') {
                 const { backup } = req.files
 
-                backup.mv("/home/cyberdevnet/mer-hacker-dev/api/cisco_meraki_migrate_tool/config_backups/backups/backup.txt")
+                // backup.mv("/home/cyberdevnet/mer-hacker-dev/api/cisco_meraki_migrate_tool/config_backups/backups/backup.txt")
+                backup.mv(path.join(__dirname, '/../api/cisco_meraki_migrate_tool/config_backups/backups/backup.txt'))
 
                 res.send({
                     status: true,
@@ -325,7 +329,7 @@ app.post("/upload_backupfile", async (req, res) => {
 
 // upload build_meraki_switchconfig script if modified by the AceEditor GUI
 
-app.post("/upload_build_meraki_switchconfig", async (req, res) => {
+app.post("/node/upload_build_meraki_switchconfig", async (req, res) => {
     try {
         if (!req.files) {
             res.send({
@@ -335,7 +339,8 @@ app.post("/upload_build_meraki_switchconfig", async (req, res) => {
         } else {
             const file = req.files.file
 
-            file.mv("/home/cyberdevnet/mer-hacker-dev/api/cisco_meraki_migrate_tool/build_meraki_switchconfig.py")
+            // file.mv("/home/cyberdevnet/mer-hacker-dev/api/cisco_meraki_migrate_tool/build_meraki_switchconfig.py")
+            file.mv(path.join(__dirname, '/../api/cisco_meraki_migrate_tool/build_meraki_switchconfig.py'))
 
             res.send({
                 status: true,
@@ -353,10 +358,11 @@ app.post("/upload_build_meraki_switchconfig", async (req, res) => {
 
 // DELETE backupfile for build_meraki_switchconfig
 
-app.post("/delete_backupfile", async (req, res) => {
+app.post("/node/delete_backupfile", async (req, res) => {
     try {
         // delete file named 'backup.txt'
-        fs.unlink("/home/cyberdevnet/mer-hacker-dev/api/cisco_meraki_migrate_tool/config_backups/backups/backup.txt", function (err) {
+        // fs.unlink("/home/cyberdevnet/mer-hacker-dev/api/cisco_meraki_migrate_tool/config_backups/backups/backup.txt", function (err) {
+        fs.unlink((path.join(__dirname, '/../api/cisco_meraki_migrate_tool/config_backups/backups/backup.txt')), function (err) {
             if (err) {
                 console.log(err);
             }
@@ -371,10 +377,11 @@ app.post("/delete_backupfile", async (req, res) => {
 
 //Reading template file
 
-app.get("/read_templateFile", async (req, res, next) => {
+app.get("/node/read_templateFile", async (req, res, next) => {
     const jsonFile = require('fs');
     try {
-        let rawTemplate = jsonFile.readFileSync('/home/cyberdevnet/mer-hacker-dev/src/components/Tools/switchPortTemplate.json');
+        // let rawTemplate = jsonFile.readFileSync('/home/cyberdevnet/mer-hacker-dev/src/components/Tools/switchPortTemplate.json');
+        let rawTemplate = jsonFile.readFileSync(path.join(__dirname, '/../src/components/Tools/switchPortTemplate.json'));
         let templateFile = JSON.parse(rawTemplate);
         res.send(templateFile);
         console.log(templateFile);
@@ -387,13 +394,13 @@ app.get("/read_templateFile", async (req, res, next) => {
 
 // //write template file
 
-app.post("/write_templateFile", async (req, res) => {
-    console.log("REQUESTTTTTTTTTTTTTTTTTTTTTT: ", req.body)
+app.post("/node/write_templateFile", async (req, res) => {
     const jsonFile = require('fs');
 
     try {
         let data = JSON.stringify(req.body, null, 2);
-        jsonFile.writeFileSync('/home/cyberdevnet/mer-hacker-dev/src/components/Tools/switchPortTemplate.json', data);
+        // jsonFile.writeFileSync('/home/cyberdevnet/mer-hacker-dev/src/components/Tools/switchPortTemplate.json', data);
+        jsonFile.writeFileSync(path.join(__dirname, '/../src/components/Tools/switchPortTemplate.json'), data);
         res.send(data)
 
     } catch (error) {

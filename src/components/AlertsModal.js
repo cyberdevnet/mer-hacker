@@ -10,10 +10,6 @@ export default function AlertsModal(ac) {
   return (
     <Dialog
       open={true}
-    // fullWidth
-    // onClose={handleClose}
-    // aria-labelledby="alert-dialog-title"
-    // aria-describedby="alert-dialog-description"
     >
       <div >
         <div className="modal-dialog modal-confirm">

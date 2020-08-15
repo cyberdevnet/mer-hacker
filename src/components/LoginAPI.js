@@ -20,7 +20,7 @@ export default function LoginAPI(ac) {
   const setCookie = async () => {
     try {
       // eslint-disable-next-line
-      const res = await axios.get('/set-cookie');
+      const res = await axios.get('/node/set-cookie');
 
     } catch (e) {
     }
@@ -30,7 +30,7 @@ export default function LoginAPI(ac) {
   // readCookie Function checks if SignedIN or not
   const readCookie = async () => {
     try {
-      const res = await axios.get('/read-cookie');
+      const res = await axios.get('/node/read-cookie');
 
       if (res.data.signedIn === true) {
         ac.setisSignedIn(res.data.signedIn);
@@ -82,7 +82,7 @@ export default function LoginAPI(ac) {
       let username = ac.User
       let password = ac.Password
       try {
-        const res = await axios.post('/authenticate',
+        const res = await axios.post('/node/authenticate',
           { "username": `${username}`, "password": `${password}` }, { signal: signal }
         );
 

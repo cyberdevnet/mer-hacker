@@ -137,7 +137,7 @@ export default function BackupRestore(ac) {
     const data = new FormData()
     const file = new Blob([value], { type: 'text/plain' });
     data.append('file', file, 'meraki_restore_network.py')
-    axios.post("/upload", data)
+    axios.post("/node/upload", data)
 
   }
 
@@ -202,7 +202,7 @@ export default function BackupRestore(ac) {
     }
     async function OpenFile() {
 
-      fetch('/api/backup_restore/meraki_restore_network.py', { signal: signal })
+      fetch('/node/api/backup_restore/meraki_restore_network.py', { signal: signal })
         .then(response => { return response.text() })
         .then((data) => {
           ac.dc.setrestoreScript(data)
@@ -309,14 +309,6 @@ export default function BackupRestore(ac) {
           setloadingButtonRestoreSwitch(false)
         })
 
-      // } else {
-      //   seterrorMessage(
-      //     <div className="form-input-error-msg alert alert-danger">
-      //       <span className="glyphicon glyphicon-exclamation-sign"></span>
-      //     Check the script before restoring the network.
-      //   </div>
-      //   )
-      // }
 
     }
     RestoreSwitch();
@@ -343,13 +335,12 @@ export default function BackupRestore(ac) {
     if (showLiveLogs) {
       interval = setInterval(() => {
         try {
-          fetch("/api/logs/log_file.log", { signal: signal })
+          fetch("/node/api/logs/log_file.log", { signal: signal })
             .then((response) => {
 
               return response.text();
             })
             .then((data) => {
-              // setliveLogs(data)
               setlazyLog(
                 <LazyLog extraLines={1} enableSearch
                   text={data}
@@ -547,11 +538,6 @@ export default function BackupRestore(ac) {
           <div className="panel panel-default">
             {showLiveLogs ? (<div style={{ height: 350 }}>
               {lazyLog}
-              {/* <LazyLog extraLines={1} enableSearch
-                text={liveLogs}
-                stream
-                caseInsensitive
-                selectableLines /> */}
             </div>) : (<div></div>)}
 
             {ac.dc.showRestorescript ? (

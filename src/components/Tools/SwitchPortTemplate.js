@@ -52,7 +52,7 @@ export default function SwitchPortTemplate(ac) {
 
     async function readTemplate() {
         try {
-            fetch('/read_templateFile')
+            fetch('/node/read_templateFile')
                 .then(res => res.json())
                 .then((data) => {
                     const TEMPLATELIST = data.map((opt, index) => ({
@@ -483,13 +483,6 @@ export default function SwitchPortTemplate(ac) {
         };
         // eslint-disable-next-line
     }, [triggerDeploy]);
-
-
-
-
-
-
-
 
 
 

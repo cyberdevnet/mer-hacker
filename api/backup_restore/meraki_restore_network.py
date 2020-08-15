@@ -30,14 +30,16 @@ def restore_network(ARG_ORGID, ARG_APIKEY):
 	print('Checking Administrator',file=f)
 	f.flush()
 	posturl = 'https://api.meraki.com/api/v0/organizations/{0}/admins'.format(str(ARG_ORGID))
-	dashboard = session.post(posturl, json={'accountStatus': 'ok', 'authenticationMethod': 'Email', 'email': 'fabrizio.rollo@nts.eu', 'hasApiKey': True, 'id': '967931', 'lastActive': 1597315983, 'name': 'Fabrizio Rollo', 'networks': [], 'orgAccess': 'full', 'tags': [], 'twoFactorAuthEnabled': True}, headers=headers)
+	dashboard = session.post(posturl, json={'accountStatus': 'ok', 'authenticationMethod': 'Email', 'email': 'devnetmerakiadmin@cisco.com', 'hasApiKey': True, 'id': '566327653141950435', 'lastActive': 1590763490, 'name': 'DevNet Admin', 'networks': [], 'orgAccess': 'read-only', 'tags': [], 'twoFactorAuthEnabled': False}, headers=headers)
+	dashboard = session.post(posturl, json={'accountStatus': 'ok', 'authenticationMethod': 'Email', 'email': 'devnetmerakiassoc@cisco.com', 'hasApiKey': True, 'id': '566327653141950436', 'lastActive': 1579727981, 'name': 'DevNet Assoc', 'networks': [], 'orgAccess': 'read-only', 'tags': [], 'twoFactorAuthEnabled': False}, headers=headers)
+	dashboard = session.post(posturl, json={'accountStatus': 'ok', 'authenticationMethod': 'Email', 'email': 'mdenapol@cisco.com', 'hasApiKey': True, 'id': '566327653141950430', 'lastActive': 1597474309, 'name': 'Matt Work', 'networks': [], 'orgAccess': 'full', 'tags': [], 'twoFactorAuthEnabled': False}, headers=headers)
 
 # MX VPN firewall
 # https://dashboard.meraki.com/api_docs#mx-vpn-firewall
 	print('Restoring mx_vpn_firewall_rules',file=f)
 	f.flush()
 	puturl = 'https://api.meraki.com/api/v0/organizations/{0}/vpnFirewallRules'.format(str(ARG_ORGID))
-	dashboard = session.put(puturl, json={'rules': [{'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}, {'comment': 'Default rule', 'policy': 'allow', 'protocol': 'Any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}], 'syslogEnabled': True}, headers=headers)
+	dashboard = session.put(puturl, json={'rules': [{'comment': 'Default rule', 'policy': 'allow', 'protocol': 'Any', 'srcPort': 'Any', 'srcCidr': 'Any', 'destPort': 'Any', 'destCidr': 'Any', 'syslogEnabled': True}], 'syslogEnabled': True}, headers=headers)
 
 # SNMP Settings
 # https://dashboard.meraki.com/api_docs#update-the-snmp-settings-for-an-organization
@@ -45,7 +47,7 @@ def restore_network(ARG_ORGID, ARG_APIKEY):
 	f.flush()
 	puturl = 'https://api.meraki.com/api/v0/organizations/{0}/snmp'.format(str(ARG_ORGID))
 	try:
-		dashboard = session.put(puturl, json={'v2cEnabled': True, 'v3Enabled': False}, headers=headers)
+		dashboard = session.put(puturl, json={'v2cEnabled': False, 'v3Enabled': False}, headers=headers)
 		dashboard.raise_for_status()
 	except requests.exceptions.HTTPError as err:
 		print(err,file=f)
@@ -61,13 +63,13 @@ def restore_network(ARG_ORGID, ARG_APIKEY):
 	except requests.exceptions.HTTPError as err:
 		print(err,file=f)
 
-# Add Network: Heisenberg-Lab-restore
-	print('Restoring network Heisenberg-Lab in new network Heisenberg-Lab-restore',file=f)
+# Add Network: DevNetAssoc1-restore
+	print('Restoring network DevNetAssoc1 in new network DevNetAssoc1-restore',file=f)
 	f.flush()
 	try:
 	# https://dashboard.meraki.com/api_docs#create-a-network
 		posturl = 'https://api.meraki.com/api/v0/organizations/{0}/networks'.format(str(ARG_ORGID))
-		dashboard = session.post(posturl, json={'name': 'Heisenberg-Lab-restore', 'disableMyMerakiCom': False, 'disableRemoteStatusPage': True, 'type': 'appliance switch wireless'}, headers=headers)
+		dashboard = session.post(posturl, json={'name': 'DevNetAssoc1-restore', 'disableMyMerakiCom': False, 'disableRemoteStatusPage': True, 'type': 'appliance camera switch wireless'}, headers=headers)
 		dashboard.raise_for_status()
 		networkid=dashboard.json()['id']
 
@@ -76,13 +78,7 @@ def restore_network(ARG_ORGID, ARG_APIKEY):
 		print('Restoring mx_vlans',file=f)
 		f.flush()
 		puturl = 'https://api.meraki.com/api/v0/networks/{0}/vlansEnabledState'.format(str(networkid))
-		dashboard = session.put(puturl, json={'enabled': True}, headers=headers)
-	# https://dashboard.meraki.com/api_docs#add-a-vlan
-		posturl = 'https://api.meraki.com/api/v0/networks/{0}/vlans'.format(str(networkid))
-		dashboard = session.post(posturl, json={'applianceIp': '192.168.128.1', 'dhcpBootOptionsEnabled': False, 'dhcpHandling': 'Run a DHCP server', 'dhcpLeaseTime': '1 day', 'dhcpOptions': [], 'dnsNameservers': 'upstream_dns', 'fixedIpAssignments': {}, 'id': 1, 'name': 'Default', 'reservedIpRanges': [], 'subnet': '192.168.128.0/24'}, headers=headers)
-		dashboard = session.post(posturl, json={'applianceIp': '10.10.10.1', 'dhcpBootOptionsEnabled': False, 'dhcpHandling': 'Run a DHCP server', 'dhcpLeaseTime': '1 day', 'dhcpOptions': [], 'dnsNameservers': 'upstream_dns', 'fixedIpAssignments': {'30:24:32:f4:f8:12': {'ip': '10.10.10.17', 'name': None}, 'e4:58:b8:05:17:31': {'ip': '10.10.10.21', 'name': None}, 'e4:aa:5d:e4:7e:be': {'ip': '10.10.10.2', 'name': None}, 'e8:b1:fc:0a:a7:d0': {'ip': '10.10.10.28', 'name': 'ubuntu'}}, 'id': 666, 'name': 'BlueSky', 'reservedIpRanges': [], 'subnet': '10.10.10.0/24'}, headers=headers)
-		dashboard = session.post(posturl, json={'applianceIp': '192.168.1.1', 'dhcpBootOptionsEnabled': False, 'dhcpHandling': 'Run a DHCP server', 'dhcpLeaseTime': '1 day', 'dhcpOptions': [], 'dnsNameservers': 'upstream_dns', 'fixedIpAssignments': {}, 'id': 999, 'name': 'Guest SSID', 'reservedIpRanges': [], 'subnet': '192.168.1.0/24'}, headers=headers)
-
+		dashboard = session.put(puturl, json={'enabled': False}, headers=headers)
 	# MX cellular firewall
 	# https://dashboard.meraki.com/api_docs#mx-cellular-firewall
 		print('Restoring mx_cellular_fw_rules',file=f)
@@ -109,21 +105,21 @@ def restore_network(ARG_ORGID, ARG_APIKEY):
 		print('Restoring SSIDs',file=f)
 		f.flush()
 		puturl = 'https://api.meraki.com/api/v0/networks/{0}/ssids/0'.format(str(networkid))
-		dashboard = session.put(puturl, json={'authMode': 'psk', 'availabilityTags': [], 'availableOnAllAps': True, 'bandSelection': 'Dual band operation', 'defaultVlanId': 666, 'enabled': True, 'encryptionMode': 'wpa', 'ipAssignmentMode': 'Bridge mode', 'lanIsolationEnabled': False, 'minBitrate': 11, 'name': "E' molto lontana l'Islanda!", 'number': 0, 'perClientBandwidthLimitDown': 0, 'perClientBandwidthLimitUp': 0, 'psk': '8volante', 'splashPage': 'None', 'ssidAdminAccessible': False, 'useVlanTagging': True, 'visible': True, 'wpaEncryptionMode': 'WPA2 only'}, headers=headers)
+		dashboard = session.put(puturl, json={'authMode': 'open', 'availabilityTags': [], 'availableOnAllAps': True, 'bandSelection': 'Dual band operation', 'enabled': True, 'ipAssignmentMode': 'NAT mode', 'minBitrate': 11, 'name': 'DevNetAssoc1 - wireless WiFi', 'number': 0, 'perClientBandwidthLimitDown': 0, 'perClientBandwidthLimitUp': 0, 'splashPage': 'None', 'ssidAdminAccessible': False, 'visible': True}, headers=headers)
 	# MR L3 firewall
 	# https://dashboard.meraki.com/api_docs#update-the-l3-firewall-rules-of-an-ssid-on-an-mr-network
 		puturl = 'https://api.meraki.com/api/v0/networks/{0}/ssids/0/l3FirewallRules'.format(str(networkid))
 		dashboard = session.put(puturl, json={'rules': [], 'allowLanAccess': True}, headers=headers)
 
 		puturl = 'https://api.meraki.com/api/v0/networks/{0}/ssids/1'.format(str(networkid))
-		dashboard = session.put(puturl, json={'adminSplashUrl': '', 'authMode': 'open', 'availabilityTags': [], 'availableOnAllAps': True, 'bandSelection': 'Dual band operation', 'defaultVlanId': 999, 'enabled': False, 'ipAssignmentMode': 'Bridge mode', 'lanIsolationEnabled': False, 'minBitrate': 11, 'name': 'Heisenberg-Guest', 'number': 1, 'perClientBandwidthLimitDown': 500, 'perClientBandwidthLimitUp': 500, 'splashPage': 'Click-through splash page', 'splashTimeout': '1440 minutes', 'ssidAdminAccessible': False, 'useVlanTagging': True, 'visible': True, 'walledGardenEnabled': False}, headers=headers)
+		dashboard = session.put(puturl, json={'authMode': 'open', 'availabilityTags': [], 'availableOnAllAps': True, 'bandSelection': 'Dual band operation', 'enabled': False, 'ipAssignmentMode': 'NAT mode', 'minBitrate': 11, 'name': 'Unconfigured SSID 2', 'number': 1, 'perClientBandwidthLimitDown': 0, 'perClientBandwidthLimitUp': 0, 'splashPage': 'None', 'ssidAdminAccessible': False, 'visible': True}, headers=headers)
 	# MR L3 firewall
 	# https://dashboard.meraki.com/api_docs#update-the-l3-firewall-rules-of-an-ssid-on-an-mr-network
 		puturl = 'https://api.meraki.com/api/v0/networks/{0}/ssids/1/l3FirewallRules'.format(str(networkid))
 		dashboard = session.put(puturl, json={'rules': [], 'allowLanAccess': True}, headers=headers)
 
 		puturl = 'https://api.meraki.com/api/v0/networks/{0}/ssids/2'.format(str(networkid))
-		dashboard = session.put(puturl, json={'authMode': 'psk', 'availabilityTags': [], 'availableOnAllAps': True, 'bandSelection': 'Dual band operation', 'defaultVlanId': 777, 'enabled': False, 'encryptionMode': 'wpa', 'ipAssignmentMode': 'Bridge mode', 'lanIsolationEnabled': False, 'minBitrate': 11, 'name': 'UPC130884FF', 'number': 2, 'perClientBandwidthLimitDown': 0, 'perClientBandwidthLimitUp': 0, 'psk': 'MRRobot123!', 'splashPage': 'None', 'ssidAdminAccessible': False, 'useVlanTagging': True, 'visible': True, 'wpaEncryptionMode': 'WPA2 only'}, headers=headers)
+		dashboard = session.put(puturl, json={'authMode': 'open', 'availabilityTags': [], 'availableOnAllAps': True, 'bandSelection': 'Dual band operation', 'enabled': False, 'ipAssignmentMode': 'NAT mode', 'minBitrate': 11, 'name': 'Unconfigured SSID 3', 'number': 2, 'perClientBandwidthLimitDown': 0, 'perClientBandwidthLimitUp': 0, 'splashPage': 'None', 'ssidAdminAccessible': False, 'visible': True}, headers=headers)
 	# MR L3 firewall
 	# https://dashboard.meraki.com/api_docs#update-the-l3-firewall-rules-of-an-ssid-on-an-mr-network
 		puturl = 'https://api.meraki.com/api/v0/networks/{0}/ssids/2/l3FirewallRules'.format(str(networkid))
@@ -217,15 +213,17 @@ def restore_network(ARG_ORGID, ARG_APIKEY):
 	# https://developer.cisco.com/meraki/api/#/rest/api-endpoints/devices/update-network-device
 		print('Restoring devices properties',file=f)
 		f.flush()
-		puturl = 'https://api.meraki.com/api/v0/networks/{0}/devices/Q2HP-QSVT-LBLV'.format(str(networkid))
-		dashboard = session.put(puturl, json={'address': '1600 Pennsylvania Ave', 'firmware': 'Not running configured version', 'floorPlanId': None, 'lanIp': None, 'lat': 37.4180951010362, 'lng': -122.098531723022, 'mac': 'e0:cb:bc:3b:25:45', 'model': 'MS220-8P', 'name': 'Heisenberg_Switch', 'serial': 'Q2HP-QSVT-LBLV', 'switchProfileId': None, 'tags': ' recently-added '}, headers=headers)
-		puturl = 'https://api.meraki.com/api/v0/networks/{0}/devices/Q2PD-M66A-L5TE'.format(str(networkid))
-		dashboard = session.put(puturl, json={'address': 'Schaeffergasse 20 Wien', 'firmware': 'wireless-25-11', 'floorPlanId': None, 'lanIp': '192.168.128.10', 'lat': 48.19386, 'lng': 16.36354, 'mac': '98:18:88:73:18:ab', 'model': 'MR33', 'name': 'AP Kleines Zimmer', 'serial': 'Q2PD-M66A-L5TE', 'tags': ' recently-added '}, headers=headers)
-		puturl = 'https://api.meraki.com/api/v0/networks/{0}/devices/Q2KN-MEHN-SK32'.format(str(networkid))
-		dashboard = session.put(puturl, json={'address': 'Schaeffergasse 20/44', 'firmware': 'wired-14-42', 'floorPlanId': None, 'lanIp': '192.168.0.22', 'lat': 48.19386, 'lng': 16.36354, 'mac': '0c:8d:db:92:1a:48', 'model': 'MX64', 'name': 'MX64-Heisenberg', 'serial': 'Q2KN-MEHN-SK32', 'tags': ' recently-added ', 'wan1Ip': '192.168.0.22', 'wan2Ip': None}, headers=headers)
+		puturl = 'https://api.meraki.com/api/v0/networks/{0}/devices/QBSA-UP8W-9MMW'.format(str(networkid))
+		dashboard = session.put(puturl, json={'address': '', 'firmware': 'Not running configured version', 'floorPlanId': None, 'lanIp': None, 'lat': 37.4180951010362, 'lng': -122.098531723022, 'mac': '4c:c8:a1:03:00:c0', 'model': 'MX450', 'serial': 'QBSA-UP8W-9MMW', 'wan1Ip': None, 'wan2Ip': None}, headers=headers)
+		puturl = 'https://api.meraki.com/api/v0/networks/{0}/devices/QBSD-9A9B-MC9K'.format(str(networkid))
+		dashboard = session.put(puturl, json={'address': '', 'firmware': 'Not running configured version', 'floorPlanId': None, 'lanIp': None, 'lat': 37.4180951010362, 'lng': -122.098531723022, 'mac': '4c:c8:a1:12:00:c0', 'model': 'MV32', 'serial': 'QBSD-9A9B-MC9K', 'wirelessMac': '4c:c8:a1:12:00:c1'}, headers=headers)
+		puturl = 'https://api.meraki.com/api/v0/networks/{0}/devices/QBSC-8F99-Q6RL'.format(str(networkid))
+		dashboard = session.put(puturl, json={'address': '', 'firmware': 'Not running configured version', 'floorPlanId': None, 'lanIp': None, 'lat': 37.4180951010362, 'lng': -122.098531723022, 'mac': '4c:c8:a1:0e:00:c0', 'model': 'MR74', 'serial': 'QBSC-8F99-Q6RL'}, headers=headers)
+		puturl = 'https://api.meraki.com/api/v0/networks/{0}/devices/QBSB-DEWE-PJ9M'.format(str(networkid))
+		dashboard = session.put(puturl, json={'address': '', 'firmware': 'Not running configured version', 'floorPlanId': None, 'lanIp': None, 'lat': 37.4180951010362, 'lng': -122.098531723022, 'mac': '4c:c8:a1:09:00:c0', 'model': 'MS425-32', 'serial': 'QBSB-DEWE-PJ9M', 'switchProfileId': None}, headers=headers)
 	except requests.exceptions.HTTPError as err:
 		print(err,file=f)
-		print('Can not add network Heisenberg-Lab - it probably already exists. Change the Network name and make a new backup.',file=f)
+		print('Can not add network DevNetAssoc1 - it probably already exists. Change the Network name and make a new backup.',file=f)
 	print('Restoring Complete, move your switchs to the new network and restore the switch configuration.',file=f)
 	f.flush()
 	f.close()
@@ -247,45 +245,141 @@ def restore_switchports(ARG_APIKEY):
 
 	try:
 		print('Starting restoring switchports',file=f)
-		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/1'
-		print('Restoring configuration Port1 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 1, "name": "", "tags": null, "enabled": true, "poeEnabled": true, "type": "trunk", "vlan": null, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/1'
+		print('Restoring configuration Port1 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 1, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
-		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/2'
-		print('Restoring configuration Port2 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 2, "name": "ACCESS_PORT_TAG", "tags": "TAG1 TAG2", "enabled": true, "poeEnabled": true, "type": "access", "vlan": 99, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/2'
+		print('Restoring configuration Port2 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 2, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
-		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/3'
-		print('Restoring configuration Port3 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 3, "name": "ACCESS_PORT_TAG", "tags": "TAG1 TAG2", "enabled": true, "poeEnabled": true, "type": "access", "vlan": 99, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/3'
+		print('Restoring configuration Port3 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 3, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
-		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/4'
-		print('Restoring configuration Port4 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 4, "name": "ACCESS_PORT_MAC", "tags": null, "enabled": true, "poeEnabled": true, "type": "access", "vlan": 66, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/4'
+		print('Restoring configuration Port4 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 4, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
-		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/5'
-		print('Restoring configuration Port5 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 5, "name": "TRUNK_PORT", "tags": null, "enabled": true, "poeEnabled": true, "type": "trunk", "vlan": null, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/5'
+		print('Restoring configuration Port5 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 5, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
-		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/6'
-		print('Restoring configuration Port6 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 6, "name": "ACCESS_PORT", "tags": null, "enabled": true, "poeEnabled": true, "type": "access", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": 1}'
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/6'
+		print('Restoring configuration Port6 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 6, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
-		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/7'
-		print('Restoring configuration Port7 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 7, "name": "test trunk", "tags": null, "enabled": true, "poeEnabled": true, "type": "trunk", "vlan": 23, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": true, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": 1}'
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/7'
+		print('Restoring configuration Port7 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 7, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
-		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/8'
-		print('Restoring configuration Port8 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 8, "name": "test trunk", "tags": null, "enabled": true, "poeEnabled": true, "type": "trunk", "vlan": 23, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": true, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": 1}'
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/8'
+		print('Restoring configuration Port8 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 8, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
-		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/9'
-		print('Restoring configuration Port9 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 9, "name": " ", "tags": null, "enabled": true, "poeEnabled": true, "type": "access", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": true, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": 1}'
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/9'
+		print('Restoring configuration Port9 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 9, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
-		puturl = 'https://api.meraki.com/api/v0/devices/Q2HP-QSVT-LBLV/switchPorts/10'
-		print('Restoring configuration Port10 switch Q2HP-QSVT-LBLV',file=f)
-		payload = '{"number": 10, "name": "", "tags": null, "enabled": true, "poeEnabled": true, "type": "trunk", "vlan": null, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": true, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": 1}'
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/10'
+		print('Restoring configuration Port10 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 10, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/11'
+		print('Restoring configuration Port11 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 11, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/12'
+		print('Restoring configuration Port12 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 12, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/13'
+		print('Restoring configuration Port13 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 13, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/14'
+		print('Restoring configuration Port14 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 14, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/15'
+		print('Restoring configuration Port15 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 15, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/16'
+		print('Restoring configuration Port16 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 16, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/17'
+		print('Restoring configuration Port17 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 17, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/18'
+		print('Restoring configuration Port18 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 18, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/19'
+		print('Restoring configuration Port19 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 19, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/20'
+		print('Restoring configuration Port20 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 20, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/21'
+		print('Restoring configuration Port21 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 21, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/22'
+		print('Restoring configuration Port22 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 22, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/23'
+		print('Restoring configuration Port23 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 23, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/24'
+		print('Restoring configuration Port24 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 24, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/25'
+		print('Restoring configuration Port25 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 25, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/26'
+		print('Restoring configuration Port26 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 26, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/27'
+		print('Restoring configuration Port27 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 27, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/28'
+		print('Restoring configuration Port28 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 28, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/29'
+		print('Restoring configuration Port29 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 29, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/30'
+		print('Restoring configuration Port30 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 30, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/31'
+		print('Restoring configuration Port31 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 31, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/32'
+		print('Restoring configuration Port32 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 32, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/33'
+		print('Restoring configuration Port33 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 33, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
+		response = requests.request('PUT', puturl, headers=headers, data = payload)
+		puturl = 'https://api.meraki.com/api/v0/devices/QBSB-DEWE-PJ9M/switchPorts/34'
+		print('Restoring configuration Port34 switch QBSB-DEWE-PJ9M',file=f)
+		payload = '{"number": 34, "name": null, "tags": null, "enabled": true, "poeEnabled": false, "type": "trunk", "vlan": 1, "voiceVlan": null, "allowedVlans": "all", "isolationEnabled": false, "rstpEnabled": true, "stpGuard": "disabled", "linkNegotiation": "Auto negotiate", "portScheduleId": null, "udld": "Alert only", "accessPolicyNumber": null}'
 		response = requests.request('PUT', puturl, headers=headers, data = payload)
 	except requests.exceptions.HTTPError as err:
 		print(err,file=f)

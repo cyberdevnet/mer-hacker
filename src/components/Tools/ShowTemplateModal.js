@@ -477,7 +477,7 @@ export default function ShowTemplateModal(ac) {
     async function writeTemplate(e) {
         setloadingSubmit(true);
         try {
-            fetch('/read_templateFile')
+            fetch('/node/read_templateFile')
                 .then(res => res.json())
                 .then((data) => {
                     const newArr = data.slice();
@@ -493,7 +493,7 @@ export default function ShowTemplateModal(ac) {
                     }
 
                     try {
-                        fetch('/write_templateFile', {
+                        fetch('/node/write_templateFile', {
                             method: 'POST',
                             headers: {
                                 'Accept': 'application/json',
@@ -538,7 +538,7 @@ export default function ShowTemplateModal(ac) {
     async function deleteTemplate(e) {
         setloading(true);
         try {
-            fetch('/read_templateFile')
+            fetch('/node/read_templateFile')
                 .then(res => res.json())
                 .then((data) => {
                     const newArr = data.slice();
@@ -559,7 +559,7 @@ export default function ShowTemplateModal(ac) {
                   Cannot delete template</div>)
                     }
                     try {
-                        fetch('/write_templateFile', {
+                        fetch('/node/write_templateFile', {
                             method: 'POST',
                             headers: {
                                 'Accept': 'application/json',

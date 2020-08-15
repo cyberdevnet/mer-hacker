@@ -14,7 +14,7 @@ export default function LoggedIn(ac) {
   // post key to backend
   async function postKey() {
 
-    const rawResponse = await fetch('/post-api-key', {
+    const rawResponse = await fetch('/node/post-api-key', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -27,7 +27,7 @@ export default function LoggedIn(ac) {
 
   async function getKey() {
     try {
-      fetch('/get-api-key')
+      fetch('/node/get-api-key')
         .then(res => res.json())
         .then((data) => {
           ac.dc.setapiKey(data.key)
@@ -107,7 +107,7 @@ export default function LoggedIn(ac) {
                       type="password"
                       required={true}
                       className="form-control-api"
-                      placeholder="API key *"
+                      placeholder="API key"
                       value={inputKey}
                       autoComplete="api"
                       onChange={(e) => setinputKey(e.target.value)}

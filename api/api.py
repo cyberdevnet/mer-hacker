@@ -102,7 +102,7 @@ def get_organizations():
     try:
         if request.method == 'POST':
             global data
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             return data
         else:
             dashboard = meraki.DashboardAPI(data['X-Cisco-Meraki-API-Key'],
@@ -124,7 +124,7 @@ def get_networks():
     try:
         if request.method == 'POST':
             global data
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             return data
         else:
             dashboard = meraki.DashboardAPI(
@@ -145,7 +145,7 @@ def get_devices():
     try:
         if request.method == 'POST':
             global data
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             return data
         else:
             dashboard = meraki.DashboardAPI(
@@ -165,7 +165,7 @@ def get_subnets():
     try:
         if request.method == 'POST':
             global data
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             return data
         else:
             dashboard = meraki.DashboardAPI(
@@ -185,7 +185,7 @@ def clients():
     try:
         if request.method == 'POST':
             global data
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             NET_ID = data['NET_ID']
             return data
@@ -210,7 +210,7 @@ def device_status():
     try:
         if request.method == 'POST':
             global data
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             return data
         else:
             dashboard = meraki.DashboardAPI(
@@ -229,7 +229,7 @@ def uplink_loss():
     try:
         if request.method == 'POST':
             global data
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             return data
         else:
             dashboard = meraki.DashboardAPI(
@@ -249,7 +249,7 @@ def get_all_networks_subnets():
     try:
         if request.method == 'POST':
             global data
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             return data
         else:
             merakirequestthrottler()
@@ -287,7 +287,7 @@ def find_portss():
     try:
         if request.method == 'POST':
             global data
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             API_KEY = data['X-Cisco-Meraki-API-Key']
             ORG_ID = data['ORG_ID']
             MAC_ADDR = data['MAC_ADDR']
@@ -307,7 +307,7 @@ def topuserdata():
         if request.method == 'POST':
             global data
 
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             ARG_ORGNAME = data['ARG_ORGNAME']
             SERIAL_NUM = data['SERIAL_NUM']
@@ -327,7 +327,7 @@ def traffic_analysis():
     try:
         if request.method == 'POST':
             global data
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             return {'data': 'ciao'}
         else:
             NET_ID = data['NET_ID']
@@ -353,7 +353,7 @@ def run_backup():
     try:
         if request.method == 'POST':
             global data
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             NET_ID = data['NET_ID']
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             ARG_ORGNAME = data['ARG_ORGNAME']
@@ -379,7 +379,7 @@ def run_restore():
         if request.method == 'POST':
             importlib.reload(meraki_restore_network)
             global data
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             NET_ID = data['NET_ID']
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             ARG_ORGNAME = data['ARG_ORGNAME']
@@ -402,7 +402,7 @@ def run_restore_switch():
         if request.method == 'POST':
             importlib.reload(meraki_restore_network)
             global data
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             NET_ID = data['NET_ID']
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             ARG_ORGNAME = data['ARG_ORGNAME']
@@ -427,7 +427,7 @@ def ios2meraki():
         if request.method == 'POST':
             importlib.reload(build_meraki_switchconfig)
             global data
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             serial_numbers = data['serial_numbers']
             print(serial_numbers)
 
@@ -447,7 +447,7 @@ def migrate_switch_config():
         if request.method == 'POST':
             importlib.reload(build_meraki_switchconfig)
             global data
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
 
             return {'ios_to_meraki': build_meraki_switchconfig.build_switchports(ARG_APIKEY)}
@@ -464,7 +464,7 @@ def lldp_cdp():
     try:
         if request.method == 'POST':
             global data
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             return {'data': 'ciao'}
         else:
             NET_ID = data['NET_ID']
@@ -492,7 +492,7 @@ def device_clients():
     try:
         if request.method == 'POST':
             global data
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             return data
         else:
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
@@ -512,7 +512,7 @@ def client():
     try:
         if request.method == 'POST':
             global data
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             return data
         else:
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
@@ -532,7 +532,7 @@ def site2site():
     try:
         if request.method == 'POST':
             global data
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             return data
         else:
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
@@ -567,7 +567,7 @@ def device_switchports():
     try:
         if request.method == 'POST':
             global data
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             return data
         else:
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
@@ -587,7 +587,7 @@ def deploy_device_switchports():
         if request.method == 'POST':
             importlib.reload(switchporttemplate)
             global data
-            data = request.get_json()
+            data = request.get_json(force=True, silent=True)
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             SERIAL_NUM = data['SERIAL_NUM']
             payload = data['PAYLOAD']

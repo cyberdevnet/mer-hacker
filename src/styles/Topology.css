@@ -33,3 +33,14 @@ svg.custom path.link {
     fill: none;
     stroke: gray;
 }
+
+.nodeNameBase {
+    fill: #000;
+    stroke: none;
+    stroke-width: 1;
+}
+
+.graph-id {
+	height: 969px;
+	width: 100%;
+}

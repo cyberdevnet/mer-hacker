@@ -5,6 +5,7 @@
 
 .form-group.field.field-object {
   text-align: -webkit-center;
+  text-align: -moz-center;
 }
 
 .control-label {
@@ -155,4 +156,10 @@ th {
   margin-top: -35px;
   /* margin-bottom: 10px; */
   color: #737373;
+}
+
+.bootstrap-table-panel {
+  padding: 15px;
+  table-layout: fixed;
+  word-wrap: break-word;
 }

@@ -13,6 +13,8 @@ import AlertModal from "./AlertsModal";
 import Topology from './Topology'
 // import Countdown from 'react-countdown';
 import ReactTooltip from 'react-tooltip'
+// import SessionTimeout from '../SessionTimeout'
+
 import "../styles/Template.css";
 
 
@@ -52,6 +54,20 @@ export default function Template(ac, dc) {
     ac.dc.settriggerTopReports(ac.dc.triggerTopReports + 1);
   };
 
+  //Session Timeout Counter
+  // React.useEffect(() => {
+  //   ac.dc.sessionTime > 0 && setTimeout(() => ac.dc.setsessionTime(ac.dc.sessionTime - 1), 1000);
+  //   // eslint-disable-next-line
+  // }, [ac.dc.sessionTime]);
+
+  // function display(seconds) {
+  //   const format = val => `0${Math.floor(val)}`.slice(-2)
+  //   const hours = seconds / 3600
+  //   const minutes = (seconds % 3600) / 60
+
+  //   return [hours, minutes, seconds % 60].map(format).join(':')
+  // }
+
   return (
     <Router>
       <div id="wrapper">
@@ -83,6 +99,7 @@ export default function Template(ac, dc) {
             {ac.dc.isSignedIn ? (
               <div>
                 <div className='timeout-wrapper'>
+                  Session Timeout: {display(ac.dc.sessionTime)}
                   Session Timeout: <Countdown className='timeout' date={Date.now() + (ac.dc.sessionTime * 1000)} daysInHours />
                 </div>
                 <i className="fa fa-gear fa-spin" style={{ fontSize: "24px" }}></i>
@@ -102,7 +119,6 @@ export default function Template(ac, dc) {
                   href="#logout"
                 >
                   <i className="fa fa-sign-out" aria-hidden="true"></i> Logout
-                  {/* <i className="fa fa-desktop"></i>Logout */}
                 </NavLink>) : (<div></div>)}
 
               </li>
@@ -218,6 +234,8 @@ export default function Template(ac, dc) {
           {ac.dc.switchAlertModal ? <AlertModal dc={ac.dc} /> : <div></div>}
           {ac.dc.switchLoggedIn ? <LoggedIn dc={ac.dc} /> : <div></div>}
           {ac.dc.switchLoggedout ? <Logout dc={ac.dc} /> : <div></div>}
+          {/* <SessionTimeout dc={ac.dc} /> */}
+
 
           <Switch>
             <Route exact path='/login' render={(dc) => (<LoginAPI {...ac.dc} dc={dc} />)} />
@@ -231,7 +249,8 @@ export default function Template(ac, dc) {
 
             {/* do not cancel this */}
             {/* <Route exact path='/login' render={(dc) => (<LoginAPI {...ac.dc} dc={dc} />)} /> */}
-            <Route component={PageNotFound} />
+            <Route render={(dc) => (<PageNotFound {...ac.dc} dc={dc} />)} />
+            {/* <Route component={PageNotFound} /> */}
           </Switch>
 
         </div>

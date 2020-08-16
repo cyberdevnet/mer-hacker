@@ -200,7 +200,6 @@ app.get("/node/get-api-key", async (req, res, next) => {
 });
 
 
-console.log('DIRECTORY:', path.join(__dirname, '/../flask/logs'))
 
 
 
@@ -380,8 +379,8 @@ app.post("/node/delete_backupfile", async (req, res) => {
 app.get("/node/read_templateFile", async (req, res, next) => {
     const jsonFile = require('fs');
     try {
-        // let rawTemplate = jsonFile.readFileSync('/home/cyberdevnet/mer-hacker-dev/src/components/Tools/switchPortTemplate.json');
-        let rawTemplate = jsonFile.readFileSync(path.join(__dirname, '/../src/components/Tools/switchPortTemplate.json'));
+        // let rawTemplate = jsonFile.readFileSync(path.join(__dirname, '/../src/components/Tools/switchPortTemplate.json'));
+        let rawTemplate = jsonFile.readFileSync(path.join(__dirname, '/templates/switchPortTemplate.json'));
         let templateFile = JSON.parse(rawTemplate);
         res.send(templateFile);
     } catch (error) {
@@ -398,8 +397,8 @@ app.post("/node/write_templateFile", async (req, res) => {
 
     try {
         let data = JSON.stringify(req.body, null, 2);
-        // jsonFile.writeFileSync('/home/cyberdevnet/mer-hacker-dev/src/components/Tools/switchPortTemplate.json', data);
-        jsonFile.writeFileSync(path.join(__dirname, '/../src/components/Tools/switchPortTemplate.json'), data);
+        // jsonFile.writeFileSync(path.join(__dirname, '/../src/components/Tools/switchPortTemplate.json'));
+        jsonFile.writeFileSync(path.join(__dirname, '/templates/switchPortTemplate.json'), data);
         res.send(data)
 
     } catch (error) {

@@ -1,12 +1,27 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import $ from 'jquery'
 import './styles/PageNotFound.css'
 
-export default function PageNotFound() {
+export default function PageNotFound(ac) {
+
+
+    //function used to close toggle menu and hide hamburger icon
+    useEffect(() => {
+        const handleToggle = () => {
+            $(this).addClass('closed');
+            $('.navbar-side').css({ left: '-260px' });
+            $('#page-wrapper').css({ 'margin-left': '0px' });
+            ac.setcollapseButton({ display: 'none' })
+        };
+        handleToggle()
+        // eslint-disable-next-line
+    }, [])
+
     return (
         <div>
             <div id="notfound">
-                <div class="notfound">
-                    <div class="notfound-404">
+                <div className="notfound">
+                    <div className="notfound-404">
                         <h1>404</h1>
                     </div>
                     <h2>Oops! Nothing was found</h2>

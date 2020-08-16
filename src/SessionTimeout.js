@@ -6,6 +6,8 @@ import $ from 'jquery'
 
 export default function SessionTimeout(ac) {
 
+
+
     const deleteCookie = async () => {
         try {
             await axios.get('/node/clear-cookie');
@@ -43,6 +45,8 @@ export default function SessionTimeout(ac) {
         if (ac.dc.sessionTime === 0) {
             handleLogOff()
             ac.dc.setsessionTime(0)
+            // history.push('/login')
+
 
         }
 
@@ -86,10 +90,9 @@ export default function SessionTimeout(ac) {
             $(this).addClass('closed');
             $('.navbar-side').css({ left: '-260px' });
             $('#page-wrapper').css({ 'margin-left': '0px' });
+
         }
     };
-
-
 
 
     return (

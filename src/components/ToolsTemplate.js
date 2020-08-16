@@ -103,6 +103,7 @@ export default function ToolsTemplate(ac) {
                   onChange={shutAllTools}
                   id="selectBox"
                   className="btn btn-default dropdown-toggle-tools"
+                  style={{ textAlign: 'inherit' }}
                 >
                   <optgroup label="Tshoot Tools">
                     <option className="option-tools-disabled" value="0">

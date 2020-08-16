@@ -46,6 +46,7 @@ export default function Topology(ac) {
 
 
 
+
     const firewallSVG = 'https://img.icons8.com/office/52/000000/firewall.png'
     const switchSVG = 'https://img.icons8.com/dusk/64/000000/switch.png'
     const apSVG = 'https://img.icons8.com/plasticine/100/000000/wifi.png'
@@ -211,25 +212,33 @@ export default function Topology(ac) {
                             })
                             .then(() => {
                                 setgraph(
-                                    <Graph
-                                        id="graph-id" // id is mandatory, if no id is defined rd3g will throw an error
-                                        data={data}
-                                        config={myConfig}
-                                        onClickNode={onClickNode}
-                                    />)
+                                    <div className='graph-id'>
+                                        <Graph
+                                            id="graph-id" // id is mandatory, if no id is defined rd3g will throw an error
+                                            data={data}
+                                            config={myConfig}
+                                            onClickNode={onClickNode}
+                                        />
+                                    </div>
+                                )
                                 settree(
                                     <div
                                         id="treeWrapper"
-                                        style={{ width: '1500px', height: '969px' }}
+                                        style={{ width: '100%', height: '969px' }}
                                         className='custom-tree'>
                                         <Tree
                                             data={myTreeData}
-                                            nodeSize={{ x: 1000, y: 140 }}
+                                            nodeSize={{ x: 750, y: 200 }}
                                             nodeSvgShape={nodeSvgShape}
-                                            separation={{ siblings: 0.3, nonSiblings: 2 }}
-                                            translate={{ x: 40, y: 400 }}
+                                            separation={{ siblings: 0.07, nonSiblings: 0.07 }}
+                                            translate={{ x: 700, y: 50 }}
                                             collapsible={false}
                                             onClick={onClickNodeTree}
+                                            orientation={'vertical'}
+                                            textLayout={{ textAnchor: "start", x: 10, y: -10, transform: "rotate(90)" }}
+                                            pathFunc={'straight'}
+                                            scaleExtent={{ min: 0.1, max: 2.1 }}
+
                                         />
                                     </div>
                                 )
@@ -352,25 +361,32 @@ export default function Topology(ac) {
                             .then(() => {
                                 if (dataVpn.nodes.length !== 0) {
                                     setgraph(
-                                        <Graph
-                                            id="graph-id" // id is mandatory, if no id is defined rd3g will throw an error
-                                            data={dataVpn}
-                                            config={myConfig}
-                                            onClickNode={onClickNodeVPN}
-                                        />)
+                                        <div className='graph-id'>
+                                            <Graph
+                                                id="graph-id" // id is mandatory, if no id is defined rd3g will throw an error
+                                                data={dataVpn}
+                                                config={myConfig}
+                                                onClickNode={onClickNodeVPN}
+                                            />
+                                        </div>
+                                    )
                                     settree(
                                         <div
                                             id="treeWrapper"
-                                            style={{ width: '1500px', height: '969px' }}
+                                            style={{ width: '100%', height: '969px' }}
                                             className='custom-tree'>
                                             <Tree
                                                 data={myVPNTreeData}
-                                                nodeSize={{ x: 1000, y: 140 }}
+                                                nodeSize={{ x: 750, y: 200 }}
                                                 nodeSvgShape={nodeSvgShape}
-                                                separation={{ siblings: 0.3, nonSiblings: 2 }}
-                                                translate={{ x: 40, y: 400 }}
+                                                separation={{ siblings: 0.07, nonSiblings: 0.07 }}
+                                                translate={{ x: 700, y: 50 }}
                                                 collapsible={false}
                                                 onClick={onClickVPNNodeTree}
+                                                orientation={'vertical'}
+                                                textLayout={{ textAnchor: "start", x: 10, y: -10, transform: "rotate(90)" }}
+                                                pathFunc={'straight'}
+                                                scaleExtent={{ min: 0.1, max: 2.1 }}
                                             />
                                         </div>
                                     )
@@ -496,7 +512,7 @@ export default function Topology(ac) {
         panAndZoom: true,
         height: window.innerHeight,
         // width: window.innerWidth,
-        width: 1500,
+        width: 2000,
         d3: {
             alphaTarget: 0.05,
             gravity: -400,
@@ -685,21 +701,24 @@ export default function Topology(ac) {
                                             <div>
                                                 {showVPNFilter ? (
                                                     <div>
-                                                        <Select
-                                                            className='select-tolopology'
-                                                            options={VPNNODESLIST}
-                                                            placeholder='Filter Node'
-                                                            onChange={HandleVPNNodes}
-                                                            classNamePrefix="topology"
-                                                        />
-                                                        <label className="radio-inline">
-                                                            <input checked={switchRadioCheck} onChange={() => { setswitchGraph('Fluid'); setswitchRadioCheck(!switchRadioCheck) }} type="radio" name="survey" id="Radios1" value="Fluid" />
+
+                                                        <div>
+                                                            <Select
+                                                                className='select-tolopology'
+                                                                options={VPNNODESLIST}
+                                                                placeholder='Filter Node'
+                                                                onChange={HandleVPNNodes}
+                                                                classNamePrefix="topology"
+                                                            />
+                                                            <label className="radio-inline">
+                                                                <input checked={switchRadioCheck} onChange={() => { setswitchGraph('Fluid'); setswitchRadioCheck(!switchRadioCheck) }} type="radio" name="survey" id="Radios1" value="Fluid" />
                                                                 Fluid
                                                         </label>
-                                                        <label className="radio-inline">
-                                                            <input checked={!switchRadioCheck} onChange={() => { setswitchGraph('Tree'); setswitchRadioCheck(!switchRadioCheck) }} type="radio" name="survey" id="Radios2" value="Tree" />
+                                                            <label className="radio-inline">
+                                                                <input checked={!switchRadioCheck} onChange={() => { setswitchGraph('Tree'); setswitchRadioCheck(!switchRadioCheck) }} type="radio" name="survey" id="Radios2" value="Tree" />
                                                                 Tree
                                                         </label>
+                                                        </div>
                                                     </div>
                                                 ) : (<div></div>)}
 
@@ -733,7 +752,6 @@ export default function Topology(ac) {
                                                             <input checked={!switchRadioCheck} onChange={() => { setswitchGraph('Tree'); setswitchRadioCheck(!switchRadioCheck) }} type="radio" name="survey" id="Radios2" value="Tree" />
                                                                 Tree
                                                         </label>
-
                                                     </div>
 
                                                 ) : (<div></div>)}

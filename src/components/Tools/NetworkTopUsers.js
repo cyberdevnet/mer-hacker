@@ -40,130 +40,142 @@ export default function NetworkTopUsers(ac) {
     async function APIcall() {
       if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
         if (trigger < 4) {
-          try {
-            ac.dc.setloadingButton(true);
+          if (ac.dc.SNtopUsers) {
 
-            fetch("/flask/topuserdata/", {
-              signal: signal,
-              method: ["POST"],
-              cache: "no-cache",
-              headers: {
-                content_type: "application/json",
-              },
-              body: JSON.stringify(APIbody2),
-            }).then((response) => {
-              return response.json;
-            });
+            try {
+              ac.dc.setloadingButton(true);
+              ac.dc.setflashMessages([])
+              seterrorMessage([])
 
-            fetch("/flask/topuserdata/", {
-              signal: signal,
-              method: ["POST"],
-              cache: "no-cache",
-              headers: {
-                content_type: "application/json",
-              },
-              body: JSON.stringify(APIbody2),
-            })
-              .then((res) => res.json())
-              .then((data) => {
-                if (data.error) {
-                  ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
-                    <span className="glyphicon glyphicon-exclamation-sign"></span>
-                    {data.error[0]}
-                  </div>)
-                } else {
-                  ac.dc.setreports(data.reports);
-
-                  let R_obj1 = {};
-                  for (var x = 0; x < data.reports.length; x++) {
-                    R_obj1[x] = data.reports[x];
-                  }
-                  const ROW1 = R_obj1[0];
-                  const ROW2 = R_obj1[1];
-                  const ROW3 = R_obj1[2];
-
-                  let R1 = [];
-                  // eslint-disable-next-line
-                  ROW1.map((item) => {
-                    var rowModel = [
-                      {
-                        TotalusagekB: item[0],
-                        DownloadkB: item[1],
-                        UploadkB: item[2],
-                        Description: item[3],
-                        DHCPhostname: item[4],
-                        MACaddress: item[5],
-                        IPaddress: item[6],
-                        VLAN: item[7],
-                      },
-                    ];
-                    R1.push(...rowModel);
-                    setmapROW1(R1);
-                  });
-
-                  let R2 = [];
-                  // eslint-disable-next-line
-                  ROW2.map((item) => {
-                    var rowModel = [
-                      {
-                        TotalusagekB: item[0],
-                        DownloadkB: item[1],
-                        UploadkB: item[2],
-                        Description: item[3],
-                        DHCPhostname: item[4],
-                        MACaddress: item[5],
-                        IPaddress: item[6],
-                        VLAN: item[7],
-                      },
-                    ];
-                    R2.push(...rowModel);
-                    setmapROW2(R2);
-                  });
-
-                  let R3 = [];
-                  // eslint-disable-next-line
-                  ROW3.map((item) => {
-                    var rowModel = [
-                      {
-                        TotalusagekB: item[0],
-                        DownloadkB: item[1],
-                        UploadkB: item[2],
-                        Description: item[3],
-                        DHCPhostname: item[4],
-                        MACaddress: item[5],
-                        IPaddress: item[6],
-                        VLAN: item[7],
-                      },
-                    ];
-                    R3.push(...rowModel);
-                    setmapROW3(R3);
-                  });
-                }
-
-              })
-              .then(() => {
-                if (
-                  mapROW1.length === 0 ||
-                  mapROW2.length === 0 ||
-                  mapROW3.length === 0
-                ) {
-                  settrigger(trigger + 1);
-                }
-              })
-              .then(() => {
-                if (mapROW1.length > 0) {
-                  ac.dc.setloadingButton(false);
-                }
-              })
-              .then(() => {
-                setshowtable(true);
+              fetch("/flask/topuserdata/", {
+                signal: signal,
+                method: ["POST"],
+                cache: "no-cache",
+                headers: {
+                  content_type: "application/json",
+                },
+                body: JSON.stringify(APIbody2),
+              }).then((response) => {
+                return response.json;
               });
-          } catch (err) {
-            if (err) {
-              console.log('Error: ', err);
-              ac.dc.setloadingButton(false);
 
+              fetch("/flask/topuserdata/", {
+                signal: signal,
+                method: ["POST"],
+                cache: "no-cache",
+                headers: {
+                  content_type: "application/json",
+                },
+                body: JSON.stringify(APIbody2),
+              })
+                .then((res) => res.json())
+                .then((data) => {
+                  if (data.error) {
+                    ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
+                      <span className="glyphicon glyphicon-exclamation-sign"></span>
+                      {data.error[0]}
+                    </div>)
+                  } else {
+                    ac.dc.setreports(data.reports);
+
+                    let R_obj1 = {};
+                    for (var x = 0; x < data.reports.length; x++) {
+                      R_obj1[x] = data.reports[x];
+                    }
+                    const ROW1 = R_obj1[0];
+                    const ROW2 = R_obj1[1];
+                    const ROW3 = R_obj1[2];
+
+                    let R1 = [];
+                    // eslint-disable-next-line
+                    ROW1.map((item) => {
+                      var rowModel = [
+                        {
+                          TotalusagekB: item[0],
+                          DownloadkB: item[1],
+                          UploadkB: item[2],
+                          Description: item[3],
+                          DHCPhostname: item[4],
+                          MACaddress: item[5],
+                          IPaddress: item[6],
+                          VLAN: item[7],
+                        },
+                      ];
+                      R1.push(...rowModel);
+                      setmapROW1(R1);
+                    });
+
+                    let R2 = [];
+                    // eslint-disable-next-line
+                    ROW2.map((item) => {
+                      var rowModel = [
+                        {
+                          TotalusagekB: item[0],
+                          DownloadkB: item[1],
+                          UploadkB: item[2],
+                          Description: item[3],
+                          DHCPhostname: item[4],
+                          MACaddress: item[5],
+                          IPaddress: item[6],
+                          VLAN: item[7],
+                        },
+                      ];
+                      R2.push(...rowModel);
+                      setmapROW2(R2);
+                    });
+
+                    let R3 = [];
+                    // eslint-disable-next-line
+                    ROW3.map((item) => {
+                      var rowModel = [
+                        {
+                          TotalusagekB: item[0],
+                          DownloadkB: item[1],
+                          UploadkB: item[2],
+                          Description: item[3],
+                          DHCPhostname: item[4],
+                          MACaddress: item[5],
+                          IPaddress: item[6],
+                          VLAN: item[7],
+                        },
+                      ];
+                      R3.push(...rowModel);
+                      setmapROW3(R3);
+                    });
+                  }
+
+                })
+                .then(() => {
+                  if (
+                    mapROW1.length === 0 ||
+                    mapROW2.length === 0 ||
+                    mapROW3.length === 0
+                  ) {
+                    settrigger(trigger + 1);
+                  }
+                })
+                .then(() => {
+                  if (mapROW1.length > 0) {
+                    ac.dc.setloadingButton(false);
+                  }
+                })
+                .then(() => {
+                  setshowtable(true);
+                });
+            } catch (err) {
+              if (err) {
+                console.log('Error: ', err);
+                ac.dc.setloadingButton(false);
+
+              }
             }
+          } else {
+            ac.dc.setloadingButton(false);
+            seterrorMessage(<div className="form-input-error-msg alert alert-danger">
+              <span className="glyphicon glyphicon-exclamation-sign"></span>
+          No MX Firewalls found in this Network, refresh your
+            browser or try another Network.
+        </div>)
           }
         } else {
           ac.dc.setloadingButton(false);
@@ -172,7 +184,7 @@ export default function NetworkTopUsers(ac) {
             <div className="form-input-error-msg alert alert-danger">
               <span className="glyphicon glyphicon-exclamation-sign"></span>
               No data was found in the selected time range. Please refresh your
-              browser and try another Network.
+              browser or try another Network.
             </div>
           );
         }

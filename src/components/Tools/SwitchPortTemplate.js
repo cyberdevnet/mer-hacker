@@ -3,6 +3,7 @@ import Select from "react-select";
 import CreateTemplateModal from './CreateTemplateModal'
 import ShowTemplateModal from './ShowTemplateModal'
 import SwitchPortTemplateSummary from './SwitchPortTemplateSummary'
+import SwitchPortConfig from './SwitchPortConfig'
 import BootstrapTable from "react-bootstrap-table-next";
 import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
@@ -31,6 +32,7 @@ export default function SwitchPortTemplate(ac) {
     const [createTemplateModal, setcreateTemplateModal] = useState(false);
     const [showTemplateModal, setshowTemplateModal] = useState(false);
     const [showSummary, setshowSummary] = useState(false);
+    const [showportConfig, setshowportConfig] = useState(false);
     const [templates, setTemplates] = useState([])
     const [templateProperty, setTemplateProperty] = useState([])
     const [formData, setformData] = useState([])
@@ -44,10 +46,8 @@ export default function SwitchPortTemplate(ac) {
     const [responseMessage, setresponseMessage] = useState([])
     const [loadingSummaryBtn, setloadingSummaryBtn] = useState(false)
     const [allSelectedPorts, setallSelectedPorts] = useState([])
-
-
-
-
+    const [allSwitchports, setallSwitchports] = useState([])
+    const [singleSwitchports, setsingleSwitchports] = useState([])
 
 
     async function readTemplate() {
@@ -176,6 +176,8 @@ export default function SwitchPortTemplate(ac) {
                                 {data.error[0]}
                             </div>)
                         } else {
+                            setallSwitchports(data.switchports)
+
                             let switchports = []
                             let row = [];
 
@@ -353,6 +355,7 @@ export default function SwitchPortTemplate(ac) {
             dataField: "template",
             text: "Template",
             editCellClasses: 'edit-cell-class',
+            // onClick: (e) => e.stopPropagation(),
             editor: {
                 type: Type.SELECT,
                 getOptions: () => templates
@@ -367,6 +370,8 @@ export default function SwitchPortTemplate(ac) {
     const selectRow = {
         mode: 'checkbox',
         hideSelectAll: true,
+        clickToSelect: true,
+        clickToEdit: true,
 
         onSelect: (row, isSelect, rowIndex) => {
             if (isSelect === true) {
@@ -484,6 +489,14 @@ export default function SwitchPortTemplate(ac) {
         // eslint-disable-next-line
     }, [triggerDeploy]);
 
+    const rowEvents = {
+        onDoubleClick: (e, row, rowIndex) => {
+            setsingleSwitchports(allSwitchports[rowIndex])
+            setshowportConfig(true)
+
+        }
+    };
+
 
 
     const dc = {
@@ -514,7 +527,10 @@ export default function SwitchPortTemplate(ac) {
         triggerDeploy, settriggerDeploy,
         responseMessage, setresponseMessage,
         loadingSummaryBtn, setloadingSummaryBtn,
-        configureDisabled, setconfigureDisabled
+        configureDisabled, setconfigureDisabled,
+        showportConfig, setshowportConfig,
+        allSwitchports, setallSwitchports,
+        singleSwitchports, setsingleSwitchports
 
     }
 
@@ -544,10 +560,15 @@ export default function SwitchPortTemplate(ac) {
                                     <div id="collapseOne" className="panel-collapse collapse">
                                         <div className="panel-body">
                                             <dl>
-                                                <dt>This scripts iterates through all networks in an
-                                    organization and returns all the IPs, serial-numbers and models of all devices.</dt>
+                                                <dt>This tool is useful when no Meraki template are in use or you want to ovveride the switchport configuration.</dt>
+                                                <dt>You can create a set of Switchport Templates and save/modify it for later use</dt>
+                                                <br />
                                             </dl>
-
+                                            <ul>
+                                                <li>Click on Select Template to select one available template</li>
+                                                <li>Click on the checkbox to select the ports to configure</li>
+                                                <li>Double Click on a row to display the switchport configuration</li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
@@ -614,7 +635,8 @@ export default function SwitchPortTemplate(ac) {
                 <div className="col-xs-12">
                     <div className="panel panel-default">
                         {showtable ? (
-                            <div className="panel-body">
+                            // <div className="panel-body">
+                            <div className="bootstrap-table-panel">
                                 <BootstrapTable
                                     keyField="number"
                                     data={dataPorts.rows}
@@ -623,7 +645,9 @@ export default function SwitchPortTemplate(ac) {
                                     tabIndexCell
                                     striped
                                     hover
+                                    rowEvents={rowEvents}
                                     cellEdit={cellEditFactory({
+
                                         mode: "click",
                                         blurToSave: true,
                                         afterSaveCell: selectRow
@@ -643,6 +667,7 @@ export default function SwitchPortTemplate(ac) {
             {createTemplateModal ? (<CreateTemplateModal dc={dc} cc={ac.dc} />) : (<div></div>)}
             {showTemplateModal ? (<ShowTemplateModal dc={dc} cc={ac.dc} />) : (<div></div>)}
             {showSummary ? (<SwitchPortTemplateSummary dc={dc} cc={ac.dc} />) : (<div></div>)}
+            {showportConfig ? (<SwitchPortConfig dc={dc} cc={ac.dc} />) : (<div></div>)}
 
         </div>
     );

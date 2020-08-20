@@ -1,0 +1,25 @@
+.btn-primary-clients {
+    float: right;
+    font-size: 15px;
+    margin-left: 10px;
+    margin-top: 25px;
+}
+.btn-primary-clients {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+
+.btn-primary-clients .btn:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+.table td {
+    text-align: center;
+}
+
+.search-label {
+    display: block!important;
+    font-weight: 100;
+}

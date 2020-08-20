@@ -53,8 +53,25 @@ export default function LoginAPI(ac) {
 
 
 
+  const setUser = (e) => {
+    e.preventDefault()
+    ac.setUser(e.target.value)
+  };
+
+  const setPass = (e) => {
+    e.preventDefault()
+    ac.setPassword(e.target.value)
+  };
+
   const handleLogin = () => {
     settriggertryLogin(triggertryLogin + 1);
+
+  };
+
+  const handleLoginEnter = (e) => {
+    if (e.key === 'Enter') {
+      settriggertryLogin(triggertryLogin + 1);
+    }
 
   };
 
@@ -156,7 +173,12 @@ export default function LoginAPI(ac) {
                         placeholder="Username"
                         value={ac.User}
                         autoComplete="User"
-                        onChange={e => ac.setUser(e.target.value)}
+                        onChange={e => setUser(e)}
+                        // onChange={e => ac.setUser(e.target.value)}
+                        // onKeyPress={!loading ? handleLoginEnter : null}
+                        // onSubmit={e => { e.preventDefault() }}
+                        // onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(e); handleLoginEnter() }}
+                        onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(e); handleLoginEnter(e) }}
                       />
                     </div>
                   </form>
@@ -171,7 +193,13 @@ export default function LoginAPI(ac) {
                         placeholder="Password"
                         value={ac.Password}
                         autoComplete="Password"
-                        onChange={e => ac.setPassword(e.target.value)}
+                        onChange={e => setPass(e)}
+                        // onChange={e => ac.setPassword(e.target.value)}
+                        // onKeyPress={!loading ? handleLoginEnter : null}
+                        // onKeyDown={(event) => !loading ? handleLoginEnter(event) : null}
+                        // onSubmit={e => { e.preventDefault() }}
+                        // onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(e); handleLoginEnter(e) }}
+                        onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(e); handleLoginEnter(e) }}
                       />
                     </div>
                   </form>

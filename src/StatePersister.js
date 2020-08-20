@@ -13,6 +13,7 @@ export default function StatePersister(ac) {
         const getOrgStatusCode = localStorage.getItem("my-getOrgStatusCode");
         const sessionTime = localStorage.getItem("my-sessionTime");
         const sessionTimeout = localStorage.getItem("my-sessionTimeout");
+        const collapseButton = localStorage.getItem("my-collapseButton");
 
 
         ac.dc.setisSignedIn(JSON.parse(isSignedIn));
@@ -20,6 +21,7 @@ export default function StatePersister(ac) {
         ac.dc.setgetOrgStatusCode(JSON.parse(getOrgStatusCode));
         ac.dc.setsessionTime(JSON.parse(sessionTime));
         ac.dc.setsessionTimeout(JSON.parse(sessionTimeout));
+        ac.dc.setcollapseButton(JSON.parse(collapseButton));
 
         // eslint-disable-next-line
     }, []);
@@ -31,6 +33,7 @@ export default function StatePersister(ac) {
         localStorage.setItem("my-getOrgStatusCode", JSON.stringify(ac.dc.getOrgStatusCode));
         localStorage.setItem("my-sessionTime", JSON.stringify(ac.dc.sessionTime));
         localStorage.setItem("my-sessionTimeout", JSON.stringify(ac.dc.sessionTimeout));
+        localStorage.setItem("my-collapseButton", JSON.stringify(ac.dc.collapseButton));
 
 
     });

@@ -6,8 +6,90 @@
     "Port": {
       "type": "Access",
       "Policy": {
+        "accessPolicyNumber": "CustomPolicy",
+        "vlan": 99,
+        "voiceVlan": 55
+      },
+      "vlan": 2001,
+      "allowedVlans": "all"
+    },
+    "linkNegotiation": "Auto negotiate",
+    "stpGuard": "BPDU guard",
+    "rstpEnabled": "Enabled",
+    "isolationEnabled": "Disabled",
+    "trusted": "Enabled",
+    "udld": "Alert only",
+    "StormControl": {
+      "Storm Control supported": "Yes",
+      "stormControlEnabled": "Enabled"
+    },
+    "templateName": "LAN_NET-AP_MS2xx-Switches",
+    "name": "LAN_NET-AP",
+    "tags": "AP MON SelfService",
+    "id": 2580
+  },
+  {
+    "enabled": "Enabled",
+    "stacking": "Disabled",
+    "poeEnabled": "Enabled",
+    "Port": {
+      "type": "Access",
+      "Policy": {
         "accessPolicyNumber": "Open",
-        "vlan": 2071
+        "vlan": 20
+      }
+    },
+    "linkNegotiation": "Auto negotiate",
+    "stpGuard": "BPDU guard",
+    "rstpEnabled": "Enabled",
+    "isolationEnabled": "Disabled",
+    "trusted": "Disabled",
+    "udld": "Alert only",
+    "StormControl": {
+      "Storm Control supported": "No",
+      "stormControlEnabled": "Enabled"
+    },
+    "templateName": "IoT_BO_MS2xx",
+    "name": "IoT",
+    "tags": "SelfService IoT",
+    "id": 2182
+  },
+  {
+    "enabled": "Enabled",
+    "stacking": "Disabled",
+    "poeEnabled": "Enabled",
+    "Port": {
+      "type": "Access",
+      "Policy": {
+        "accessPolicyNumber": "CustomPolicy",
+        "vlan": 30,
+        "voiceVlan": 40
+      }
+    },
+    "linkNegotiation": "Auto negotiate",
+    "stpGuard": "BPDU guard",
+    "rstpEnabled": "Enabled",
+    "isolationEnabled": "Disabled",
+    "trusted": "Disabled",
+    "udld": "Alert only",
+    "StormControl": {
+      "Storm Control supported": "No"
+    },
+    "templateName": "LAN_INTRNAL_d1x",
+    "name": "LAN_INTERNAL",
+    "tags": "SelfService LAN_INTERNAL",
+    "id": 1871
+  },
+  {
+    "enabled": "Enabled",
+    "stacking": "Disabled",
+    "poeEnabled": "Enabled",
+    "Port": {
+      "type": "Access",
+      "Policy": {
+        "accessPolicyNumber": "CustomPolicy",
+        "vlan": 999,
+        "voiceVlan": 40
       }
     },
     "linkNegotiation": "Auto negotiate",
@@ -20,10 +102,9 @@
       "Storm Control supported": "Yes",
       "stormControlEnabled": "Enabled"
     },
-    "templateName": "AppleTV",
-    "name": "AppleTV",
-    "tags": "SelfService ATV",
-    "id": 1485
+    "templateName": "SIGNA_STORMCONTROL",
+    "name": "802.1X",
+    "id": 5109
   },
   {
     "enabled": "Enabled",
@@ -33,7 +114,8 @@
       "type": "Access",
       "Policy": {
         "accessPolicyNumber": "CustomPolicy",
-        "vlan": 444
+        "vlan": 77,
+        "voiceVlan": 99
       }
     },
     "linkNegotiation": "Auto negotiate",
@@ -45,20 +127,44 @@
     "StormControl": {
       "Storm Control supported": "No"
     },
-    "templateName": "TEST2",
-    "name": "CIAO",
-    "tags": "TEST_1 TEST_2",
-    "id": 1888
+    "templateName": "TEST",
+    "name": "TEST",
+    "id": 4412
   },
   {
     "enabled": "Enabled",
     "stacking": "Disabled",
     "poeEnabled": "Enabled",
     "Port": {
+      "type": "Trunk",
+      "Policy": {
+        "accessPolicyNumber": "CustomPolicy"
+      },
+      "allowedVlans": "all"
+    },
+    "linkNegotiation": "Auto negotiate",
+    "stpGuard": "Disabled",
+    "rstpEnabled": "Enabled",
+    "isolationEnabled": "Disabled",
+    "trusted": "Enabled",
+    "udld": "Alert only",
+    "StormControl": {
+      "Storm Control supported": "No"
+    },
+    "templateName": "TRUNKK",
+    "name": "TRUNKK",
+    "id": 4846
+  },
+  {
+    "enabled": "Enabled",
+    "stacking": "Enabled",
+    "poeEnabled": "Enabled",
+    "Port": {
       "type": "Access",
       "Policy": {
-        "accessPolicyNumber": "CustomPolicy",
-        "vlan": 45
+        "accessPolicyNumber": "Open",
+        "vlan": 456,
+        "voiceVlan": 34
       }
     },
     "linkNegotiation": "Auto negotiate",
@@ -70,8 +176,9 @@
     "StormControl": {
       "Storm Control supported": "No"
     },
-    "templateName": "Modifica2",
-    "name": "CIAO",
-    "id": 5715
+    "templateName": "ACCESSSS",
+    "name": "ACCESSSS",
+    "tags": "ACCESSSS ACCESSSS2 ACCESSSS4",
+    "id": 4461
   }
 ]

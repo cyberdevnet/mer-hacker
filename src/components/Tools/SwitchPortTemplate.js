@@ -9,7 +9,7 @@ import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
 
-export default function SwitchPortTemplate(ac) {
+export default function GetAllClients(ac) {
     const [showtable, setshowtable] = useState(false);
     const [trigger, settrigger] = useState(0);
     const [triggerDeploy, settriggerDeploy] = useState(0);

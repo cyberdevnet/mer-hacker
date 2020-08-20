@@ -42,11 +42,11 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
         for x in payload:
 
             # set port to a default config
-            number = x['number']
-            defaultConfig = json.dumps(defaultPayload)
-            url = f"https://api.meraki.com/api/v0/devices/{SERIAL_NUM}/switchPorts/{number}"
-            response = requests.request('PUT', url, headers=headers, data=defaultConfig)
-            response_data =response.json()
+            # number = x['number']
+            # defaultConfig = json.dumps(defaultPayload)
+            # url = f"https://api.meraki.com/api/v0/devices/{SERIAL_NUM}/switchPorts/{number}"
+            # response = requests.request('PUT', url, headers=headers, data=defaultConfig)
+            # response_data =response.json()
 
 
 
@@ -106,18 +106,19 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
                 del x['payload']['Port']['type']
                 x['payload'].update({"type": "access"})
 
+
                 # change accessPolicyNumber from Name to number
                 if x['payload']['Port']['Policy']['accessPolicyNumber'] == "CustomPolicy":
                     x['payload'].update({"accessPolicyNumber": 1})
                     x['payload'].update({"vlan": x['payload']['Port']['Policy']['vlan']})
-                    if x['payload']['Port']['Policy'].get('voiceVlan') == True:
+                    if x['payload']['Port']['Policy'].get('voiceVlan'):
                         x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})   
                     del x['payload']['Port']['Policy']
 
                 elif x['payload']['Port']['Policy']['accessPolicyNumber'] == "Open":
                     x['payload'].update({"accessPolicyNumber": 0})
                     x['payload'].update({"vlan": x['payload']['Port']['Policy']['vlan']})
-                    if x['payload']['Port']['Policy'].get('voiceVlan') == True:
+                    if x['payload']['Port']['Policy'].get('voiceVlan'):
                         x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})  
                     # x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})
                     del x['payload']['Port']['Policy']
@@ -127,7 +128,7 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
                     maclist = macs.split(sep=",", maxsplit=-1)
                     x['payload'].update({"macWhitelist": maclist})
                     x['payload'].update({"vlan": x['payload']['Port']['Policy']['vlan']})
-                    if x['payload']['Port']['Policy'].get('voiceVlan') == True:
+                    if x['payload']['Port']['Policy'].get('voiceVlan'):
                         x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})  
                     # x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})
                     del x['payload']['Port']['Policy']
@@ -137,7 +138,7 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
                     maclist = macs.split(sep=",", maxsplit=-1)
                     x['payload'].update({"vlan": x['payload']['Port']['Policy']['vlan']})
                     # x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})
-                    if x['payload']['Port']['Policy'].get('voiceVlan') == True:
+                    if x['payload']['Port']['Policy'].get('voiceVlan'):
                         x['payload'].update({"voiceVlan": x['payload']['Port']['Policy']['voiceVlan']})  
                     x['payload'].update({"stickyMacWhitelist": maclist})
                     x['payload'].update({"stickyMacWhitelistLimit": x['payload']['Port']['Policy']['stickyMacWhitelistLimit']})
@@ -151,26 +152,65 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
                 del x['payload']['Port']['Policy']
                 x['payload'].update({"type": "trunk"})
                 x['payload'].update({"allowedVlans": x['payload']['Port']['allowedVlans']})
-                if x['payload']['Port'].get('vlan') == True:
+                if x['payload']['Port'].get('vlan'):
                     x['payload'].update({"vlan": x['payload']['Port']['vlan']})
                 del x['payload']['Port']
 
         
             data.append({'config' : x['payload'], 'number' : x['number']} )
 
-            print("data", data)
-            print()
-            print()
-            print()
 
         for x in data:
             number = x['number']
             config = json.dumps(x['config'])
+
             print('Iteration number',number)
             url = f"https://api.meraki.com/api/v0/devices/{SERIAL_NUM}/switchPorts/{number}"
             response = requests.request('PUT', url, headers=headers, data=config)
             response_data =response.json()
-            print(response_data)
+            print('PRIMA',response_data)
+
+
+
+            # find which part of the payload should be configured again in order to clear the config
+            dict1 = x['config']
+            dict2 = response_data
+
+            keys_one = set(dict1.keys())
+            keys_two = set(dict2.keys())
+            same_keys = keys_one.intersection(keys_two)
+            NOTsame_keys = keys_one.symmetric_difference(keys_two)
+            # To get a list of the keys:
+            result = list(same_keys)
+            UNresult = list(NOTsame_keys)
+
+            newPayload = {}
+            for x in UNresult:
+                newPayload.update({x : None})
+
+            if 'number' in newPayload:
+                del newPayload['number']
+            if 'allowedVlans' in newPayload:
+                newPayload.update({'allowedVlans' : 'all'})
+            if 'stickyMacWhitelist' in newPayload:
+                del newPayload['stickyMacWhitelist']
+            if 'macWhitelist' in newPayload:
+                del newPayload['macWhitelist']
+            if 'stickyMacWhitelistLimit' in newPayload:
+                del newPayload['stickyMacWhitelistLimit']
+
+
+            
+            # set port to a default config only if no errors, if any errors port should not be configured at all
+            if response_data.get('errors'):
+                pass
+            else:
+                defaultConfig = json.dumps(newPayload)
+                url = f"https://api.meraki.com/api/v0/devices/{SERIAL_NUM}/switchPorts/{number}"
+                response = requests.request('PUT', url, headers=headers, data=defaultConfig)
+                response_data =response.json()
+
+
         return (response_data)
             
     except Exception as err:

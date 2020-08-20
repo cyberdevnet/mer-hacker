@@ -85,6 +85,18 @@ export default function LoggedIn(ac) {
     // eslint-disable-next-line
   }, [triggerLogin])
 
+  const setKey = (e) => {
+    e.preventDefault()
+    setinputKey(e.target.value)
+  };
+
+  const handleLoginEnter = (e) => {
+    if (e.key === 'Enter') {
+      settriggerLogin(triggerLogin + 1)
+    }
+
+  };
+
   return (
     <div>
       <div id="myModal">
@@ -110,20 +122,15 @@ export default function LoggedIn(ac) {
                       placeholder="API key"
                       value={inputKey}
                       autoComplete="api"
-                      onChange={(e) => setinputKey(e.target.value)}
+                      onChange={e => setKey(e)}
+                      onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(e); handleLoginEnter(e) }}
+                    // onChange={(e) => setinputKey(e.target.value)}
                     />
                   </div>
                 </form>
               </div>
             </div>
             <div className="modal-footer">
-              {/* <button
-                onClick={() => settriggerLogin(triggerLogin + 1)}
-                className="btn btn-success btn-block"
-                data-dismiss="modal"
-              >
-                OK
-              </button> */}
               <button
                 onClick={!loading ? () => settriggerLogin(triggerLogin + 1) : null}
                 disabled={loading}

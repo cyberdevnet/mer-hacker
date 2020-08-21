@@ -5,10 +5,28 @@ import "../../styles/CreateTemplateModal.css";
 
 export default function GetAllClientsModal(ac) {
 
+    let ClientList = Number(ac.dc.clientListID)
+
 
     const Cancel = () => {
         ac.dc.setshowclientModal(false);
 
+    };
+
+    const handleClientUp = () => {
+
+        if (ClientList < ac.dc.allClients.length && ac.dc.clientListID !== ac.dc.allClients.length - 1) {
+            ac.dc.setsingleClient(ac.dc.allClients[ClientList + 1])
+            ac.dc.setclientListID(ClientList + 1)
+        }
+
+    };
+
+    const handleClientDown = () => {
+        if (ClientList > 0) {
+            ac.dc.setsingleClient(ac.dc.allClients[ClientList - 1])
+            ac.dc.setclientListID(ClientList - 1)
+        }
     };
 
     return (
@@ -19,14 +37,41 @@ export default function GetAllClientsModal(ac) {
             <div >
                 <div className="modal-dialog-summary modal-confirm-summary">
                     <div >
-                        <button onClick={Cancel} type="button" className="close" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                        <div className="modal-header">
-                            <h4>Client Details</h4>
+                        <div style={{ borderBottom: 'none' }} className="modal-header">
+                            <button
+                                onClick={Cancel}
+                                type="button"
+                                className="close"
+                                data-dismiss="modal"
+                                aria-hidden="true"
+                                style={{ top: '0px', right: '-55px', outline: 'none' }}
+                            >
+                                <span>&times;</span>
+                            </button>
+                            <button
+                                onClick={handleClientUp}
+                                type="button"
+                                className="close"
+                                data-dismiss="modal"
+                                aria-hidden="true"
+                                style={{ top: '65px', right: '-45px', fontSize: '23px', color: 'black', outline: 'none' }}
+                            >
+                                <span className="glyphicon glyphicon-circle-arrow-right"></span>
+                            </button>
+                            <button
+                                onClick={handleClientDown}
+                                type="button"
+                                className="close"
+                                data-dismiss="modal"
+                                aria-hidden="true"
+                                style={{ top: '65px', left: '-45px', fontSize: '23px', color: 'black', outline: 'none' }}
+                            >
+                                <span className="glyphicon glyphicon-circle-arrow-left" ></span>
+                            </button>
                         </div>
                         <div className="modal-body text-center"
                             style={{ fontSize: '11px', color: 'darkslategray' }}>
+                            <h4>Client Details</h4>
                             <table className="table table-striped" id="table1">
                                 <thead >
                                     <tr>
@@ -37,87 +82,87 @@ export default function GetAllClientsModal(ac) {
 
                                 <tbody key='1'>
                                     <tr>
-                                        <td style={{ float: 'left' }}> description </td>
+                                        <th style={{ float: 'left' }}> description </th>
                                         <td> {ac.dc.singleClient.description} </td>
                                     </tr>
                                     <tr>
-                                        <td style={{ float: 'left' }}> firstSeen </td>
+                                        <th style={{ float: 'left' }}> firstSeen </th>
                                         <td> {ac.dc.singleClient.firstSeen} </td>
                                     </tr>
                                     <tr>
-                                        <td style={{ float: 'left' }}> groupPolicy8021x </td>
+                                        <th style={{ float: 'left' }}> groupPolicy8021x </th>
                                         <td> {ac.dc.singleClient.groupPolicy8021x} </td>
                                     </tr>
                                     <tr>
-                                        <td style={{ float: 'left' }}> id </td>
+                                        <th style={{ float: 'left' }}> id </th>
                                         <td> {ac.dc.singleClient.id} </td>
                                     </tr>
                                     <tr>
-                                        <td style={{ float: 'left' }}> ip </td>
+                                        <th style={{ float: 'left' }}> ip </th>
                                         <td> {ac.dc.singleClient.ipEnabled} </td>
                                     </tr>
                                     <tr>
-                                        <td style={{ float: 'left' }}> ip6 </td>
+                                        <th style={{ float: 'left' }}> ip6 </th>
                                         <td> {ac.dc.singleClient.ip6} </td>
                                     </tr>
                                     <tr>
-                                        <td style={{ float: 'left' }}> ip6local </td>
+                                        <th style={{ float: 'left' }}> ip6local </th>
                                         <td> {ac.dc.singleClient.ip6Local} </td>
                                     </tr>
                                     <tr>
-                                        <td style={{ float: 'left' }}> lastSeen </td>
+                                        <th style={{ float: 'left' }}> lastSeen </th>
                                         <td> {ac.dc.singleClient.lastSeen} </td>
                                     </tr>
                                     <tr>
-                                        <td style={{ float: 'left' }}> mac </td>
+                                        <th style={{ float: 'left' }}> mac </th>
                                         <td> {ac.dc.singleClient.mac} </td>
                                     </tr>
                                     <tr>
-                                        <td style={{ float: 'left' }}> manufacturer </td>
+                                        <th style={{ float: 'left' }}> manufacturer </th>
                                         <td> {ac.dc.singleClient.manufacturer} </td>
                                     </tr>
                                     <tr>
-                                        <td style={{ float: 'left' }}> notes </td>
+                                        <th style={{ float: 'left' }}> notes </th>
                                         <td> {ac.dc.singleClient.notes} </td>
                                     </tr>
                                     <tr>
-                                        <td style={{ float: 'left' }}> os </td>
+                                        <th style={{ float: 'left' }}> os </th>
                                         <td> {ac.dc.singleClient.os} </td>
                                     </tr>
                                     <tr>
-                                        <td style={{ float: 'left' }}> recentDeviceName </td>
+                                        <th style={{ float: 'left' }}> recentDeviceName </th>
                                         <td> {ac.dc.singleClient.recentDeviceName} </td>
                                     </tr>
                                     <tr>
-                                        <td style={{ float: 'left' }}> recentDeviceSerial </td>
+                                        <th style={{ float: 'left' }}> recentDeviceSerial </th>
                                         <td> {ac.dc.singleClient.recentDeviceSerial} </td>
                                     </tr>
                                     <tr>
-                                        <td style={{ float: 'left' }}> smInstalled </td>
+                                        <th style={{ float: 'left' }}> smInstalled </th>
                                         <td> {ac.dc.singleClient.smInstalled} </td>
                                     </tr>
                                     <tr>
-                                        <td style={{ float: 'left' }}> ssid </td>
+                                        <th style={{ float: 'left' }}> ssid </th>
                                         <td> {ac.dc.singleClient.ssid} </td>
                                     </tr>
                                     <tr>
-                                        <td style={{ float: 'left' }}> status </td>
+                                        <th style={{ float: 'left' }}> status </th>
                                         <td> {ac.dc.singleClient.status} </td>
                                     </tr>
                                     <tr>
-                                        <td style={{ float: 'left' }}> switchport </td>
+                                        <th style={{ float: 'left' }}> switchport </th>
                                         <td> {ac.dc.singleClient.switchport} </td>
                                     </tr>
                                     {/* <tr>
-                                        <td style={{ float: 'left' }}> usage </td>
+                                        <th style={{ float: 'left' }}> usage </th>
                                         <td> {ac.dc.singleClient.usage} </td>
                                     </tr> */}
                                     <tr>
-                                        <td style={{ float: 'left' }}> user </td>
+                                        <th style={{ float: 'left' }}> user </th>
                                         <td> {ac.dc.singleClient.user} </td>
                                     </tr>
                                     <tr>
-                                        <td style={{ float: 'left' }}> vlan </td>
+                                        <th style={{ float: 'left' }}> vlan </th>
                                         <td> {ac.dc.singleClient.vlan} </td>
                                     </tr>
                                 </tbody>

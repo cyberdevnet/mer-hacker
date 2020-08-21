@@ -16,6 +16,7 @@ export default function SwitchPortTemplate(ac) {
     const [singleClient, setsingleClient] = useState([])
     const [showclientModal, setshowclientModal] = useState(false);
     const [dataClients, setdataClients] = useState([])
+    const [clientListID, setclientListID] = useState([])
 
 
 
@@ -76,7 +77,6 @@ export default function SwitchPortTemplate(ac) {
                             let row = [];
 
                             if (data.clients.length !== 0) {
-                                console.log('HABEMUS DATA')
                                 // eslint-disable-next-line
                                 data.clients.map((opt, index) => {
                                     if (opt.status === 'Online') {
@@ -248,12 +248,9 @@ export default function SwitchPortTemplate(ac) {
 
 
 
-
-
-
-
     const rowEvents = {
         onDoubleClick: (e, row, rowIndex) => {
+            setclientListID(rowIndex)
             setsingleClient(allClients[rowIndex])
             setshowclientModal(true)
 
@@ -269,7 +266,8 @@ export default function SwitchPortTemplate(ac) {
         settrigger,
         showclientModal, setshowclientModal,
         allClients, setallClients,
-        singleClient, setsingleClient
+        singleClient, setsingleClient,
+        clientListID, setclientListID
     }
 
     return (
@@ -298,8 +296,12 @@ export default function SwitchPortTemplate(ac) {
                                     <div id="collapseOne" className="panel-collapse collapse">
                                         <div className="panel-body">
                                             <dl>
-                                                <dt>This scripts returns all the clients currently active on a network, double click on a row will show the client's details.</dt>
+                                                <dt>This scripts returns all the clients active in the last 1 hour on a network.</dt>
                                             </dl>
+                                            <ul>
+                                                <li>Double Click on a row to display the client's details</li>
+                                                <li>The table is exportable in CSV format</li>
+                                            </ul>
 
                                         </div>
                                     </div>
@@ -331,14 +333,16 @@ export default function SwitchPortTemplate(ac) {
                             <div className="bootstrap-table-panel">
                                 <ToolkitProvider
                                     search
-                                    keyField="description"
+                                    keyField="mac"
                                     data={dataClients.rows}
                                     columns={columns}
                                 >
                                     {
                                         props => (
                                             <div>
-                                                <SearchBar {...props.searchProps} />
+                                                <SearchBar
+                                                    style={{ width: '299px' }}
+                                                    {...props.searchProps} />
                                                 <hr />
                                                 <BootstrapTable
                                                     {...props.baseProps}

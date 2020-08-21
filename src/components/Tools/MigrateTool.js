@@ -443,6 +443,7 @@ export default function MigrateTool(ac) {
                                 <input
                                     type="text"
                                     className="form-control"
+                                    style={{ width: '299px' }}
                                     placeholder="Serial Numbers"
                                     onChange={(e) => {
                                         setSNpresent(true)

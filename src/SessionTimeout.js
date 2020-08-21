@@ -1,10 +1,42 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import axios from 'axios'
 import Dialog from '@material-ui/core/Dialog';
+import { useIdleTimer } from 'react-idle-timer'
 import $ from 'jquery'
 
 
 export default function SessionTimeout(ac) {
+    console.log("SessionTimeout -> ac", ac)
+    const [sessionTime, setsessionTime] = useState(60)  // <====== DO NOT CHANGE THIS VALUE
+    const [sessionTimeout, setsessionTimeout] = useState(false)
+    const [trigger, settrigger] = useState(0)
+    let history = useHistory();
+
+
+    const handleOnIdle = event => {
+        getLastActiveTime()
+        setsessionTimeout(true)
+        settrigger(trigger + 1)
+    }
+
+    const handleOnActive = event => {
+        getRemainingTime()
+    }
+
+    const handleOnAction = (e) => {
+        getRemainingTime()
+    }
+
+
+    // idelTimeout set to 15 minutes
+    const { getRemainingTime, getLastActiveTime } = useIdleTimer({
+        timeout: 1000 * 60 * 15,
+        onIdle: handleOnIdle,
+        onActive: handleOnActive,
+        onAction: handleOnAction,
+        debounce: 500
+    })
 
 
 
@@ -34,30 +66,31 @@ export default function SessionTimeout(ac) {
 
     useEffect(() => {
 
-        const timer =
-            ac.dc.isSignedIn === true && ac.dc.sessionTime > 0 && setInterval(() => ac.dc.setsessionTime(ac.dc.sessionTime - 1), 1000);
+        if (trigger > 0) {
+            const timer =
+                sessionTime > 0 && setInterval(() => setsessionTime(sessionTime - 1), 1000);
+
+            if (sessionTime === 0) {
+                handleLogOff()
+                settrigger(0)
 
 
-        if (ac.dc.sessionTime === 20) {
-            ac.dc.setsessionTimeout(true)
+            }
 
-        }
-        if (ac.dc.sessionTime === 0) {
-            handleLogOff()
-            ac.dc.setsessionTime(0)
-            // history.push('/login')
-
-
+            return () => clearInterval(timer);
         }
 
-        return () => clearInterval(timer);
+
+
+
         // eslint-disable-next-line
-    }, [ac.dc.isSignedIn, ac.dc.sessionTime]);
+    }, [trigger, sessionTime]);
 
 
     const handleClose = () => {
-        ac.dc.setsessionTimeout(false);
-        ac.dc.setsessionTime(3600)
+        setsessionTimeout(false);
+        setsessionTime(60)
+        settrigger(0)
     };
 
 
@@ -66,7 +99,7 @@ export default function SessionTimeout(ac) {
         //since the timer runs at first render it fires the handleLogOff
         //on login the login not disappear
         //with this if statement we check if the api box is open or not
-        // and we hie the login
+        // and we hide the login
         if (ac.dc.switchLoggedIn === true) {
             ac.dc.sethideLogin({ display: "none" });
         } else {
@@ -74,8 +107,8 @@ export default function SessionTimeout(ac) {
             deleteCookie()
             postKey()
             ac.dc.setswitchLoginAPI(true);
-            ac.dc.setsessionTimeout(false);
-            ac.dc.setsessionTime(0)
+            setsessionTimeout(false);
+            setsessionTime(0)
             ac.dc.setapiKey("");
             ac.dc.setisSignedIn(false)
             ac.dc.setgetOrgStatusCode(0);
@@ -90,43 +123,46 @@ export default function SessionTimeout(ac) {
             $(this).addClass('closed');
             $('.navbar-side').css({ left: '-260px' });
             $('#page-wrapper').css({ 'margin-left': '0px' });
+            history.push('/login')
 
         }
     };
 
 
     return (
-        <Dialog
-            open={ac.dc.sessionTimeout}
-            onClose={handleClose}
-        >
-            <div>
-                <div className="modal-header">
-                    <h4 className="modal-title-idle">Your session is about to expire</h4>
+        <div>
+            <Dialog
+                open={sessionTimeout}
+                onClose={handleClose}
+            >
+                <div>
+                    <div className="modal-header">
+                        <h4 className="modal-title-idle">Your session is about to expire due to inactivity</h4>
+                    </div>
+                    <div className="modal-body text-center">
+                        Please choose to stay signed in or to logoff.
+                        Otherwise, you will be logged off automatically.
                 </div>
-                <div className="modal-body text-center">
-                    Please choose to stay signed in or to logoff.
-                    Otherwise, you will be logged off automatically.
-                </div>
-                <div className="modal-footer">
-                    <button
-                        onClick={handleClose}
-                        type="button"
-                        className="btn btn-info"
-                    >
-                        Stay Logged in ({ac.dc.sessionTime})
+                    <div className="modal-footer">
+                        <button
+                            onClick={handleClose}
+                            type="button"
+                            className="btn btn-info"
+                        >
+                            Stay Logged in ({sessionTime})
                       </button>
-                    <button
-                        onClick={handleLogOff}
-                        type="button"
-                        className="btn btn-danger"
-                        data-dismiss="modal"
-                    >
-                        Log Off
+                        <button
+                            onClick={handleLogOff}
+                            type="button"
+                            className="btn btn-danger"
+                            data-dismiss="modal"
+                        >
+                            Log Off
                       </button>
+                    </div>
                 </div>
-            </div>
-        </Dialog>
+            </Dialog>
+        </div>
 
     )
 

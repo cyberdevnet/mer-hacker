@@ -3,6 +3,13 @@
   text-align: -webkit-center
 } */
 
+/* form in dataTable */
+.form-control {
+  width: 100%;
+  margin: 0px;
+
+}
+
 .form-group.field.field-object {
   text-align: -webkit-center;
   text-align: -moz-center;
@@ -86,12 +93,7 @@
 
 }
 
-/* form in dataTable */
-.form-control {
-  width: 100%;
-  margin: 0px;
 
-}
 
 .form-control.editor.edit-select{
   font-family: 'Open Sans', sans-serif;

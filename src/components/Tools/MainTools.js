@@ -3,6 +3,7 @@ import GetAllDevicesIP from "./GetAllDevicesIP";
 import GetAllSubnets from "./GetAllSubnets";
 import GetAllOrganizationSubnets from "./GetAllOrganizationSubnets";
 import GetAllClients from "./GetAllClients";
+import GetAllSwitchPorts from "./GetAllSwitchPorts";
 import NetworkTopUsers from "./NetworkTopUsers";
 import FindPorts from "./FindPorts";
 import TrafficAnalysis from "./TrafficAnalysis";
@@ -35,31 +36,36 @@ export default function MainTools(ac) {
           <div></div>
         )}
       {ac.dc.switchAllTools[5] ? (
-        <NetworkTopUsers dc={ac.dc} />
+        <GetAllSwitchPorts dc={ac.dc} />
       ) : (
           <div></div>
         )}
       {ac.dc.switchAllTools[6] ? (
-        <FindPorts dc={ac.dc} />
+        <NetworkTopUsers dc={ac.dc} />
       ) : (
           <div></div>
         )}
       {ac.dc.switchAllTools[7] ? (
-        <TrafficAnalysis dc={ac.dc} />
+        <FindPorts dc={ac.dc} />
       ) : (
           <div></div>
         )}
       {ac.dc.switchAllTools[8] ? (
-        <BackupRestore dc={ac.dc} />
+        <TrafficAnalysis dc={ac.dc} />
       ) : (
           <div></div>
         )}
       {ac.dc.switchAllTools[9] ? (
-        <MigrateTool dc={ac.dc} />
+        <BackupRestore dc={ac.dc} />
       ) : (
           <div></div>
         )}
       {ac.dc.switchAllTools[10] ? (
+        <MigrateTool dc={ac.dc} />
+      ) : (
+          <div></div>
+        )}
+      {ac.dc.switchAllTools[11] ? (
         <SwitchPortTemplate dc={ac.dc} />
       ) : (
           <div></div>

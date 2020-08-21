@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Switch, Route, NavLink } from "react-router-dom";
+import History from '../History'
 import Select from "react-select";
 import ProtectedRoute from '../ProtectedRoute'
 import Home from './Home'
@@ -11,9 +12,9 @@ import PageNotFound from '../PageNotFound'
 import ToolsTemplate from "./ToolsTemplate";
 import AlertModal from "./AlertsModal";
 import Topology from './Topology'
-// import Countdown from 'react-countdown';
+import $ from 'jquery'
 import ReactTooltip from 'react-tooltip'
-// import SessionTimeout from '../SessionTimeout'
+import SessionTimeout from '../SessionTimeout'
 
 import "../styles/Template.css";
 
@@ -54,19 +55,27 @@ export default function Template(ac, dc) {
     ac.dc.settriggerTopReports(ac.dc.triggerTopReports + 1);
   };
 
-  //Session Timeout Counter
-  // React.useEffect(() => {
-  //   ac.dc.sessionTime > 0 && setTimeout(() => ac.dc.setsessionTime(ac.dc.sessionTime - 1), 1000);
-  //   // eslint-disable-next-line
-  // }, [ac.dc.sessionTime]);
 
-  // function display(seconds) {
-  //   const format = val => `0${Math.floor(val)}`.slice(-2)
-  //   const hours = seconds / 3600
-  //   const minutes = (seconds % 3600) / 60
 
-  //   return [hours, minutes, seconds % 60].map(format).join(':')
-  // }
+
+
+  // scroll functions
+  $(window).scroll(function (e) {
+
+    // add/remove class to navbar when scrolling to hide/show
+    var scroll = $(window).scrollTop();
+    if (scroll >= 150) {
+      $('.navbar').addClass("navbar-hide");
+      $('.navbar-side').stop().animate({ top: '10px' })
+    } else {
+      $('.navbar').removeClass("navbar-hide");
+      $('.navbar-side').stop().animate({ top: '80px' })
+    }
+
+  });
+
+
+
 
   return (
     <Router>
@@ -95,18 +104,6 @@ export default function Template(ac, dc) {
               <i className="fa fa-bars icon" style={ac.dc.collapseButton}></i>
             </div>
           </div>
-          {/* <div className="nav navbar-top-links navbar-right">
-            {ac.dc.isSignedIn ? (
-              <div>
-                <div className='timeout-wrapper'>
-                  Session Timeout: {display(ac.dc.sessionTime)}
-                  Session Timeout: <Countdown className='timeout' date={Date.now() + (ac.dc.sessionTime * 1000)} daysInHours />
-                </div>
-                <i className="fa fa-gear fa-spin" style={{ fontSize: "24px" }}></i>
-              </div>
-            ) : (<div></div>)}
-          </div> */}
-
         </nav>
 
         <nav className="navbar-default navbar-side" role="navigation" >
@@ -234,8 +231,7 @@ export default function Template(ac, dc) {
           {ac.dc.switchAlertModal ? <AlertModal dc={ac.dc} /> : <div></div>}
           {ac.dc.switchLoggedIn ? <LoggedIn dc={ac.dc} /> : <div></div>}
           {ac.dc.switchLoggedout ? <Logout dc={ac.dc} /> : <div></div>}
-          {/* <SessionTimeout dc={ac.dc} /> */}
-
+          {ac.dc.isSignedIn ? <SessionTimeout dc={ac.dc} history={History} /> : <div></div>}
 
           <Switch>
             <Route exact path='/login' render={(dc) => (<LoginAPI {...ac.dc} dc={dc} />)} />

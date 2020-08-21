@@ -53,10 +53,7 @@ export default function LoggedIn(ac) {
       setloading(true)
       postKey()
         .then(() => getKey())
-        .then(() =>
-          ac.dc.setsessionTime(3600),
 
-        )
         // Trigger getOrganization on-login
         .then(() => {
           setTimeout(() => {

@@ -13,6 +13,7 @@ from flask import jsonify
 
 def deploy(ARG_APIKEY,SERIAL_NUM,payload):
 
+
     headers = {
     "Content-Type": "application/json",
     "Accept": "application/json",
@@ -41,17 +42,7 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
         data = []
         for x in payload:
 
-            # set port to a default config
-            # number = x['number']
-            # defaultConfig = json.dumps(defaultPayload)
-            # url = f"https://api.meraki.com/api/v0/devices/{SERIAL_NUM}/switchPorts/{number}"
-            # response = requests.request('PUT', url, headers=headers, data=defaultConfig)
-            # response_data =response.json()
 
-
-
-
-            
             # delete not necessary entries from payload
             del x['payload']['id']
             del x['payload']['templateName']
@@ -160,15 +151,27 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
             data.append({'config' : x['payload'], 'number' : x['number']} )
 
 
+        # normal configuration of switchport
         for x in data:
             number = x['number']
             config = json.dumps(x['config'])
-
+            error = []
             print('Iteration number',number)
             url = f"https://api.meraki.com/api/v0/devices/{SERIAL_NUM}/switchPorts/{number}"
             response = requests.request('PUT', url, headers=headers, data=config)
             response_data =response.json()
-            print('PRIMA',response_data)
+
+
+            # removing stormControlEnabled from payload and send error message, port will be however configured
+            if response_data.get('errors'):
+                if response_data['errors'][0] == 'Storm control is currently not supported in this network':
+                    error = 'Storm control is currently not supported in this network/switch, Storm control configuration removed. '
+                    del x['config']['stormControlEnabled']
+                    config = json.dumps(x['config'])
+                    url = f"https://api.meraki.com/api/v0/devices/{SERIAL_NUM}/switchPorts/{number}"
+                    response = requests.request('PUT', url, headers=headers, data=config)
+                    response_data =response.json()
+
 
 
 
@@ -201,7 +204,7 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
 
 
             
-            # set port to a default config only if no errors, if any errors port should not be configured at all
+            # set port to a default config only if no errors, if any errors port should not be configured at all (except for stormcontrol)
             if response_data.get('errors'):
                 pass
             else:
@@ -211,11 +214,11 @@ def deploy(ARG_APIKEY,SERIAL_NUM,payload):
                 response_data =response.json()
 
 
-        return (response_data)
+
+        return (response_data, error)
             
     except Exception as err:
         print('Exception: ',err)
-        # return(err)
         
 
     

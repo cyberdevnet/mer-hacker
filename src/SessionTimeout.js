@@ -7,7 +7,6 @@ import $ from 'jquery'
 
 
 export default function SessionTimeout(ac) {
-    console.log("SessionTimeout -> ac", ac)
     const [sessionTime, setsessionTime] = useState(60)  // <====== DO NOT CHANGE THIS VALUE
     const [sessionTimeout, setsessionTimeout] = useState(false)
     const [trigger, settrigger] = useState(0)

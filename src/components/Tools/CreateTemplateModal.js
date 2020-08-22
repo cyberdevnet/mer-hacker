@@ -11,7 +11,7 @@ export default function CreateTemplateModal(ac) {
         "title": "Create Template",
         "type": "object",
         "required": [
-            "templateName", 'name'
+            "templateName",
         ],
         "properties": {
             "templateName": {
@@ -443,22 +443,20 @@ export default function CreateTemplateModal(ac) {
                 error.stack = "Allowed VLANs must be 'all' or a comma-separated list of VLANs or ranges between 1 and 4094"
                 setloadingSubmit(false)
             }
-            // else if (error.name === "required" && error.property === ".Port.vlan") {
-            //     error.stack = "VLAN is a required property"
-            //     setloadingSubmit(false)
-            // }
             else if (error.name === "required" && error.property === ".Port.Policy.vlan") {
-                error.stack = "VLAN is a required property"
+                error.stack = "VLAN must be a number between 1 and 4094"
                 setloadingSubmit(false)
             }
             else if (error.name === "oneOf" && error.property === ".Port") {
 
                 error.stack = null
+                // error.stack = "Please check your template"
                 setloadingSubmit(false)
             }
             else if (error.name === "enum" && error.property === ".Port.type") {
 
                 error.stack = null
+                // error.stack = "Please check your template"
                 setloadingSubmit(false)
             }
 

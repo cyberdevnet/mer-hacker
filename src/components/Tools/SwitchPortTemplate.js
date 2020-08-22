@@ -471,10 +471,27 @@ export default function SwitchPortTemplate(ac) {
                                 {data.switchporttemplate.errors} please check your Template and try again.
                             </div>)
                         } else {
-                            setresponseMessage(<div className="form-input-error-msg alert alert-success">
-                                <span className="glyphicon glyphicon-exclamation-sign"></span>
-                            Ports configured successfully.
-                        </div>)
+                            console.log("Deploy -> data.switchporttemplate", data.switchporttemplate)
+                            if (data.switchporttemplate[1].length > 0) {
+                                setresponseMessage(
+                                    <div>
+                                        <div className="form-input-error-msg alert alert-danger">
+                                            <span className="glyphicon glyphicon-exclamation-sign"></span>
+                                            {data.switchporttemplate[1]}
+                                        </div>
+                                        <div className="form-input-error-msg alert alert-success">
+                                            <span className="glyphicon glyphicon-exclamation-sign"></span>
+                                        Ports configured successfully.
+                                    </div>
+                                    </div>
+                                )
+                            } else {
+                                setresponseMessage(
+                                    <div className="form-input-error-msg alert alert-success">
+                                        <span className="glyphicon glyphicon-exclamation-sign"></span>
+                                Ports configured successfully.
+                            </div>)
+                            }
                         }
                     }
                 })
@@ -571,6 +588,9 @@ export default function SwitchPortTemplate(ac) {
                                                 <li>Click on the checkbox to select the ports to configure</li>
                                                 <li>Double Click on a row to display the switchport configuration</li>
                                             </ul>
+                                            <dl>
+                                                <dt>Please note: There's currently a bug in the APi preventing the StormControl configuration</dt>
+                                            </dl>
                                         </div>
                                     </div>
                                 </div>

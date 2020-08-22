@@ -13,7 +13,7 @@ export default function ShowTemplateModal(ac) {
         "title": "Show Template",
         "type": "object",
         "required": [
-            "templateName", 'name'
+            "templateName",
         ],
         "properties": {
             "templateName": {
@@ -444,12 +444,8 @@ export default function ShowTemplateModal(ac) {
                 error.stack = "Allowed VLANs must be 'all' or a comma-separated list of VLANs or ranges between 1 and 4094"
                 setloadingSubmit(false)
             }
-            // else if (error.name === "required" && error.property === ".Port.vlan") {
-            //     error.stack = "VLAN is a required property"
-            //     setloadingSubmit(false)
-            // }
             else if (error.name === "required" && error.property === ".Port.Policy.vlan") {
-                error.stack = "VLAN is a required property"
+                error.stack = "VLAN must be a number between 1 and 4094"
                 setloadingSubmit(false)
             }
             else if (error.name === "oneOf" && error.property === ".Port") {

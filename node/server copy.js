@@ -40,7 +40,7 @@ app.use(cookieParser('82e4e438a0705fabf61f9854e3b575af'));
 
 // Mongodb initialization to users database
 
-var conn = Mongoose.createConnection("mongodb://localhost/users", { useNewUrlParser: true, useUnifiedTopology: true });
+Mongoose.connect("mongodb://localhost/users", { useNewUrlParser: true, useUnifiedTopology: true });
 
 const UserSchema = new Mongoose.Schema({
     username: String,
@@ -68,7 +68,7 @@ UserSchema.methods.comparePassword = function (plaintext, callback) {
 };
 
 
-const UserModel = conn.model("user", UserSchema);
+const UserModel = new Mongoose.model("user", UserSchema);
 
 //connection to the Mongodb database to check the users
 app.get("/node/dump", async (req, res) => {
@@ -142,14 +142,14 @@ app.get('/node/clear-cookie', (req, res) => {
 
 // Mongodb initialization to apikeys database
 
-var conn2 = Mongoose.createConnection("mongodb://localhost/apikeys", {
+Mongoose.connect("mongodb://localhost/apikeys", {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
     useFindAndModify: false
 });
 
-const ApiKeysModel = conn2.model("apikeys", { key: String });
+const ApiKeysModel = new Mongoose.model("apikeys", { key: String });
 
 
 //this route updates an existing entry in the database with the api key sent from client

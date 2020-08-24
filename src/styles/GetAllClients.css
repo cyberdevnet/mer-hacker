@@ -30,4 +30,35 @@
     font-weight: 100;
 }
 
+.export-csv {
+    float: right;
+    margin: 10px;
+    position: relative;
+    bottom: 50px;
+}
 
+.btn.btn-default.dropdown-toggle-tools-change-log {
+    /* margin-bottom: 15px; */
+    width: 185px;
+    height: 34px;
+    margin-right: 10px;
+  }
+  
+  .glyphicon.glyphicon-info-sign {
+    color: #31708f;
+    font-size: 16px;
+  }
+  
+  .form-control {
+    margin: 10px;
+  }
+
+  .select_network_change-log {
+    width: 250px;
+    margin-left: 4px;
+    
+  }
+
+  .change_log__control.css-yk16xz-control {
+    background-color: hsl(0, 0%, 24%);
+  }

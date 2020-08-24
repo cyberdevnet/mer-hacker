@@ -310,5 +310,19 @@ module.exports = function (app) {
       changeOrigin: true,
     })
   );
+  app.use(
+    "/flask/change_log",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/flask/admins",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
 
 };

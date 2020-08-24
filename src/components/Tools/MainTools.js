@@ -10,6 +10,7 @@ import TrafficAnalysis from "./TrafficAnalysis";
 import BackupRestore from "./BackupRestore";
 import MigrateTool from "./MigrateTool";
 import SwitchPortTemplate from "./SwitchPortTemplate";
+import ChangeLog from "./ChangeLog";
 import "../../styles/MainTools.css";
 
 export default function MainTools(ac) {
@@ -67,6 +68,11 @@ export default function MainTools(ac) {
         )}
       {ac.dc.switchAllTools[11] ? (
         <SwitchPortTemplate dc={ac.dc} />
+      ) : (
+          <div></div>
+        )}
+      {ac.dc.switchAllTools[12] ? (
+        <ChangeLog dc={ac.dc} />
       ) : (
           <div></div>
         )}

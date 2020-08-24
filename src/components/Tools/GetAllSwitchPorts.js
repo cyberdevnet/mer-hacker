@@ -413,14 +413,14 @@ export default function GetAllSwitchPorts(ac) {
                                                 <SearchBar
                                                     style={{ width: '299px' }}
                                                     {...props.searchProps} />
-                                                <hr />
+                                                <ExportCSVButton className='export-csv' {...props.csvProps}>Export CSV</ExportCSVButton>
+
                                                 <BootstrapTable
                                                     {...props.baseProps}
                                                     rowEvents={rowEvents}
                                                     striped
                                                     hover
                                                 />
-                                                <ExportCSVButton {...props.csvProps}>Export CSV</ExportCSVButton>
                                             </div>
                                         )
                                     }

@@ -34,6 +34,8 @@ export default function ToolsTemplate(ac) {
       ac.setswitchAllTools({ 10: true });
     } else if (selectedValue === "11") {
       ac.setswitchAllTools({ 11: true });
+    } else if (selectedValue === "12") {
+      ac.setswitchAllTools({ 12: true });
     }
   };
 
@@ -124,6 +126,7 @@ export default function ToolsTemplate(ac) {
                     <option value="9">Backup & Restore</option>
                     <option value="10">Migrate Tool</option>
                     <option value="11">Switchport Templates</option>
+                    <option value="12">Change Log</option>
                   </optgroup>
                 </select>
               </div>

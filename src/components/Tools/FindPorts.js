@@ -277,7 +277,7 @@ export default function NetworkTopUsers(ac) {
                   <select
                     onChange={selectTimeInterval}
                     id="selectBox-find-port"
-                    className="btn btn-default dropdown-toggle-tools-findports"
+                    className="btn btn-default dropdown-toggle-tools-change-log"
                   >
                     <optgroup>
                       <option className="option-tools-disabled" value="0">

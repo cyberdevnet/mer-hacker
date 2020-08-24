@@ -72,97 +72,92 @@ export default function GetAllClientsModal(ac) {
                         <div className="modal-body text-center"
                             style={{ fontSize: '11px', color: 'darkslategray' }}>
                             <h4>Client Details</h4>
-                            <table className="table table-striped" id="table1">
-                                <thead >
-                                    <tr>
-                                        <th id='col1' scope="col"></th>
-                                        <th id='col2' scope="col"></th>
-                                    </tr>
-                                </thead>
+                            <table className="table table-striped table-bordered" id="table1">
+
 
                                 <tbody key='1'>
                                     <tr>
-                                        <th style={{ float: 'left' }}> description </th>
+                                        <th style={{ width: '100%', float: 'left' }}> description </th>
                                         <td> {ac.dc.singleClient.description} </td>
                                     </tr>
                                     <tr>
-                                        <th style={{ float: 'left' }}> firstSeen </th>
+                                        <th style={{ width: '100%', float: 'left' }}> firstSeen </th>
                                         <td> {ac.dc.singleClient.firstSeen} </td>
                                     </tr>
                                     <tr>
-                                        <th style={{ float: 'left' }}> groupPolicy8021x </th>
+                                        <th style={{ width: '100%', float: 'left' }}> groupPolicy8021x </th>
                                         <td> {ac.dc.singleClient.groupPolicy8021x} </td>
                                     </tr>
                                     <tr>
-                                        <th style={{ float: 'left' }}> id </th>
+                                        <th style={{ width: '100%', float: 'left' }}> id </th>
                                         <td> {ac.dc.singleClient.id} </td>
                                     </tr>
                                     <tr>
-                                        <th style={{ float: 'left' }}> ip </th>
+                                        <th style={{ width: '100%', float: 'left' }}> ip </th>
                                         <td> {ac.dc.singleClient.ipEnabled} </td>
                                     </tr>
                                     <tr>
-                                        <th style={{ float: 'left' }}> ip6 </th>
+                                        <th style={{ width: '100%', float: 'left' }}> ip6 </th>
                                         <td> {ac.dc.singleClient.ip6} </td>
                                     </tr>
                                     <tr>
-                                        <th style={{ float: 'left' }}> ip6local </th>
+                                        <th style={{ width: '100%', float: 'left' }}> ip6local </th>
                                         <td> {ac.dc.singleClient.ip6Local} </td>
                                     </tr>
                                     <tr>
-                                        <th style={{ float: 'left' }}> lastSeen </th>
+                                        <th style={{ width: '100%', float: 'left' }}> lastSeen </th>
                                         <td> {ac.dc.singleClient.lastSeen} </td>
                                     </tr>
                                     <tr>
-                                        <th style={{ float: 'left' }}> mac </th>
+                                        <th style={{ width: '100%', float: 'left' }}> mac </th>
                                         <td> {ac.dc.singleClient.mac} </td>
                                     </tr>
                                     <tr>
-                                        <th style={{ float: 'left' }}> manufacturer </th>
+                                        <th style={{ width: '100%', float: 'left' }}> manufacturer </th>
                                         <td> {ac.dc.singleClient.manufacturer} </td>
                                     </tr>
                                     <tr>
-                                        <th style={{ float: 'left' }}> notes </th>
+                                        <th style={{ width: '100%', float: 'left' }}> notes </th>
                                         <td> {ac.dc.singleClient.notes} </td>
                                     </tr>
                                     <tr>
-                                        <th style={{ float: 'left' }}> os </th>
+                                        <th style={{ width: '100%', float: 'left' }}> os </th>
                                         <td> {ac.dc.singleClient.os} </td>
                                     </tr>
                                     <tr>
-                                        <th style={{ float: 'left' }}> recentDeviceName </th>
+                                        <th style={{ width: '100%', float: 'left' }}> recentDeviceName </th>
                                         <td> {ac.dc.singleClient.recentDeviceName} </td>
                                     </tr>
                                     <tr>
-                                        <th style={{ float: 'left' }}> recentDeviceSerial </th>
+                                        <th style={{ width: '100%', float: 'left' }}> recentDeviceSerial </th>
                                         <td> {ac.dc.singleClient.recentDeviceSerial} </td>
                                     </tr>
                                     <tr>
-                                        <th style={{ float: 'left' }}> smInstalled </th>
+                                        <th style={{ width: '100%', float: 'left' }}> smInstalled </th>
                                         <td> {ac.dc.singleClient.smInstalled} </td>
                                     </tr>
                                     <tr>
-                                        <th style={{ float: 'left' }}> ssid </th>
+                                        <th style={{ width: '100%', float: 'left' }}> ssid </th>
                                         <td> {ac.dc.singleClient.ssid} </td>
                                     </tr>
                                     <tr>
-                                        <th style={{ float: 'left' }}> status </th>
+                                        <th style={{ width: '100%', float: 'left' }}> status </th>
                                         <td> {ac.dc.singleClient.status} </td>
                                     </tr>
                                     <tr>
-                                        <th style={{ float: 'left' }}> switchport </th>
+                                        <th style={{ width: '100%', float: 'left' }}> switchport </th>
                                         <td> {ac.dc.singleClient.switchport} </td>
                                     </tr>
                                     {/* <tr>
-                                        <th style={{ float: 'left' }}> usage </th>
+                                        <th style={{ width: '100%',float: 'left' }}> usage </th>
                                         <td> {ac.dc.singleClient.usage} </td>
                                     </tr> */}
                                     <tr>
-                                        <th style={{ float: 'left' }}> user </th>
+                                        <th style={{ width: '100%', float: 'left' }}> user </th>
                                         <td> {ac.dc.singleClient.user} </td>
                                     </tr>
                                     <tr>
-                                        <th style={{ float: 'left' }}> vlan </th>
+                                        <th style={{ width: '100%', float: 'left' }}> vlan </th>
                                         <td> {ac.dc.singleClient.vlan} </td>
                                     </tr>
                                 </tbody>

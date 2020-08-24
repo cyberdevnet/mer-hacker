@@ -20,9 +20,11 @@ import logging
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 
-
 dirname = os.path.dirname(__file__)
-debug_file = dirname +'/logs/debug_file.log'
+print("dirname", dirname)
+debug_file = dirname
+debug_file = '/home/cyberdevnet/mer-hacker/flask/logs/debug_file.log'
+# debug_file = dirname +'/logs/debug_file.log'
 print(debug_file)
 log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 logging.basicConfig(filename=debug_file, level=logging.DEBUG,format=log_format,filemode='w')
@@ -594,6 +596,61 @@ def deploy_device_switchports():
             return {'switchporttemplate': switchporttemplate.deploy(ARG_APIKEY,SERIAL_NUM,payload)}
         else:
             return {'switchporttemplate': 'boh'}
+    except Exception as err:
+        print('Exception: ',err)
+        flash(err)
+        return {'error' : [render_template('flash_template.html')]}
+
+
+
+
+
+@ app.route('/flask/change_log', methods=['GET', 'POST'])
+def change_log():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json(force=True, silent=True)
+            return data
+        else:
+            ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
+            ORG_ID = data['organizationId']
+            NET_ID = data['NET_ID']
+            ADMIN_ID = data['ADMIN_ID']
+            TIME_SPAN = data['TIME_SPAN']
+            dashboard = meraki.DashboardAPI(ARG_APIKEY)
+            if len(NET_ID) > 0 and len(ADMIN_ID) > 0:
+                change_log = dashboard.change_log.getOrganizationConfigurationChanges(organizationId=ORG_ID,networkId=NET_ID, adminId=ADMIN_ID,timespan=TIME_SPAN)
+            elif len(NET_ID) > 0 and len(ADMIN_ID) <= 0:
+                change_log = dashboard.change_log.getOrganizationConfigurationChanges(organizationId=ORG_ID,networkId=NET_ID,timespan=TIME_SPAN)
+            elif len(ADMIN_ID) > 0 and len(NET_ID) <= 0:
+                change_log = dashboard.change_log.getOrganizationConfigurationChanges(organizationId=ORG_ID,adminId=ADMIN_ID,timespan=TIME_SPAN)
+            elif len(ADMIN_ID) <= 0 and len(NET_ID) <= 0:
+                change_log = dashboard.change_log.getOrganizationConfigurationChanges(organizationId=ORG_ID,timespan=TIME_SPAN)
+
+
+
+            return {'change_log': change_log}
+    except Exception as err:
+        print('Exception: ',err)
+        flash(err)
+        return {'error' : [render_template('flash_template.html')]}
+
+
+
+@ app.route('/flask/admins', methods=['GET', 'POST'])
+def admins():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json(force=True, silent=True)
+            return data
+        else:
+            ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
+            ORG_ID = data['organizationId']
+            dashboard = meraki.DashboardAPI(ARG_APIKEY)
+            admins = dashboard.admins.getOrganizationAdmins(ORG_ID )
+            return {'admins': admins}
     except Exception as err:
         print('Exception: ',err)
         flash(err)

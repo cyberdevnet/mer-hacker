@@ -157,7 +157,12 @@ export default function SwitchPortTemplate(ac) {
                         setshowtable(true)
                         setloading(false)
                     })
+            } else {
+                ac.dc.setswitchAlertModal(true);
+                ac.dc.setAlertModalError("Please set Organization and Network.");
+                ac.dc.setswitchToolsTemplate(false);
             }
+
             return () => {
                 abortController.abort()
                 setloading(false)
@@ -343,14 +348,14 @@ export default function SwitchPortTemplate(ac) {
                                                 <SearchBar
                                                     style={{ width: '299px' }}
                                                     {...props.searchProps} />
-                                                <hr />
+                                                <ExportCSVButton className='export-csv' {...props.csvProps}>Export CSV</ExportCSVButton>
                                                 <BootstrapTable
                                                     {...props.baseProps}
                                                     rowEvents={rowEvents}
                                                     striped
                                                     hover
                                                 />
-                                                <ExportCSVButton {...props.csvProps}>Export CSV</ExportCSVButton>
+
                                             </div>
                                         )
                                     }

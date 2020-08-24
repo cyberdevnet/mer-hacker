@@ -38,8 +38,8 @@ export default function TopologyVPNModal(ac) {
         subnets.push(
             <tr key={index}>
                 <th scope="row">{index}</th>
-                <td style={{ textAlign: 'left' }} >{item.localSubnet}</td>
-                <td style={{ textAlign: 'left' }} >{item.useVpn}{glyphicon[index]}</td>
+                <td style={{ textAlign: 'center' }} >{item.localSubnet}</td>
+                <td style={{ textAlign: 'center' }} >{item.useVpn}{glyphicon[index]}</td>
             </tr>
         )
     }
@@ -105,7 +105,7 @@ export default function TopologyVPNModal(ac) {
                                     </tr>
                                 </tbody>
                             </table>
-                            <table className="table table-striped" id="table2">
+                            <table className="table table-striped table-bordered" id="table2">
                                 <thead >
                                     <tr>
                                         <th id='col1' scope="col">#</th>

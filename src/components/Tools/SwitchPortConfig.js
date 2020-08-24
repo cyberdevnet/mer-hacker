@@ -94,93 +94,86 @@ export default function SwitchPortConfig(ac) {
                         </div>
                         <div className="modal-body text-center"
                             style={{ fontSize: '11px', color: 'darkslategray' }}>
-                            <table className="table table-striped" id="table1">
-                                <thead >
-                                    <tr>
-                                        <th id='col1' scope="col"></th>
-                                        <th id='col2' scope="col"></th>
-                                    </tr>
-                                </thead>
-
+                            <table className="table table-striped table-bordered" id="table1">
                                 <tbody key='1'>
                                     <tr>
-                                        <th scope="row" style={{ float: 'left' }}> Switchport </th>
+                                        <th scope="row" style={{ width: '100%', float: 'left' }}> Switchport </th>
                                         <td> {ac.dc.singleSwitchports.number} </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row" style={{ float: 'left' }}> Name </th>
+                                        <th scope="row" style={{ width: '100%', float: 'left' }}> Name </th>
                                         <td> {ac.dc.singleSwitchports.name} </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row" style={{ float: 'left' }}> Tags </th>
+                                        <th scope="row" style={{ width: '100%', float: 'left' }}> Tags </th>
                                         <td> {ac.dc.singleSwitchports.tags} </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row" style={{ float: 'left' }}> Port enabled </th>
+                                        <th scope="row" style={{ width: '100%', float: 'left' }}> Port enabled </th>
                                         <td> {`${ac.dc.singleSwitchports.enabled}`} </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row" style={{ float: 'left' }}> PoE </th>
+                                        <th scope="row" style={{ width: '100%', float: 'left' }}> PoE </th>
                                         <td> {`${ac.dc.singleSwitchports.poeEnabled}`} </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row" style={{ float: 'left' }}> Type </th>
+                                        <th scope="row" style={{ width: '100%', float: 'left' }}> Type </th>
                                         <td> {ac.dc.singleSwitchports.type} </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row" style={{ float: 'left' }}> Native VLAN </th>
+                                        <th scope="row" style={{ width: '100%', float: 'left' }}> Native VLAN </th>
                                         <td> {ac.dc.singleSwitchports.vlan} </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row" style={{ float: 'left' }}> Allowed VLANs </th>
+                                        <th scope="row" style={{ width: '100%', float: 'left' }}> Allowed VLANs </th>
                                         <td> {ac.dc.singleSwitchports.allowedVlans} </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row" style={{ float: 'left' }}> Access policy </th>
+                                        <th scope="row" style={{ width: '100%', float: 'left' }}> Access policy </th>
                                         <td> {ac.dc.singleSwitchports.accessPolicyNumber} </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row" style={{ float: 'left' }}> Whitelisted MACs </th>
+                                        <th scope="row" style={{ width: '100%', float: 'left' }}> Whitelisted MACs </th>
                                         <td> {ac.dc.singleSwitchports.stickyMacWhitelist} </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row" style={{ float: 'left' }}> Whitelist size limit </th>
+                                        <th scope="row" style={{ width: '100%', float: 'left' }}> Whitelist size limit </th>
                                         <td> {ac.dc.singleSwitchports.stickyMacWhitelistLimit} </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row" style={{ float: 'left' }}> VLAN </th>
+                                        <th scope="row" style={{ width: '100%', float: 'left' }}> VLAN </th>
                                         <td> {ac.dc.singleSwitchports.vlan} </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row" style={{ float: 'left' }}> Voice VLAN </th>
+                                        <th scope="row" style={{ width: '100%', float: 'left' }}> Voice VLAN </th>
                                         <td> {ac.dc.singleSwitchports.voiceVlan} </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row" style={{ float: 'left' }}> Link </th>
+                                        <th scope="row" style={{ width: '100%', float: 'left' }}> Link </th>
                                         <td> {ac.dc.singleSwitchports.linkNegotiation} </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row" style={{ float: 'left' }}> RSTP </th>
+                                        <th scope="row" style={{ width: '100%', float: 'left' }}> RSTP </th>
                                         <td> {`${ac.dc.singleSwitchports.rstpEnabled}`} </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row" style={{ float: 'left' }}> STP guard </th>
+                                        <th scope="row" style={{ width: '100%', float: 'left' }}> STP guard </th>
                                         <td> {ac.dc.singleSwitchports.stpGuard} </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row" style={{ float: 'left' }}> Port schedule </th>
+                                        <th scope="row" style={{ width: '100%', float: 'left' }}> Port schedule </th>
                                         <td> {ac.dc.singleSwitchports.portScheduleId} </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row" style={{ float: 'left' }}> Port isolation </th>
+                                        <th scope="row" style={{ width: '100%', float: 'left' }}> Port isolation </th>
                                         <td> {`${ac.dc.singleSwitchports.isolationEnabled}`} </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row" style={{ float: 'left' }}> Storm Control </th>
+                                        <th scope="row" style={{ width: '100%', float: 'left' }}> Storm Control </th>
                                         <td> {ac.dc.singleSwitchports.stormControlEnabled} </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row" style={{ float: 'left' }}> UDLD </th>
+                                        <th scope="row" style={{ width: '100%', float: 'left' }}> UDLD </th>
                                         <td> {ac.dc.singleSwitchports.udld} </td>
                                     </tr>
                                 </tbody>

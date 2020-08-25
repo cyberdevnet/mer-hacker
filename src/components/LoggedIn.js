@@ -127,7 +127,7 @@ export default function LoggedIn(ac) {
                 </form>
               </div>
             </div>
-            <div className="modal-footer">
+            <div className="modal-footer-logged-in">
               <button
                 onClick={!loading ? () => settriggerLogin(triggerLogin + 1) : null}
                 disabled={loading}

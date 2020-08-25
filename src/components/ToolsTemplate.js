@@ -1,43 +1,45 @@
 import React from "react";
 import MainTools from "./Tools/MainTools";
 import LiveLog from "./LiveLog";
+import Select from "react-select";
+
 
 import "../styles/ToolsTemplate.css";
 
 
 export default function ToolsTemplate(ac) {
 
+  const all_tools = [
+    { tool: 'Get all devices IPs' },
+    { tool: 'Get all subnets' },
+    { tool: 'Get all Organization subnets' },
+    { tool: 'Get all Clients' },
+    { tool: 'Get all SwitchPorts' },
+    { tool: 'Network Top Users Report' },
+    { tool: 'Find Port' },
+    { tool: 'Network Analysis' },
+    { tool: 'Backup & Restore' },
+    { tool: 'Migrate Tool' },
+    { tool: 'Switchport Templates' },
+    { tool: 'Change Log' },
+  ]
 
-  const shutAllTools = () => {
+  const ALLTOOLS = all_tools.map((opt, index) => ({
+    label: opt.tool,
+    index: index
+
+  }));
+
+
+
+  const HandleTools = (opt) => {
+    let number = opt.index + 1
     ac.setswitchMainTools(true);
-    let selectBox = document.getElementById("selectBox");
-    let selectedValue = selectBox.options[selectBox.selectedIndex].value;
-    if (selectedValue === "1") {
-      ac.setswitchAllTools({ 1: true });
-    } else if (selectedValue === "2") {
-      ac.setswitchAllTools({ 2: true });
-    } else if (selectedValue === "3") {
-      ac.setswitchAllTools({ 3: true });
-    } else if (selectedValue === "4") {
-      ac.setswitchAllTools({ 4: true });
-    } else if (selectedValue === "5") {
-      ac.setswitchAllTools({ 5: true });
-    } else if (selectedValue === "6") {
-      ac.setswitchAllTools({ 6: true });
-    } else if (selectedValue === "7") {
-      ac.setswitchAllTools({ 7: true });
-    } else if (selectedValue === "8") {
-      ac.setswitchAllTools({ 8: true });
-    } else if (selectedValue === "9") {
-      ac.setswitchAllTools({ 9: true });
-    } else if (selectedValue === "10") {
-      ac.setswitchAllTools({ 10: true });
-    } else if (selectedValue === "11") {
-      ac.setswitchAllTools({ 11: true });
-    } else if (selectedValue === "12") {
-      ac.setswitchAllTools({ 12: true });
-    }
+    ac.setswitchAllTools({ [number]: true });
   };
+
+
+
 
 
   return (
@@ -102,33 +104,14 @@ export default function ToolsTemplate(ac) {
         <div className="col-xs-12">
           <div className="panel panel-default">
             <div className="panel-body">
-              {/* <button onClick={shutAllTools}>Button</button> */}
-              {/* <div className="sub-title-tools">Select Tools</div> */}
-              <div>
-                <select
-                  onChange={shutAllTools}
-                  id="selectBox"
-                  className="btn btn-default dropdown-toggle-tools"
-                  style={{ textAlign: 'inherit' }}
-                >
-                  <optgroup label="Tshoot Tools">
-                    <option className="option-tools-disabled" value="0">
-                      Select Tools
-                    </option>
-                    <option value="1">Get all devices IPs</option>
-                    <option value="2">Get all subnets</option>
-                    <option value="3">Get all Organization subnets</option>
-                    <option value="4">Get all Clients</option>
-                    <option value="5">Get all SwitchPorts</option>
-                    <option value="6">Network Top Users Report</option>
-                    <option value="7">Find Port</option>
-                    <option value="8">Network Analysis</option>
-                    <option value="9">Backup & Restore</option>
-                    <option value="10">Migrate Tool</option>
-                    <option value="11">Switchport Templates</option>
-                    <option value="12">Change Log</option>
-                  </optgroup>
-                </select>
+              <div className="form-group">
+                <Select
+                  className='select_network_change-log'
+                  options={ALLTOOLS}
+                  placeholder='Select Tool'
+                  onChange={HandleTools}
+                  classNamePrefix="change-log"
+                />
               </div>
               <LiveLog />
             </div>

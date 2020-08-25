@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import Select from "react-select";
 import "../../styles/FindPorts.css";
 
 export default function NetworkTopUsers(ac) {
@@ -16,19 +17,10 @@ export default function NetworkTopUsers(ac) {
   // eslint-disable-next-line
   const [macAddressafterTransf, setmacAddressafterTransf] = useState("");
   const [switchTimeInterval, setswitchTimeInterval] = useState(15);
+  console.log("NetworkTopUsers -> switchTimeInterval", switchTimeInterval)
 
 
-  const selectTimeInterval = () => {
-    let selectBox = document.getElementById("selectBox-find-port");
-    let selectedValue = selectBox.options[selectBox.selectedIndex].value;
-    if (selectedValue === "1") {
-      setswitchTimeInterval(15);
-    } else if (selectedValue === "2") {
-      setswitchTimeInterval(30);
-    } else if (selectedValue === "3") {
-      setswitchTimeInterval(60);
-    }
-  };
+
 
   const isFirstRunMAC = useRef(true);
   useEffect(() => {
@@ -234,8 +226,27 @@ export default function NetworkTopUsers(ac) {
     }
   };
 
+  const time_interval = [
+    { time: '15 minutes' },
+    { time: '30 minutes' },
+    { time: '60 minutes' },
+  ]
 
+  const TIMEINTERVAL = time_interval.map((opt, index) => ({
+    label: opt.time,
+    index: index
 
+  }));
+
+  const selectTimeInterval = (opt) => {
+    if (opt.index === 0) {
+      setswitchTimeInterval(15);
+    } else if (opt.index === 1) {
+      setswitchTimeInterval(30);
+    } else if (opt.index === 2) {
+      setswitchTimeInterval(60);
+    }
+  };
 
   return (
     <div id="page-inner-main-templates">
@@ -254,7 +265,6 @@ export default function NetworkTopUsers(ac) {
                         className="collapsed"
                       >
                         <span className="glyphicon glyphicon-info-sign"></span>
-                        {/* Description */}
                       </a>
                     </h4>
                   </div>
@@ -274,20 +284,13 @@ export default function NetworkTopUsers(ac) {
             <div className="panel-body">
               <form className="form-inline">
                 <div className="form-group">
-                  <select
+                  <Select
+                    className='select_network_time-interval'
+                    options={TIMEINTERVAL}
+                    placeholder='Select Interval'
                     onChange={selectTimeInterval}
-                    id="selectBox-find-port"
-                    className="btn btn-default dropdown-toggle-tools-change-log"
-                  >
-                    <optgroup>
-                      <option className="option-tools-disabled" value="0">
-                        Select Time Interval
-                      </option>
-                      <option value="1">15 minutes</option>
-                      <option value="2">30 minutes</option>
-                      <option value="3">60 minutes</option>
-                    </optgroup>
-                  </select>
+                    classNamePrefix="time-interval"
+                  />
                 </div>
 
                 <div className="form-group">

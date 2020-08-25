@@ -116,9 +116,9 @@ export default function ChangeLog(ac) {
                                         adminName: opt.adminName,
                                         networkName: opt.networkName,
                                         page: opt.page,
-                                        label: label,
-                                        oldValue: oldValue,
-                                        newValue: newValue,
+                                        label: opt.label,
+                                        oldValue: opt.oldValue,
+                                        newValue: opt.newValue,
                                         key: randomKey,
                                         Expandlabel: opt.label,
                                         ExpandoldValue: opt.oldValue,
@@ -272,23 +272,26 @@ export default function ChangeLog(ac) {
             headerStyle: (colum, colIndex) => {
                 return { width: '250px', textAlign: 'center' };
             },
+            style: (colum, colIndex) => {
+                return { textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' };
+            },
         },
         {
             dataField: "oldValue",
             text: "Old Value",
             editable: false,
-            // headerStyle: (colum, colIndex) => {
-            //     return {  };
-            // },
+            style: (colum, colIndex) => {
+                return { textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' };
+            },
 
         },
         {
             dataField: "newValue",
             text: "New Value",
             editable: false,
-            // headerStyle: (colum, colIndex) => {
-            //     return {  };
-            // },
+            style: (colum, colIndex) => {
+                return { textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' };
+            },
 
         },
         {

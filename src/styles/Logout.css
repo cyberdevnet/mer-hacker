@@ -25,13 +25,14 @@
 }
 .modal-confirm .modal-body {
   color: #999;
+  text-align: center
 }
 .modal-confirm .modal-footer {
   border: none;
   text-align: center;
   border-radius: 5px;
   font-size: 13px;
-  padding: 10px 15px 25px;
+  padding: 0px 65px 0px 0px;
 }
 .modal-confirm .modal-footer a {
   color: #999;

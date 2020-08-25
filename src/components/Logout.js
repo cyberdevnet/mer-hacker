@@ -1,5 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import Dialog from '@material-ui/core/Dialog';
 import axios from 'axios'
 
 
@@ -67,46 +68,50 @@ export default function Logout(ac, props) {
   };
 
   return (
-    <div id="myModal">
-      <div className="modal-dialog modal-confirm">
-        <div className="modal-content">
-          <div className="modal-header">
-            <div className="icon-box-logout">
-              <i className="material-icons">&#xE5CD;</i>
+    <Dialog
+      open={true}
+    >
+      <div>
+        <div className="modal-dialog modal-confirm">
+          <div >
+            <div className="modal-header">
+              <div className="icon-box-logout">
+                <i className="material-icons">&#xE5CD;</i>
+              </div>
+              <h4 className="modal-title">Are you sure?</h4>
+              <button
+                onClick={Cancel}
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+            </button>
             </div>
-            <h4 className="modal-title">Are you sure?</h4>
-            <button
-              onClick={Cancel}
-              type="button"
-              className="close"
-              data-dismiss="modal"
-              aria-hidden="true"
-            >
-              &times;
+            <div className="modal-body">
+              <p>Do you really want to Logout?</p>
+            </div>
+            <div className="modal-footer">
+              <button
+                onClick={Cancel}
+                type="button"
+                className="btn btn-info"
+                data-dismiss="modal"
+              >
+                Cancel
             </button>
-          </div>
-          <div className="modal-body">
-            <p>Do you really want to Logout?</p>
-          </div>
-          <div className="modal-footer">
-            <button
-              onClick={Cancel}
-              type="button"
-              className="btn btn-info"
-              data-dismiss="modal"
-            >
-              Cancel
+              <button
+                onClick={ConfirmLogout}
+                type="button"
+                className="btn btn-danger"
+              >
+                Logout
             </button>
-            <button
-              onClick={ConfirmLogout}
-              type="button"
-              className="btn btn-danger"
-            >
-              Logout
-            </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Dialog>
   );
 }

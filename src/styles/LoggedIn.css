@@ -3,6 +3,7 @@
 
 
 .form-control-api {
+  margin: 0px 0px 0px -2px;
   display: block;
   width: 360px;
   height: 34px;
@@ -49,11 +50,13 @@
   top: -5px;
   right: -5px;
 }
-.modal-confirm .modal-footer {
+.modal-confirm .modal-footer-logged-in {
   border: none;
   text-align: center;
   border-radius: 5px;
   font-size: 13px;
+    padding: 0px 5px 0px 0px;
+
 }
 .modal-confirm .icon-box-login {
   color: #fff;

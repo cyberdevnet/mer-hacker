@@ -82,3 +82,18 @@
 .glyphicon {
   margin-right: 10px;
 }
+
+
+
+.change-log__option.css-9gakcf-option {
+  background-color: transparent;
+  color: black;
+}
+.change-log__option.css-9gakcf-option:hover {
+  background-color: #DEEBFF;
+  color: black;
+}
+
+/* .change-log__control.css-yk16xz-control:hover {
+  border-color: hsl(0,0%,70%);
+} */

@@ -13,6 +13,7 @@ export default function Topology(ac) {
     const [switchTopologyVPNModal, setswitchTopologyVPNModal] = useState(false);
     const [trigger, settrigger] = useState(1)
     const [loading, setloading] = useState(false);
+    const [loadingFilterNode, setloadingFilterNode] = useState(false);
     const [deviceSerial, setdeviceSerial] = useState([])
     const [sourceDeviceName, setsourceDeviceName] = useState([])
     const [isDeviceSelected, setisDeviceSelected] = useState(false)
@@ -87,6 +88,32 @@ export default function Topology(ac) {
         id: index,
 
     }));
+
+    const topology_list = [
+        { topology: 'Client Topology' },
+        { topology: 'VPN Topology' },
+    ]
+
+    const TOPOLOGYLIST = topology_list.map((opt, index) => ({
+        label: opt.topology,
+        index: index
+    }));
+
+    const TopologyType = (opt) => {
+        ac.setflashMessages([])
+        ac.setswitchMainTools(true);
+        if (opt.index === 0) {
+            setclientTopology(true);
+            setvpnTopology(false);
+            setgraph([])
+
+        } else if (opt.index === 1) {
+            setvpnTopology(true);
+            setclientTopology(false);
+            setgraph([])
+
+        }
+    };
 
 
 
@@ -436,6 +463,7 @@ export default function Topology(ac) {
     }, [trigger]);
 
     async function APIcallClient(index) {
+        setloadingFilterNode(true)
         //clearing the ClientModel array to avoid duplicate
         setclientID(modalModel[index].id)
         try {
@@ -457,6 +485,7 @@ export default function Topology(ac) {
                 .then((res) => { return res.json() })
                 .then((client) => {
                     if (client.error) {
+                        setloadingFilterNode(false)
                         setswitchTopologyModal(true)
                         setmodel(modalModel[index])
                     } else {
@@ -484,6 +513,7 @@ export default function Topology(ac) {
                     }
                 })
                 .then(() => {
+                    setloadingFilterNode(false)
                     setswitchTopologyModal(true)
                 }
 
@@ -491,6 +521,7 @@ export default function Topology(ac) {
 
         } catch (err) {
             console.log("This is the error:", err);
+            setloadingFilterNode(false)
             ac.setflashMessages(<div className="form-input-error-msg alert alert-danger">
                 <span className="glyphicon glyphicon-exclamation-sign"></span>
             Not a valid Client
@@ -611,24 +642,6 @@ export default function Topology(ac) {
         setnodeVPNListID(opt.id)
     };
 
-    const TopologyType = () => {
-        ac.setflashMessages([])
-        ac.setswitchMainTools(true);
-        let selectBox = document.getElementById("selectTopology");
-        let selectedValue = selectBox.options[selectBox.selectedIndex].value;
-        if (selectedValue === "1") {
-            setclientTopology(true);
-            setvpnTopology(false);
-            setgraph([])
-
-        } else if (selectedValue === "2") {
-            setvpnTopology(true);
-            setclientTopology(false);
-            setgraph([])
-
-        }
-    };
-
 
 
     const LoadTopology = (prevState, id) => {
@@ -665,8 +678,9 @@ export default function Topology(ac) {
                         <div className="panel panel-default">
                             <div className="panel-body" style={{ height: "85px" }}>
                                 <div className="panel-group" id="accordion">
-                                    <div className="panel-heading">
-                                        {/* <h4 className="panel-title-description"> */}
+                                    <div className="panel-heading"
+                                        style={{ padding: '0px 0px 0px' }}
+                                    >
                                         <a
                                             data-toggle="collapse"
                                             data-parent="#accordion"
@@ -676,24 +690,17 @@ export default function Topology(ac) {
                                         >
                                             <span className="glyphicon glyphicon-circle-arrow-down"></span>
                                         </a>
-                                        <select
+                                        <Select
+                                            className='select-tolopology'
+                                            options={TOPOLOGYLIST}
+                                            placeholder='Select Topology'
                                             onChange={TopologyType}
-                                            id="selectTopology"
-                                            className="btn btn-default dropdown-toggle-tools"
-                                        >
-                                            <option className="option-tools-disabled" value="0">
-                                                Select Topology
-                                            </option>
-                                            <option value="1">Client Topology</option>
-                                            <option value="2">VPN Topology</option>
-                                        </select>
+                                            classNamePrefix="topology"
+                                        />
                                     </div>
                                 </div>
                             </div>
-                            {/* </div> */}
                             <div id="collapseOne" className="panel-collapse">
-
-                                {/* <div className="panel panel-default"> */}
                                 <div className="panel-body">
 
                                     {vpnTopology ? (
@@ -709,6 +716,7 @@ export default function Topology(ac) {
                                                                 placeholder='Filter Node'
                                                                 onChange={HandleVPNNodes}
                                                                 classNamePrefix="topology"
+                                                                isLoading={loadingFilterNode}
                                                             />
                                                             <label className="radio-inline">
                                                                 <input checked={switchRadioCheck} onChange={() => { setswitchGraph('Fluid'); setswitchRadioCheck(!switchRadioCheck) }} type="radio" name="survey" id="Radios1" value="Fluid" />
@@ -743,6 +751,7 @@ export default function Topology(ac) {
                                                             placeholder='Filter Node'
                                                             onChange={HandleNodes}
                                                             classNamePrefix="topology"
+                                                            isLoading={loadingFilterNode}
                                                         />
                                                         <label className="radio-inline">
                                                             <input checked={switchRadioCheck} onChange={() => { setswitchGraph('Fluid'); setswitchRadioCheck(!switchRadioCheck) }} type="radio" name="survey" id="Radios1" value="Fluid" />

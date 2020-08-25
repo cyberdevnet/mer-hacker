@@ -44,3 +44,12 @@ svg.custom path.link {
 	height: 969px;
 	width: 100%;
 }
+
+.topology__option.css-9gakcf-option {
+	background-color: transparent;
+	color: black;
+  }
+  .topology__option.css-9gakcf-option:hover {
+	background-color: #DEEBFF;
+	color: black;
+  }

@@ -5,7 +5,7 @@ import datetime
 import requests
 import json
 import importlib
-from flask import Flask, request, jsonify, abort,flash, render_template
+from flask import Flask, request, jsonify, abort, flash, render_template
 from flask_socketio import SocketIO
 from werkzeug.exceptions import BadRequest, HTTPException
 import meraki
@@ -20,15 +20,14 @@ import logging
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 
-dirname = os.path.dirname(__file__)
-print("dirname", dirname)
-debug_file = dirname
-debug_file = '/home/cyberdevnet/mer-hacker/flask/logs/debug_file.log'
-# debug_file = dirname +'/logs/debug_file.log'
+# dirname = os.path.dirname(__file__)
+dirname = os.path.dirname(os.path.abspath(__file__))
+debug_file = dirname + '/logs/debug_file.log'
 print(debug_file)
 log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-logging.basicConfig(filename=debug_file, level=logging.DEBUG,format=log_format,filemode='w')
-logger= logging.getLogger()
+logging.basicConfig(filename=debug_file, level=logging.DEBUG,
+                    format=log_format, filemode='w')
+logger = logging.getLogger()
 
 
 # SECTION: GLOBAL VARIABLES: MODIFY TO CHANGE SCRIPT BEHAVIOUR
@@ -76,27 +75,21 @@ CORS(app)
 #         code = e.code
 #     return jsonify(error=str(e)), code
 
-# # An exception will be raised, hopefully to be caught by 'handle_error'    
+# # An exception will be raised, hopefully to be caught by 'handle_error'
 # @app.route('/error_handling', methods=['GET'])
 # def error_handling():
 #     return (1 / 'ciao')
-
-
-
-
 
 
 #  CLEAR debug_file after user has been logged out
 @app.route('/flask/delete_debugfile', methods=['POST'])
 def delete_debugfile():
     try:
-        with open(debug_file,'w'):
+        with open(debug_file, 'w'):
             pass
     except Exception as error:
         print(error)
     return {'delete_debugfile': 'Debugfile cleared!'}
-
-
 
 
 @app.route('/flask/organizations', methods=['GET', 'POST'])
@@ -108,17 +101,15 @@ def get_organizations():
             return data
         else:
             dashboard = meraki.DashboardAPI(data['X-Cisco-Meraki-API-Key'],
-                 output_log=False)
+                                            output_log=False)
             organizations = dashboard.organizations.getOrganizations()
             return {'organizations': organizations}
     except meraki.APIError as err:
         print('Error: ', err)
-        flash('Organization not found, please check your API key and your internet connection')
+        flash(
+            'Organization not found, please check your API key and your internet connection')
         flash(err)
-        return {'error' : [render_template('flash_template.html')]}
-
-
-
+        return {'error': [render_template('flash_template.html')]}
 
 
 @app.route('/flask/networks', methods=['GET', 'POST'])
@@ -138,8 +129,7 @@ def get_networks():
         print('Error: ', err)
         error = (err.message['errors'][0])
         flash(error)
-        return {'error' : [render_template('flash_template.html'),err.status]}
-
+        return {'error': [render_template('flash_template.html'), err.status]}
 
 
 @ app.route('/flask/devices', methods=['GET', 'POST'])
@@ -159,7 +149,7 @@ def get_devices():
         print('Error: ', err)
         error = (err.message['errors'][0])
         flash(error)
-        return {'error' : [render_template('flash_template.html'),err.status]}
+        return {'error': [render_template('flash_template.html'), err.status]}
 
 
 @ app.route('/flask/vlans', methods=['GET', 'POST'])
@@ -179,7 +169,7 @@ def get_subnets():
         print('Error: ', err)
         error = (err.message['errors'][0])
         flash(error)
-        return {'error' : [render_template('flash_template.html'),err.status]}
+        return {'error': [render_template('flash_template.html'), err.status]}
 
 
 @ app.route('/flask/clients', methods=['GET', 'POST'])
@@ -195,16 +185,14 @@ def clients():
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             NET_ID = data['NET_ID']
             dashboard = meraki.DashboardAPI(ARG_APIKEY)
-            clients = dashboard.clients.getNetworkClients(NET_ID, perPage=1000,timespan=3600)
+            clients = dashboard.clients.getNetworkClients(
+                NET_ID, perPage=1000, timespan=3600)
             return {'clients': clients}
     except meraki.APIError as err:
         print('Error: ', err)
         error = (err.message['errors'][0])
         flash(error)
-        return {'error' : [render_template('flash_template.html'),err.status]}
-
-
-
+        return {'error': [render_template('flash_template.html'), err.status]}
 
 
 @app.route('/flask/device_status', methods=['GET', 'POST'])
@@ -224,7 +212,8 @@ def device_status():
         print('Error: ', err)
         error = (err.message['errors'][0])
         flash(error)
-        return {'error' : [render_template('flash_template.html'),err.status]}
+        return {'error': [render_template('flash_template.html'), err.status]}
+
 
 @app.route('/flask/uplink_loss', methods=['GET', 'POST'])
 def uplink_loss():
@@ -243,7 +232,7 @@ def uplink_loss():
         print('Error: ', err)
         error = (err.message['errors'][0])
         flash(error)
-        return {'error' : [render_template('flash_template.html'),err.status]}
+        return {'error': [render_template('flash_template.html'), err.status]}
 
 
 @ app.route('/flask/allVlans', methods=['GET', 'POST'])
@@ -267,7 +256,8 @@ def get_all_networks_subnets():
                     vlans.setdefault('result', [])
                     vlans['result'].append(
                         {'allVlans': allVlans, 'networkname': x['name']})
-                    vlans.update({'allVlans': allVlans, 'networkname': x['name']})
+                    vlans.update(
+                        {'allVlans': allVlans, 'networkname': x['name']})
                     continue
                 except meraki.APIError as err:
                     error = (err.message['errors'][0])
@@ -279,9 +269,7 @@ def get_all_networks_subnets():
         print('Error: ', err)
         error = (err.message['errors'][0])
         flash(error)
-        return {'error' : [render_template('flash_template.html'),err.status]}
-
-
+        return {'error': [render_template('flash_template.html'), err.status]}
 
 
 @ app.route('/flask/find_ports', methods=['GET', 'POST'])
@@ -300,7 +288,7 @@ def find_portss():
         else:
             return {'print'}
     except Exception as error:
-        return  {'error': error}
+        return {'error': error}
 
 
 @ app.route("/flask/topuserdata/", methods=['GET', 'POST'])
@@ -320,8 +308,7 @@ def topuserdata():
         else:
             return {'data': 'ciao'}
     except Exception as error:
-        return  {'error': error}
-
+        return {'error': error}
 
 
 @ app.route('/flask/traffic_analysis/', methods=['GET', 'POST'])
@@ -344,10 +331,7 @@ def traffic_analysis():
         print('Error: ', err)
         error = (err.message['errors'][0])
         flash(error)
-        return {'error' : [render_template('flash_template.html'),err.status]}
-
-
-
+        return {'error': [render_template('flash_template.html'), err.status]}
 
 
 @ app.route('/flask/run_backup/', methods=['GET', 'POST'])
@@ -358,8 +342,6 @@ def run_backup():
             data = request.get_json(force=True, silent=True)
             NET_ID = data['NET_ID']
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
-            ARG_ORGNAME = data['ARG_ORGNAME']
-            SERIAL_NUM = data['SERIAL_NUM']
             ARG_ORGID = data['ARG_ORGID']
 
             return {'backup': meraki_backup_network.backup_network(ARG_ORGID, NET_ID, ARG_APIKEY)}
@@ -367,12 +349,10 @@ def run_backup():
 
             return {'backup': 'backup'}
     except Exception as err:
-        print('Exception: ',err)
+        print('Exception: ', err)
         # error = (err.message['errors'][0])
         flash(err)
-        return {'error' : [render_template('flash_template.html')]}
-
-
+        return {'error': [render_template('flash_template.html')]}
 
 
 @ app.route('/flask/run_restore/', methods=['GET', 'POST'])
@@ -382,10 +362,7 @@ def run_restore():
             importlib.reload(meraki_restore_network)
             global data
             data = request.get_json(force=True, silent=True)
-            NET_ID = data['NET_ID']
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
-            ARG_ORGNAME = data['ARG_ORGNAME']
-            SERIAL_NUM = data['SERIAL_NUM']
             ARG_ORGID = data['ARG_ORGID']
 
             return {'backup': meraki_restore_network.restore_network(ARG_ORGID, ARG_APIKEY)}
@@ -394,8 +371,7 @@ def run_restore():
             return {'backup': 'backup'}
     except Exception as err:
         print('Error: ', err)
-        return  {'error': err}
-
+        return {'error': err}
 
 
 @ app.route('/flask/run_restore_switch/', methods=['GET', 'POST'])
@@ -405,11 +381,7 @@ def run_restore_switch():
             importlib.reload(meraki_restore_network)
             global data
             data = request.get_json(force=True, silent=True)
-            NET_ID = data['NET_ID']
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
-            ARG_ORGNAME = data['ARG_ORGNAME']
-            SERIAL_NUM = data['SERIAL_NUM']
-            ARG_ORGID = data['ARG_ORGID']
 
             return {'backup': meraki_restore_network.restore_switchports(ARG_APIKEY)}
         else:
@@ -417,10 +389,7 @@ def run_restore_switch():
             return {'backup': 'backup'}
     except Exception as err:
         print('Error: ', err)
-        return  {'error': err}
-
-
-
+        return {'error': err}
 
 
 @ app.route('/flask/ios_to_meraki/', methods=['GET', 'POST'])
@@ -438,9 +407,9 @@ def ios2meraki():
 
             return {'ios_to_meraki': 'ios_to_meraki'}
     except Exception as err:
-        print('Exception: ',err)
+        print('Exception: ', err)
         flash(err)
-        return {'error' : [render_template('flash_template.html')]}
+        return {'error': [render_template('flash_template.html')]}
 
 
 @ app.route('/flask/run_migrate_switch_config/', methods=['GET', 'POST'])
@@ -456,9 +425,9 @@ def migrate_switch_config():
         else:
             return {'ios_to_meraki': 'ios_to_meraki'}
     except Exception as err:
-        print('Exception: ',err)
+        print('Exception: ', err)
         flash(err)
-        return {'error' : [render_template('flash_template.html')]}
+        return {'error': [render_template('flash_template.html')]}
 
 
 @ app.route('/flask/lldp_cdp/', methods=['GET', 'POST'])
@@ -476,7 +445,7 @@ def lldp_cdp():
             dashboard = meraki.DashboardAPI(ARG_APIKEY, output_log=False)
 
             lldp_cdp = dashboard.devices.getNetworkDeviceLldp_cdp(
-                    NET_ID,SERIAL_NUM, timespan=TIME_SPAN)
+                NET_ID, SERIAL_NUM, timespan=TIME_SPAN)
             return {'lldp_cdp': lldp_cdp}
     # except Exception as err:
     #     print('Exception: ',err)
@@ -486,7 +455,7 @@ def lldp_cdp():
         print('Error: ', err)
         error = (err.message['errors'][0])
         flash(error)
-        return {'error' : [render_template('flash_template.html'),err.status]}
+        return {'error': [render_template('flash_template.html'), err.status]}
 
 
 @ app.route('/flask/device_clients', methods=['GET', 'POST'])
@@ -500,13 +469,14 @@ def device_clients():
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             SERIAL_NUM = data['SERIAL_NUM']
             dashboard = meraki.DashboardAPI(ARG_APIKEY)
-            device_clients = dashboard.clients.getDeviceClients(SERIAL_NUM,timespan=1000)
+            device_clients = dashboard.clients.getDeviceClients(
+                SERIAL_NUM, timespan=1000)
             return {'device_clients': device_clients}
     except meraki.APIError as err:
         print('Error: ', err)
         error = (err.message['errors'][0])
         flash(error)
-        return {'error' : [render_template('flash_template.html'),err.status]}
+        return {'error': [render_template('flash_template.html'), err.status]}
 
 
 @ app.route('/flask/client', methods=['GET', 'POST'])
@@ -524,9 +494,9 @@ def client():
             client = dashboard.clients.getNetworkClient(NET_ID, CLIENT_ID)
             return {'client': client}
     except Exception as err:
-        print('Exception: ',err)
+        print('Exception: ', err)
         flash(err)
-        return {'error' : [render_template('flash_template.html')]}
+        return {'error': [render_template('flash_template.html')]}
 
 
 @ app.route('/flask/site2site', methods=['GET', 'POST'])
@@ -539,14 +509,14 @@ def site2site():
         else:
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             NET_ID_LIST = data['NET_ID_LIST']
-            site2site=[]
+            site2site = []
             for ID in NET_ID_LIST:
                 print("CALLED ID", ID)
                 headers = {
                     "Content-Type": "application/json",
                     "Accept": "application/json",
                     "X-Cisco-Meraki-API-Key": ARG_APIKEY
-                        }
+                }
                 NET_ID = ID
                 url = f"https://api.meraki.com/api/v0/networks/{NET_ID}/siteToSiteVpn"
                 response = requests.request('GET', url, headers=headers)
@@ -561,7 +531,7 @@ def site2site():
         print('Error: ', err)
         error = (err.message['errors'][0])
         flash(error)
-        return {'error' : [render_template('flash_template.html'),err.status]}
+        return {'error': [render_template('flash_template.html'), err.status]}
 
 
 @ app.route('/flask/device_switchports', methods=['GET', 'POST'])
@@ -575,12 +545,13 @@ def device_switchports():
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             SERIAL_NUM = data['SERIAL_NUM']
             dashboard = meraki.DashboardAPI(ARG_APIKEY)
-            switchports = dashboard.switch_ports.getDeviceSwitchPorts(SERIAL_NUM)
+            switchports = dashboard.switch_ports.getDeviceSwitchPorts(
+                SERIAL_NUM)
             return {'switchports': switchports}
     except Exception as err:
-        print('Exception: ',err)
+        print('Exception: ', err)
         flash(err)
-        return {'error' : [render_template('flash_template.html')]}
+        return {'error': [render_template('flash_template.html')]}
 
 
 @ app.route('/flask/deploy_device_switchports', methods=['GET', 'POST'])
@@ -593,16 +564,13 @@ def deploy_device_switchports():
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             SERIAL_NUM = data['SERIAL_NUM']
             payload = data['PAYLOAD']
-            return {'switchporttemplate': switchporttemplate.deploy(ARG_APIKEY,SERIAL_NUM,payload)}
+            return {'switchporttemplate': switchporttemplate.deploy(ARG_APIKEY, SERIAL_NUM, payload)}
         else:
             return {'switchporttemplate': 'boh'}
     except Exception as err:
-        print('Exception: ',err)
+        print('Exception: ', err)
         flash(err)
-        return {'error' : [render_template('flash_template.html')]}
-
-
-
+        return {'error': [render_template('flash_template.html')]}
 
 
 @ app.route('/flask/change_log', methods=['GET', 'POST'])
@@ -620,22 +588,23 @@ def change_log():
             TIME_SPAN = data['TIME_SPAN']
             dashboard = meraki.DashboardAPI(ARG_APIKEY)
             if len(NET_ID) > 0 and len(ADMIN_ID) > 0:
-                change_log = dashboard.change_log.getOrganizationConfigurationChanges(organizationId=ORG_ID,networkId=NET_ID, adminId=ADMIN_ID,timespan=TIME_SPAN)
+                change_log = dashboard.change_log.getOrganizationConfigurationChanges(
+                    organizationId=ORG_ID, networkId=NET_ID, adminId=ADMIN_ID, timespan=TIME_SPAN)
             elif len(NET_ID) > 0 and len(ADMIN_ID) <= 0:
-                change_log = dashboard.change_log.getOrganizationConfigurationChanges(organizationId=ORG_ID,networkId=NET_ID,timespan=TIME_SPAN)
+                change_log = dashboard.change_log.getOrganizationConfigurationChanges(
+                    organizationId=ORG_ID, networkId=NET_ID, timespan=TIME_SPAN)
             elif len(ADMIN_ID) > 0 and len(NET_ID) <= 0:
-                change_log = dashboard.change_log.getOrganizationConfigurationChanges(organizationId=ORG_ID,adminId=ADMIN_ID,timespan=TIME_SPAN)
+                change_log = dashboard.change_log.getOrganizationConfigurationChanges(
+                    organizationId=ORG_ID, adminId=ADMIN_ID, timespan=TIME_SPAN)
             elif len(ADMIN_ID) <= 0 and len(NET_ID) <= 0:
-                change_log = dashboard.change_log.getOrganizationConfigurationChanges(organizationId=ORG_ID,timespan=TIME_SPAN)
-
-
+                change_log = dashboard.change_log.getOrganizationConfigurationChanges(
+                    organizationId=ORG_ID, timespan=TIME_SPAN)
 
             return {'change_log': change_log}
     except Exception as err:
-        print('Exception: ',err)
+        print('Exception: ', err)
         flash(err)
-        return {'error' : [render_template('flash_template.html')]}
-
+        return {'error': [render_template('flash_template.html')]}
 
 
 @ app.route('/flask/admins', methods=['GET', 'POST'])
@@ -649,15 +618,13 @@ def admins():
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             ORG_ID = data['organizationId']
             dashboard = meraki.DashboardAPI(ARG_APIKEY)
-            admins = dashboard.admins.getOrganizationAdmins(ORG_ID )
+            admins = dashboard.admins.getOrganizationAdmins(ORG_ID)
             return {'admins': admins}
     except Exception as err:
-        print('Exception: ',err)
+        print('Exception: ', err)
         flash(err)
-        return {'error' : [render_template('flash_template.html')]}
+        return {'error': [render_template('flash_template.html')]}
+
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000)
-
-
-

@@ -33,7 +33,6 @@ export default function AlertsModal(ac) {
             <div className="modal-body text-center">
               <h4>Something went wrong</h4>
               <span>{ac.dc.AlertModalError}</span>
-              {/* <p>Please set Organization and Network.</p> */}
             </div>
           </div>
         </div>

@@ -445,10 +445,11 @@ export default function ChangeLog(ac) {
                                     <div id="collapseOne" className="panel-collapse collapse">
                                         <div className="panel-body">
                                             <dl>
-                                                <dt>This scripts returns all the clients active in the last 1 hour on a network.</dt>
+                                                <dt>This scripts returns all changes have been made in an organization.</dt>
                                             </dl>
                                             <ul>
-                                                <li>Double Click on a row to display the client's details</li>
+                                                <li>You can filter the result based on Administrator, specific network or time Interval (default 1 week)</li>
+                                                <li>Click on a row to display the change details</li>
                                                 <li>The table is exportable in CSV format</li>
                                             </ul>
 

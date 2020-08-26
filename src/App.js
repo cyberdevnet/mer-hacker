@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import StatePersister from './StatePersister'
+import StatePersister from "./StatePersister";
 import Template from "./components/Template";
 
 const MainContext = React.createContext(null);
 
-
 function App() {
-
-
   // eslint-disable-next-line
   const [apiKey, setapiKey] = useState([]);
   const [User, setUser] = useState([]);
@@ -45,9 +42,13 @@ function App() {
   const [switchMainTools, setswitchMainTools] = useState(false);
   const [switchAlertModal, setswitchAlertModal] = useState(false);
   const [switchConfirmRestore, setswitchConfirmRestore] = useState(false);
-  const [switchConfirmRestoreSwitch, setswitchConfirmRestoreSwitch] = useState(false);
+  const [switchConfirmRestoreSwitch, setswitchConfirmRestoreSwitch] = useState(
+    false
+  );
   const [AlertModalError, setAlertModalError] = useState([]);
-  const [switchswitchChangeApiKey, setswitchswitchChangeApiKey] = useState(false);
+  const [switchswitchChangeApiKey, setswitchswitchChangeApiKey] = useState(
+    false
+  );
   const [ulClassorg, setulClassorg] = useState("nav nav-second-level");
   const [ulClassnet, setulClassnet] = useState("nav nav-second-level");
   const [totalDevices, settotalDevices] = useState(0);
@@ -58,13 +59,13 @@ function App() {
   const [datab, setdatab] = useState([]);
   const [isOrgSelected, setisOrgSelected] = useState(false);
   const [isNetSelected, setisNetSelected] = useState(false);
-  const [flashMessages, setflashMessages] = useState([])
-  const [restoreScript, setrestoreScript] = useState('')
-  const [showRestorescript, setshowRestorescript] = useState(false)
-  const [collapseButton, setcollapseButton] = useState({ display: 'none' })
+  const [flashMessages, setflashMessages] = useState([]);
+  const [restoreScript, setrestoreScript] = useState("");
+  const [showRestorescript, setshowRestorescript] = useState(false);
+  const [collapseButton, setcollapseButton] = useState({ display: "none" });
   const [hideLogin, sethideLogin] = useState({ display: "block" });
-  const [loadingOrg, setloadingOrg] = useState(false)
-  const [loadingNet, setloadingNet] = useState(false)
+  const [loadingOrg, setloadingOrg] = useState(false);
+  const [loadingNet, setloadingNet] = useState(false);
   const [switchAllTools, setswitchAllTools] = useState({
     1: false,
     2: false,
@@ -76,24 +77,22 @@ function App() {
     8: false,
   });
 
-
-
   // automatic get key from server on-render and on-refresh
   useEffect(() => {
     async function getKey() {
       try {
-        fetch('node/get-api-key')
-          .then(res => res.json())
+        fetch("node/get-api-key")
+          .then((res) => res.json())
           .then((data) => {
-            setapiKey(data.key)
+            setapiKey(data.key);
           })
-          .catch(error => console.log('An error occured ', error))
+          .catch((error) => console.log("An error occured ", error));
       } catch (e) {
-        console.log('Error:', e);
+        console.log("Error:", e);
       }
     }
-    getKey()
-  }, [])
+    getKey();
+  }, []);
 
   const APIbody = {
     "X-Cisco-Meraki-API-Key": `${apiKey}`,
@@ -101,18 +100,17 @@ function App() {
     NET_ID: `${networkID}`,
   };
 
-
   const isFirstRunOrg = useRef(true);
 
   useEffect(() => {
-    const abortController = new AbortController()
-    const signal = abortController.signal
+    const abortController = new AbortController();
+    const signal = abortController.signal;
     if (isFirstRunOrg.current) {
       isFirstRunOrg.current = false;
       return;
     }
     async function callOrganization() {
-      setloadingOrg(true)
+      setloadingOrg(true);
       fetch("/flask/organizations", {
         method: ["POST"],
         cache: "no-cache",
@@ -126,49 +124,53 @@ function App() {
       fetch("/flask/organizations", { signal: signal })
         .then((res) => {
           if (res.status === 500) {
-            setflashMessages(<div className="form-input-error-msg alert alert-danger">
-              <span className="glyphicon glyphicon-exclamation-sign"></span>
-            Organization not found, please check your API key and your internet connection</div>)
+            setflashMessages(
+              <div className="form-input-error-msg alert alert-danger">
+                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                Organization not found, please check your API key and your
+                internet connection
+              </div>
+            );
           }
           setgetOrgStatusCode(res.status);
           return res.json();
         })
         .then((data) => {
           if (data.error) {
-            setflashMessages(<div className="form-input-error-msg alert alert-danger">
-              <span className="glyphicon glyphicon-exclamation-sign"></span>
-              {data.error}
-            </div>)
+            setflashMessages(
+              <div className="form-input-error-msg alert alert-danger">
+                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                {data.error}
+              </div>
+            );
           } else {
             setorganizationList(data.organizations);
-            setloadingOrg(false)
+            setloadingOrg(false);
           }
-
-        })
+        });
     }
     callOrganization();
     return () => {
-      abortController.abort()
-      console.log("cleanup -> abortController")
+      abortController.abort();
+      console.log("cleanup -> abortController");
       setAlertModalError([]);
-      setflashMessages([])
+      setflashMessages([]);
     };
     // eslint-disable-next-line
   }, [triggerGetOrg, triggerSelectOrg]);
 
-
   const isFirstRunNetwork = useRef(true);
   useEffect(() => {
-    const abortController = new AbortController()
-    const signal = abortController.signal
+    const abortController = new AbortController();
+    const signal = abortController.signal;
     if (isFirstRunNetwork.current) {
       isFirstRunNetwork.current = false;
       return;
     }
     async function callNetworks() {
       if (organization !== "Set Organization") {
-        setflashMessages([])
-        setloadingNet(true)
+        setflashMessages([]);
+        setloadingNet(true);
         fetch("/flask/networks", {
           method: ["POST"],
           cache: "no-cache",
@@ -180,25 +182,27 @@ function App() {
           return response.json;
         });
         fetch("/flask/networks", { signal: signal })
-          .then(r => r.json())
+          .then((r) => r.json())
           .then((data) => {
             if (data.error) {
-              setflashMessages(<div className="form-input-error-msg alert alert-danger">
-                <span className="glyphicon glyphicon-exclamation-sign"></span>
-                {data.error[0]}
-              </div>)
+              setflashMessages(
+                <div className="form-input-error-msg alert alert-danger">
+                  <span className="glyphicon glyphicon-exclamation-sign"></span>
+                  {data.error[0]}
+                </div>
+              );
             } else {
               const NET = Object.values(data.networks);
-
-
 
               let networkIDList = [];
               let combinedIDList = [];
               // eslint-disable-next-line
               NET.map((item) => {
-
                 var a = item.productTypes.indexOf("appliance");
-                if ((item.type === 'combined' && a !== -1) || (item.type === 'appliance' && a !== -1)) {
+                if (
+                  (item.type === "combined" && a !== -1) ||
+                  (item.type === "appliance" && a !== -1)
+                ) {
                   var IDcombinedListModel = [
                     {
                       id: item.id,
@@ -207,9 +211,8 @@ function App() {
                     },
                   ];
                   combinedIDList.push(...IDcombinedListModel);
-                  setcombindeNetworksIDList(combinedIDList)
+                  setcombindeNetworksIDList(combinedIDList);
                 }
-
 
                 var IDListModel = [
                   {
@@ -221,15 +224,15 @@ function App() {
               });
               setnetworkList(data.networks);
               settimeZone(data.networks[0].timeZone);
-              setloadingNet(false)
+              setloadingNet(false);
             }
-          })
+          });
       }
       return () => {
-        abortController.abort()
-        console.log("cleanup -> abortController")
+        abortController.abort();
+        console.log("cleanup -> abortController");
         setAlertModalError([]);
-        setflashMessages([])
+        setflashMessages([]);
       };
     }
     callNetworks();
@@ -237,14 +240,10 @@ function App() {
     // eslint-disable-next-line
   }, [organization]);
 
-
-
-
-
   const isFirstRunHosts = useRef(true);
   useEffect(() => {
-    const abortController = new AbortController()
-    const signal = abortController.signal
+    const abortController = new AbortController();
+    const signal = abortController.signal;
     if (isFirstRunHosts.current) {
       isFirstRunHosts.current = false;
       return;
@@ -265,32 +264,32 @@ function App() {
           .then((res) => res.json())
           .then((data) => {
             if (data.error) {
-              setflashMessages(<div className="form-input-error-msg alert alert-danger">
-                <span className="glyphicon glyphicon-exclamation-sign"></span>
-                {data.error[0]}
-              </div>)
+              setflashMessages(
+                <div className="form-input-error-msg alert alert-danger">
+                  <span className="glyphicon glyphicon-exclamation-sign"></span>
+                  {data.error[0]}
+                </div>
+              );
             } else {
               sethostList(data.clients);
               settotalHosts(data.clients.length);
             }
-          })
+          });
       }
       return () => {
-        abortController.abort()
-        console.log("cleanup -> abortController")
+        abortController.abort();
+        console.log("cleanup -> abortController");
       };
     }
     callClients();
     // eslint-disable-next-line
   }, [network]);
 
-
   const isFirstDevices = useRef(true);
 
-
   useEffect(() => {
-    const abortController = new AbortController()
-    const signal = abortController.signal
+    const abortController = new AbortController();
+    const signal = abortController.signal;
     if (isFirstDevices.current) {
       isFirstDevices.current = false;
       return;
@@ -300,10 +299,12 @@ function App() {
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {
-            setflashMessages(<div className="form-input-error-msg alert alert-danger">
-              <span className="glyphicon glyphicon-exclamation-sign"></span>
-              {data.error[0]}
-            </div>)
+            setflashMessages(
+              <div className="form-input-error-msg alert alert-danger">
+                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                {data.error[0]}
+              </div>
+            );
           } else {
             setdeviceList(data.devices);
             let Dev1 = {};
@@ -315,12 +316,11 @@ function App() {
               }
             }
           }
-        })
-
+        });
     }
     return () => {
-      abortController.abort()
-      console.log("cleanup -> abortController")
+      abortController.abort();
+      console.log("cleanup -> abortController");
     };
     // eslint-disable-next-line
   }, [networkID]);
@@ -430,14 +430,16 @@ function App() {
     settriggerSelectOrg,
     isSignedIn,
     setisSignedIn,
-    User, setUser,
-    Password, setPassword,
+    User,
+    setUser,
+    Password,
+    setPassword,
     combindeNetworksIDList,
     setcombindeNetworksIDList,
     loadingOrg,
     setloadingOrg,
     loadingNet,
-    setloadingNet
+    setloadingNet,
   };
 
   return (
@@ -449,4 +451,3 @@ function App() {
 }
 
 export default App;
-

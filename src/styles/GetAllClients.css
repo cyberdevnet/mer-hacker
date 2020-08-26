@@ -1,64 +1,87 @@
 .form-control {
-    width: 100%;
-    margin: 0px;
-  
-  }
+  width: 100%;
+  margin: 0px;
+}
 
 .btn-primary-clients {
-    float: right;
-    font-size: 15px;
-    margin-left: 10px;
-    margin-top: 25px;
+  float: right;
+  font-size: 15px;
+  margin-left: 10px;
+  margin-top: 25px;
 }
 .btn-primary-clients {
-    color: #fff;
-    background-color: #337ab7;
-    border-color: #2e6da4;
+  color: #fff;
+  background-color: #337ab7;
+  border-color: #2e6da4;
 }
 
 .btn-primary-clients .btn:hover {
-    color: #fff;
-    text-decoration: none;
+  color: #fff;
+  text-decoration: none;
 }
 
 .table td {
-    text-align: center;
+  text-align: center;
 }
 
 .search-label {
-    display: block!important;
-    font-weight: 100;
+  display: block !important;
+  font-weight: 100;
 }
 
 .export-csv {
-    float: right;
-    margin: 10px;
-    position: relative;
-    bottom: 50px;
+  float: right;
+  margin: 10px;
+  position: relative;
+  bottom: 50px;
 }
 
 .btn.btn-default.dropdown-toggle-tools-change-log {
-    /* margin-bottom: 15px; */
-    width: 185px;
-    height: 34px;
-    margin-right: 10px;
-  }
-  
-  .glyphicon.glyphicon-info-sign {
-    color: #31708f;
-    font-size: 16px;
-  }
-  
-  .form-control {
-    margin: 10px;
-  }
+  /* margin-bottom: 15px; */
+  width: 185px;
+  height: 34px;
+  margin-right: 10px;
+}
 
-  .select_network_change-log {
-    width: 250px;
-    margin-left: 4px;
-    
-  }
+.glyphicon.glyphicon-info-sign {
+  color: #31708f;
+  font-size: 16px;
+}
 
-  .change_log__control.css-yk16xz-control {
-    background-color: hsl(0, 0%, 24%);
-  }
+.form-control {
+  margin: 10px;
+}
+
+.select_network_change-log {
+  width: 250px;
+  margin-left: 4px;
+}
+
+.change_log__control.css-yk16xz-control {
+  background-color: hsl(0, 0%, 24%);
+}
+
+.primary-usage-history {
+  font-size: 10px;
+}
+.primary-usage-history {
+  color: #fff;
+  background-color: #337ab7;
+  border-color: #2e6da4;
+}
+
+/* .primary-usage-history .btn:focus {
+  color: #fff;
+  text-decoration: none;
+} */
+
+.btn.btn-light-refresh {
+  top: 0px;
+  right: -55px;
+  outline: none;
+  font-size: 11px;
+  margin-top: 0px;
+  float: right;
+  margin-right: 6px;
+  margin-top: -5px;
+}

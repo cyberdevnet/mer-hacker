@@ -1,7 +1,6 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
 
 module.exports = function (app) {
-
   // START Express-Server Part
   app.use(
     "/node/flask/backup_restore/",
@@ -123,7 +122,6 @@ module.exports = function (app) {
     })
   );
   // END Express-Server Part
-
 
   // START Mongodb Part
   app.use(
@@ -324,5 +322,11 @@ module.exports = function (app) {
       changeOrigin: true,
     })
   );
-
+  app.use(
+    "/flask/usageHistory",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
 };

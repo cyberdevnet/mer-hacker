@@ -626,5 +626,26 @@ def admins():
         return {'error': [render_template('flash_template.html')]}
 
 
+@ app.route('/flask/usageHistory', methods=['GET', 'POST'])
+def usageHistory():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json(force=True, silent=True)
+            return data
+        else:
+            ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
+            NET_ID = data['NET_ID']
+            CLIENT_ID = data['CLIENT_ID']
+            dashboard = meraki.DashboardAPI(ARG_APIKEY)
+            usageHistory = dashboard.clients.getNetworkClientUsageHistory(
+                NET_ID, CLIENT_ID)
+            return {'usageHistory': usageHistory}
+    except Exception as err:
+        print('Exception: ', err)
+        flash(err)
+        return {'error': [render_template('flash_template.html')]}
+
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000)

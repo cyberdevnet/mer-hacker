@@ -30,8 +30,8 @@ export default function NetworkTopUsers(ac) {
 
   const isFirstRun = useRef(true);
   useEffect(() => {
-    const abortController = new AbortController()
-    const signal = abortController.signal
+    const abortController = new AbortController();
+    const signal = abortController.signal;
     if (isFirstRun.current) {
       isFirstRun.current = false;
       return;
@@ -41,11 +41,10 @@ export default function NetworkTopUsers(ac) {
       if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
         if (trigger < 4) {
           if (ac.dc.SNtopUsers) {
-
             try {
               ac.dc.setloadingButton(true);
-              ac.dc.setflashMessages([])
-              seterrorMessage([])
+              ac.dc.setflashMessages([]);
+              seterrorMessage([]);
 
               fetch("/flask/topuserdata/", {
                 signal: signal,
@@ -71,10 +70,12 @@ export default function NetworkTopUsers(ac) {
                 .then((res) => res.json())
                 .then((data) => {
                   if (data.error) {
-                    ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
-                      <span className="glyphicon glyphicon-exclamation-sign"></span>
-                      {data.error[0]}
-                    </div>)
+                    ac.dc.setflashMessages(
+                      <div className="form-input-error-msg alert alert-danger">
+                        <span className="glyphicon glyphicon-exclamation-sign"></span>
+                        {data.error[0]}
+                      </div>
+                    );
                   } else {
                     ac.dc.setreports(data.reports);
 
@@ -143,7 +144,6 @@ export default function NetworkTopUsers(ac) {
                       setmapROW3(R3);
                     });
                   }
-
                 })
                 .then(() => {
                   if (
@@ -164,18 +164,19 @@ export default function NetworkTopUsers(ac) {
                 });
             } catch (err) {
               if (err) {
-                console.log('Error: ', err);
+                console.log("Error: ", err);
                 ac.dc.setloadingButton(false);
-
               }
             }
           } else {
             ac.dc.setloadingButton(false);
-            seterrorMessage(<div className="form-input-error-msg alert alert-danger">
-              <span className="glyphicon glyphicon-exclamation-sign"></span>
-          No MX Firewalls found in this Network, refresh your
-            browser or try another Network.
-        </div>)
+            seterrorMessage(
+              <div className="form-input-error-msg alert alert-danger">
+                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                No MX Firewalls found in this Network, refresh your browser or
+                try another Network.
+              </div>
+            );
           }
         } else {
           ac.dc.setloadingButton(false);
@@ -196,8 +197,7 @@ export default function NetworkTopUsers(ac) {
     }
     APIcall();
     return () => {
-      abortController.abort()
-      console.log("cleanup -> abortController")
+      abortController.abort();
       ac.dc.setreports([]);
       setmapROW1([]);
       setmapROW2([]);
@@ -401,11 +401,12 @@ export default function NetworkTopUsers(ac) {
                   <div id="collapseOne" className="panel-collapse collapse">
                     <div className="panel-body">
                       <dl>
-                        <dt>This script finds the top 10 heaviest bandwidth users of
-                        an MX security appliance in the last 10, 30 and 60
-                      minutes.</dt>
+                        <dt>
+                          This script finds the top 10 heaviest bandwidth users
+                          of an MX security appliance in the last 10, 30 and 60
+                          minutes.
+                        </dt>
                       </dl>
-
                     </div>
                   </div>
                 </div>
@@ -447,7 +448,9 @@ export default function NetworkTopUsers(ac) {
             {showtable ? (
               <div>
                 <div className="panel-body">
-                  <CSVLink data={mapROW1} separator={";"}>Download cvs</CSVLink>
+                  <CSVLink data={mapROW1} separator={";"}>
+                    Download cvs
+                  </CSVLink>
 
                   <MDBDataTableV5
                     hover
@@ -462,7 +465,9 @@ export default function NetworkTopUsers(ac) {
                   />
                 </div>
                 <div className="panel-body">
-                  <CSVLink data={mapROW2} separator={";"}>Download cvs</CSVLink>
+                  <CSVLink data={mapROW2} separator={";"}>
+                    Download cvs
+                  </CSVLink>
 
                   <MDBDataTableV5
                     hover
@@ -477,7 +482,9 @@ export default function NetworkTopUsers(ac) {
                   />
                 </div>
                 <div className="panel-body">
-                  <CSVLink data={mapROW3} separator={";"}>Download cvs</CSVLink>
+                  <CSVLink data={mapROW3} separator={";"}>
+                    Download cvs
+                  </CSVLink>
 
                   <MDBDataTableV5
                     hover
@@ -493,8 +500,8 @@ export default function NetworkTopUsers(ac) {
                 </div>
               </div>
             ) : (
-                <div></div>
-              )}
+              <div></div>
+            )}
           </div>
         </div>
       </div>

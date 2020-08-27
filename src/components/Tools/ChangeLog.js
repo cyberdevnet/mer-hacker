@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import GetAllClientsModal from "./GetAllClientsModal";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, {
   Search,
@@ -17,12 +16,8 @@ export default function ChangeLog(ac) {
   const [loading, setloading] = useState(false);
   const [loadingAdmins, setloadingAdmins] = useState(false);
   const [flashMessages, setflashMessages] = useState([]);
-  const [allLogs, setallLogs] = useState([]);
   const [allAdmins, setallAdmins] = useState([]);
-  const [singleClient, setsingleClient] = useState([]);
-  const [showclientModal, setshowclientModal] = useState(false);
   const [dataLogs, setdataLogs] = useState([]);
-  const [clientListID, setclientListID] = useState([]);
   const [timeIntervalID, settimeIntervalID] = useState(604800);
   const [networkID, setnetworkID] = useState([]);
   const [adminID, setadminID] = useState([]);
@@ -79,7 +74,6 @@ export default function ChangeLog(ac) {
                 </div>
               );
             } else {
-              setallLogs(data.change_log);
               let change_log = [];
               let row = [];
 
@@ -119,20 +113,6 @@ export default function ChangeLog(ac) {
                     min +
                     ":" +
                     sec;
-
-                  function truncateString(str, num) {
-                    // If the length of str is less than or equal to num
-                    // just return str--don't truncate it.
-                    if (str.length <= num) {
-                      return str;
-                    }
-                    // Return str truncated with '(Click to expand)' concatenated to the end of str.
-                    return str.slice(0, num) + "...(Click to expand)";
-                  }
-
-                  let label = truncateString(opt.label, 15);
-                  let oldValue = truncateString(opt.oldValue, 15);
-                  let newValue = truncateString(opt.newValue, 15);
 
                   let randomKey = Math.random().toString(36).substring(7);
 
@@ -355,13 +335,19 @@ export default function ChangeLog(ac) {
       if (isAnyExpands) {
         return (
           <b>
-            <span className="glyphicon glyphicon-arrow-up"></span>
+            <span
+              style={{ fontSize: "11px" }}
+              className="glyphicon glyphicon-arrow-up"
+            ></span>
           </b>
         );
       }
       return (
         <b>
-          <span className="glyphicon glyphicon-arrow-down"></span>
+          <span
+            style={{ fontSize: "11px" }}
+            className="glyphicon glyphicon-arrow-down"
+          ></span>
         </b>
       );
     },
@@ -369,13 +355,19 @@ export default function ChangeLog(ac) {
       if (expanded) {
         return (
           <b>
-            <span className="glyphicon glyphicon-arrow-up"></span>
+            <span
+              style={{ fontSize: "11px" }}
+              className="glyphicon glyphicon-arrow-up"
+            ></span>
           </b>
         );
       }
       return (
         <b>
-          <span className="glyphicon glyphicon-arrow-down"></span>
+          <span
+            style={{ fontSize: "11px" }}
+            className="glyphicon glyphicon-arrow-down"
+          ></span>
         </b>
       );
     },
@@ -431,21 +423,6 @@ export default function ChangeLog(ac) {
     } else {
       setadminID(opt.id);
     }
-  };
-
-  const dc = {
-    showtable,
-    setshowtable,
-    trigger,
-    settrigger,
-    showclientModal,
-    setshowclientModal,
-    allLogs,
-    setallLogs,
-    singleClient,
-    setsingleClient,
-    clientListID,
-    setclientListID,
   };
 
   return (

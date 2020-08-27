@@ -60,8 +60,8 @@ export default function TrafficAnalysis(ac) {
 
   const isFirstRun = useRef(true);
   useEffect(() => {
-    const abortController = new AbortController()
-    const signal = abortController.signal
+    const abortController = new AbortController();
+    const signal = abortController.signal;
     if (isFirstRun.current) {
       isFirstRun.current = false;
       return;
@@ -90,12 +90,14 @@ export default function TrafficAnalysis(ac) {
               })
 
               .then((data) => {
-                console.log("APIcall -> data", data)
+                console.log("APIcall -> data", data);
                 if (data.error) {
-                  ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
-                    <span className="glyphicon glyphicon-exclamation-sign"></span>
-                    {data.error[0]}
-                  </div>)
+                  ac.dc.setflashMessages(
+                    <div className="form-input-error-msg alert alert-danger">
+                      <span className="glyphicon glyphicon-exclamation-sign"></span>
+                      {data.error[0]}
+                    </div>
+                  );
                   ac.dc.setloadingButton(false);
                   setshowtable(false);
                 } else {
@@ -126,14 +128,12 @@ export default function TrafficAnalysis(ac) {
                     ];
                     R1.push(...rowModel);
                     setmapROW1(R1);
-                  })
-                    .then(() => {
-                      setshowtable(true);
-                      ac.dc.setloadingButton(false);
-                    })
+                  }).then(() => {
+                    setshowtable(true);
+                    ac.dc.setloadingButton(false);
+                  });
                 }
-              })
-
+              });
           } catch (err) {
             if (err) {
               console.log("This is the error:", err);
@@ -151,8 +151,7 @@ export default function TrafficAnalysis(ac) {
     }
     APIcall();
     return () => {
-      abortController.abort()
-      console.log("cleanup -> abortController")
+      abortController.abort();
       setnetwanalysis([]);
       setmapROW1([]);
       setshowtable(false);
@@ -251,9 +250,18 @@ export default function TrafficAnalysis(ac) {
                   <div id="collapseOne" className="panel-collapse collapse">
                     <div className="panel-body">
                       <dl>
-                        <dt>This script aggregates all of the detected applications for a given time frame or device type.</dt>
-                        <dt>Time frame options for hourly, weekly, daily and monthly are available.</dt>
-                        <dt>Device type options for combined, switch, wireless and appliance are available(default combined).</dt>
+                        <dt>
+                          This script aggregates all of the detected
+                          applications for a given time frame or device type.
+                        </dt>
+                        <dt>
+                          Time frame options for hourly, weekly, daily and
+                          monthly are available.
+                        </dt>
+                        <dt>
+                          Device type options for combined, switch, wireless and
+                          appliance are available(default combined).
+                        </dt>
                       </dl>
                     </div>
                   </div>
@@ -323,7 +331,10 @@ export default function TrafficAnalysis(ac) {
             {showtable ? (
               <div>
                 <div className="panel-body">
-                  <CSVLink data={mapROW1} separator={";"}>Download cvs</CSVLink>;
+                  <CSVLink data={mapROW1} separator={";"}>
+                    Download cvs
+                  </CSVLink>
+                  ;
                   <MDBDataTableV5
                     hover
                     entriesOptions={[10, 25, 100, 250, 500, 1000, 2000]}
@@ -338,8 +349,8 @@ export default function TrafficAnalysis(ac) {
                 </div>
               </div>
             ) : (
-                <div></div>
-              )}
+              <div></div>
+            )}
           </div>
         </div>
       </div>

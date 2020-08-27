@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import Chart from "react-apexcharts";
-import Dialog from "@material-ui/core/Dialog";
 
 export default function ClientsusageHistory(ac) {
   const [chart, setchart] = useState(false);
@@ -154,6 +153,7 @@ export default function ClientsusageHistory(ac) {
             if (data.usageHistory.length > 30) {
               let range = data.usageHistory.length - 30;
               let dataCut = data.usageHistory.slice(range);
+              // eslint-disable-next-line
               dataCut.map((opt, index) => {
                 let unix_timestamp = opt.ts;
                 var date = new Date(unix_timestamp * 1000);
@@ -170,6 +170,7 @@ export default function ClientsusageHistory(ac) {
               });
             } else {
               let dataCut = data.usageHistory;
+              // eslint-disable-next-line
               dataCut.map((opt, index) => {
                 let unix_timestamp = opt.ts;
                 var date = new Date(unix_timestamp * 1000);

@@ -1,26 +1,31 @@
-
 import React, { useEffect, useState, useRef } from "react";
 import { LazyLog } from "react-lazylog";
 import "../../styles/BackupRestore.css";
-import axios from 'axios';
+import axios from "axios";
 import "ace-builds";
 import AceEditor from "react-ace";
-import ReactModal from 'react-modal'
+import ReactModal from "react-modal";
 import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/theme-twilight";
 import "ace-builds/src-min-noconflict/ext-language_tools";
 // eslint-disable-next-line
-const fs = require('browserify-fs');
-
+const fs = require("browserify-fs");
 
 export default function BackupRestore(ac) {
   const [loadingButtonBackup, setloadingButtonBackup] = useState(false);
   const [loadingButtonRestore, setloadingButtonRestore] = useState(false);
-  const [loadingButtonRestoreSwitch, setloadingButtonRestoreSwitch] = useState(false);
-  const [displayButtons, setdisplayButtons] = useState({ display: 'none' });
-  const [displayRestoreButtons, setdisplayRestoreButtons] = useState({ display: 'none' });
-  const [displayRestoreSwitchButtons, setdisplayRestoreSwitchButtons] = useState({ display: 'none' });
+  const [loadingButtonRestoreSwitch, setloadingButtonRestoreSwitch] = useState(
+    false
+  );
+  const [displayButtons, setdisplayButtons] = useState({ display: "none" });
+  const [displayRestoreButtons, setdisplayRestoreButtons] = useState({
+    display: "none",
+  });
+  const [
+    displayRestoreSwitchButtons,
+    setdisplayRestoreSwitchButtons,
+  ] = useState({ display: "none" });
   const [triggerBackup, settriggerBackup] = useState(0);
   const [triggerFile, settriggerFile] = useState(0);
   const [triggerRestore, settriggerRestore] = useState(0);
@@ -28,12 +33,9 @@ export default function BackupRestore(ac) {
   // eslint-disable-next-line
   const [errorMessage, seterrorMessage] = useState(null);
   // eslint-disable-next-line
-  const [liveLogs, setliveLogs] = useState('');
-  const [showLiveLogs, setshowLiveLogs] = useState(false)
+  const [liveLogs, setliveLogs] = useState("");
+  const [showLiveLogs, setshowLiveLogs] = useState(false);
   const [lazyLog, setlazyLog] = useState([]);
-
-
-
 
   const APIbody2 = {
     "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
@@ -44,42 +46,36 @@ export default function BackupRestore(ac) {
     ARG_ORGID: `${ac.dc.organizationID}`,
   };
 
-
-
   const handleBackup = (e) => {
-    e.stopPropagation()
-    ac.dc.setshowRestorescript(false)
-    ac.dc.setrestoreScript([])
-    setdisplayButtons({ display: 'none' })
+    e.stopPropagation();
+    ac.dc.setshowRestorescript(false);
+    ac.dc.setrestoreScript([]);
+    setdisplayButtons({ display: "none" });
     // e.preventDefault();
     settriggerBackup(triggerBackup + 1);
-    setliveLogs([])
-    setshowLiveLogs(true)
+    setliveLogs([]);
+    setshowLiveLogs(true);
     if (triggerBackup > 3) {
       settriggerBackup(0);
       seterrorMessage(null);
     }
   };
 
-
   const handleRestoreFile = (e) => {
     e.preventDefault();
-    setshowLiveLogs(false)
+    setshowLiveLogs(false);
     seterrorMessage(null);
     settriggerFile(triggerFile + 1);
     if (triggerFile > 3) {
       settriggerFile(0);
     }
-
   };
-
-
 
   const HandleRestore = (e) => {
     e.preventDefault();
-    ac.dc.setswitchConfirmRestore(true)
-    ac.dc.setshowRestorescript(false)
-    setshowLiveLogs(false)
+    ac.dc.setswitchConfirmRestore(true);
+    ac.dc.setshowRestorescript(false);
+    setshowLiveLogs(false);
   };
 
   const CancelRestore = (e) => {
@@ -89,22 +85,19 @@ export default function BackupRestore(ac) {
 
   const ConfirmRestore = (e) => {
     e.preventDefault();
-    ac.dc.setswitchConfirmRestore(false)
+    ac.dc.setswitchConfirmRestore(false);
     settriggerRestore(triggerRestore + 1);
-    setshowLiveLogs(true)
+    setshowLiveLogs(true);
     if (triggerRestore > 3) {
       settriggerRestore(0);
     }
   };
 
-
-
   const HandleRestoreSwitch = (f) => {
     f.preventDefault();
-    ac.dc.setswitchConfirmRestoreSwitch(true)
-    ac.dc.setshowRestorescript(false)
-    setshowLiveLogs(false)
-
+    ac.dc.setswitchConfirmRestoreSwitch(true);
+    ac.dc.setshowRestorescript(false);
+    setshowLiveLogs(false);
   };
 
   const CancelRestoreSwitch = (f) => {
@@ -114,9 +107,9 @@ export default function BackupRestore(ac) {
 
   const ConfirmRestoreSwitch = (f) => {
     f.preventDefault();
-    ac.dc.setswitchConfirmRestoreSwitch(false)
+    ac.dc.setswitchConfirmRestoreSwitch(false);
     settriggerRestoreSwitch(triggerRestoreSwitch + 1);
-    setshowLiveLogs(true)
+    setshowLiveLogs(true);
     if (triggerRestoreSwitch > 3) {
       settriggerRestoreSwitch(0);
     }
@@ -124,29 +117,26 @@ export default function BackupRestore(ac) {
 
   const downloadScript = () => {
     const element = document.createElement("a");
-    const file = new Blob([ac.dc.restoreScript], { type: 'text/plain' });
+    const file = new Blob([ac.dc.restoreScript], { type: "text/plain" });
     element.href = URL.createObjectURL(file);
     element.download = "meraki_restore_network.py";
     document.body.appendChild(element); // Required for this to work in FireFox
     element.click();
-  }
+  };
 
   // function used to upload the meraki_restore_network.py file on the xpress server
   // after has been modified by the AceEditor GUI
   const UploadModifiedScript = (value) => {
-    const data = new FormData()
-    const file = new Blob([value], { type: 'text/plain' });
-    data.append('file', file, 'meraki_restore_network.py')
-    axios.post("/node/upload", data)
-
-  }
-
-
+    const data = new FormData();
+    const file = new Blob([value], { type: "text/plain" });
+    data.append("file", file, "meraki_restore_network.py");
+    axios.post("/node/upload", data);
+  };
 
   const isFirstRun = useRef(true);
   useEffect(() => {
-    const abortController = new AbortController()
-    const signal = abortController.signal
+    const abortController = new AbortController();
+    const signal = abortController.signal;
     if (isFirstRun.current) {
       isFirstRun.current = false;
       return;
@@ -154,7 +144,6 @@ export default function BackupRestore(ac) {
 
     async function Backup() {
       if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
-
         setloadingButtonBackup(true);
 
         fetch("/flask/run_backup/", {
@@ -166,13 +155,12 @@ export default function BackupRestore(ac) {
           },
           body: JSON.stringify(APIbody2),
         })
-
           .then((res) => res.json())
           .then(() => {
             setloadingButtonBackup(false);
-            setdisplayButtons({ display: 'inline-block' })
-            setdisplayRestoreButtons({ display: 'inline-block' })
-          })
+            setdisplayButtons({ display: "inline-block" });
+            setdisplayRestoreButtons({ display: "inline-block" });
+          });
 
         // });
       } else {
@@ -183,64 +171,58 @@ export default function BackupRestore(ac) {
     }
     Backup();
     return () => {
-      abortController.abort()
-      console.log("cleanup -> abortController")
+      abortController.abort();
       seterrorMessage(null);
     };
     // eslint-disable-next-line
   }, [triggerBackup]);
 
-
-
   const isFirstRunFile = useRef(true);
   useEffect(() => {
-    const abortController = new AbortController()
-    const signal = abortController.signal
+    const abortController = new AbortController();
+    const signal = abortController.signal;
     if (isFirstRunFile.current) {
       isFirstRunFile.current = false;
       return;
     }
     async function OpenFile() {
-
-      fetch('/node/flask/backup_restore/meraki_restore_network.py', { signal: signal })
-        .then(response => { return response.text() })
+      fetch("/node/flask/backup_restore/meraki_restore_network.py", {
+        signal: signal,
+      })
+        .then((response) => {
+          return response.text();
+        })
         .then((data) => {
-          ac.dc.setrestoreScript(data)
+          ac.dc.setrestoreScript(data);
         })
         .then(() => {
-          ac.dc.setshowRestorescript(true)
+          ac.dc.setshowRestorescript(true);
         })
 
         .catch((err) => {
-          console.log("APIcall -> err", err)
-
+          console.log("APIcall -> err", err);
         });
-
     }
     OpenFile();
     return () => {
-      abortController.abort()
-      console.log("cleanup -> abortController")
-      ac.dc.setshowRestorescript(false)
+      abortController.abort();
+      ac.dc.setshowRestorescript(false);
       seterrorMessage(null);
     };
     // eslint-disable-next-line
   }, [triggerFile]);
 
-
-
   const isFirstRunRestore = useRef(true);
   useEffect(() => {
-    const abortController = new AbortController()
-    const signal = abortController.signal
+    const abortController = new AbortController();
+    const signal = abortController.signal;
     if (isFirstRunRestore.current) {
       isFirstRunRestore.current = false;
       return;
     }
     async function Restore() {
-
       setloadingButtonRestore(true);
-      ac.dc.setshowRestorescript(false)
+      ac.dc.setshowRestorescript(false);
 
       fetch("/flask/run_restore/", {
         signal: signal,
@@ -251,35 +233,29 @@ export default function BackupRestore(ac) {
         },
         body: JSON.stringify(APIbody2),
       })
-
         .then((res) => {
-          console.log('POST response: ', res);
+          console.log("POST response: ", res);
         })
-
 
         .then(() => {
-          setdisplayRestoreSwitchButtons({ display: 'inline-block' })
-          setdisplayRestoreButtons({ display: 'none' })
-          setloadingButtonRestore(false)
-        })
-
+          setdisplayRestoreSwitchButtons({ display: "inline-block" });
+          setdisplayRestoreButtons({ display: "none" });
+          setloadingButtonRestore(false);
+        });
     }
     Restore();
     return () => {
-      abortController.abort()
-      console.log("cleanup -> abortController")
-      ac.dc.setshowRestorescript(false)
+      abortController.abort();
+      ac.dc.setshowRestorescript(false);
       seterrorMessage(null);
     };
     // eslint-disable-next-line
   }, [triggerRestore]);
 
-
-
   const isFirstRunRestoreSwitch = useRef(true);
   useEffect(() => {
-    const abortController = new AbortController()
-    const signal = abortController.signal
+    const abortController = new AbortController();
+    const signal = abortController.signal;
     if (isFirstRunRestoreSwitch.current) {
       isFirstRunRestoreSwitch.current = false;
       return;
@@ -288,7 +264,7 @@ export default function BackupRestore(ac) {
       // if (ac.dc.showRestorescript === true) {
 
       setloadingButtonRestoreSwitch(true);
-      ac.dc.setshowRestorescript(false)
+      ac.dc.setshowRestorescript(false);
 
       fetch("/flask/run_restore_switch/", {
         signal: signal,
@@ -299,33 +275,27 @@ export default function BackupRestore(ac) {
         },
         body: JSON.stringify(APIbody2),
       })
-
         .then((res) => {
-          console.log('POST response: ', res);
+          console.log("POST response: ", res);
         })
-
 
         .then(() => {
-          setloadingButtonRestoreSwitch(false)
-        })
-
-
+          setloadingButtonRestoreSwitch(false);
+        });
     }
     RestoreSwitch();
     return () => {
-      abortController.abort()
-      console.log("cleanup -> abortController")
-      ac.dc.setshowRestorescript(false)
+      abortController.abort();
+      ac.dc.setshowRestorescript(false);
       seterrorMessage(null);
     };
     // eslint-disable-next-line
   }, [triggerRestoreSwitch]);
 
-
   const isFirstRunLogs = useRef(true);
   useEffect(() => {
-    const abortController = new AbortController()
-    const signal = abortController.signal
+    const abortController = new AbortController();
+    const signal = abortController.signal;
     if (isFirstRunLogs.current) {
       isFirstRunLogs.current = false;
       return;
@@ -337,47 +307,41 @@ export default function BackupRestore(ac) {
         try {
           fetch("/node/flask/logs/log_file.log", { signal: signal })
             .then((response) => {
-
               return response.text();
             })
             .then((data) => {
               setlazyLog(
-                <LazyLog extraLines={1} enableSearch
+                <LazyLog
+                  extraLines={1}
+                  enableSearch
                   text={data}
                   stream
                   caseInsensitive
-                  selectableLines />)
-
-            })
-
+                  selectableLines
+                />
+              );
+            });
         } catch (err) {
           if (err) {
             console.log(err);
           }
         }
-
-      }, 900)
+      }, 900);
       // auto-clear Interval
       setTimeout(() => {
-        clearInterval(interval)
+        clearInterval(interval);
       }, 600000);
-
     } else if (!showLiveLogs) {
-      clearInterval(interval)
+      clearInterval(interval);
     }
     return () => {
-      abortController.abort()
-      console.log("cleanup -> abortController")
-      clearInterval(interval)
+      abortController.abort();
+      clearInterval(interval);
     };
-
   }, [showLiveLogs]);
-
-
 
   return (
     <div id="page-inner-main-templates">
-
       <div className="row">
         <div className="col-xs-12">
           <div className="panel panel-default">
@@ -398,24 +362,55 @@ export default function BackupRestore(ac) {
                   </div>
                   <div id="collapseOne" className="panel-collapse collapse in">
                     <div className="panel-body">
-                      <p><strong>Please read carefully before starting the Backup & Restore.</strong></p>
+                      <p>
+                        <strong>
+                          Please read carefully before starting the Backup &
+                          Restore.
+                        </strong>
+                      </p>
 
                       <dl>
-                        <dt>This script makes a snapshot of a network and creates a downloadable python file used to restore the configuration.</dt>
-                        <dt>The configuration will be restored creating a new network with name "your-new-network-restore"</dt>
-                        <dt>Since the Switchs configuration is lost when a device is moved to another network, the backup process must be run in two steps.</dt>
+                        <dt>
+                          This script makes a snapshot of a network and creates
+                          a downloadable python file used to restore the
+                          configuration.
+                        </dt>
+                        <dt>
+                          The configuration will be restored creating a new
+                          network with name "your-new-network-restore"
+                        </dt>
+                        <dt>
+                          Since the Switchs configuration is lost when a device
+                          is moved to another network, the backup process must
+                          be run in two steps.
+                        </dt>
                       </dl>
                       <ul>
                         <li>Run Backup.</li>
-                        <li>Review the script snapshot before starting the restore.</li>
+                        <li>
+                          Review the script snapshot before starting the
+                          restore.
+                        </li>
                         <li>Download the script(optional).</li>
-                        <li>Restore the configuration (a new network with name "your-new-network-restore" will be created).</li>
-                        <li>Go to your Meraki dashboard and move your devices to the newly created network.</li>
+                        <li>
+                          Restore the configuration (a new network with name
+                          "your-new-network-restore" will be created).
+                        </li>
+                        <li>
+                          Go to your Meraki dashboard and move your devices to
+                          the newly created network.
+                        </li>
                         <li>Restore the switchports configuration.</li>
                       </ul>
                       <dl>
-                        <dt>Note that the Restore will not overwrite existing networks but creates a new one.</dt>
-                        <dt>The script can be modified before the Restore process (basic knowledge of python required).</dt>
+                        <dt>
+                          Note that the Restore will not overwrite existing
+                          networks but creates a new one.
+                        </dt>
+                        <dt>
+                          The script can be modified before the Restore process
+                          (basic knowledge of python required).
+                        </dt>
                       </dl>
                     </div>
                   </div>
@@ -423,13 +418,12 @@ export default function BackupRestore(ac) {
               </div>
             </div>
             <div className="panel-body">
-
               <div>{errorMessage && <span>{errorMessage}</span>}</div>
               <button
-                type='button'
+                type="button"
                 id="runButton"
                 className="btn btn-primary"
-                onClick={(e) => !loadingButtonBackup ? handleBackup(e) : null}
+                onClick={(e) => (!loadingButtonBackup ? handleBackup(e) : null)}
                 disabled={loadingButtonBackup}
               >
                 {loadingButtonBackup && (
@@ -477,7 +471,9 @@ export default function BackupRestore(ac) {
                 style={displayRestoreSwitchButtons}
                 id="restore"
                 className="btn btn-danger"
-                onClick={!loadingButtonRestoreSwitch ? HandleRestoreSwitch : null}
+                onClick={
+                  !loadingButtonRestoreSwitch ? HandleRestoreSwitch : null
+                }
                 disabled={loadingButtonRestoreSwitch}
               >
                 {loadingButtonRestoreSwitch && (
@@ -487,10 +483,11 @@ export default function BackupRestore(ac) {
                   />
                 )}
                 {loadingButtonRestoreSwitch && <span>Restoring</span>}
-                {!loadingButtonRestoreSwitch && <span>Restore Switchsports</span>}
+                {!loadingButtonRestoreSwitch && (
+                  <span>Restore Switchsports</span>
+                )}
               </button>
             </div>
-
           </div>
         </div>
       </div>
@@ -505,11 +502,29 @@ export default function BackupRestore(ac) {
           ariaHideApp={false}
         >
           <div>
-            <p>Are you sure you want to restore the Network {ac.dc.network}? </p>
-            <p className="text-secondary"><small>a new network with name {ac.dc.network}-restore will be created</small></p>
+            <p>
+              Are you sure you want to restore the Network {ac.dc.network}?{" "}
+            </p>
+            <p className="text-secondary">
+              <small>
+                a new network with name {ac.dc.network}-restore will be created
+              </small>
+            </p>
           </div>
-          <button onClick={CancelRestore} type="button" className="btn btn-secondary" >Cancel</button>
-          <button onClick={ConfirmRestore} type="button" className="btn btn-danger">Restore</button>
+          <button
+            onClick={CancelRestore}
+            type="button"
+            className="btn btn-secondary"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={ConfirmRestore}
+            type="button"
+            className="btn btn-danger"
+          >
+            Restore
+          </button>
         </ReactModal>
       </div>
       <div>
@@ -525,20 +540,31 @@ export default function BackupRestore(ac) {
             <p>Are you sure you want to restore the switch configuration? </p>
             {/* <p className="text-secondary"><small>switch configuration will be copied from {ac.dc.network}.</small></p> */}
           </div>
-          <button onClick={CancelRestoreSwitch} type="button" className="btn btn-secondary" >Cancel</button>
-          <button onClick={ConfirmRestoreSwitch} type="button" className="btn btn-danger">Restore</button>
+          <button
+            onClick={CancelRestoreSwitch}
+            type="button"
+            className="btn btn-secondary"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={ConfirmRestoreSwitch}
+            type="button"
+            className="btn btn-danger"
+          >
+            Restore
+          </button>
         </ReactModal>
       </div>
-
-
-
 
       <div className="row">
         <div className="col-xs-12">
           <div className="panel panel-default">
-            {showLiveLogs ? (<div style={{ height: 350 }}>
-              {lazyLog}
-            </div>) : (<div></div>)}
+            {showLiveLogs ? (
+              <div style={{ height: 350 }}>{lazyLog}</div>
+            ) : (
+              <div></div>
+            )}
 
             {ac.dc.showRestorescript ? (
               <div className="panel-body">
@@ -547,11 +573,14 @@ export default function BackupRestore(ac) {
                   // ref="aceEditor"
                   mode="python"
                   theme="twilight"
-                  onChange={value => { ac.dc.setrestoreScript(value); UploadModifiedScript(value) }}
+                  onChange={(value) => {
+                    ac.dc.setrestoreScript(value);
+                    UploadModifiedScript(value);
+                  }}
                   name="ace-editor"
                   id="ace-editor"
-                  width='auto'
-                  height='750px'
+                  width="auto"
+                  height="750px"
                   fontSize={14}
                   showPrintMargin={true}
                   showGutter={true}
@@ -566,17 +595,19 @@ export default function BackupRestore(ac) {
                   }}
                   commands={[
                     {
-                      name: 'run',
-                      bindKey: { win: 'Ctrl-s', mac: 'Command-s' },
-                      exec: (value) => { ac.dc.setrestoreScript(value) }
-                    }
+                      name: "run",
+                      bindKey: { win: "Ctrl-s", mac: "Command-s" },
+                      exec: (value) => {
+                        ac.dc.setrestoreScript(value);
+                      },
+                    },
                   ]}
-                />,
-
+                />
+                ,
               </div>
             ) : (
-                <div></div>
-              )}
+              <div></div>
+            )}
           </div>
         </div>
       </div>

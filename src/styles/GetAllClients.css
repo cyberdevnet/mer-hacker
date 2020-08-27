@@ -62,7 +62,9 @@
 }
 
 .primary-usage-history {
-  font-size: 10px;
+  font-size: 12px;
+  margin-top: 4px;
+  margin-bottom: -25px;
 }
 .primary-usage-history {
   color: #fff;
@@ -81,7 +83,21 @@
   outline: none;
   font-size: 11px;
   margin-top: 0px;
-  float: right;
+  /* float: right; */
   margin-right: 6px;
   margin-top: -5px;
+}
+
+.glyphicon.glyphicon-refresh.Usagehistory {
+  font-size: 14px;
+  margin-left: 5px;
+  top: 3px;
+}
+
+.glyphicon.glyphicon-refresh.Usagehistory:hover {
+  color: darkslategray;
+}
+
+.apexcharts-menu-icon {
+  width: 100%;
 }

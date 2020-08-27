@@ -16,7 +16,6 @@ export default function SwitchPortTemplate(ac) {
   const [triggerUsageHistory, settriggerUsageHistory] = useState(0);
   const [loading, setloading] = useState(false);
   const [loadingUsage, setloadingUsage] = useState(false);
-  console.log("SwitchPortTemplate -> loadingUsage", loadingUsage);
   const [flashMessages, setflashMessages] = useState([]);
   const [allClients, setallClients] = useState([]);
   const [singleClient, setsingleClient] = useState([]);
@@ -80,8 +79,6 @@ export default function SwitchPortTemplate(ac) {
                 </div>
               );
             } else {
-              console.log("callClients -> data.clients", data.clients);
-
               setallClients(data.clients);
               let clients = [];
               let row = [];
@@ -189,29 +186,7 @@ export default function SwitchPortTemplate(ac) {
     // eslint-disable-next-line
   }, [trigger]);
 
-  // const UsageHistoryrankFormatter = (cell, row, rowIndex, formatExtraData) => {
-  //   return (
-  //     <div>
-  //       <button
-  //         className="btn primary-usage-history"
-  //         onClick={() => callUsageHistory(row)}
-  //         disabled={loadingUsage}
-  //       >
-  //         {loadingUsage && (
-  //           <i
-  //             className="fa fa-refresh fa-spin"
-  //             style={{ marginRight: "5px" }}
-  //           />
-  //         )}
-  //         {loadingUsage && <span>Loading</span>}
-  //         {!loadingUsage && <span>Click</span>}
-  //       </button>
-  //     </div>
-  //   );
-  // };
-
   const callUsageHistory = (row) => {
-    console.log("callUsageHistory -> row", row);
     setclientID(row.id);
     setclientName(row.description);
     settriggerUsageHistory(triggerUsageHistory + 1);
@@ -291,21 +266,10 @@ export default function SwitchPortTemplate(ac) {
         return { width: "80px", textAlign: "center" };
       },
     },
-    // {
-    //   dataField: "Usage History",
-    //   text: "Usage",
-    //   // editable: false,
-    //   // key: "Usage History",
-    //   headerStyle: (colum, colIndex) => {
-    //     return { width: "80px", textAlign: "center" };
-    //   },
-    //   formatter: UsageHistoryrankFormatter,
-    // },
   ];
 
   const rowEvents = {
     onDoubleClick: (e, row, rowIndex) => {
-      console.log("SwitchPortTemplate -> e", e);
       setclientListID(rowIndex);
       setsingleClient(allClients[rowIndex]);
       setshowclientModal(true);
@@ -315,31 +279,21 @@ export default function SwitchPortTemplate(ac) {
   const expandRow = {
     renderer: (row) => (
       <div>
-        <table className="table table-striped table-bordered" id="table1">
-          <tbody key="1">
-            <tr>
-              <th style={{ border: "none", float: "left" }}>
-                Client usage history{" "}
-              </th>
-              <td style={{ width: "90%" }}>
-                <button
-                  className="btn primary-usage-history"
-                  onClick={() => callUsageHistory(row)}
-                  disabled={loadingUsage}
-                >
-                  {loadingUsage && (
-                    <i
-                      className="fa fa-refresh fa-spin"
-                      style={{ marginRight: "5px" }}
-                    />
-                  )}
-                  {loadingUsage && <span>Loading</span>}
-                  {!loadingUsage && <span>Click</span>}
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <button
+          className="btn primary-usage-history"
+          onClick={() => callUsageHistory(row)}
+          disabled={loadingUsage}
+        >
+          {loadingUsage && (
+            <i
+              className="fa fa-refresh fa-spin"
+              style={{ marginRight: "5px" }}
+            />
+          )}
+          {loadingUsage && <span>Loading</span>}
+          {!loadingUsage && <span>Client usage history</span>}
+        </button>
+        <ClientsusageHistory dc={dc} cc={ac.dc} />
       </div>
     ),
     showExpandColumn: false,
@@ -484,7 +438,6 @@ export default function SwitchPortTemplate(ac) {
       ) : (
         <div></div>
       )}
-      <ClientsusageHistory dc={dc} cc={ac.dc} />
     </div>
   );
 }

@@ -16,8 +16,8 @@ export default function GetAllSubnets(ac) {
 
   const isFirstRun = useRef(true);
   useEffect(() => {
-    const abortController = new AbortController()
-    const signal = abortController.signal
+    const abortController = new AbortController();
+    const signal = abortController.signal;
     if (isFirstRun.current) {
       isFirstRun.current = false;
       return;
@@ -39,10 +39,12 @@ export default function GetAllSubnets(ac) {
           .then((res) => res.json())
           .then((data) => {
             if (data.error) {
-              ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
-                <span className="glyphicon glyphicon-exclamation-sign"></span>
-                {data.error[0]}
-              </div>)
+              ac.dc.setflashMessages(
+                <div className="form-input-error-msg alert alert-danger">
+                  <span className="glyphicon glyphicon-exclamation-sign"></span>
+                  {data.error[0]}
+                </div>
+              );
             } else {
               ac.dc.setvlanList(data.vlans);
 
@@ -64,8 +66,7 @@ export default function GetAllSubnets(ac) {
             }
           })
           .then(() => setloading(false))
-          .then(() => setshowtable(true))
-
+          .then(() => setshowtable(true));
       } else {
         ac.dc.setswitchAlertModal(true);
         ac.dc.setAlertModalError("Please set Organization and Network.");
@@ -75,9 +76,8 @@ export default function GetAllSubnets(ac) {
 
     APIcall();
     return () => {
-      abortController.abort()
-      console.log("cleanup -> abortController")
-      ac.dc.setflashMessages([])
+      abortController.abort();
+      ac.dc.setflashMessages([]);
       ac.dc.setvlanList([]);
       setmapRows([]);
       setshowtable(false);
@@ -151,10 +151,15 @@ export default function GetAllSubnets(ac) {
                   <div id="collapseOne" className="panel-collapse collapse">
                     <div className="panel-body">
                       <dl>
-                        <dt>This scripts returns all VLANs configured in a network.</dt>
-                        <dt>The script works only
-                        on MX and Z3 devices, does not work on VPN HUBs, the
-                      network must be reachable in the Meraki Dashboard.</dt>
+                        <dt>
+                          This scripts returns all VLANs configured in a
+                          network.
+                        </dt>
+                        <dt>
+                          The script works only on MX and Z3 devices, does not
+                          work on VPN HUBs, the network must be reachable in the
+                          Meraki Dashboard.
+                        </dt>
                       </dl>
                     </div>
                   </div>
@@ -192,7 +197,9 @@ export default function GetAllSubnets(ac) {
           <div className="panel panel-default">
             {showtable ? (
               <div className="panel-body">
-                <CSVLink data={mapRows} separator={";"}>Download cvs</CSVLink>
+                <CSVLink data={mapRows} separator={";"}>
+                  Download cvs
+                </CSVLink>
                 <MDBDataTableV5
                   hover
                   entriesOptions={[10, 25, 50, 100]}
@@ -206,8 +213,8 @@ export default function GetAllSubnets(ac) {
                 />
               </div>
             ) : (
-                <div></div>
-              )}
+              <div></div>
+            )}
           </div>
         </div>
       </div>

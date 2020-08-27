@@ -1,10 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useHistory } from "react-router-dom";
-import $ from 'jquery'
-import axios from 'axios'
-
-
-
+import $ from "jquery";
+import axios from "axios";
 
 import "../styles/LoginAPI.css";
 
@@ -15,31 +12,26 @@ export default function LoginAPI(ac) {
 
   let history = useHistory();
 
-
   // setCookie Function if successeful Login
   const setCookie = async () => {
     try {
       // eslint-disable-next-line
-      const res = await axios.get('/node/set-cookie');
-
-    } catch (e) {
-    }
+      const res = await axios.get("/node/set-cookie");
+    } catch (e) {}
   };
-
 
   // readCookie Function checks if SignedIN or not
   const readCookie = async () => {
     try {
-      const res = await axios.get('/node/read-cookie');
+      const res = await axios.get("/node/read-cookie");
 
       if (res.data.signedIn === true) {
         ac.setisSignedIn(res.data.signedIn);
-
       } else {
-        history.push('/login')
-        $(this).addClass('closed');
-        $('.navbar-side').css({ left: '-260px' });
-        $('#page-wrapper').css({ 'margin-left': '0px' });
+        history.push("/login");
+        $(this).addClass("closed");
+        $(".navbar-side").css({ left: "-260px" });
+        $("#page-wrapper").css({ "margin-left": "0px" });
       }
     } catch (e) {
       ac.setisSignedIn(false);
@@ -51,44 +43,38 @@ export default function LoginAPI(ac) {
     // eslint-disable-next-line
   }, []);
 
-
-
   const setUser = (e) => {
-    e.preventDefault()
-    ac.setUser(e.target.value)
+    e.preventDefault();
+    ac.setUser(e.target.value);
   };
 
   const setPass = (e) => {
-    e.preventDefault()
-    ac.setPassword(e.target.value)
+    e.preventDefault();
+    ac.setPassword(e.target.value);
   };
 
   const handleLogin = () => {
     settriggertryLogin(triggertryLogin + 1);
-
   };
 
   const handleLoginEnter = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       settriggertryLogin(triggertryLogin + 1);
     }
-
   };
 
   JSON.stringify({
     "X-Cisco-Meraki-API-Key": `${ac.inputConfKey}`,
     organizationId: `${ac.organizationID}`,
     networkId: `${ac.networkID}`,
-  })
-
+  });
 
   //Authentication Request to Server
 
   const isFirstTryLogin = useRef(true);
   useEffect(() => {
-
-    const abortController = new AbortController()
-    const signal = abortController.signal
+    const abortController = new AbortController();
+    const signal = abortController.signal;
     if (isFirstTryLogin.current) {
       isFirstTryLogin.current = false;
       return;
@@ -96,29 +82,32 @@ export default function LoginAPI(ac) {
     const auth = async () => {
       setloading(true);
 
-      let username = ac.User
-      let password = ac.Password
+      let username = ac.User;
+      let password = ac.Password;
       try {
-        const res = await axios.post('/node/authenticate',
-          { "username": `${username}`, "password": `${password}` }, { signal: signal }
+        const res = await axios.post(
+          "/node/authenticate",
+          { username: `${username}`, password: `${password}` },
+          { signal: signal }
         );
 
         //simulate delay
         setTimeout(() => {
-          if (res.data === 'Allowed') {
+          if (res.data === "Allowed") {
             ac.sethideLogin({ display: "none" });
-            setCookie()
-            ac.setswitchLoggedIn(true)
-            ac.setisSignedIn(res.data.signedIn)
-            setloading(false)
+            setCookie();
+            ac.setswitchLoggedIn(true);
+            ac.setisSignedIn(res.data.signedIn);
+            setloading(false);
           } else {
             setloading(false);
             seterrorMessageLogin(
               <div className="form-input-error-msg alert alert-danger">
                 <span className="glyphicon glyphicon-exclamation-sign-login"></span>
-                {res.data}: We are unable to complete your login please check your username and password, your
-              Internet connection or try again later
-            </div>
+                {res.data}: We are unable to complete your login please check
+                your username and password, your Internet connection or try
+                again later
+              </div>
             );
           }
         }, 1500);
@@ -127,33 +116,34 @@ export default function LoginAPI(ac) {
         seterrorMessageLogin(
           <div className="form-input-error-msg alert alert-danger">
             <span className="glyphicon glyphicon-exclamation-sign-login"></span>
-            We are unable to complete your login please check your username and password, your
-            Internet connection or try again later
+            We are unable to complete your login please check your username and
+            password, your Internet connection or try again later
           </div>
         );
         console.log(e);
       }
     };
-    auth()
+    auth();
     return () => {
-      abortController.abort()
-      console.log("cleanup -> abortController")
-      seterrorMessageLogin([])
+      abortController.abort();
+      seterrorMessageLogin([]);
       ac.setAlertModalError([]);
-      ac.setflashMessages([])
-    }
+      ac.setflashMessages([]);
+    };
     // eslint-disable-next-line
-  }, [triggertryLogin])
-
+  }, [triggertryLogin]);
 
   //style={ac.hideLogin}
 
   return (
-
     <div style={ac.hideLogin} className="container register">
       <div className="row">
         <div className="col-md-3 register-left">
-          <img src="https://i.ibb.co/1XQKfyd/Mer-Haker-white.png" alt="Mer-Haker-big" style={{ width: '230px' }} />
+          <img
+            src="https://i.ibb.co/1XQKfyd/Mer-Haker-white.png"
+            alt="Mer-Haker-big"
+            style={{ width: "230px" }}
+          />
           {/* <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt="" /> */}
           <h3>Welcome</h3>
           <br />
@@ -173,12 +163,15 @@ export default function LoginAPI(ac) {
                         placeholder="Username"
                         value={ac.User}
                         autoComplete="User"
-                        onChange={e => setUser(e)}
+                        onChange={(e) => setUser(e)}
                         // onChange={e => ac.setUser(e.target.value)}
                         // onKeyPress={!loading ? handleLoginEnter : null}
                         // onSubmit={e => { e.preventDefault() }}
                         // onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(e); handleLoginEnter() }}
-                        onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(e); handleLoginEnter(e) }}
+                        onKeyDown={(e) => {
+                          e.key === "Enter" && e.preventDefault(e);
+                          handleLoginEnter(e);
+                        }}
                       />
                     </div>
                   </form>
@@ -193,13 +186,16 @@ export default function LoginAPI(ac) {
                         placeholder="Password"
                         value={ac.Password}
                         autoComplete="Password"
-                        onChange={e => setPass(e)}
+                        onChange={(e) => setPass(e)}
                         // onChange={e => ac.setPassword(e.target.value)}
                         // onKeyPress={!loading ? handleLoginEnter : null}
                         // onKeyDown={(event) => !loading ? handleLoginEnter(event) : null}
                         // onSubmit={e => { e.preventDefault() }}
                         // onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(e); handleLoginEnter(e) }}
-                        onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(e); handleLoginEnter(e) }}
+                        onKeyDown={(e) => {
+                          e.key === "Enter" && e.preventDefault(e);
+                          handleLoginEnter(e);
+                        }}
                       />
                     </div>
                   </form>

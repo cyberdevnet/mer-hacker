@@ -152,7 +152,6 @@ function App() {
     callOrganization();
     return () => {
       abortController.abort();
-      console.log("cleanup -> abortController");
       setAlertModalError([]);
       setflashMessages([]);
     };
@@ -230,7 +229,6 @@ function App() {
       }
       return () => {
         abortController.abort();
-        console.log("cleanup -> abortController");
         setAlertModalError([]);
         setflashMessages([]);
       };
@@ -278,7 +276,6 @@ function App() {
       }
       return () => {
         abortController.abort();
-        console.log("cleanup -> abortController");
       };
     }
     callClients();
@@ -320,7 +317,6 @@ function App() {
     }
     return () => {
       abortController.abort();
-      console.log("cleanup -> abortController");
     };
     // eslint-disable-next-line
   }, [networkID]);

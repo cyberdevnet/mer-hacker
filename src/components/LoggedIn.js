@@ -1,97 +1,89 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 
-import $ from 'jquery'
+import $ from "jquery";
 import "../styles/LoggedIn.css";
 
 export default function LoggedIn(ac) {
   const [loading, setloading] = useState(false);
-  const [inputKey, setinputKey] = useState('')
-  const [triggerLogin, settriggerLogin] = useState(0)
-
-
+  const [inputKey, setinputKey] = useState("");
+  const [triggerLogin, settriggerLogin] = useState(0);
 
   // post key to backend
   async function postKey() {
-
-    const rawResponse = await fetch('/node/post-api-key', {
-      method: 'POST',
+    const rawResponse = await fetch("/node/post-api-key", {
+      method: "POST",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        Accept: "application/json",
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ key: `${inputKey}` })
-    })
+      body: JSON.stringify({ key: `${inputKey}` }),
+    });
     return await rawResponse.json();
   }
 
   async function getKey() {
     try {
-      fetch('/node/get-api-key')
-        .then(res => res.json())
+      fetch("/node/get-api-key")
+        .then((res) => res.json())
         .then((data) => {
-          ac.dc.setapiKey(data.key)
+          ac.dc.setapiKey(data.key);
         })
-        .catch(error => console.log('An error occured ', error))
+        .catch((error) => console.log("An error occured ", error));
     } catch (e) {
-      console.log('Error:', e);
+      console.log("Error:", e);
     }
   }
-
 
   let history = useHistory();
 
   const isFirstSetKey = useRef(true);
 
   useEffect(() => {
-    const abortController = new AbortController()
+    const abortController = new AbortController();
     if (isFirstSetKey.current) {
       isFirstSetKey.current = false;
       return;
     }
     const handleLoginSuccess = () => {
-      setloading(true)
+      setloading(true);
       postKey()
         .then(() => getKey())
 
         // Trigger getOrganization on-login
         .then(() => {
           setTimeout(() => {
-            ac.dc.settriggerGetOrg(ac.dc.triggerGetOrg + 1)
-            ac.dc.setisSignedIn(true)
-            ac.dc.setswitchLoggedIn(false)
-            ac.dc.setswitchLoginAPI(false)
-            ac.dc.setswitchDashboard(true)
-            ac.dc.setswitchLoggedout(false)
-            ac.dc.setcollapseButton({ display: 'block' })
-            $('.navbar-side').animate({ left: '0px' })
-            $(this).removeClass('closed')
-            $('#page-wrapper').animate({ 'margin-left': '260px' })
-            history.push('/home')
-            setloading(false)
+            ac.dc.settriggerGetOrg(ac.dc.triggerGetOrg + 1);
+            ac.dc.setisSignedIn(true);
+            ac.dc.setswitchLoggedIn(false);
+            ac.dc.setswitchLoginAPI(false);
+            ac.dc.setswitchDashboard(true);
+            ac.dc.setswitchLoggedout(false);
+            ac.dc.setcollapseButton({ display: "block" });
+            $(".navbar-side").animate({ left: "0px" });
+            $(this).removeClass("closed");
+            $("#page-wrapper").animate({ "margin-left": "260px" });
+            history.push("/home");
+            setloading(false);
           }, 1500);
-
-        })
-
+        });
     };
-    handleLoginSuccess()
+    handleLoginSuccess();
     return () => {
-      abortController.abort()
-      console.log("cleanup -> abortController")
+      abortController.abort();
     };
     // eslint-disable-next-line
-  }, [triggerLogin])
+  }, [triggerLogin]);
 
   const setKey = (e) => {
-    e.preventDefault()
-    setinputKey(e.target.value)
+    e.preventDefault();
+    setinputKey(e.target.value);
   };
 
   const handleLoginEnter = (e) => {
-    if (e.key === 'Enter') {
-      settriggerLogin(triggerLogin + 1)
+    if (e.key === "Enter") {
+      settriggerLogin(triggerLogin + 1);
     }
-
   };
 
   return (
@@ -110,7 +102,7 @@ export default function LoggedIn(ac) {
                 <p>Please set your Meraki API key</p>
               </div>
               <div className="col-md-6">
-                <form >
+                <form>
                   <div className="form-group">
                     <input
                       type="password"
@@ -119,9 +111,12 @@ export default function LoggedIn(ac) {
                       placeholder="API key"
                       value={inputKey}
                       autoComplete="api"
-                      onChange={e => setKey(e)}
-                      onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(e); handleLoginEnter(e) }}
-                    // onChange={(e) => setinputKey(e.target.value)}
+                      onChange={(e) => setKey(e)}
+                      onKeyDown={(e) => {
+                        e.key === "Enter" && e.preventDefault(e);
+                        handleLoginEnter(e);
+                      }}
+                      // onChange={(e) => setinputKey(e.target.value)}
                     />
                   </div>
                 </form>
@@ -129,7 +124,9 @@ export default function LoggedIn(ac) {
             </div>
             <div className="modal-footer-logged-in">
               <button
-                onClick={!loading ? () => settriggerLogin(triggerLogin + 1) : null}
+                onClick={
+                  !loading ? () => settriggerLogin(triggerLogin + 1) : null
+                }
                 disabled={loading}
                 className="btn btn-success btn-block"
                 data-dismiss="modal"

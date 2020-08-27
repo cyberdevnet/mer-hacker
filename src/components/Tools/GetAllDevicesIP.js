@@ -18,8 +18,8 @@ export default function GetAllDevicesIP(ac) {
 
   const isFirstRun = useRef(true);
   useEffect(() => {
-    const abortController = new AbortController()
-    const signal = abortController.signal
+    const abortController = new AbortController();
+    const signal = abortController.signal;
     if (isFirstRun.current) {
       isFirstRun.current = false;
       return;
@@ -41,10 +41,12 @@ export default function GetAllDevicesIP(ac) {
           .then((res) => res.json())
           .then((data) => {
             if (data.error) {
-              ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
-                <span className="glyphicon glyphicon-exclamation-sign"></span>
-                {data.error[0]}
-              </div>)
+              ac.dc.setflashMessages(
+                <div className="form-input-error-msg alert alert-danger">
+                  <span className="glyphicon glyphicon-exclamation-sign"></span>
+                  {data.error[0]}
+                </div>
+              );
             } else {
               ac.dc.setclientList(data.devices);
 
@@ -66,12 +68,10 @@ export default function GetAllDevicesIP(ac) {
                 setmapRows(row);
               });
             }
-
           })
           .then(() => setloading(false))
           .then(() => setshowtable(true))
-          .then(() => setloading(false))
-
+          .then(() => setloading(false));
       } else {
         ac.dc.setswitchAlertModal(true);
         ac.dc.setAlertModalError("Please set Organization and Network.");
@@ -81,8 +81,7 @@ export default function GetAllDevicesIP(ac) {
 
     APIcall();
     return () => {
-      abortController.abort()
-      console.log("cleanup -> abortController")
+      abortController.abort();
       ac.dc.setclientList([]);
       setmapRows([]);
       setshowtable(false);
@@ -169,10 +168,12 @@ export default function GetAllDevicesIP(ac) {
                   <div id="collapseOne" className="panel-collapse collapse">
                     <div className="panel-body">
                       <dl>
-                        <dt>This scripts iterates through all networks in an
-                      organization and returns all the IPs, serial-numbers and models of all devices.</dt>
+                        <dt>
+                          This scripts iterates through all networks in an
+                          organization and returns all the IPs, serial-numbers
+                          and models of all devices.
+                        </dt>
                       </dl>
-
                     </div>
                   </div>
                 </div>
@@ -208,7 +209,9 @@ export default function GetAllDevicesIP(ac) {
           <div className="panel panel-default">
             {showtable ? (
               <div className="panel-body">
-                <CSVLink data={mapRows} separator={";"}>Download cvs</CSVLink>
+                <CSVLink data={mapRows} separator={";"}>
+                  Download cvs
+                </CSVLink>
                 <MDBDataTableV5
                   hover
                   entriesOptions={[10, 25, 50, 100]}
@@ -222,8 +225,8 @@ export default function GetAllDevicesIP(ac) {
                 />
               </div>
             ) : (
-                <div></div>
-              )}
+              <div></div>
+            )}
           </div>
         </div>
       </div>

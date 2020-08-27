@@ -1,14 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
-// import myLogs from "/home/cyberdevnet/mer-hacker-dev/api/logs/debug_file.log";
-// import myLogs from "/home/cyberdevnet/mer-hacker-dev/src/DebugsLogs/debug.log";
 import { LazyLog } from "react-lazylog";
 import "../styles/LiveLog.css";
 
 export default function LiveLog(ac) {
-  // const [debug_logs, setdebug_logs] = useState([]);
   const [lazyLog, setlazyLog] = useState([]);
-  const [showDebug, setshowDebug] = useState(false)
-  const [buttonPHolder, setbuttonPHolder] = useState('Debug')
+  const [showDebug, setshowDebug] = useState(false);
+  const [buttonPHolder, setbuttonPHolder] = useState("Debug");
 
   const isFirstRun = useRef(true);
   useEffect(() => {
@@ -23,35 +20,39 @@ export default function LiveLog(ac) {
         try {
           fetch("/node/flask/logs/debug_file.log")
             .then((response) => {
-
               return response.text();
             })
             .then((data) => {
-              setlazyLog(<LazyLog extraLines={1} enableSearch text={data} stream caseInsensitive selectableLines />
-              )
-            })
-
+              setlazyLog(
+                <LazyLog
+                  extraLines={1}
+                  enableSearch
+                  text={data}
+                  stream
+                  caseInsensitive
+                  selectableLines
+                />
+              );
+            });
         } catch (err) {
           if (err) {
             console.log(err);
             ac.dc.setalert(true);
           }
         }
-
-      }, 1500)
+      }, 1500);
 
       // auto-clearing after 30 sec
       setTimeout(() => {
-        clearInterval(interval)
+        clearInterval(interval);
       }, 600000);
-
     } else if (!showDebug) {
-      clearInterval(interval)
+      clearInterval(interval);
     }
     if (showDebug === true) {
-      setbuttonPHolder('Close')
+      setbuttonPHolder("Close");
     } else {
-      setbuttonPHolder('Debug')
+      setbuttonPHolder("Debug");
     }
     return () => clearInterval(interval);
     // eslint-disable-next-line
@@ -59,18 +60,13 @@ export default function LiveLog(ac) {
 
   const OpenDebug = () => {
     setTimeout(() => {
-      setshowDebug(!showDebug)
+      setshowDebug(!showDebug);
     }, 800);
-
   };
-
 
   return (
     <div>
-      <button
-        onClick={OpenDebug}
-        className="btn btn-primary-live-log"
-      >
+      <button onClick={OpenDebug} className="btn btn-primary-live-log">
         {buttonPHolder}
       </button>
       {showDebug ? (
@@ -78,16 +74,14 @@ export default function LiveLog(ac) {
           <div className="col-xs-12">
             <div className="panel panel-default">
               <div className="panel-body">
-                <div style={{ height: 800 }}>
-                  {lazyLog}
-                </div>
-
+                <div style={{ height: 800 }}>{lazyLog}</div>
               </div>
             </div>
           </div>
-
         </div>
-      ) : (<div></div>)}
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 }

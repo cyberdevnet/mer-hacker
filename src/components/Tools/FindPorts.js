@@ -17,15 +17,12 @@ export default function NetworkTopUsers(ac) {
   // eslint-disable-next-line
   const [macAddressafterTransf, setmacAddressafterTransf] = useState("");
   const [switchTimeInterval, setswitchTimeInterval] = useState(15);
-  console.log("NetworkTopUsers -> switchTimeInterval", switchTimeInterval)
-
-
-
+  console.log("NetworkTopUsers -> switchTimeInterval", switchTimeInterval);
 
   const isFirstRunMAC = useRef(true);
   useEffect(() => {
-    const abortController = new AbortController()
-    const signal = abortController.signal
+    const abortController = new AbortController();
+    const signal = abortController.signal;
     if (isFirstRunMAC.current) {
       isFirstRunMAC.current = false;
       return;
@@ -70,16 +67,18 @@ export default function NetworkTopUsers(ac) {
               .then((response) => response.json())
               .then((data) => {
                 if (data.error) {
-                  ac.dc.setflashMessages(<div className="form-input-error-msg alert alert-danger">
-                    <span className="glyphicon glyphicon-exclamation-sign"></span>
-                    {data.error[0]}
-                  </div>)
+                  ac.dc.setflashMessages(
+                    <div className="form-input-error-msg alert alert-danger">
+                      <span className="glyphicon glyphicon-exclamation-sign"></span>
+                      {data.error[0]}
+                    </div>
+                  );
                 } else {
-                  setfindPort(data.data)
+                  setfindPort(data.data);
                 }
               })
               .then(() => setshowtable(true))
-              .then(() => ac.dc.setloadingButton(false))
+              .then(() => ac.dc.setloadingButton(false));
           } else {
             seterrorMessageMAC(
               <div className="form-input-error-msg alert alert-danger">
@@ -102,8 +101,7 @@ export default function NetworkTopUsers(ac) {
     }
     APICallMAC();
     return () => {
-      abortController.abort()
-      console.log("cleanup -> abortController")
+      abortController.abort();
       setfindPort([]);
       setshowtable(false);
       setshowError(false);
@@ -113,8 +111,8 @@ export default function NetworkTopUsers(ac) {
 
   const isFirstRunIP = useRef(true);
   useEffect(() => {
-    const abortController = new AbortController()
-    const signal = abortController.signal
+    const abortController = new AbortController();
+    const signal = abortController.signal;
     if (isFirstRunIP.current) {
       isFirstRunIP.current = false;
       return;
@@ -175,8 +173,7 @@ export default function NetworkTopUsers(ac) {
     }
     APICallIP();
     return () => {
-      abortController.abort()
-      console.log("cleanup -> abortController")
+      abortController.abort();
       setfindPort([]);
       setshowtable(false);
       setshowError(false);
@@ -206,13 +203,11 @@ export default function NetworkTopUsers(ac) {
       seterrorMessageMAC(false);
       seterrorMessageIP(false);
       seterrorMessageMAC_IP(null);
-
     } else if (macAddressbeforeTransf !== "" && IPAddress === "") {
       settriggerMAC(triggerMAC + 1);
       seterrorMessageMAC(false);
       seterrorMessageIP(false);
       seterrorMessageMAC_IP(null);
-
     } else {
       seterrorMessageMAC(false);
       seterrorMessageIP(false);
@@ -227,15 +222,14 @@ export default function NetworkTopUsers(ac) {
   };
 
   const time_interval = [
-    { time: '15 minutes' },
-    { time: '30 minutes' },
-    { time: '60 minutes' },
-  ]
+    { time: "15 minutes" },
+    { time: "30 minutes" },
+    { time: "60 minutes" },
+  ];
 
   const TIMEINTERVAL = time_interval.map((opt, index) => ({
     label: opt.time,
-    index: index
-
+    index: index,
   }));
 
   const selectTimeInterval = (opt) => {
@@ -271,10 +265,13 @@ export default function NetworkTopUsers(ac) {
                   <div id="collapseOne" className="panel-collapse collapse">
                     <div className="panel-body">
                       <dl>
-                        <dt>This script finds the switch and ports where a clients is connected, searching either by clients MAC address or IP address.</dt>
+                        <dt>
+                          This script finds the switch and ports where a clients
+                          is connected, searching either by clients MAC address
+                          or IP address.
+                        </dt>
                         <dt>This script works only on MS-series switchs.</dt>
                       </dl>
-
                     </div>
                   </div>
                 </div>
@@ -285,9 +282,9 @@ export default function NetworkTopUsers(ac) {
               <form className="form-inline">
                 <div className="form-group">
                   <Select
-                    className='select_network_time-interval'
+                    className="select_network_time-interval"
                     options={TIMEINTERVAL}
-                    placeholder='Select Interval'
+                    placeholder="Select Interval"
                     onChange={selectTimeInterval}
                     classNamePrefix="time-interval"
                   />
@@ -362,8 +359,8 @@ export default function NetworkTopUsers(ac) {
                 </div>
               </div>
             ) : (
-                <div></div>
-              )}
+              <div></div>
+            )}
 
             {showtable ? (
               <div className="panel-body">
@@ -396,8 +393,8 @@ export default function NetworkTopUsers(ac) {
                 </div>
               </div>
             ) : (
-                <div></div>
-              )}
+              <div></div>
+            )}
           </div>
         </div>
       </div>

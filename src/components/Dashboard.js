@@ -21,8 +21,6 @@ export default function Dashboard(ac) {
   const [licenseState, setlicenseState] = useState([]);
   const [showLicense, setshowLicense] = useState(false);
   const [LicenceDevices, setLicenceDevices] = useState([]);
-  console.log("Dashboard -> LicenceDevices", LicenceDevices);
-  console.log("Dashboard -> licenseState", licenseState);
 
   // eslint-disable-next-line
   const [deviceStatusData, setdeviceStatusData] = useState([
@@ -423,8 +421,6 @@ export default function Dashboard(ac) {
                   </div>
                 );
               } else {
-                console.log("LicenseStatus -> data", data);
-
                 const DEVICES = Object.values(
                   data.licenseState.licensedDeviceCounts
                 );

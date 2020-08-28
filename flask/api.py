@@ -647,5 +647,25 @@ def usageHistory():
         return {'error': [render_template('flash_template.html')]}
 
 
+@app.route('/flask/licenseState', methods=['GET', 'POST'])
+def get_licenseState():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json(force=True, silent=True)
+            return data
+        else:
+            dashboard = meraki.DashboardAPI(
+                data['X-Cisco-Meraki-API-Key'], output_log=False)
+            licenseState = dashboard.organizations.getOrganizationLicenseState(
+                data['organizationId'])
+            return {'licenseState': licenseState}
+    except meraki.APIError as err:
+        print('Error: ', err)
+        error = (err.message['errors'][0])
+        flash(error)
+        return {'error': [render_template('flash_template.html'), err.status]}
+
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000)

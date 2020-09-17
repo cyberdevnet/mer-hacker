@@ -197,6 +197,13 @@ module.exports = function (app) {
     })
   );
   app.use(
+    "/flask/inventory",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
     "/flask/uplink_loss",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",

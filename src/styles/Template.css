@@ -34,6 +34,18 @@ a {
   line-height: 25px;
   padding-top: 20px;
 }
+.select-tools {
+  padding: 0 0 0 15px;
+  margin: 0 0 7px;
+  color: #bdbebf;
+  font-size: 11px;
+  font-weight: 200;
+}
+.select-tools p {
+  font-size: 13px;
+  line-height: 25px;
+  padding-top: 20px;
+}
 
 .i-organization {
   position: relative;
@@ -57,7 +69,16 @@ a {
   margin-left: 4px;
 }
 
+.sel_tool {
+  width: 250px;
+  margin-left: 4px;
+}
+
 .foo__control.css-yk16xz-control {
+  background-color: hsl(0, 0%, 24%);
+}
+
+.foo__control.foo__control--is-disabled.css-1fhf3k1-control {
   background-color: hsl(0, 0%, 24%);
 }
 
@@ -80,7 +101,6 @@ a {
   border-color: hsla(0, 0%, 80%, 0.16);
 }
 
-
 .timeout-wrapper {
   margin-right: 70px;
   position: relative;
@@ -92,13 +112,11 @@ a {
 
 .fa.fa-gear.fa-spin {
   float: right;
-    margin-right: 30px;
-    color: #777;
-    font-weight: 600;
-    font-size: 24px;
+  margin-right: 30px;
+  color: #777;
+  font-weight: 600;
+  font-size: 24px;
 }
-
-
 
 .navbar {
   opacity: 1;
@@ -113,4 +131,3 @@ a {
   pointer-events: none;
   opacity: 0;
 }
-

@@ -3,44 +3,35 @@ import MainTools from "./Tools/MainTools";
 import LiveLog from "./LiveLog";
 import Select from "react-select";
 
-
 import "../styles/ToolsTemplate.css";
 
-
 export default function ToolsTemplate(ac) {
-
   const all_tools = [
-    { tool: 'Get all devices IPs' },
-    { tool: 'Get all subnets' },
-    { tool: 'Get all Organization subnets' },
-    { tool: 'Get all Clients' },
-    { tool: 'Get all SwitchPorts' },
-    { tool: 'Network Top Users Report' },
-    { tool: 'Find Port' },
-    { tool: 'Network Analysis' },
-    { tool: 'Backup & Restore' },
-    { tool: 'Migrate Tool' },
-    { tool: 'Switchport Templates' },
-    { tool: 'Change Log' },
-  ]
+    { tool: "Get all devices IPs" },
+    { tool: "Get all subnets" },
+    { tool: "Get all Organization subnets" },
+    { tool: "Get all Clients" },
+    { tool: "Get all SwitchPorts" },
+    { tool: "Network Top Users Report" },
+    { tool: "Find Port" },
+    { tool: "Network Analysis" },
+    { tool: "Backup & Restore" },
+    { tool: "Migrate Tool" },
+    { tool: "Switchport Templates" },
+    { tool: "Change Log" },
+    { tool: "Inventory" },
+  ];
 
   const ALLTOOLS = all_tools.map((opt, index) => ({
     label: opt.tool,
-    index: index
-
+    index: index,
   }));
 
-
-
   const HandleTools = (opt) => {
-    let number = opt.index + 1
+    let number = opt.index + 1;
     ac.setswitchMainTools(true);
     ac.setswitchAllTools({ [number]: true });
   };
-
-
-
-
 
   return (
     <div id="page-inner-tool-templates">
@@ -106,9 +97,9 @@ export default function ToolsTemplate(ac) {
             <div className="panel-body">
               <div className="form-group">
                 <Select
-                  className='select_network_change-log'
+                  className="select_network_change-log"
                   options={ALLTOOLS}
-                  placeholder='Select Tool'
+                  placeholder="Select Tool"
                   onChange={HandleTools}
                   classNamePrefix="change-log"
                 />

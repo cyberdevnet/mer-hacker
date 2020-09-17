@@ -215,6 +215,27 @@ def device_status():
         return {'error': [render_template('flash_template.html'), err.status]}
 
 
+@app.route('/flask/inventory', methods=['GET', 'POST'])
+def inventory():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json(force=True, silent=True)
+            return data
+        else:
+            dashboard = meraki.DashboardAPI(
+                data['X-Cisco-Meraki-API-Key'], output_log=False)
+            organization_id = data['organizationId']
+            inventory = dashboard.organizations.getOrganizationInventory(
+                organization_id)
+            return {'inventory': inventory}
+    except meraki.APIError as err:
+        print('Error: ', err)
+        error = (err.message['errors'][0])
+        flash(error)
+        return {'error': [render_template('flash_template.html'), err.status]}
+
+
 @app.route('/flask/uplink_loss', methods=['GET', 'POST'])
 def uplink_loss():
     try:

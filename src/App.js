@@ -1,6 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import StatePersister from "./StatePersister";
 import Template from "./components/Template";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  NavLink,
+  useHistory,
+} from "react-router-dom";
 
 const MainContext = React.createContext(null);
 
@@ -34,6 +41,7 @@ function App() {
   const [inputConfKey, setinputConfKey] = useState("");
   const [isLoggedIn, setisLoggedIn] = useState(false);
   const [isSignedIn, setisSignedIn] = useState(false);
+  console.log("App -> isSignedIn", isSignedIn);
   const [switchLoginAPI, setswitchLoginAPI] = useState(true);
   const [switchDashboard, setswitchDashboard] = useState(false);
   const [switchLoggedIn, setswitchLoggedIn] = useState(false);
@@ -440,7 +448,10 @@ function App() {
 
   return (
     <MainContext.Provider dc={dc}>
-      <Template dc={dc} />
+      <Router>
+        <Template dc={dc} />
+      </Router>
+
       <StatePersister dc={dc} />
     </MainContext.Provider>
   );

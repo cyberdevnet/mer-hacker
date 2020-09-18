@@ -471,7 +471,6 @@ export default function SwitchPortTemplate(ac) {
                                 {data.switchporttemplate.errors} please check your Template and try again.
                             </div>)
                         } else {
-                            console.log("Deploy -> data.switchporttemplate", data.switchporttemplate)
                             if (data.switchporttemplate[1].length > 0) {
                                 setresponseMessage(
                                     <div>

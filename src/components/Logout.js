@@ -57,7 +57,6 @@ export default function Logout(ac, props) {
     axios.post("/node/post-AlreadyisSignedIn", {
       AlreadyisSignedIn: false,
     });
-    // axios.post("/delete_debugfile", {}).then(res => console.log(res)).catch(error => console.log(error))
   };
 
   const Cancel = () => {

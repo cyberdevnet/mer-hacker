@@ -77,3 +77,18 @@ POST http://localhost:3001/node/delete_debugfile
 
 ###
 GET http://localhost:5000/flask/change_log
+
+
+
+###
+GET http://localhost:3001/node/get-AlreadyisSignedIn
+
+
+###
+POST http://localhost:3001/node/post-AlreadyisSignedIn
+Content-Type: application/json
+
+{
+    "AlreadyisSignedIn": false
+
+}

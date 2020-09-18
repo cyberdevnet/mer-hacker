@@ -108,6 +108,20 @@ module.exports = function (app) {
     })
   );
   app.use(
+    "/node/post-AlreadyisSignedIn",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/node/get-AlreadyisSignedIn",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
     "/node/post-api-key",
     createProxyMiddleware({
       target: "http://127.0.0.1:3001",

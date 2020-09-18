@@ -273,6 +273,7 @@ def get_all_networks_subnets():
             for x in networks:
                 try:
                     networkId = x['id']
+                    networkName = x['name']
                     allVlans = dashboard.vlans.getNetworkVlans(networkId)
                     vlans.setdefault('result', [])
                     vlans['result'].append(
@@ -282,14 +283,14 @@ def get_all_networks_subnets():
                     continue
                 except meraki.APIError as err:
                     error = (err.message['errors'][0])
-                    print(error)
+                    print(error + ' ' + networkName)
                     continue
             print('script end')
             return(vlans)
     except meraki.APIError as err:
         print('Error: ', err)
         error = (err.message['errors'][0])
-        flash(error)
+        flash(error + ' ' + networkName)
         return {'error': [render_template('flash_template.html'), err.status]}
 
 

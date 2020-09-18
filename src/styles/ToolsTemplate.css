@@ -83,17 +83,29 @@
   margin-right: 10px;
 }
 
-
-
 .change-log__option.css-9gakcf-option {
   background-color: transparent;
   color: black;
 }
 .change-log__option.css-9gakcf-option:hover {
-  background-color: #DEEBFF;
+  background-color: #deebff;
   color: black;
 }
 
 /* .change-log__control.css-yk16xz-control:hover {
   border-color: hsl(0,0%,70%);
 } */
+
+.panel-debug {
+  height: 50px;
+  margin-bottom: 20px;
+  background-color: #fff;
+  border: 1px solid transparent;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}

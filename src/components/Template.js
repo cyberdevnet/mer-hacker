@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  NavLink,
-  useHistory,
-} from "react-router-dom";
+import { Switch, Route, NavLink, useHistory } from "react-router-dom";
 import History from "../History";
 import Select from "react-select";
 import ProtectedRoute from "../ProtectedRoute";
@@ -25,7 +19,6 @@ import SessionTimeout from "../SessionTimeout";
 import "../styles/Template.css";
 
 export default function Template(ac, dc) {
-  console.log("Template -> ac", ac);
   // eslint-disable-next-line
   const [navLinkStyle, setnavLinkStyle] = useState({ pointerEvents: "none" });
 
@@ -95,15 +88,14 @@ export default function Template(ac, dc) {
   let history = useHistory();
 
   const HandleTools = (opt) => {
-    console.log("HandleTools -> opt", opt);
     let number = opt.index + 1;
     ac.dc.setswitchMainTools(true);
+    ac.dc.settoolSelected(opt.label);
     ac.dc.setswitchAllTools({ [number]: true });
     history.push("/tools");
   };
 
   return (
-    // <Router>
     <div id="wrapper">
       <nav className="navbar navbar-default top-navbar" role="navigation">
         <div className="navbar-header">
@@ -215,9 +207,6 @@ export default function Template(ac, dc) {
                   onChange={HandleTools}
                   classNamePrefix="foo"
                 />
-                <NavLink exact to="tools" href="#null">
-                  <i className="fa fa-wrench"></i> Tools
-                </NavLink>
               </li>
             ) : (
               <li data-tip="Select Organization and Network">
@@ -231,9 +220,6 @@ export default function Template(ac, dc) {
                   classNamePrefix="foo"
                   isDisabled
                 />
-                <NavLink style={navLinkStyle} exact to="tools" href="#null">
-                  <i className="fa fa-wrench"></i> Tools
-                </NavLink>
               </li>
             )}
             {ac.dc.organizationID !== 0 && ac.dc.networkID !== 0 ? (
@@ -259,6 +245,7 @@ export default function Template(ac, dc) {
               </li>
             )}
           </ul>
+          {ac.dc.flashMessages}
         </div>
       </nav>
       <div id="page-wrapper">
@@ -324,6 +311,5 @@ export default function Template(ac, dc) {
         </Switch>
       </div>
     </div>
-    // </Router>
   );
 }

@@ -7,8 +7,6 @@ import $ from "jquery";
 import "../styles/Logout.css";
 
 export default function Logout(ac, props) {
-  console.log("Logout -> ac", ac);
-
   let history = useHistory();
 
   const deleteCookie = async () => {
@@ -56,6 +54,9 @@ export default function Logout(ac, props) {
     ac.sethideLogin({ display: "block" });
     axios.post("/node/delete_backupfile", {});
     axios.post("/flask/delete_debugfile", {});
+    axios.post("/node/post-AlreadyisSignedIn", {
+      AlreadyisSignedIn: false,
+    });
     // axios.post("/delete_debugfile", {}).then(res => console.log(res)).catch(error => console.log(error))
   };
 

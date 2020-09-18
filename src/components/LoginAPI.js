@@ -2,12 +2,14 @@ import React, { useEffect, useState, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import $ from "jquery";
 import axios from "axios";
-
 import "../styles/LoginAPI.css";
+import AlreadyisSignedInModal from "./AlreadyisSignedInModal";
 
 export default function LoginAPI(ac) {
   const [triggertryLogin, settriggertryLogin] = useState(0);
+  const [triggerAlreadyisSignedIn, settriggerAlreadyisSignedIn] = useState(0);
   const [loading, setloading] = useState(false);
+
   const [errorMessageLogin, seterrorMessageLogin] = useState(null);
 
   let history = useHistory();
@@ -54,12 +56,12 @@ export default function LoginAPI(ac) {
   };
 
   const handleLogin = () => {
-    settriggertryLogin(triggertryLogin + 1);
+    settriggerAlreadyisSignedIn(triggerAlreadyisSignedIn + 1);
   };
 
   const handleLoginEnter = (e) => {
     if (e.key === "Enter") {
-      settriggertryLogin(triggertryLogin + 1);
+      settriggerAlreadyisSignedIn(triggerAlreadyisSignedIn + 1);
     }
   };
 
@@ -68,6 +70,39 @@ export default function LoginAPI(ac) {
     organizationId: `${ac.organizationID}`,
     networkId: `${ac.networkID}`,
   });
+
+  const isFirstAlreadyisSignedIn = useRef(true);
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+    if (isFirstAlreadyisSignedIn.current) {
+      isFirstAlreadyisSignedIn.current = false;
+      return;
+    }
+    async function AlreadyisSignedIn() {
+      fetch("/node/get-AlreadyisSignedIn", { signal: signal })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          let response = data[0].AlreadyisSignedIn;
+
+          if (response === true) {
+            // deny login because another user is using the application
+            ac.setshowAlreadyisSignedInModal(true);
+          } else if (response === false) {
+            //no another user is using the application, trigger the real Login
+            settriggertryLogin(triggertryLogin + 1);
+          }
+        });
+    }
+    AlreadyisSignedIn();
+    return () => {
+      abortController.abort();
+    };
+    // eslint-disable-next-line
+  }, [triggerAlreadyisSignedIn]);
 
   //Authentication Request to Server
 
@@ -99,6 +134,9 @@ export default function LoginAPI(ac) {
             ac.setswitchLoggedIn(true);
             ac.setisSignedIn(res.data.signedIn);
             setloading(false);
+            axios.post("/node/post-AlreadyisSignedIn", {
+              AlreadyisSignedIn: true,
+            });
           } else {
             setloading(false);
             seterrorMessageLogin(
@@ -133,10 +171,15 @@ export default function LoginAPI(ac) {
     // eslint-disable-next-line
   }, [triggertryLogin]);
 
-  //style={ac.hideLogin}
+  let dc = { triggertryLogin, settriggertryLogin };
 
   return (
     <div style={ac.hideLogin} className="container register">
+      {ac.showAlreadyisSignedInModal ? (
+        <AlreadyisSignedInModal {...ac} dc={dc} />
+      ) : (
+        <div></div>
+      )}
       <div className="row">
         <div className="col-md-3 register-left">
           <img
@@ -164,10 +207,6 @@ export default function LoginAPI(ac) {
                         value={ac.User}
                         autoComplete="User"
                         onChange={(e) => setUser(e)}
-                        // onChange={e => ac.setUser(e.target.value)}
-                        // onKeyPress={!loading ? handleLoginEnter : null}
-                        // onSubmit={e => { e.preventDefault() }}
-                        // onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(e); handleLoginEnter() }}
                         onKeyDown={(e) => {
                           e.key === "Enter" && e.preventDefault(e);
                           handleLoginEnter(e);
@@ -187,11 +226,6 @@ export default function LoginAPI(ac) {
                         value={ac.Password}
                         autoComplete="Password"
                         onChange={(e) => setPass(e)}
-                        // onChange={e => ac.setPassword(e.target.value)}
-                        // onKeyPress={!loading ? handleLoginEnter : null}
-                        // onKeyDown={(event) => !loading ? handleLoginEnter(event) : null}
-                        // onSubmit={e => { e.preventDefault() }}
-                        // onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(e); handleLoginEnter(e) }}
                         onKeyDown={(e) => {
                           e.key === "Enter" && e.preventDefault(e);
                           handleLoginEnter(e);

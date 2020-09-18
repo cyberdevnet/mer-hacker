@@ -21,6 +21,14 @@ export default function GetAllOrganizationSubnets(ac) {
     settrigger(trigger + 1);
   };
 
+  // utility function to check if an object is empty
+  function isEmpty(obj) {
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) return false;
+    }
+    return true;
+  }
+
   const isFirstRun = useRef(true);
   useEffect(() => {
     const abortController = new AbortController();
@@ -56,38 +64,58 @@ export default function GetAllOrganizationSubnets(ac) {
             } else {
               ac.dc.setallVlanList(data.result);
 
-              let Vlanobjects = {};
-              let Nameobjects = {};
-              for (var x = 0; x < data.result.length; x++) {
-                Vlanobjects[x] = data.result[x].allVlans;
-                Nameobjects[x] = data.result[x].networkname;
+              if (isEmpty(data)) {
+                // Object is empty (Would return true in this example)
+                ac.dc.setflashMessages(
+                  <div className="form-input-error-msg alert alert-danger">
+                    <span className="glyphicon glyphicon-exclamation-sign"></span>
+                    VLANs are not enabled in this Organization
+                  </div>
+                );
+              } else {
+                // Object is NOT empty
+                let Vlanobjects = {};
+                let Nameobjects = {};
+
+                for (var x = 0; x < data.result.length; x++) {
+                  Vlanobjects[x] = data.result[x].allVlans;
+                  Nameobjects[x] = data.result[x].networkname;
+                }
+                const VLANS = Object.values(Vlanobjects);
+
+                let row = [];
+                // eslint-disable-next-line
+                VLANS.map((item) => {
+                  row.push(...item);
+                });
+
+                let row2 = [];
+                // eslint-disable-next-line
+                row.map((item) => {
+                  const name = [];
+                  // eslint-disable-next-line
+                  ac.dc.networkList.map((network) => {
+                    if (network.id === item.networkId) {
+                      name.push(network.name);
+                    }
+                  });
+
+                  var rowModel = [
+                    {
+                      Subnet: item.subnet,
+                      VlanID: item.id,
+                      VlanName: item.name,
+                      MX_IP: item.applianceIp,
+                      DNS: item.dnsNameservers,
+                      Network: name,
+                    },
+                  ];
+                  row2.push(...rowModel);
+                  setmapRows(row2);
+                });
+
+                setshowtable(true);
               }
-              const VLANS = Object.values(Vlanobjects);
-
-              let row = [];
-              // eslint-disable-next-line
-              VLANS.map((item) => {
-                row.push(...item);
-              });
-
-              let row2 = [];
-              // eslint-disable-next-line
-              row.map((item) => {
-                var rowModel = [
-                  {
-                    Subnet: item.subnet,
-                    VlanID: item.id,
-                    VlanName: item.name,
-                    MX_IP: item.applianceIp,
-                    DNS: item.dnsNameservers,
-                    Network: "Network ---",
-                  },
-                ];
-                row2.push(...rowModel);
-                setmapRows(row2);
-              });
-
-              setshowtable(true);
             }
           })
 

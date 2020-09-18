@@ -13,6 +13,7 @@ export default function SwitchPortTemplate(ac) {
   const [trigger, settrigger] = useState(0);
   const [loading, setloading] = useState(false);
   const [flashMessages, setflashMessages] = useState([]);
+  // eslint-disable-next-line
   const [inventory, setinventory] = useState([]);
   const [dataInventory, setdataInventory] = useState([]);
 
@@ -99,6 +100,7 @@ export default function SwitchPortTemplate(ac) {
                     date + "/" + month + "/" + year + " " + hour + ":" + min;
 
                   const name = [];
+                  // eslint-disable-next-line
                   ac.dc.networkList.map((network) => {
                     if (network.id === opt.networkId) {
                       name.push(network.name);

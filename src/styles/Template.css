@@ -78,6 +78,11 @@ a {
   background-color: hsl(0, 0%, 24%);
 }
 
+.foo__option.css-9gakcf-option {
+  background-color: transparent;
+  color: black;
+}
+
 .foo__control.foo__control--is-disabled.css-1fhf3k1-control {
   background-color: hsl(0, 0%, 24%);
 }

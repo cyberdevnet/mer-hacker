@@ -20,6 +20,7 @@ export default function Dashboard(ac) {
   const [mapRows, setmapRows] = useState([]);
   const [licenseState, setlicenseState] = useState([]);
   const [showLicense, setshowLicense] = useState(false);
+  // eslint-disable-next-line
   const [LicenceDevices, setLicenceDevices] = useState([]);
 
   // eslint-disable-next-line

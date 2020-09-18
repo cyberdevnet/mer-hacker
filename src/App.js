@@ -1,13 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import StatePersister from "./StatePersister";
 import Template from "./components/Template";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  NavLink,
-  useHistory,
-} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 
 const MainContext = React.createContext(null);
 
@@ -41,7 +35,6 @@ function App() {
   const [inputConfKey, setinputConfKey] = useState("");
   const [isLoggedIn, setisLoggedIn] = useState(false);
   const [isSignedIn, setisSignedIn] = useState(false);
-  console.log("App -> isSignedIn", isSignedIn);
   const [switchLoginAPI, setswitchLoginAPI] = useState(true);
   const [switchDashboard, setswitchDashboard] = useState(false);
   const [switchLoggedIn, setswitchLoggedIn] = useState(false);
@@ -68,12 +61,17 @@ function App() {
   const [isOrgSelected, setisOrgSelected] = useState(false);
   const [isNetSelected, setisNetSelected] = useState(false);
   const [flashMessages, setflashMessages] = useState([]);
+  console.log("App -> flashMessages", flashMessages);
   const [restoreScript, setrestoreScript] = useState("");
   const [showRestorescript, setshowRestorescript] = useState(false);
   const [collapseButton, setcollapseButton] = useState({ display: "none" });
   const [hideLogin, sethideLogin] = useState({ display: "block" });
   const [loadingOrg, setloadingOrg] = useState(false);
   const [loadingNet, setloadingNet] = useState(false);
+  const [toolSelected, settoolSelected] = useState(false);
+  const [showAlreadyisSignedInModal, setshowAlreadyisSignedInModal] = useState(
+    false
+  );
   const [switchAllTools, setswitchAllTools] = useState({
     1: false,
     2: false,
@@ -444,6 +442,10 @@ function App() {
     setloadingOrg,
     loadingNet,
     setloadingNet,
+    toolSelected,
+    settoolSelected,
+    showAlreadyisSignedInModal,
+    setshowAlreadyisSignedInModal,
   };
 
   return (

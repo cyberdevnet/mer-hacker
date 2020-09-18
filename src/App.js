@@ -61,7 +61,6 @@ function App() {
   const [isOrgSelected, setisOrgSelected] = useState(false);
   const [isNetSelected, setisNetSelected] = useState(false);
   const [flashMessages, setflashMessages] = useState([]);
-  console.log("App -> flashMessages", flashMessages);
   const [restoreScript, setrestoreScript] = useState("");
   const [showRestorescript, setshowRestorescript] = useState(false);
   const [collapseButton, setcollapseButton] = useState({ display: "none" });

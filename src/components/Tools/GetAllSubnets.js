@@ -38,7 +38,6 @@ export default function GetAllSubnets(ac) {
         fetch("/flask/vlans", { signal: signal })
           .then((res) => res.json())
           .then((data) => {
-            console.log("APIcall -> data", data);
             if (data.error) {
               ac.dc.setflashMessages(
                 <div className="form-input-error-msg alert alert-danger">

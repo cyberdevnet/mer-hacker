@@ -17,7 +17,6 @@ export default function NetworkTopUsers(ac) {
   // eslint-disable-next-line
   const [macAddressafterTransf, setmacAddressafterTransf] = useState("");
   const [switchTimeInterval, setswitchTimeInterval] = useState(15);
-  console.log("NetworkTopUsers -> switchTimeInterval", switchTimeInterval);
 
   const isFirstRunMAC = useRef(true);
   useEffect(() => {

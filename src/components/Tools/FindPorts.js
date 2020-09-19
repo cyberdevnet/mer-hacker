@@ -8,7 +8,9 @@ export default function NetworkTopUsers(ac) {
   const [triggerMAC, settriggerMAC] = useState(0);
   const [triggerIP, settriggerIP] = useState(0);
   const [findPort, setfindPort] = useState([]);
+  console.log("NetworkTopUsers -> findPort", findPort);
   const [findPortTable, setfindPortTable] = useState([]);
+  const [networkName, setnetworkName] = useState([]);
   const [errorMessageMAC, seterrorMessageMAC] = useState(null);
   const [errorMessageIP, seterrorMessageIP] = useState(null);
   const [errorMessageMAC_IP, seterrorMessageMAC_IP] = useState(null);
@@ -65,6 +67,7 @@ export default function NetworkTopUsers(ac) {
             })
               .then((response) => response.json())
               .then((data) => {
+                console.log("transormMacAddress -> data", data);
                 if (data.error) {
                   ac.dc.setflashMessages(
                     <div className="form-input-error-msg alert alert-danger">
@@ -191,8 +194,20 @@ export default function NetworkTopUsers(ac) {
       setshowError(true);
       setshowtable(false);
     } else {
+      const Networkname = [];
+      // eslint-disable-next-line
+      ac.dc.networkList.map((network) => {
+        if (network.id === findPort[6]) {
+          Networkname.push(network.name);
+        }
+      });
+
+      setnetworkName(Networkname);
+      console.log("NetworkTopUsers -> Networkname", Networkname);
+
       setfindPortTable(findPort);
     }
+    // eslint-disable-next-line
   }, [findPort]);
 
   const handleTopUsers = (e) => {
@@ -374,6 +389,7 @@ export default function NetworkTopUsers(ac) {
                         <th>IP Address</th>
                         <th>VLAN</th>
                         <th>MAC Address</th>
+                        <th>Network</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -386,6 +402,7 @@ export default function NetworkTopUsers(ac) {
                         <td>{findPortTable[3]}</td>
                         <td>{findPortTable[4]}</td>
                         <td>{findPortTable[5]}</td>
+                        <td>{networkName}</td>
                       </tr>
                     </tbody>
                   </table>

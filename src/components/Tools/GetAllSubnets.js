@@ -1,12 +1,23 @@
 import React, { useEffect, useState, useRef } from "react";
-import { CSVLink } from "react-csv";
-import { MDBDataTableV5 } from "mdbreact";
+import BootstrapTable from "react-bootstrap-table-next";
+import ToolkitProvider, {
+  Search,
+  CSVExport,
+} from "react-bootstrap-table2-toolkit";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css";
+import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
 
 export default function GetAllSubnets(ac) {
   const [showtable, setshowtable] = useState(false);
   const [trigger, settrigger] = useState(0);
   const [loading, setloading] = useState(false);
-  const [mapRows, setmapRows] = useState([]);
+  const [dataInventory, setdataInventory] = useState([]);
+
+  const { SearchBar } = Search;
+  const { ExportCSVButton } = CSVExport;
+
   // eslint-disable-next-line
   const APIbody = {
     "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
@@ -49,19 +60,21 @@ export default function GetAllSubnets(ac) {
               ac.dc.setvlanList(data.vlans);
 
               let row = [];
+              let deviceData = [];
               // eslint-disable-next-line
               data.vlans.map((item) => {
-                var rowModel = [
-                  {
-                    Subnet: item.subnet,
-                    VlanID: item.id,
-                    VlanName: item.name,
-                    MX_IP: item.applianceIp,
-                    DNS: item.dnsNameservers,
-                  },
-                ];
-                row.push(...rowModel);
-                setmapRows(row);
+                var rowModel = {
+                  subnet: item.subnet,
+                  id: item.id,
+                  name: item.name,
+                  network: ac.dc.network,
+                  applianceIp: item.applianceIp,
+                  dnsNameservers: item.dnsNameservers,
+                };
+
+                row.push(rowModel);
+                deviceData.push(rowModel);
+                setdataInventory({ ...columns, rows: row });
               });
             }
           })
@@ -79,7 +92,6 @@ export default function GetAllSubnets(ac) {
       abortController.abort();
       ac.dc.setflashMessages([]);
       ac.dc.setvlanList([]);
-      setmapRows([]);
       setshowtable(false);
     };
     // eslint-disable-next-line
@@ -90,44 +102,114 @@ export default function GetAllSubnets(ac) {
     settrigger(trigger + 1);
   };
 
-  const datatable = {
-    columns: [
+  const columns = [
+    {
+      dataField: "subnet",
+      text: "Subnet",
+      editable: false,
+      key: "subnet",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "id",
+      text: "VLAN ID",
+      editable: false,
+      key: "id",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "name",
+      text: "VLAN Name",
+      editable: false,
+      key: "name",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "network",
+      text: "Network",
+      editable: false,
+      key: "network",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "applianceIp",
+      text: "MX IP",
+      editable: false,
+      key: "applianceIp",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "dnsNameservers",
+      text: "DNS Servers",
+      editable: false,
+      key: "dnsNameservers",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+  ];
+
+  const Paginationoptions = {
+    paginationSize: 4,
+    pageStartIndex: 0,
+    // alwaysShowAllBtns: true, // Always show next and previous button
+    // withFirstAndLast: false, // Hide the going to First and Last page button
+    // hideSizePerPage: true, // Hide the sizePerPage dropdown always
+    // hidePageListOnlyOnePage: true, // Hide the pagination list when only one page
+    firstPageText: "First",
+    prePageText: "Back",
+    nextPageText: "Next",
+    lastPageText: "Last",
+    nextPageTitle: "First page",
+    prePageTitle: "Pre page",
+    firstPageTitle: "Next page",
+    lastPageTitle: "Last page",
+    showTotal: true,
+    disablePageTitle: true,
+    sizePerPageList: [
       {
-        label: "Subnet",
-        field: "Subnet",
-        width: 150,
-        attributes: {
-          "aria-controls": "DataTable",
-          "aria-label": "Description",
-        },
+        text: "5",
+        value: 5,
       },
       {
-        label: "VLAN ID",
-        field: "VlanID",
-        sort: "asc",
-        width: 270,
+        text: "10",
+        value: 10,
       },
       {
-        label: "VLAN Name",
-        field: "VlanName",
-        sort: "asc",
-        width: 200,
+        text: "25",
+        value: 25,
       },
       {
-        label: "MX IP",
-        field: "MX_IP",
-        sort: "asc",
-        width: 100,
+        text: "50",
+        value: 50,
       },
       {
-        label: "DNS Servers",
-        field: "DNS",
-        sort: "asc",
-        width: 100,
+        text: "100",
+        value: 100,
+      },
+      {
+        text: "All",
+        ...(showtable ? { value: dataInventory.rows.length } : { value: 100 }),
       },
     ],
-    rows: mapRows,
   };
+
   return (
     <div id="page-inner-main-templates">
       <div className="row">
@@ -180,14 +262,6 @@ export default function GetAllSubnets(ac) {
                 {loading && <span>Loading Data</span>}
                 {!loading && <span>RUN</span>}
               </button>
-
-              {/* <a
-                href="#null"
-                className="btn btn-primary"
-                // onClick={handleResults}
-              >
-                Show results
-              </a> */}
             </div>
           </div>
         </div>
@@ -197,20 +271,35 @@ export default function GetAllSubnets(ac) {
           <div className="panel panel-default">
             {showtable ? (
               <div className="panel-body">
-                <CSVLink data={mapRows} separator={";"}>
-                  Download cvs
-                </CSVLink>
-                <MDBDataTableV5
-                  hover
-                  entriesOptions={[10, 25, 50, 100]}
-                  entries={10}
-                  pagesAmount={10}
-                  data={datatable}
-                  pagingTop
-                  searchTop
-                  searchBottom={false}
-                  exportToCSV={true}
-                />
+                <div className="bootstrap-table-panel">
+                  <ToolkitProvider
+                    search
+                    keyField="subnet"
+                    data={dataInventory.rows}
+                    columns={columns}
+                  >
+                    {(props) => (
+                      <div>
+                        <SearchBar
+                          style={{ width: "299px" }}
+                          {...props.searchProps}
+                        />
+                        <ExportCSVButton
+                          className="export-csv"
+                          {...props.csvProps}
+                        >
+                          Export CSV
+                        </ExportCSVButton>
+                        <BootstrapTable
+                          {...props.baseProps}
+                          striped
+                          hover
+                          pagination={paginationFactory(Paginationoptions)}
+                        />
+                      </div>
+                    )}
+                  </ToolkitProvider>
+                </div>
               </div>
             ) : (
               <div></div>

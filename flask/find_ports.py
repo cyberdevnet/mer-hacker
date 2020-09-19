@@ -27,9 +27,8 @@ import meraki
 
 
 dirname = os.path.dirname(__file__)
-log_file = dirname +'/logs/log_file.log'
-error_file = dirname +'/logs/error_file.log'
-
+log_file = dirname + '/logs/log_file.log'
+error_file = dirname + '/logs/error_file.log'
 
 
 # Used in merakirequestthrottler() to avoid hitting dashboard API max request rate
@@ -67,8 +66,9 @@ def list_networks(api_key, org_id):
                                 'X-Cisco-Meraki-API-Key': api_key, 'Content-Type': 'application/json'})
         return json.loads(response.text)
     except requests.exceptions.RequestException as e:
-        print('Error calling list_networks: {}'.format(e),file=e)
+        print('Error calling list_networks: {}'.format(e), file=e)
     e.close()
+
 
 def get_inventory(api_key, org_id):
     e = open(error_file, 'w')
@@ -79,8 +79,9 @@ def get_inventory(api_key, org_id):
                                 'X-Cisco-Meraki-API-Key': api_key, 'Content-Type': 'application/json'})
         return json.loads(response.text)
     except requests.exceptions.RequestException as e:
-        print('Error calling get_inventory: {}'.format(e),file=e)
+        print('Error calling get_inventory: {}'.format(e), file=e)
     e.close()
+
 
 def list_switch_ports(api_key, serial):
     e = open(error_file, 'w')
@@ -91,8 +92,10 @@ def list_switch_ports(api_key, serial):
                                 'X-Cisco-Meraki-API-Key': api_key, 'Content-Type': 'application/json'})
         return json.loads(response.text)
     except requests.exceptions.RequestException as e:
-        print('Error calling list_switch_ports with serial number {}: {}'.format(serial, e),file=e)
+        print('Error calling list_switch_ports with serial number {}: {}'.format(
+            serial, e), file=e)
     e.close()
+
 
 def get_port_details(api_key, serial, number):
     e = open(error_file, 'w')
@@ -104,8 +107,9 @@ def get_port_details(api_key, serial, number):
         return json.loads(response.text)
     except requests.exceptions.RequestException as e:
         print('Error calling get_port_details with serial {} and port {}: {}'.format(
-            serial, number, e),file=e)
+            serial, number, e), file=e)
     e.close()
+
 
 def update_switch_port(api_key, serial, number, data):
     e = open(error_file, 'w')
@@ -117,8 +121,9 @@ def update_switch_port(api_key, serial, number, data):
         return json.loads(response.text)
     except requests.exceptions.RequestException as e:
         print('Error calling update_switch_port with serial {}, port {}, and data {}: {}'.format(
-            serial, number, data, e),file=e)
+            serial, number, data, e), file=e)
     e.close()
+
 
 def list_clients(api_key, serial, TIME_SPAN):  # timestamp in seconds
     e = open(error_file, 'w')
@@ -129,7 +134,8 @@ def list_clients(api_key, serial, TIME_SPAN):  # timestamp in seconds
                                 'X-Cisco-Meraki-API-Key': api_key, 'Content-Type': 'application/json'})
         return json.loads(response.text)
     except requests.exceptions.RequestException as e:
-        print('Error calling list_clients with serial {}: {}'.format(serial, e),file=e)
+        print('Error calling list_clients with serial {}: {}'.format(
+            serial, e), file=e)
     e.close()
 
 
@@ -151,7 +157,6 @@ def find_ports(API_KEY, ORG_ID, MAC_ADDR, IP_ADDR, TIME_SPAN):
     print('Found a total of %d switches configured across %d networks in this organization.' % (
         len(switches), len(switch_networks)), file=f)
 
-
     # Find all ports with search parameter
     if MAC_ADDR != '':
 
@@ -164,6 +169,8 @@ def find_ports(API_KEY, ORG_ID, MAC_ADDR, IP_ADDR, TIME_SPAN):
 
         # Find all clients per switch that match list
         for switch in switches:
+
+            networkId = switch['networkId']
             # Find clients that were connected in last 15 minutes
             clients = list_clients(API_KEY, switch['serial'], 60 * TIME_SPAN)
 
@@ -209,8 +216,9 @@ def find_ports(API_KEY, ORG_ID, MAC_ADDR, IP_ADDR, TIME_SPAN):
                     findport[0].port = port
                     print('- on port %s, found %d matches' %
                           (port, matched_ports[port]))
-                return (findport[0].switch, findport[0].port, findport[0].description, findport[0].ip, findport[0].vlan, findport[0].mac)
-        print('Found %d total ports matching search criteria.' % (tally_ports), file=f)
+                return (findport[0].switch, findport[0].port, findport[0].description, findport[0].ip, findport[0].vlan, findport[0].mac, networkId)
+        print('Found %d total ports matching search criteria.' %
+              (tally_ports), file=f)
 
     elif IP_ADDR != '':
 
@@ -218,6 +226,9 @@ def find_ports(API_KEY, ORG_ID, MAC_ADDR, IP_ADDR, TIME_SPAN):
 
         # Find all clients per switch that match list
         for switch in switches:
+
+            networkId = switch['networkId']
+
             # Find clients that were connected in last 15 minutes
             clients = list_clients(API_KEY, switch['serial'], 60 * TIME_SPAN)
 
@@ -234,9 +245,8 @@ def find_ports(API_KEY, ORG_ID, MAC_ADDR, IP_ADDR, TIME_SPAN):
             try:
                 if clients_ips != None and IP_ADDR != None:
                     matches = [s for s in clients_ips if IP_ADDR in s]
-                    print(matches)
             except:
-                print('error',file=e)
+                print('error', file=e)
 
             # Find ports of matched clients
             findport = []
@@ -260,14 +270,15 @@ def find_ports(API_KEY, ORG_ID, MAC_ADDR, IP_ADDR, TIME_SPAN):
                 findport.append(c_Findport())
                 findport[0].switch = switch['name']
                 print('Found %d matched IP addresses on switch %s' %
-                      (len(matches), switch['serial']),file=f)
+                      (len(matches), switch['serial']), file=f)
                 tally_ports += len(matched_ports.keys())
                 for port in matched_ports.keys():
                     findport.append(c_Findport())
                     findport[0].port = port
                     print('- on port %s, found %d matches' %
                           (port, matched_ports[port]))
-                return (findport[0].switch, findport[0].port, findport[0].description, findport[0].ip, findport[0].vlan, findport[0].mac)
-        print('Found %d total ports matching search criteria.' % (tally_ports),file=f)
+                return (findport[0].switch, findport[0].port, findport[0].description, findport[0].ip, findport[0].vlan, findport[0].mac, networkId)
+        print('Found %d total ports matching search criteria.' %
+              (tally_ports), file=f)
     f.close()
     e.close()

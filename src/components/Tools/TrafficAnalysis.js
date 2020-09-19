@@ -1,16 +1,27 @@
 import React, { useEffect, useState, useRef } from "react";
-import { CSVLink } from "react-csv";
-import { MDBDataTableV5 } from "mdbreact";
+import BootstrapTable from "react-bootstrap-table-next";
+import ToolkitProvider, {
+  Search,
+  CSVExport,
+} from "react-bootstrap-table2-toolkit";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css";
+import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
+import Select from "react-select";
 
 export default function TrafficAnalysis(ac) {
   const [showtable, setshowtable] = useState(false);
   const [trigger, settrigger] = useState(0);
-  const [mapROW1, setmapROW1] = useState([]);
   const [switchTimeInterval, setswitchTimeInterval] = useState(7200);
   const [switchDeviceType, setswitchDeviceType] = useState("combined");
   // eslint-disable-next-line
   const [netwanalysis, setnetwanalysis] = useState([]);
-  // const [errorMessage, seterrorMessage] = useState(null);
+  const [dataInventory, setdataInventory] = useState([]);
+  console.log("TrafficAnalysis -> dataInventory", dataInventory);
+
+  const { SearchBar } = Search;
+  const { ExportCSVButton } = CSVExport;
 
   const APIbody2 = {
     "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
@@ -19,32 +30,53 @@ export default function TrafficAnalysis(ac) {
     TIME_SPAN: switchTimeInterval,
   };
 
-  const selectTimeInterval = () => {
-    let selectBox = document.getElementById("selectBox-find-time-span");
-    let selectedValue = selectBox.options[selectBox.selectedIndex].value;
-    if (selectedValue === "1") {
+  const time_interval = [
+    { time: "2 hours", seconds: 7200 },
+    { time: "8 hours", seconds: 28800 },
+    { time: "1 day", seconds: 86400 },
+    { time: "7 days", seconds: 604800 },
+    { time: "1 month", seconds: 2592000 },
+  ];
+
+  const TIMEINTERVAL = time_interval.map((opt, index) => ({
+    label: opt.time,
+    index: index,
+  }));
+
+  const selectTimeInterval = (opt) => {
+    if (opt === null) {
       setswitchTimeInterval(7200);
-    } else if (selectedValue === "2") {
+    } else if (opt.index === 1) {
       setswitchTimeInterval(28800);
-    } else if (selectedValue === "3") {
+    } else if (opt.index === 2) {
       setswitchTimeInterval(86400);
-    } else if (selectedValue === "4") {
+    } else if (opt.index === 3) {
       setswitchTimeInterval(604800);
-    } else if (selectedValue === "5") {
+    } else if (opt.index === 4) {
       setswitchTimeInterval(2592000);
     }
   };
 
-  const selectDeviceType = () => {
-    let selectBox = document.getElementById("selectBox-find-device-type");
-    let selectedValue = selectBox.options[selectBox.selectedIndex].value;
-    if (selectedValue === "1") {
+  const device_type = [
+    { device: "Combined" },
+    { device: "Wireless" },
+    { device: "Switch" },
+    { device: "Appliance" },
+  ];
+
+  const DEVICETYPE = device_type.map((opt, index) => ({
+    label: opt.device,
+    index: index,
+  }));
+
+  const selectDeviceType = (opt) => {
+    if (opt === null) {
       setswitchDeviceType("combined");
-    } else if (selectedValue === "2") {
+    } else if (opt.index === 1) {
       setswitchDeviceType("wireless");
-    } else if (selectedValue === "3") {
+    } else if (opt.index === 2) {
       setswitchDeviceType("switch");
-    } else if (selectedValue === "4") {
+    } else if (opt.index === 3) {
       setswitchDeviceType("appliance");
     }
   };
@@ -90,7 +122,9 @@ export default function TrafficAnalysis(ac) {
               })
 
               .then((data) => {
+                console.log("APIcall -> data", data);
                 if (data.error) {
+                  setshowtable(false);
                   ac.dc.setflashMessages(
                     <div className="form-input-error-msg alert alert-danger">
                       <span className="glyphicon glyphicon-exclamation-sign"></span>
@@ -98,40 +132,39 @@ export default function TrafficAnalysis(ac) {
                     </div>
                   );
                   ac.dc.setloadingButton(false);
-                  setshowtable(false);
                 } else {
                   setnetwanalysis(data.analysis);
 
-                  let R_obj1 = {};
-                  for (var x = 0; x < data.analysis.length; x++) {
-                    R_obj1[x] = data.analysis[x];
-                  }
-
-                  const ROW1 = Object.values(R_obj1);
-
                   let R1 = [];
+                  let deviceData = [];
                   // eslint-disable-next-line
-                  ROW1.map((item) => {
-                    var rowModel = [
-                      {
-                        application: item.application,
-                        destination: item.destination,
-                        protocol: item.protocol,
-                        port: item.port,
-                        sent: item.sent,
-                        recv: item.recv,
-                        flows: item.flows,
-                        activeTime: item.activeTime,
-                        numClients: item.numClients,
-                      },
-                    ];
-                    R1.push(...rowModel);
-                    setmapROW1(R1);
-                  }).then(() => {
-                    setshowtable(true);
-                    ac.dc.setloadingButton(false);
+                  data.analysis.map((item) => {
+                    let randomKey = Math.random().toString(36).substring(2, 15);
+
+                    var rowModel = {
+                      application: item.application,
+                      destination: item.destination,
+                      protocol: item.protocol,
+                      port: item.port,
+                      sent: item.sent,
+                      recv: item.recv,
+                      flows: item.flows,
+                      activeTime: item.activeTime,
+                      numClients: item.numClients,
+                      key: randomKey,
+                    };
+
+                    R1.push(rowModel);
+                    deviceData.push(rowModel);
+                    setdataInventory({ ...columns, rows: R1 });
                   });
                 }
+              })
+              .then(() => {
+                if (dataInventory.length !== 0) {
+                  setshowtable(true);
+                }
+                ac.dc.setloadingButton(false);
               });
           } catch (err) {
             if (err) {
@@ -152,7 +185,6 @@ export default function TrafficAnalysis(ac) {
     return () => {
       abortController.abort();
       setnetwanalysis([]);
-      setmapROW1([]);
       setshowtable(false);
       ac.dc.setflashMessages(null);
       ac.dc.setloadingButton(false);
@@ -160,70 +192,156 @@ export default function TrafficAnalysis(ac) {
     // eslint-disable-next-line
   }, [trigger]);
 
-  const datatable_10 = {
-    columns: [
-      {
-        label: "Application",
-        field: "application",
-        sort: "asc",
-        width: 270,
+  const columns = [
+    {
+      dataField: "application",
+      text: "Application",
+      editable: false,
+      key: "application",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
       },
+    },
+    {
+      dataField: "destination",
+      text: "Destination",
+      editable: false,
+      key: "destination",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "protocol",
+      text: "Protocol",
+      editable: false,
+      key: "protocol",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "port",
+      text: "Port",
+      editable: false,
+      key: "port",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "sent",
+      text: "Sent (Kb)",
+      editable: false,
+      key: "sent",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "recv",
+      text: "Received (Kb)",
+      editable: false,
+      key: "recv",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "flows",
+      text: "Flows",
+      editable: false,
+      key: "flows",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "activeTime",
+      text: "Active Time (sec)",
+      editable: false,
+      key: "activeTime",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "numClients",
+      text: "Clients",
+      editable: false,
+      key: "numClients",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "key",
+      text: "key",
+      editable: false,
+      hidden: "true",
+    },
+  ];
 
+  const Paginationoptions = {
+    paginationSize: 4,
+    pageStartIndex: 0,
+    // alwaysShowAllBtns: true, // Always show next and previous button
+    // withFirstAndLast: false, // Hide the going to First and Last page button
+    // hideSizePerPage: true, // Hide the sizePerPage dropdown always
+    // hidePageListOnlyOnePage: true, // Hide the pagination list when only one page
+    firstPageText: "First",
+    prePageText: "Back",
+    nextPageText: "Next",
+    lastPageText: "Last",
+    nextPageTitle: "First page",
+    prePageTitle: "Pre page",
+    firstPageTitle: "Next page",
+    lastPageTitle: "Last page",
+    showTotal: true,
+    disablePageTitle: true,
+    sizePerPageList: [
       {
-        label: "Destination",
-        field: "destination",
-        sort: "asc",
-        width: 200,
+        text: "10",
+        value: 10,
       },
       {
-        label: "Protocol",
-        field: "protocol",
-        sort: "asc",
-        width: 100,
+        text: "25",
+        value: 25,
       },
       {
-        label: "Port",
-        field: "port",
-        sort: "asc",
-        width: 100,
+        text: "50",
+        value: 50,
       },
       {
-        label: "Sent (Kb)",
-        field: "sent",
-        sort: "asc",
-        width: 100,
-      },
-
-      {
-        label: "Received (Kb)",
-        field: "recv",
-        sort: "asc",
-        width: 100,
+        text: "100",
+        value: 100,
       },
       {
-        label: "Flows",
-        field: "flows",
-        sort: "asc",
-        width: 100,
+        text: "250",
+        value: 250,
       },
       {
-        label: "Active Time (sec)",
-        field: "activeTime",
-        width: 150,
-        attributes: {
-          "aria-controls": "DataTable",
-          "aria-label": "Description",
-        },
+        text: "500",
+        value: 500,
       },
-
       {
-        label: "Clients",
-        field: "numClients",
-        sort: "asc",
-        width: 100,
+        text: "1000",
+        value: 1000,
+      },
+      {
+        text: "All",
+        ...(showtable ? { value: dataInventory.rows.length } : { value: 100 }),
       },
     ],
-    rows: mapROW1,
   };
 
   return (
@@ -270,41 +388,26 @@ export default function TrafficAnalysis(ac) {
             <div className="panel-body">
               <form className="form-inline">
                 <div className="form-group">
-                  <select
+                  <Select
+                    className="select_network_change-log"
+                    options={TIMEINTERVAL}
+                    placeholder="Select Interval"
                     onChange={selectTimeInterval}
-                    id="selectBox-find-time-span"
-                    className="btn btn-default dropdown-toggle-tools-findports"
-                  >
-                    <optgroup>
-                      <option className="option-tools-disabled" value="0">
-                        Select Time Interval
-                      </option>
-                      <option value="1">2 Hour</option>
-                      <option value="2">8 Hours</option>
-                      <option value="3">1 Day</option>
-                      <option value="4">7 Days</option>
-                      <option value="5">1 Month</option>
-                    </optgroup>
-                  </select>
-                  <select
+                    classNamePrefix="time-interval"
+                    isClearable={true}
+                  />
+                </div>
+                <div className="form-group">
+                  <Select
+                    className="select_network_change-log"
+                    options={DEVICETYPE}
+                    placeholder="Device type"
                     onChange={selectDeviceType}
-                    id="selectBox-find-device-type"
-                    className="btn btn-default dropdown-toggle-tools-findports"
-                  >
-                    <optgroup>
-                      <option className="option-tools-disabled" value="0">
-                        Select Device Type
-                      </option>
-                      <option value="1">Combined</option>
-                      <option value="2">Wireless</option>
-                      <option value="3">Switch</option>
-                      <option value="4">Appliance</option>
-                    </optgroup>
-                  </select>
+                    classNamePrefix="time-interval"
+                    isClearable={true}
+                  />
                 </div>
               </form>
-
-              {/* <div>{errorMessage && <span>{errorMessage}</span>}</div> */}
               <button
                 id="runButton"
                 className="btn btn-primary"
@@ -330,21 +433,35 @@ export default function TrafficAnalysis(ac) {
             {showtable ? (
               <div>
                 <div className="panel-body">
-                  <CSVLink data={mapROW1} separator={";"}>
-                    Download cvs
-                  </CSVLink>
-                  ;
-                  <MDBDataTableV5
-                    hover
-                    entriesOptions={[10, 25, 100, 250, 500, 1000, 2000]}
-                    entries={25}
-                    pagesAmount={1000}
-                    data={datatable_10}
-                    pagingTop
-                    searchTop
-                    searchBottom={false}
-                    exportToCSV={true}
-                  />
+                  <div className="bootstrap-table-panel">
+                    <ToolkitProvider
+                      search
+                      keyField="key"
+                      data={dataInventory.rows}
+                      columns={columns}
+                    >
+                      {(props) => (
+                        <div>
+                          <SearchBar
+                            style={{ width: "299px" }}
+                            {...props.searchProps}
+                          />
+                          <ExportCSVButton
+                            className="export-csv"
+                            {...props.csvProps}
+                          >
+                            Export CSV
+                          </ExportCSVButton>
+                          <BootstrapTable
+                            {...props.baseProps}
+                            striped
+                            hover
+                            pagination={paginationFactory(Paginationoptions)}
+                          />
+                        </div>
+                      )}
+                    </ToolkitProvider>
+                  </div>
                 </div>
               </div>
             ) : (

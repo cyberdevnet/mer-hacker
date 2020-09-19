@@ -1,15 +1,24 @@
 import React, { useEffect, useState, useRef } from "react";
-import { CSVLink } from "react-csv";
-import { MDBDataTableV5 } from "mdbreact";
+import BootstrapTable from "react-bootstrap-table-next";
+import ToolkitProvider, {
+  Search,
+  CSVExport,
+} from "react-bootstrap-table2-toolkit";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css";
+import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
 
 export default function GetAllDevicesIP(ac) {
   const [showtable, setshowtable] = useState(false);
   const [trigger, settrigger] = useState(0);
   const [loading, setloading] = useState(false);
-  const [mapRows, setmapRows] = useState([]);
+  const [dataInventory, setdataInventory] = useState([]);
+
+  const { SearchBar } = Search;
+  const { ExportCSVButton } = CSVExport;
 
   // eslint-disable-next-line
-
   const APIbody = {
     "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
     organizationId: `${ac.dc.organizationID}`,
@@ -50,22 +59,24 @@ export default function GetAllDevicesIP(ac) {
             } else {
               ac.dc.setclientList(data.devices);
 
+              let deviceData = [];
               let row = [];
               // eslint-disable-next-line
               data.devices.map((item) => {
-                var rowModel = [
-                  {
-                    Description: item.name,
-                    Model: item.model,
-                    LAN_IP_address: item.lanIp,
-                    MAC_address: item.mac,
-                    WAN_1_IP: item.wan1Ip,
-                    WAN_2_IP: item.wan2Ip,
-                    Serial: item.serial,
-                  },
-                ];
-                row.push(...rowModel);
-                setmapRows(row);
+                var rowModel = {
+                  name: item.name,
+                  model: item.model,
+                  lanIp: item.lanIp,
+                  network: ac.dc.network,
+                  mac: item.mac,
+                  wan1Ip: item.wan1Ip,
+                  wan2Ip: item.wan2Ip,
+                  serial: item.serial,
+                };
+
+                row.push(rowModel);
+                deviceData.push(rowModel);
+                setdataInventory({ ...columns, rows: row });
               });
             }
           })
@@ -83,7 +94,6 @@ export default function GetAllDevicesIP(ac) {
     return () => {
       abortController.abort();
       ac.dc.setclientList([]);
-      setmapRows([]);
       setshowtable(false);
     };
     // eslint-disable-next-line
@@ -94,55 +104,132 @@ export default function GetAllDevicesIP(ac) {
     settrigger(trigger + 1);
   };
 
-  const datatable = {
-    columns: [
+  const columns = [
+    {
+      dataField: "name",
+      text: "Description",
+      editable: false,
+      key: "name",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "model",
+      text: "Model",
+      editable: false,
+      key: "model",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "lanIp",
+      text: "LAN IP address",
+      editable: false,
+      key: "lanIp",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "network",
+      text: "Network",
+      editable: false,
+      key: "network",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "wan1Ip",
+      text: "WAN 1 IP",
+      editable: false,
+      key: "wan1Ip",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "wan2Ip",
+      text: "WAN 2 IP",
+      editable: false,
+      key: "wan2Ip",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "mac",
+      text: "MAC Adress",
+      editable: false,
+      key: "mac",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "serial",
+      text: "Serial",
+      editable: false,
+      key: "serial",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+  ];
+
+  const Paginationoptions = {
+    paginationSize: 4,
+    pageStartIndex: 0,
+    // alwaysShowAllBtns: true, // Always show next and previous button
+    // withFirstAndLast: false, // Hide the going to First and Last page button
+    // hideSizePerPage: true, // Hide the sizePerPage dropdown always
+    // hidePageListOnlyOnePage: true, // Hide the pagination list when only one page
+    firstPageText: "First",
+    prePageText: "Back",
+    nextPageText: "Next",
+    lastPageText: "Last",
+    nextPageTitle: "First page",
+    prePageTitle: "Pre page",
+    firstPageTitle: "Next page",
+    lastPageTitle: "Last page",
+    showTotal: true,
+    disablePageTitle: true,
+    sizePerPageList: [
       {
-        label: "Description",
-        field: "Description",
-        width: 150,
-        attributes: {
-          "aria-controls": "DataTable",
-          "aria-label": "Description",
-        },
+        text: "5",
+        value: 5,
       },
       {
-        label: "Model",
-        field: "Model",
-        sort: "asc",
-        width: 270,
+        text: "10",
+        value: 10,
       },
       {
-        label: "LAN IP address",
-        field: "LAN_IP_address",
-        sort: "asc",
-        width: 200,
+        text: "25",
+        value: 25,
       },
       {
-        label: "MAC address",
-        field: "MAC_address",
-        sort: "asc",
-        width: 100,
+        text: "50",
+        value: 50,
       },
       {
-        label: "WAN 1 IP",
-        field: "WAN_1_IP",
-        sort: "asc",
-        width: 150,
+        text: "100",
+        value: 100,
       },
       {
-        label: "WAN 2 IP",
-        field: "WAN 2 IP",
-        sort: "asc",
-        width: 100,
-      },
-      {
-        label: "Serial",
-        field: "Serial",
-        sort: "asc",
-        width: 100,
+        text: "All",
+        ...(showtable ? { value: dataInventory.rows.length } : { value: 100 }),
       },
     ],
-    rows: mapRows,
   };
 
   return (
@@ -192,14 +279,6 @@ export default function GetAllDevicesIP(ac) {
                 {loading && <span>Loading Data</span>}
                 {!loading && <span>RUN</span>}
               </button>
-
-              {/* <a
-                href="#null"
-                className="btn btn-primary"
-                // onClick={handleResults}
-              >
-                Show results
-              </a> */}
             </div>
           </div>
         </div>
@@ -208,21 +287,36 @@ export default function GetAllDevicesIP(ac) {
         <div className="col-xs-12">
           <div className="panel panel-default">
             {showtable ? (
-              <div className="panel-body">
-                <CSVLink data={mapRows} separator={";"}>
-                  Download cvs
-                </CSVLink>
-                <MDBDataTableV5
-                  hover
-                  entriesOptions={[10, 25, 50, 100]}
-                  entries={10}
-                  pagesAmount={10}
-                  data={datatable}
-                  pagingTop
-                  searchTop
-                  searchBottom={false}
-                  exportToCSV={true}
-                />
+              <div>
+                <div className="bootstrap-table-panel">
+                  <ToolkitProvider
+                    search
+                    keyField="mac"
+                    data={dataInventory.rows}
+                    columns={columns}
+                  >
+                    {(props) => (
+                      <div>
+                        <SearchBar
+                          style={{ width: "299px" }}
+                          {...props.searchProps}
+                        />
+                        <ExportCSVButton
+                          className="export-csv"
+                          {...props.csvProps}
+                        >
+                          Export CSV
+                        </ExportCSVButton>
+                        <BootstrapTable
+                          {...props.baseProps}
+                          striped
+                          hover
+                          pagination={paginationFactory(Paginationoptions)}
+                        />
+                      </div>
+                    )}
+                  </ToolkitProvider>
+                </div>
               </div>
             ) : (
               <div></div>

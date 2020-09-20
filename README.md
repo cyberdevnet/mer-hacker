@@ -18,15 +18,11 @@
 </p>
 
 ## Description
-<<<<<<< HEAD
 
-=======
->>>>>>> 01dc08ea35b73dee0b9315c2a2a0f1459c8e95ef
 Mer-hacker is a troubleshoting and configuration application for Meraki organizations, useful for daily basis repetitive tasks.
 Most of the functions available are custom and not present in the Meraki dashboard.
 The goal of mer-hacker is to simplify some troubleshooting and configuration tasks
 
-<<<<<<< HEAD
 ## Tools
 
 - Get all devices IPs
@@ -56,47 +52,12 @@ The goal of mer-hacker is to simplify some troubleshooting and configuration tas
 
 - Network Analysis
 
-=======
-
-
-## Tools
-
-* Get all devices IPs
-  - This scripts returns all the IPs, serial-numbers and models of all devices assigned to the selected network.
-  
-* Get all subnets
-  - This scripts returns all VLANs configured in a network.
-  - The script works only on MX and Z3 devices, does not work on VPN HUBs, the network must be reachable in the Meraki Dashboard.
-  
-* Get all Organization subnets
-  - This script iterates through all networks in an organization and returns all the subnets and VLANs associated with every network.
-  - The script works only on MX and Z3 devices, does not work on VPN HUBs, the network must be reachable in the Meraki Dashboard.
-
-* Get all Clients
-  - This scripts returns all the clients active in the last 1 hour on a network.
-
-* Get all SwitchPorts
-  - This scripts returns all the Switchports of a selected Switch.
-  
-* Network Top Users Report
-  - This script finds the top 10 heaviest bandwidth users of an MX security appliance in the last 10, 30 and 60 minutes.
-
-* Find Port
-  - This script finds the switch and ports where a clients is connected, searching either by clients MAC address or IP address.
-  - This script works only on MS-series switch.
-
-* Network Analysis
->>>>>>> 01dc08ea35b73dee0b9315c2a2a0f1459c8e95ef
   - This script aggregates all of the detected applications for a given time frame or device type.
   - Time frame options for hourly, weekly, daily and monthly are available.
   - Device type options for combined, switch, wireless and appliance are available.
 
-<<<<<<< HEAD
 - Backup & Restore
 
-=======
-* Backup & Restore
->>>>>>> 01dc08ea35b73dee0b9315c2a2a0f1459c8e95ef
   - This script makes a snapshot of a network and creates a downloadable python file used to restore the configuration.
   - The configuration will be restored creating a new network with name "your-new-network-restore"
   - Since the Switchs configuration is lost when a device is moved to another network, the backup process must be run in two steps.
@@ -110,14 +71,9 @@ The goal of mer-hacker is to simplify some troubleshooting and configuration tas
 
   - Note that the Restore will not overwrite existing networks but creates a new one.
   - The script can be modified before the Restore process (basic knowledge of python required).
-<<<<<<< HEAD
 
 - Migrate Tool
 
-=======
-  
-* Migrate Tool
->>>>>>> 01dc08ea35b73dee0b9315c2a2a0f1459c8e95ef
   - This script converts a cisco running-config into a Meraki Switch-Port configuration and creates a downloadable python file used to push the new switchport configuration.
   - Before to convert and push the configuration be sure to:
 
@@ -134,14 +90,9 @@ The goal of mer-hacker is to simplify some troubleshooting and configuration tas
     - Download the script(optional).
     - Push the configuration to the meraki Switch
     - Go to your Meraki dashboard and check if the configuration is successfully uploaded
-<<<<<<< HEAD
 
 - Switchport Templates
 
-=======
-  
-* Switchport Templates
->>>>>>> 01dc08ea35b73dee0b9315c2a2a0f1459c8e95ef
   - This tool is useful when no Meraki template are in use or you want to ovveride the switchport configuration.
   - You can create a set of Switchport Templates and save/modify it for later use.
     - Insert the serial number or a list of comma-separated serial-numbers
@@ -154,7 +105,6 @@ The goal of mer-hacker is to simplify some troubleshooting and configuration tas
     - Go to your Meraki dashboard and check if the configuration is successfully uploaded
   - Please note: There's currently a bug in the APi preventing the StormControl configuration
 
-<<<<<<< HEAD
 - Change log
   - This scripts returns all changes have been made in an organization.
     - You can filter the result based on Administrator, specific network or time Interval (default 1 week)
@@ -172,23 +122,6 @@ The goal of mer-hacker is to simplify some troubleshooting and configuration tas
 
 ## Related
 
-=======
-* Change log
-  - This scripts returns all changes have been made in an organization. 
-    - You can filter the result based on Administrator, specific network or time Interval (default 1 week)
-    - Click on a row to display the change details
-* Inventory
-  - This scripts returns the inventory for the selected organization.
-
-  
-## How To Use
-* Instruction:
-  - To run Mer-hacker on your server you need:
-     - Detailed instruction WIP
-    
-## Credits
-## Related
->>>>>>> 01dc08ea35b73dee0b9315c2a2a0f1459c8e95ef
 ## License
 
 MIT License
@@ -200,8 +133,3 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-<<<<<<< HEAD
-=======
-
-  
->>>>>>> 01dc08ea35b73dee0b9315c2a2a0f1459c8e95ef

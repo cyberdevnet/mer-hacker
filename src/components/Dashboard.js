@@ -11,17 +11,19 @@ import {
   VictoryLabel,
   VictoryTooltip,
 } from "victory";
-
-// import Template from './Template'
 import "../styles/Dashboard.css";
+// import "@fortawesome/fontawesome-free/css/all.min.css";
+// import "bootstrap-css-only/css/bootstrap.min.css";
 
 export default function Dashboard(ac) {
-  const [showtable, setshowtable] = useState(true);
+  const [showtable, setshowtable] = useState(false);
   const [mapRows, setmapRows] = useState([]);
   const [licenseState, setlicenseState] = useState([]);
   const [showLicense, setshowLicense] = useState(false);
   // eslint-disable-next-line
   const [LicenceDevices, setLicenceDevices] = useState([]);
+  const [pagination, setpagination] = useState(false);
+  const [fullPagination, setfullPagination] = useState(false);
 
   // eslint-disable-next-line
   const [deviceStatusData, setdeviceStatusData] = useState([
@@ -146,7 +148,9 @@ export default function Dashboard(ac) {
     const abortController = new AbortController();
     const signal = abortController.signal;
     async function callDeviceStatus() {
-      if (ac.organizationID !== 0) {
+      if (ac.organizationID !== 0 && ac.networkID !== 0) {
+        setpagination(false);
+        setfullPagination(false);
         try {
           fetch("/flask/device_status", {
             method: ["POST"],
@@ -172,56 +176,28 @@ export default function Dashboard(ac) {
                 ac.setdeviceStatusList(data.deviceStatus);
                 ac.settotaldeviceStatusList(data.deviceStatus.length);
 
-                let DeviceStatusobjects = {};
-                let DeviceListobjects = {};
-                for (var x = 0; x < data.deviceStatus.length; x++) {
-                  DeviceStatusobjects[x] = data.deviceStatus[x].status;
-                  DeviceListobjects[x] = data.deviceStatus[x];
+                if (data.deviceStatus.length > 25) {
+                  setpagination(true);
+                  setfullPagination(true);
                 }
-                const DEVICEOBJ = Object.values(DeviceStatusobjects);
-                const DEVICELISTOBJ = Object.values(DeviceListobjects);
-
-                let OnlineObj = [];
-                let OfflineObj = [];
-                let AlertingObj = [];
-                for (var y = 0; y < data.deviceStatus.length; y++) {
-                  if (DEVICEOBJ[y] === "online") {
-                    OnlineObj.push(DEVICEOBJ[y]);
-                  } else if (DEVICEOBJ[y] === "offline") {
-                    OfflineObj.push(DEVICEOBJ[y]);
-                  } else if (DEVICEOBJ[y] === "alerting") {
-                    AlertingObj.push(DEVICEOBJ[y]);
-                  }
-                }
-
-                //Find index of specific object using findIndex method.
-                const objID1 = deviceStatusData.findIndex(
-                  (obj) => obj.id === 1
-                );
-                const objID2 = deviceStatusData.findIndex(
-                  (obj) => obj.id === 2
-                );
-                const objID3 = deviceStatusData.findIndex(
-                  (obj) => obj.id === 3
-                );
-
-                //Update object's count property.
-                deviceStatusData[objID1].device_count = AlertingObj.length;
-                deviceStatusData[objID2].device_count = OfflineObj.length;
-                deviceStatusData[objID3].device_count = OnlineObj.length;
-                deviceStatusData[objID1].label = AlertingObj.length;
-                deviceStatusData[objID2].label = OfflineObj.length;
-                deviceStatusData[objID3].label = OnlineObj.length;
 
                 //devices list table
 
                 let row = [];
                 // eslint-disable-next-line
-                DEVICELISTOBJ.map((item) => {
+                data.deviceStatus.map((item) => {
+                  const name = [];
+                  // eslint-disable-next-line
+                  ac.networkList.map((network) => {
+                    if (network.id === item.networkId) {
+                      name.push(network.name);
+                    }
+                  });
                   if (item.usingCellularFailover) {
                     row.push({
                       name: item.name,
                       status: item.status,
+                      networkId: name,
                       lanIp: item.lanIp,
                       publicIp: item.publicIp,
                       wan1Ip: item.wan1Ip,
@@ -238,6 +214,7 @@ export default function Dashboard(ac) {
                     row.push({
                       name: item.name,
                       status: item.status,
+                      networkId: name,
                       lanIp: item.lanIp,
                       publicIp: item.publicIp,
                       wan1Ip: item.wan1Ip,
@@ -247,8 +224,10 @@ export default function Dashboard(ac) {
                   }
                   setmapRows(row);
                 });
-                setshowtable(true);
               }
+            })
+            .then(() => {
+              setshowtable(true);
             });
         } catch (err) {
           if (err) {
@@ -266,7 +245,7 @@ export default function Dashboard(ac) {
       abortController.abort();
     };
     // eslint-disable-next-line
-  }, [ac.organizationID]);
+  }, [ac.networkID]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -468,6 +447,12 @@ export default function Dashboard(ac) {
         width: 270,
       },
       {
+        label: "Network",
+        field: "networkId",
+        sort: "asc",
+        width: 270,
+      },
+      {
         label: "Lan IP",
         field: "lanIp",
         sort: "asc",
@@ -495,7 +480,7 @@ export default function Dashboard(ac) {
         label: "Cellular",
         field: "usingCellularFailover",
         sort: "asc",
-        width: 100,
+        width: 50,
       },
       {
         label: "Serial",
@@ -728,7 +713,7 @@ export default function Dashboard(ac) {
                     <p className="p-license">
                       Expiration date: {licenseState.expirationDate}
                     </p>
-                    <p className="p-license">
+                    <div className="p-license">
                       {Object.keys(licenseState.licensedDeviceCounts).map(
                         (key, i) => (
                           <p className="p-license" key={i}>
@@ -739,7 +724,7 @@ export default function Dashboard(ac) {
                           </p>
                         )
                       )}
-                    </p>
+                    </div>
                   </div>
                 </div>
               ) : (
@@ -809,7 +794,7 @@ export default function Dashboard(ac) {
         <div className="board">
           <div className="panel panel-primary">
             <div className="number">
-              <small>Devices Inventory</small>
+              <small>Devices Status</small>
             </div>
             <div className="icon">
               <i className="fa fa-server fa-5x yellow"></i>
@@ -822,18 +807,24 @@ export default function Dashboard(ac) {
           <div className="panel panel-default">
             {showtable ? (
               <div className="panel-body">
-                <CSVLink data={mapRows} separator={";"}>
-                  Download cvs
+                <CSVLink data={mapRows} separator={","}>
+                  <button className="btnCSV" color="primary">
+                    Download CSV
+                  </button>
                 </CSVLink>
                 <MDBDataTableV5
                   hover
                   striped
+                  bordered
                   small
                   data={datatable}
-                  paging={false}
+                  paging={pagination}
                   searchTop
                   searchBottom={false}
                   exportToCSV={true}
+                  entriesOptions={[25, 100, 250, 500]}
+                  entries={25}
+                  fullPagination={fullPagination}
                 />
               </div>
             ) : (

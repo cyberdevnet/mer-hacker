@@ -37,3 +37,24 @@
   line-height: 3px;
   padding-top: 8px;
 }
+
+.btnCSV {
+  float: right;
+  margin-top: 0px;
+  margin-bottom: 15px;
+}
+
+.form-control.form-control-sm.ml-0.my-1 {
+  margin-right: 0px;
+  margin-top: 0px;
+  height: 38px;
+  display: inline-block;
+  width: auto;
+  vertical-align: middle;
+}
+
+.custom-select.custom-select-sm.form-control.form-control-sm {
+  margin-left: 10px;
+  width: 78px;
+  height: 35px;
+}

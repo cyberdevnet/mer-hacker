@@ -18,7 +18,6 @@ export default function TrafficAnalysis(ac) {
   // eslint-disable-next-line
   const [netwanalysis, setnetwanalysis] = useState([]);
   const [dataInventory, setdataInventory] = useState([]);
-  console.log("TrafficAnalysis -> dataInventory", dataInventory);
 
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;

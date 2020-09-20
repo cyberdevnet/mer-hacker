@@ -134,7 +134,8 @@ export default function Template(ac, dc) {
             <li>
               {ac.dc.isSignedIn ? (
                 <NavLink exact to="logout" href="#logout">
-                  <i className="fa fa-sign-out" aria-hidden="true"></i> Logout
+                  <i className="fas fa-sign-out-alt" aria-hidden="true"></i>{" "}
+                  Logout
                 </NavLink>
               ) : (
                 <div></div>
@@ -226,7 +227,7 @@ export default function Template(ac, dc) {
               <li>
                 <ReactTooltip place="right" type="warning" effect="float" />
                 <NavLink exact to="topology" href="#topology">
-                  <i className="fa fa-connectdevelop" aria-hidden="true"></i>{" "}
+                  <i className="fab fa-connectdevelop" aria-hidden="true"></i>{" "}
                   Topology
                 </NavLink>
               </li>
@@ -239,7 +240,7 @@ export default function Template(ac, dc) {
                   to="topology"
                   href="#topology"
                 >
-                  <i className="fa fa-connectdevelop" aria-hidden="true"></i>{" "}
+                  <i className="fab fa-connectdevelop" aria-hidden="true"></i>{" "}
                   Topology
                 </NavLink>
               </li>

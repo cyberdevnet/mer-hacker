@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { CSVLink } from "react-csv";
 import { MDBDataTableV5 } from "mdbreact";
+import "../../styles/NetworkTopUsers.css";
 
 export default function NetworkTopUsers(ac) {
   const [showtable, setshowtable] = useState(false);
@@ -448,53 +449,65 @@ export default function NetworkTopUsers(ac) {
             {showtable ? (
               <div>
                 <div className="panel-body">
-                  <CSVLink data={mapROW1} separator={";"}>
-                    Download cvs
+                  <h4 className="topuser-description">
+                    Top 10 hosts in the last 10 minutes
+                  </h4>
+                  <CSVLink data={mapROW1} separator={","}>
+                    <button className="btnCSV" color="primary">
+                      Download CSV
+                    </button>
                   </CSVLink>
 
                   <MDBDataTableV5
                     hover
-                    entriesOptions={[10]}
-                    entries={10}
-                    pagesAmount={10}
+                    sorting={false}
+                    searching={false}
+                    bordered
+                    striped
                     data={datatable_10}
-                    pagingTop
-                    searchTop
-                    searchBottom={false}
+                    paging={false}
                     exportToCSV={true}
                   />
                 </div>
                 <div className="panel-body">
-                  <CSVLink data={mapROW2} separator={";"}>
-                    Download cvs
+                  <h4 className="topuser-description">
+                    Top 10 hosts in the last 30 minutes
+                  </h4>
+                  <CSVLink data={mapROW2} separator={","}>
+                    <button className="btnCSV" color="primary">
+                      Download CSV
+                    </button>
                   </CSVLink>
 
                   <MDBDataTableV5
                     hover
-                    entriesOptions={[10]}
-                    entries={10}
-                    pagesAmount={10}
+                    sorting={false}
+                    searching={false}
+                    bordered
+                    striped
                     data={datatable_30}
-                    pagingTop
-                    searchTop
-                    searchBottom={false}
+                    paging={false}
                     exportToCSV={true}
                   />
                 </div>
                 <div className="panel-body">
-                  <CSVLink data={mapROW3} separator={";"}>
-                    Download cvs
+                  <h4 className="topuser-description">
+                    Top 10 hosts in the last 60 minutes
+                  </h4>
+                  <CSVLink data={mapROW3} separator={","}>
+                    <button className="btnCSV" color="primary">
+                      Download CSV
+                    </button>
                   </CSVLink>
 
                   <MDBDataTableV5
                     hover
-                    entriesOptions={[10]}
-                    entries={10}
-                    pagesAmount={10}
+                    sorting={false}
+                    searching={false}
+                    bordered
+                    striped
                     data={datatable_60}
-                    pagingTop
-                    searchTop
-                    searchBottom={false}
+                    paging={false}
                     exportToCSV={true}
                   />
                 </div>

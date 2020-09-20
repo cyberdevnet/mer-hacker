@@ -256,9 +256,9 @@ export default function GetAllDevicesIP(ac) {
                     <div className="panel-body">
                       <dl>
                         <dt>
-                          This scripts iterates through all networks in an
-                          organization and returns all the IPs, serial-numbers
-                          and models of all devices.
+                          This scripts returns all the IPs, serial-numbers and
+                          models of all devices assigned to the selected
+                          network.
                         </dt>
                       </dl>
                     </div>

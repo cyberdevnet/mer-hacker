@@ -1,68 +1,135 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<h1 align="center">
+  <br>
+  <a href="https://imgbb.com/"><img src="https://i.ibb.co/S6PZnsk/Mer-Haker-big.png" alt="Mer-Haker-big" border="0" /></a>
+  <br>
+  Mer-hacker
+  <br>
+</h1>
 
-## Available Scripts
+<h4 align="center">Mer-hacker is a troubleshoting and configuration application for Meraki organizations, built with react, python3 and nodejs.</h4>
 
-In the project directory, you can run:
+<p align="center">
+  <a href="#description">Description</a> •
+  <a href="#tools">Tools</a> •
+  <a href="#how-to-use">How To Use</a> •
+  <a href="#credits">Credits</a> •
+  <a href="#related">Related</a> •
+  <a href="#license">License</a>
+</p>
 
-### `yarn start`
+## Description
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Mer-hacker is a troubleshoting and configuration application for Meraki organizations, useful for daily basis repetitive tasks.
+Most of the functions available are custom and not present in the Meraki dashboard.
+The goal of mer-hacker is to simplify some troubleshooting and configuration tasks
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Tools
 
-### `yarn test`
+- Get all devices IPs
+  - This scripts returns all the IPs, serial-numbers and models of all devices assigned to the selected network.
+- Get all subnets
+  - This scripts returns all VLANs configured in a network.
+  - The script works only on MX and Z3 devices, does not work on VPN HUBs, the network must be reachable in the Meraki Dashboard.
+- Get all Organization subnets
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  - This script iterates through all networks in an organization and returns all the subnets and VLANs associated with every network.
+  - The script works only on MX and Z3 devices, does not work on VPN HUBs, the network must be reachable in the Meraki Dashboard.
 
-### `yarn build`
+- Get all Clients
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+  - This scripts returns all the clients active in the last 1 hour on a network.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+- Get all SwitchPorts
+  - This scripts returns all the Switchports of a selected Switch.
+- Network Top Users Report
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  - This script finds the top 10 heaviest bandwidth users of an MX security appliance in the last 10, 30 and 60 minutes.
 
-### `yarn eject`
+- Find Port
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+  - This script finds the switch and ports where a clients is connected, searching either by clients MAC address or IP address.
+  - This script works only on MS-series switch.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Network Analysis
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+  - This script aggregates all of the detected applications for a given time frame or device type.
+  - Time frame options for hourly, weekly, daily and monthly are available.
+  - Device type options for combined, switch, wireless and appliance are available.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- Backup & Restore
 
-## Learn More
+  - This script makes a snapshot of a network and creates a downloadable python file used to restore the configuration.
+  - The configuration will be restored creating a new network with name "your-new-network-restore"
+  - Since the Switchs configuration is lost when a device is moved to another network, the backup process must be run in two steps.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    - Run Backup.
+    - Review the script snapshot before starting the restore.
+    - Download the script(optional).
+    - Restore the configuration (a new network with name "your-new-network-restore" will be created).
+    - Go to your Meraki dashboard and move your devices to the newly created network.
+    - Restore the switchports configuration.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+  - Note that the Restore will not overwrite existing networks but creates a new one.
+  - The script can be modified before the Restore process (basic knowledge of python required).
 
-### Code Splitting
+- Migrate Tool
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+  - This script converts a cisco running-config into a Meraki Switch-Port configuration and creates a downloadable python file used to push the new switchport configuration.
+  - Before to convert and push the configuration be sure to:
 
-### Analyzing the Bundle Size
+    - Check if the switch serial-number has been claimed for you Organization.
+    - Check if the new switch has been added to the right Network
+    - Check if the an Access Policy is configured
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+  - Instructions:
+    - Insert the serial number or a list of comma-separated serial-numbers
+    - Load the Cisco running-config, the file must be in .txt format
+    - Convert the configuration
+    - Check the script
+    - The script can be modified before the pushing the configuration (basic knowledge of python required).
+    - Download the script(optional).
+    - Push the configuration to the meraki Switch
+    - Go to your Meraki dashboard and check if the configuration is successfully uploaded
 
-### Making a Progressive Web App
+- Switchport Templates
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+  - This tool is useful when no Meraki template are in use or you want to ovveride the switchport configuration.
+  - You can create a set of Switchport Templates and save/modify it for later use.
+    - Insert the serial number or a list of comma-separated serial-numbers
+    - Load the Cisco running-config, the file must be in .txt format
+    - Convert the configuration
+    - Check the script
+    - The script can be modified before the pushing the configuration (basic knowledge of python required).
+    - Download the script(optional).
+    - Push the configuration to the meraki Switch
+    - Go to your Meraki dashboard and check if the configuration is successfully uploaded
+  - Please note: There's currently a bug in the APi preventing the StormControl configuration
 
-### Advanced Configuration
+- Change log
+  - This scripts returns all changes have been made in an organization.
+    - You can filter the result based on Administrator, specific network or time Interval (default 1 week)
+    - Click on a row to display the change details
+- Inventory
+  - This scripts returns the inventory for the selected organization.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+## How To Use
 
-### Deployment
+- Instruction:
+  - To run Mer-hacker on your server you need:
+    - Detailed instruction WIP
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+## Credits
 
-### `yarn build` fails to minify
+## Related
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+## License
+
+MIT License
+
+Copyright (c) 2020 cyberdevnet
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

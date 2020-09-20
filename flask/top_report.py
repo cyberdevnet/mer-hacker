@@ -1,4 +1,6 @@
 
+# script is based on https://github.com/meraki/automation-scripts repository
+
 import sys
 import getopt
 import requests

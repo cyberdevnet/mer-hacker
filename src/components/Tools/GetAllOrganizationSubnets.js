@@ -278,7 +278,7 @@ export default function GetAllOrganizationSubnets(ac) {
                     <div className="panel-body">
                       <dl>
                         <dt>
-                          This scripts iterates through all networks in an
+                          This script iterates through all networks in an
                           organization and returns all the subnets and VLANs
                           associated with every network.
                         </dt>

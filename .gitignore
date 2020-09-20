@@ -24,6 +24,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
 #variuos files to ignore
 .log
 meraki_restore_organization.py

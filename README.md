@@ -110,6 +110,10 @@ The goal of mer-hacker is to simplify some troubleshooting and configuration tas
 
   
 ## How To Use
+* Instruction:
+  - To run Mer-hacker on your server you need:
+     - Detailed instruction WIP
+    
 ## Credits
 ## Related
 ## License

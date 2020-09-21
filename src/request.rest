@@ -27,7 +27,7 @@ Content-Type: application/json
 Accept : */*
 
 {
-    "username": "admin", "password": "8dudjd"
+    "username": "mer-hacker", "password": "mer-hacker"
 
 }
 
@@ -92,3 +92,7 @@ Content-Type: application/json
     "AlreadyisSignedIn": false
 
 }
+
+
+###
+GET http://165.22.30.93/flask/organizations

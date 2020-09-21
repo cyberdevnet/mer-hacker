@@ -104,6 +104,8 @@ The goal of mer-hacker is to simplify some troubleshooting and configuration tas
     - Push the configuration to the meraki Switch
     - Go to your Meraki dashboard and check if the configuration is successfully uploaded
   - Please note: There's currently a bug in the APi preventing the StormControl configuration
+  
+  ![Alt Text](https://media.giphy.com/media/nAZM5lWwKsKMpA5qUg/giphy.gif)
 
 - Change log
   - This scripts returns all changes have been made in an organization.
@@ -111,6 +113,10 @@ The goal of mer-hacker is to simplify some troubleshooting and configuration tas
     - Click on a row to display the change details
 - Inventory
   - This scripts returns the inventory for the selected organization.
+  
+- Topology
+
+ ![Alt Text size](https://media.giphy.com/media/wFqlTYfAZEpCM116a9/giphy.gif)
 
 ## How To Use
 
@@ -119,6 +125,7 @@ The goal of mer-hacker is to simplify some troubleshooting and configuration tas
     - Detailed instruction WIP
 
 ## Credits
+
 
 ## Related
 

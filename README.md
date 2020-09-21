@@ -12,6 +12,7 @@
   <a href="#description">Description</a> •
   <a href="#tools">Tools</a> •
   <a href="#how-to-use">How To Use</a> •
+  <a href="#live-demo">Live Demo</a> •
   <a href="#credits">Credits</a> •
   <a href="#related">Related</a> •
   <a href="#license">License</a>
@@ -123,6 +124,14 @@ The goal of mer-hacker is to simplify some troubleshooting and configuration tas
 - Instruction:
   - To run Mer-hacker on your server you need:
     - Detailed instruction WIP
+    
+## Live Demo
+- A full functional demo is available here: http://165.22.30.93/login
+  - username: mer-hacker
+  - password: mer-hacker
+  - To try out you can use the Meraki always-on api-key => https://developer.cisco.com/meraki/meraki-platform/
+  - a session timeout of 15 minutes will log you out on idle
+  - only 1 user log-in is supported, if the application is currently used please wait until session is completed
 
 ## Credits
 

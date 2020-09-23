@@ -11,6 +11,7 @@
 <p align="center">
   <a href="#description">Description</a> •
   <a href="#tools">Tools</a> •
+  <a href="#topology">Topology</a> •
   <a href="#how-to-use">How To Use</a> •
   <a href="#live-demo">Live Demo</a> •
   <a href="#credits">Credits</a> •
@@ -117,8 +118,14 @@ The goal of mer-hacker is to simplify some troubleshooting and configuration tas
 - Inventory
   - This scripts returns the inventory for the selected organization.
   
-- Topology
+## Topology
 
+- Two type of topology are available:
+  - Client Topology
+    - Client Topology shows you
+  - VPN topology
+    - VPN topology shows you
+    
      <p align="center">
         <img src="https://media.giphy.com/media/wFqlTYfAZEpCM116a9/giphy.gif" width="750" height="400"/>
      </p>

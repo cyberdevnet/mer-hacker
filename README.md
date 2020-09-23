@@ -106,7 +106,9 @@ The goal of mer-hacker is to simplify some troubleshooting and configuration tas
     - Go to your Meraki dashboard and check if the configuration is successfully uploaded
   - Please note: There's currently a bug in the APi preventing the StormControl configuration
   
-  ![Alt Text](https://media.giphy.com/media/nAZM5lWwKsKMpA5qUg/giphy.gif)
+       <p align="center">
+        <img src="https://media.giphy.com/media/nAZM5lWwKsKMpA5qUg/giphy.gif" width="750" height="400"/>
+        </p>
 
 - Change log
   - This scripts returns all changes have been made in an organization.
@@ -117,7 +119,9 @@ The goal of mer-hacker is to simplify some troubleshooting and configuration tas
   
 - Topology
 
- ![Alt Text size](https://media.giphy.com/media/wFqlTYfAZEpCM116a9/giphy.gif)
+     <p align="center">
+        <img src="https://media.giphy.com/media/wFqlTYfAZEpCM116a9/giphy.gif" width="750" height="400"/>
+     </p>
 
 ## How To Use
 

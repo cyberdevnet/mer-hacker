@@ -10,6 +10,7 @@
 
 <p align="center">
   <a href="#description">Description</a> •
+  <a href="#dashboard">Dashboard</a> •
   <a href="#tools">Tools</a> •
   <a href="#topology">Topology</a> •
   <a href="#how-to-use">How To Use</a> •
@@ -23,7 +24,16 @@
 
 Mer-hacker is a troubleshoting and configuration application for Meraki organizations, useful for daily basis repetitive tasks.
 Most of the functions available are custom and not present in the Meraki dashboard.
-The goal of mer-hacker is to simplify some troubleshooting and configuration tasks
+The goal of mer-hacker is to simplify some troubleshooting and configuration tasks visualizing the output of python script fetched from the Meraki API in a beautiful manner using, tables, charts and much more.
+
+## Dashboard
+
+  - A simple dashboard with charts for latency/packet-loss visualization, devices count, devices status and more
+  
+     <p align="center">
+        <img src="https://media.giphy.com/media/PI9aoZNqSP06vyfhuS/source.gif" width="750" height="400"/>
+     </p>
+
 
 ## Tools
 
@@ -122,9 +132,9 @@ The goal of mer-hacker is to simplify some troubleshooting and configuration tas
 
 - Two type of topology are available:
   - Client Topology
-    - Client Topology shows you
+    - Client Topology shows you a map of all VPN spokes connected to a central Hub
   - VPN topology
-    - VPN topology shows you
+    - VPN topology shows you a detailed topology of all hosts connected to an MX, MS or MR device, client IP adresses, mac, switchports and much more.
     
      <p align="center">
         <img src="https://media.giphy.com/media/wFqlTYfAZEpCM116a9/giphy.gif" width="750" height="400"/>
@@ -137,15 +147,23 @@ The goal of mer-hacker is to simplify some troubleshooting and configuration tas
     - Detailed instruction WIP
     
 ## Live Demo
-- A full functional demo is available here: http://165.22.30.93/login
+- A full functional demo is available here: http://mer-hacker.com/login
   - username: mer-hacker
   - password: mer-hacker
   - To try out you can use the Meraki always-on api-key => https://developer.cisco.com/meraki/meraki-platform/
   - a session timeout of 15 minutes will log you out on idle
   - only 1 user log-in is supported, if the application is currently used please wait until session is completed
+  
+  - please remeber that:
+    
+     <p align="center">
+        <img src="https://tenor.com/view/spiderman-responsibility-gif-4589950.gif" width="480" height="257"/>
+     </p>
 
 ## Credits
-
+  - some of the tools used by this application are heavily inspired by:
+    - https://github.com/meraki/automation-scripts 
+    - https://www.ifm.net.nz/cookbooks/meraki-backup.html
 
 ## Related
 

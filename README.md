@@ -107,14 +107,6 @@ The goal of mer-hacker is to simplify some troubleshooting and configuration tas
 
   - This tool is useful when no Meraki template are in use or you want to ovveride the switchport configuration.
   - You can create a set of Switchport Templates and save/modify it for later use.
-    - Insert the serial number or a list of comma-separated serial-numbers
-    - Load the Cisco running-config, the file must be in .txt format
-    - Convert the configuration
-    - Check the script
-    - The script can be modified before the pushing the configuration (basic knowledge of python required).
-    - Download the script(optional).
-    - Push the configuration to the meraki Switch
-    - Go to your Meraki dashboard and check if the configuration is successfully uploaded
   - Please note: There's currently a bug in the APi preventing the StormControl configuration
   
        <p align="center">

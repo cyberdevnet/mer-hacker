@@ -1,34 +1,35 @@
-.modal-confirm .btn.btn-forceLogin {
+.modal-confirm .btn.btn-endSession {
   color: #fff;
   background-color: #d9534f;
   border-color: #d43f3a;
-  margin: 0px 20px 2px;
+  float: right;
+  margin: 0px -46px 2px;
 }
 
-.modal-confirm .btn.btn-forceLogin:hover {
+.modal-confirm .btn.btn-endSession:hover {
   color: #fff;
   background-color: #d27370;
   border-color: #d43f3a;
 }
-.modal-confirm .btn.btn-forceLogin:focus {
+.modal-confirm .btn.btn-endSession:focus {
   color: #fff;
   background-color: #d27370;
   border-color: #d43f3a;
 }
 
-.modal-confirm .btn.btn-requestSession {
+.modal-confirm .btn.btn-cancelSignedIn {
   color: #fff;
   background-color: #337ab7;
   border-color: #2e6da4;
-  float: right;
+  float: left;
   margin: 0px 20px 2px;
 }
-.modal-confirm .btn.btn-requestSession:hover {
+.modal-confirm .btn.btn-cancelSignedIn:hover {
   color: #fff;
   background-color: #5e9bd0;
   border-color: #2e6da4;
 }
-.modal-confirm .btn.btn-requestSession:focus {
+.modal-confirm .btn.btn-cancelSignedIn:focus {
   color: #fff;
   background-color: #5e9bd0;
   border-color: #2e6da4;
@@ -36,12 +37,4 @@
 
 .modal-dialog-AlreadyisSignedIn {
   margin: 10px 10px;
-}
-
-.modal-confirm .form-control.sendMessageLogin {
-  max-width: 432px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  margin-right: 10px;
-  height: 38px;
 }

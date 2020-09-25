@@ -17,6 +17,14 @@ export default function Logout(ac, props) {
     } catch (e) {
       console.log(e);
     }
+    // try {
+    //   await axios.post("/node/clear-cookie", {}, { withCredentials: true });
+    //   // await axios.get("/node/clear-cookie");
+    //   ac.setisSignedIn(false);
+    //   history.push("/login");
+    // } catch (e) {
+    //   console.log(e);
+    // }
   };
 
   // send a 'leer' string to server on logout to clear the key
@@ -27,7 +35,10 @@ export default function Logout(ac, props) {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ key: "leer" }),
+      body: JSON.stringify({
+        username: "leer",
+        apiKey: "leer",
+      }),
     });
     return await rawResponse.json();
   }

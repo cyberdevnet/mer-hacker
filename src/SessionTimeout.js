@@ -44,6 +44,7 @@ export default function SessionTimeout(ac) {
   };
 
   // send a 'leer' string to server on logout to clear the key
+
   async function postKey() {
     const rawResponse = await fetch("/node/post-api-key", {
       method: "POST",
@@ -51,7 +52,10 @@ export default function SessionTimeout(ac) {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ key: "leer" }),
+      body: JSON.stringify({
+        username: "leer",
+        apiKey: "leer",
+      }),
     });
     return await rawResponse.json();
   }

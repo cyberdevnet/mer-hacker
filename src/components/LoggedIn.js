@@ -17,19 +17,33 @@ export default function LoggedIn(ac) {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ key: `${inputKey}` }),
+      body: JSON.stringify({
+        username: `${ac.dc.User}`,
+        apiKey: `${inputKey}`,
+      }),
     });
     return await rawResponse.json();
   }
 
   async function getKey() {
     try {
-      fetch("/node/get-api-key")
-        .then((res) => res.json())
-        .then((data) => {
-          ac.dc.setapiKey(data.key);
+      fetch("/node/get-api-key", {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: `${ac.dc.User}` }),
+      })
+        .then((response) => {
+          return response.json();
         })
-        .catch((error) => console.log("An error occured ", error));
+        .then((data) => {
+          ac.dc.setapiKey(data.apiKey);
+        })
+        .catch((error) => {
+          console.log("An error occured ", error);
+        });
     } catch (e) {
       console.log("Error:", e);
     }

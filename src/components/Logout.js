@@ -17,14 +17,6 @@ export default function Logout(ac, props) {
     } catch (e) {
       console.log(e);
     }
-    // try {
-    //   await axios.post("/node/clear-cookie", {}, { withCredentials: true });
-    //   // await axios.get("/node/clear-cookie");
-    //   ac.setisSignedIn(false);
-    //   history.push("/login");
-    // } catch (e) {
-    //   console.log(e);
-    // }
   };
 
   // send a 'leer' string to server on logout to clear the key
@@ -66,7 +58,8 @@ export default function Logout(ac, props) {
     axios.post("/node/delete_backupfile", {});
     axios.post("/flask/delete_debugfile", {});
     axios.post("/node/post-AlreadyisSignedIn", {
-      AlreadyisSignedIn: false,
+      username: ac.User,
+      signed: false,
     });
   };
 

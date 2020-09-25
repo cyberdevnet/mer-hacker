@@ -7,6 +7,7 @@ import AlreadyisSignedInModal from "./AlreadyisSignedInModal";
 
 export default function LoginAPI(ac) {
   const [triggertryLogin, settriggertryLogin] = useState(0);
+  console.log("LoginAPI -> triggertryLogin", triggertryLogin);
   const [triggerAlreadyisSignedIn, settriggerAlreadyisSignedIn] = useState(0);
   const [loading, setloading] = useState(false);
 
@@ -28,7 +29,6 @@ export default function LoginAPI(ac) {
       const res = await axios.get("/node/read-cookie");
 
       if (res.data.signedIn === true) {
-        console.log("readCookie -> res.data.signedIn", res.data.signedIn);
         ac.setisSignedIn(true);
       } else {
         ac.setisSignedIn(false);
@@ -77,23 +77,29 @@ export default function LoginAPI(ac) {
 
   useEffect(() => {
     const abortController = new AbortController();
-    const signal = abortController.signal;
     if (isFirstAlreadyisSignedIn.current) {
       isFirstAlreadyisSignedIn.current = false;
       return;
     }
     async function AlreadyisSignedIn() {
-      fetch("/node/get-AlreadyisSignedIn", { signal: signal })
+      fetch("/node/get-AlreadyisSignedIn", {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: `${ac.User}` }),
+      })
         .then((res) => {
           return res.json();
         })
         .then((data) => {
-          let response = data[0].AlreadyisSignedIn;
+          let response = data.signed;
 
-          if (response === true) {
+          if (response === "true") {
             // deny login because another user is using the application
             ac.setshowAlreadyisSignedInModal(true);
-          } else if (response === false) {
+          } else if (response === "false") {
             //no another user is using the application, trigger the real Login
             settriggertryLogin(triggertryLogin + 1);
           }
@@ -137,7 +143,8 @@ export default function LoginAPI(ac) {
             ac.setisSignedIn(res.data.signedIn);
             setloading(false);
             axios.post("/node/post-AlreadyisSignedIn", {
-              AlreadyisSignedIn: true,
+              username: ac.User,
+              signed: "true",
             });
           } else {
             setloading(false);

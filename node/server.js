@@ -13,25 +13,12 @@ const path = require("path");
 const session = require("express-session");
 const redis = require("redis");
 const redisStore = require("connect-redis")(session);
+const MongoStore = require("connect-mongo")(session);
 const client = redis.createClient();
 
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(
-  session({
-    secret: "82e4e438a0705fabf61f9854e3b575af",
-    // create new redis store.
-    store: new redisStore({
-      host: "localhost",
-      port: 6379,
-      client: client,
-      ttl: 3600,
-    }),
-    saveUninitialized: false,
-    resave: false,
-  })
-);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/views"));
 let urlencodedParser = bodyParser.urlencoded({ extended: true });
@@ -60,16 +47,20 @@ app.use(cookieParser("82e4e438a0705fabf61f9854e3b575af"));
 
 // Mongodb initialization to users database
 
-var conn = Mongoose.createConnection("mongodb://localhost/users", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-});
+var mongooseConnection = Mongoose.createConnection(
+  "mongodb://localhost/users",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  }
+);
 
 const UserSchema = new Mongoose.Schema({
   username: String,
   password: String,
   apiKey: String,
+  signed: String,
 });
 
 //check to see if the user is being created or changed.
@@ -90,7 +81,7 @@ UserSchema.methods.comparePassword = function (plaintext, callback) {
   return callback(null, bcrypt.compareSync(plaintext, this.password));
 };
 
-const UserModel = conn.model("user", UserSchema);
+const UserModel = mongooseConnection.model("user", UserSchema);
 
 //connection to the Mongodb database to check the users
 app.get("/node/dump", async (req, res) => {
@@ -104,7 +95,6 @@ app.get("/node/dump", async (req, res) => {
 
 //create a new user on Mongodb + password and salt + hash
 app.post("/node/hash-users", async (req, res) => {
-  console.log("REEEEEEEQ", req.body);
   try {
     const user = new UserModel(req.body);
     console.log("user", user);
@@ -134,22 +124,27 @@ app.post("/node/authenticate", async (req, res, next) => {
   }
 });
 
-//cookie set - read - clear
+//session set - read - clear
+
+app.use(
+  session({
+    secret: "82e4e438a0705fabf61f9854e3b575af",
+    store: new MongoStore({
+      mongooseConnection: mongooseConnection,
+      collection: "users",
+      ttl: 3600,
+    }),
+    saveUninitialized: false,
+    resave: false,
+  })
+);
+
 app.post("/node/set-cookie", (req, res) => {
   console.log("req", req.body.user);
   req.session.user = req.body.user;
   res.send({ signedIn: true });
   res.end("done");
 });
-
-// app.get("/node/set-cookie", (req, res) => {
-//   const options = {
-//     maxAge: 1000 * 60 * 60, // would expire after 60 minutes
-//     httpOnly: true, // The cookie only accessible by the web server
-//     signed: true, // Indicates if the cookie should be signed
-//   };
-//   res.cookie("cookie", "somerandomstuff", options).send({ signedIn: true });
-// });
 
 app.get("/node/read-cookie", (req, res) => {
   if (req.session.user) {
@@ -162,70 +157,44 @@ app.get("/node/read-cookie", (req, res) => {
   }
 });
 
-// app.get("/node/read-cookie", (req, res) => {
-//   if (req.signedCookies.cookie === "somerandomstuff") {
-//     res.send({ signedIn: true });
-//   } else {
-//     res.send({ signedIn: false });
-//   }
-// });
-
 app.get("/node/clear-cookie", (req, res) => {
   console.log("SESSION DESTROYED ");
 
-  req.session.destroy();
-});
+  // req.session.destroy((err) => {
+  //   res.redirect("/"); // will always fire after session is destroyed
+  // });
 
-// app.post("/node/clear-cookie", (req, res) => {
-//   // console.log("RESPONSE COOKIE", res);
-//   const options = {
-//     maxAge: 1000 * 60 * 60, // would expire after 60 minutes
-//     httpOnly: true, // The cookie only accessible by the web server
-//     signed: true, // Indicates if the cookie should be signed
-//   };
-//   res.clearCookie("cookie", "somerandomstuff", options).end();
-//   return res.sendStatus(200);
-// });
+  req.session.destroy();
+  res.send({ signedIn: false });
+});
 
 // Check if AlreadyisSignedIn
 
-// Mongodb initialization to AlreadyisSignedIn database
-
-var conn3 = Mongoose.createConnection("mongodb://localhost/AlreadyisSignedIn", {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-});
-
-const AlreadyisSignedInModel = conn3.model(
-  "AlreadyisSignedIn",
-  { AlreadyisSignedIn: Boolean },
-  "AlreadyisSignedIn"
-);
-
-//post route to the AlreadyisSignedIn database to update the AlreadyisSignedIn boolean
 app.post("/node/post-AlreadyisSignedIn", async (req, res, next) => {
+  console.log("req", req.body);
   try {
-    let AlreadyisSignedIn = await AlreadyisSignedInModel.findOneAndUpdate(
-      {},
-      { AlreadyisSignedIn: req.body.AlreadyisSignedIn },
-      { new: true }
+    let signed = await UserModel.findOneAndUpdate(
+      { username: req.body.username },
+      { signed: req.body.signed },
+      req.body
     );
 
-    res.send(AlreadyisSignedIn);
+    res.send(signed);
   } catch (error) {
     res.status(500).send(error);
     return next(new Error(error));
   }
 });
 
-//get route to the AlreadyisSignedIn database to retrieve the AlreadyisSignedIn boolean
+//post route to the user database to retrieve the AlreadyisSignedIn boolean
 
-app.get("/node/get-AlreadyisSignedIn", async (req, res, next) => {
+app.post("/node/get-AlreadyisSignedIn", async (req, res, next) => {
   try {
-    var AlreadyisSignedIn = await AlreadyisSignedInModel.find();
-    res.send(AlreadyisSignedIn);
+    var signed = await UserModel.findOne(
+      { username: req.body.username },
+      { signed: "signed" }
+    );
+    res.send(signed);
   } catch (error) {
     res.status(500).send(error);
     return next(new Error(error));

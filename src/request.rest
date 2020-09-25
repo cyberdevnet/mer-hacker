@@ -29,7 +29,7 @@ Accept : */*
 
 {
     
-    "user": "bau"
+    "user": "admin"
     
 }
 
@@ -40,7 +40,8 @@ Content-Type: application/json
 Accept : */*
 
 {
-    "username": "master", "password": "1234", "apiKey":"tzu"
+    "username": "admin", "password": "1234", "apiKey":"tzu",
+    "signed": "false","session":"session"
 
 }
 
@@ -109,7 +110,13 @@ GET http://localhost:5000/flask/change_log
 
 
 ###
-GET http://localhost:3001/node/get-AlreadyisSignedIn
+POST http://localhost:3001/node/get-AlreadyisSignedIn
+Content-Type: application/json
+
+
+{
+    "username": "admin"
+}
 
 
 ###
@@ -117,7 +124,8 @@ POST http://localhost:3001/node/post-AlreadyisSignedIn
 Content-Type: application/json
 
 {
-    "AlreadyisSignedIn": true
+    "username": "admin",
+    "signed": false
 
 }
 

@@ -36,7 +36,6 @@ function App() {
   const [inputConfKey, setinputConfKey] = useState("");
   const [isLoggedIn, setisLoggedIn] = useState(false);
   const [isSignedIn, setisSignedIn] = useState(false);
-  console.log("App -> isSignedIn", isSignedIn);
   const [switchLoginAPI, setswitchLoginAPI] = useState(true);
   const [switchDashboard, setswitchDashboard] = useState(false);
   const [switchLoggedIn, setswitchLoggedIn] = useState(false);

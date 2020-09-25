@@ -10,10 +10,30 @@ const bcrypt = require("bcrypt");
 const Mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
+const session = require("express-session");
+const redis = require("redis");
+const redisStore = require("connect-redis")(session);
+const client = redis.createClient();
 
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(
+  session({
+    secret: "82e4e438a0705fabf61f9854e3b575af",
+    // create new redis store.
+    store: new redisStore({
+      host: "localhost",
+      port: 6379,
+      client: client,
+      ttl: 3600,
+    }),
+    saveUninitialized: false,
+    resave: false,
+  })
+);
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(__dirname + "/views"));
 let urlencodedParser = bodyParser.urlencoded({ extended: true });
 var jsonParser = bodyParser.json();
 
@@ -43,11 +63,13 @@ app.use(cookieParser("82e4e438a0705fabf61f9854e3b575af"));
 var conn = Mongoose.createConnection("mongodb://localhost/users", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useFindAndModify: false,
 });
 
 const UserSchema = new Mongoose.Schema({
   username: String,
   password: String,
+  apiKey: String,
 });
 
 //check to see if the user is being created or changed.
@@ -61,7 +83,7 @@ UserSchema.pre("save", function (next) {
   next();
 });
 
-//function take the provided data, compare it against our hashed data,
+//function take the provided user data, compare it against our hashed user data,
 //and then return the boolean res within the callback.
 
 UserSchema.methods.comparePassword = function (plaintext, callback) {
@@ -82,8 +104,10 @@ app.get("/node/dump", async (req, res) => {
 
 //create a new user on Mongodb + password and salt + hash
 app.post("/node/hash-users", async (req, res) => {
+  console.log("REEEEEEEQ", req.body);
   try {
     const user = new UserModel(req.body);
+    console.log("user", user);
     const result = await user.save();
     res.send(result);
     res.status(201).send();
@@ -111,26 +135,57 @@ app.post("/node/authenticate", async (req, res, next) => {
 });
 
 //cookie set - read - clear
-app.get("/node/set-cookie", (req, res) => {
-  const options = {
-    maxAge: 1000 * 60 * 60, // would expire after 60 minutes
-    httpOnly: true, // The cookie only accessible by the web server
-    signed: true, // Indicates if the cookie should be signed
-  };
-  res.cookie("cookie", "somerandomstuff", options).send({ signedIn: true });
+app.post("/node/set-cookie", (req, res) => {
+  console.log("req", req.body.user);
+  req.session.user = req.body.user;
+  res.send({ signedIn: true });
+  res.end("done");
 });
 
+// app.get("/node/set-cookie", (req, res) => {
+//   const options = {
+//     maxAge: 1000 * 60 * 60, // would expire after 60 minutes
+//     httpOnly: true, // The cookie only accessible by the web server
+//     signed: true, // Indicates if the cookie should be signed
+//   };
+//   res.cookie("cookie", "somerandomstuff", options).send({ signedIn: true });
+// });
+
 app.get("/node/read-cookie", (req, res) => {
-  if (req.signedCookies.cookie === "somerandomstuff") {
+  if (req.session.user) {
+    console.log("LOGGED IN AS:", req.session.user);
     res.send({ signedIn: true });
   } else {
+    console.log("LOGGED OUT");
+
     res.send({ signedIn: false });
   }
 });
 
+// app.get("/node/read-cookie", (req, res) => {
+//   if (req.signedCookies.cookie === "somerandomstuff") {
+//     res.send({ signedIn: true });
+//   } else {
+//     res.send({ signedIn: false });
+//   }
+// });
+
 app.get("/node/clear-cookie", (req, res) => {
-  res.clearCookie("cookie").end();
+  console.log("SESSION DESTROYED ");
+
+  req.session.destroy();
 });
+
+// app.post("/node/clear-cookie", (req, res) => {
+//   // console.log("RESPONSE COOKIE", res);
+//   const options = {
+//     maxAge: 1000 * 60 * 60, // would expire after 60 minutes
+//     httpOnly: true, // The cookie only accessible by the web server
+//     signed: true, // Indicates if the cookie should be signed
+//   };
+//   res.clearCookie("cookie", "somerandomstuff", options).end();
+//   return res.sendStatus(200);
+// });
 
 // Check if AlreadyisSignedIn
 
@@ -179,29 +234,42 @@ app.get("/node/get-AlreadyisSignedIn", async (req, res, next) => {
 
 // store and retrieve API key
 
-// Mongodb initialization to apikeys database
-
-var conn2 = Mongoose.createConnection("mongodb://localhost/apikeys", {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
+app.post("/node/post-api-key", async (req, res, next) => {
+  console.log("req", req.boy);
+  try {
+    if (req.body.username !== "leer") {
+      //user is still logged
+      const key = await UserModel.findOneAndUpdate(
+        { username: req.body.username },
+        { apiKey: req.body.apiKey },
+        req.body
+      ).exec();
+      res.json(key);
+      res.status(201).send();
+    } else {
+      const key = await UserModel.updateMany(
+        //user has already logged-out, remove api-key from database
+        {},
+        { apiKey: req.body.apiKey },
+        req.body
+      ).exec();
+      res.json(key);
+      res.status(201).send();
+    }
+  } catch (error) {
+    res.status(500).send(error);
+    return next(new Error(error));
+  }
 });
 
-const ApiKeysModel = conn2.model("apikeys", { key: String });
-
-//this route updates an existing entry in the database with the api key sent from client
-// if for every reason there were no entry, create a new one with the route above:
-
-app.post("/node/post-api-key", async (req, res, next) => {
+//connection to the apikeys database to retrieve the key
+app.post("/node/get-api-key", async (req, res, next) => {
   try {
-    const key = ApiKeysModel.findOneAndUpdate(
-      {},
-      { key: req.body.key },
-      req.body
+    var apiKey = await UserModel.findOne(
+      { username: req.body.username },
+      { apiKey: "apiKey" }
     ).exec();
-    res.json(key);
-    res.status(201).send();
+    res.send(apiKey);
   } catch (error) {
     res.status(500).send(error);
     return next(new Error(error));
@@ -209,6 +277,9 @@ app.post("/node/post-api-key", async (req, res, next) => {
 });
 
 //  <======== DO NOT DELETE THIS ROUTE =========>
+
+//this route updates an existing entry in the database with the api key sent from client
+// if for every reason there were no entry, create a new one with the route above:
 
 //this route can be used to create a new entry in the database if not present
 
@@ -224,17 +295,6 @@ app.post("/node/post-api-key", async (req, res, next) => {
 // })
 
 //  <======== DO NOT DELETE THIS =========>
-
-//connection to the apikeys database to retrieve the key
-app.get("/node/get-api-key", async (req, res, next) => {
-  try {
-    var apiKey = await ApiKeysModel.findOne({}, { key: "key" }).exec();
-    res.send(apiKey);
-  } catch (error) {
-    res.status(500).send(error);
-    return next(new Error(error));
-  }
-});
 
 // serve static files for backup/restore script
 

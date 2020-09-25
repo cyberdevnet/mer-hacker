@@ -18,7 +18,7 @@ export default function LoginAPI(ac) {
   const setCookie = async () => {
     try {
       // eslint-disable-next-line
-      const res = await axios.get("/node/set-cookie");
+      const res = await axios.post("/node/set-cookie", { user: ac.User });
     } catch (e) {}
   };
 
@@ -28,8 +28,10 @@ export default function LoginAPI(ac) {
       const res = await axios.get("/node/read-cookie");
 
       if (res.data.signedIn === true) {
-        ac.setisSignedIn(res.data.signedIn);
+        console.log("readCookie -> res.data.signedIn", res.data.signedIn);
+        ac.setisSignedIn(true);
       } else {
+        ac.setisSignedIn(false);
         history.push("/login");
         $(this).addClass("closed");
         $(".navbar-side").css({ left: "-260px" });

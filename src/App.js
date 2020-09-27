@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import StatePersister from "./StatePersister";
 import Template from "./components/Template";
-import { BrowserRouter as Router, useHistory } from "react-router-dom";
-import axios from "axios";
-import $ from "jquery";
+import { BrowserRouter as Router } from "react-router-dom";
 
 const MainContext = React.createContext(null);
 
@@ -35,7 +33,6 @@ function App() {
   const [inputKey, setinputKey] = useState("");
   const [inputConfKey, setinputConfKey] = useState("");
   const [isLoggedIn, setisLoggedIn] = useState(false);
-  const [isSignedIn, setisSignedIn] = useState(false);
   const [switchLoginAPI, setswitchLoginAPI] = useState(true);
   const [switchDashboard, setswitchDashboard] = useState(false);
   const [switchLoggedIn, setswitchLoggedIn] = useState(false);
@@ -69,8 +66,6 @@ function App() {
   const [loadingOrg, setloadingOrg] = useState(false);
   const [loadingNet, setloadingNet] = useState(false);
   const [toolSelected, settoolSelected] = useState(false);
-  const [sessionStore, setsessionStore] = useState([]);
-  console.log("App -> sessionStore", sessionStore);
   const [showAlreadyisSignedInModal, setshowAlreadyisSignedInModal] = useState(
     false
   );
@@ -94,6 +89,15 @@ function App() {
   useEffect(() => {
     localStorage.setItem("my-User", JSON.stringify(User));
   }, [User]);
+
+  const [isSignedIn, setisSignedIn] = useState(() => {
+    const stickyValue = localStorage.getItem("my-isSignedIn");
+    return stickyValue !== null ? JSON.parse(stickyValue) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("my-isSignedIn", JSON.stringify(isSignedIn));
+  }, [isSignedIn]);
 
   // automatic get key from server on-render and on-refresh
   useEffect(() => {
@@ -467,8 +471,6 @@ function App() {
     settoolSelected,
     showAlreadyisSignedInModal,
     setshowAlreadyisSignedInModal,
-    sessionStore,
-    setsessionStore,
   };
 
   return (

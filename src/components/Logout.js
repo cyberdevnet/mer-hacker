@@ -12,18 +12,14 @@ export default function Logout(ac, props) {
   const deleteCookie = async () => {
     try {
       await axios
-        .post("/node/read-cookie", { username: ac.User })
+        .post("/node/read-cookie", {
+          username: ac.User,
+          isSignedIn: ac.isSignedIn,
+        })
         .then((res) => {
-          fetch("/node/clear-cookie", {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              username: ac.User,
-              sessionID: res.data.sessionID,
-            }),
+          return axios.post("/node/clear-cookie", {
+            username: ac.User,
+            sessionID: res.data.sessionID,
           });
         })
         .then(() => {
@@ -73,10 +69,6 @@ export default function Logout(ac, props) {
     ac.sethideLogin({ display: "block" });
     axios.post("/node/delete_backupfile", {});
     axios.post("/flask/delete_debugfile", {});
-    axios.post("/node/post-AlreadyisSignedIn", {
-      username: ac.User,
-      signed: false,
-    });
   };
 
   const Cancel = () => {

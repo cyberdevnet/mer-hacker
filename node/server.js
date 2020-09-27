@@ -1,8 +1,6 @@
 const express = require("express");
 const app = express();
 const multer = require("multer");
-const uuid = require("uuid");
-const morgan = require("morgan");
 const fileUpload = require("express-fileupload");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -11,10 +9,7 @@ const Mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
 const session = require("express-session");
-const redis = require("redis");
-const redisStore = require("connect-redis")(session);
 const MongoStore = require("connect-mongo")(session);
-const client = redis.createClient();
 
 app.use(cors());
 app.use(express.json());
@@ -157,33 +152,42 @@ app.use(
   })
 );
 
-app.post("/node/set-cookie", (req, res) => {
-  req.session.user = req.body.user;
-  res.send({
-    signedIn: true,
-    sessionID: req.sessionID,
-    username: req.session.user,
-  });
-  res.end("done");
+app.post("/node/set-cookie", (req, res, next) => {
+  try {
+    if (req.session.user !== req.body.user) {
+      req.session.user = req.body.user;
+      res.send({
+        signedIn: true,
+        sessionID: req.sessionID,
+        username: req.session.user,
+      });
+    }
+    res.end("done");
+  } catch (error) {
+    res.status(500).send(error);
+    return next(new Error(error));
+  }
 });
 
 app.post("/node/read-cookie", async (req, res, next) => {
   try {
-    var sessionID = await SessionModel.findOne({}).exec();
-    if (sessionID) {
-      const ID = sessionID._id;
-      console.log("ID", ID);
-      const json = JSON.parse(sessionID.session);
-      console.log(json.user);
-
-      if (json.user === req.body.username) {
-        res.send({ signedIn: true, sessionID: ID });
-      } else {
-        console.log("LOGGED OUT");
-        res.send({ signedIn: false });
-      }
+    if (req.body.username === req.session.user) {
+      console.log("LOGGED IN");
+      res.send({ signedIn: true, sessionID: req.sessionID });
     } else {
-      console.log("LOGGED OUT");
+      res.send({ signedIn: false, sessionID: req.sessionID });
+    }
+  } catch (error) {
+    res.status(500).send(error);
+    return next(new Error(error));
+  }
+});
+
+app.post("/node/clear-cookie", async (req, res, next) => {
+  try {
+    if (req.body.sessionID === req.sessionID) {
+      req.session.destroy();
+      console.log("SESSION DESTROYED ");
       res.send({ signedIn: false });
     }
   } catch (error) {
@@ -192,52 +196,21 @@ app.post("/node/read-cookie", async (req, res, next) => {
   }
 });
 
-app.post("/node/clear-cookie", async (req, res) => {
-  let sessionID = req.body.sessionID;
-
-  mongooseSessions
-    .collection("sessions")
-    .findOneAndDelete({ _id: sessionID }, function (err, session) {
-      res.send({ session: session, signedIn: false });
-      res.redirect("/login"); // will always fire after session is destroyed
-
-      console.log("SESSION DESTROYED ");
-    });
-
-  // req.session.destroy((err) => {
-  //   res.redirect("/login"); // will always fire after session is destroyed
-  // });
-
-  // req.session.destroy();
-  // res.send({ signedIn: false });
-});
-
 // Check if AlreadyisSignedIn
 
-app.post("/node/post-AlreadyisSignedIn", async (req, res, next) => {
-  try {
-    let signed = await UserModel.findOneAndUpdate(
-      { username: req.body.username },
-      { signed: req.body.signed },
-      req.body
-    );
-
-    res.send(signed);
-  } catch (error) {
-    res.status(500).send(error);
-    return next(new Error(error));
-  }
-});
-
-//post route to the user database to retrieve the AlreadyisSignedIn boolean
+//post route to the database to retrieve the AlreadyisSignedIn boolean
 
 app.post("/node/get-AlreadyisSignedIn", async (req, res, next) => {
   try {
-    var signed = await UserModel.findOne(
-      { username: req.body.username },
-      { signed: "signed" }
-    );
-    res.send(signed);
+    if (req.sessionID) {
+      console.log("ALREADY SIGNED");
+      let signed = true;
+      res.send({ signed: signed });
+    } else {
+      console.log("NOT SIGNED");
+      let signed = false;
+      res.send({ signed: signed });
+    }
   } catch (error) {
     res.status(500).send(error);
     return next(new Error(error));
@@ -412,7 +385,6 @@ app.post("/node/upload_backupfile", async (req, res) => {
       if (req.files.backup.mimetype === "text/plain") {
         const { backup } = req.files;
 
-        // backup.mv("/home/cyberdevnet/mer-hacker-dev/api/cisco_meraki_migrate_tool/config_backups/backups/backup.txt")
         backup.mv(
           path.join(
             __dirname,
@@ -480,9 +452,17 @@ app.post("/node/delete_backupfile", async (req, res) => {
       function (err) {
         if (err) {
           console.log(err);
+          res.send({
+            status: false,
+            message: "Backupfile not deleted",
+          });
         }
 
         // if no error, file has been deleted successfully
+        res.send({
+          status: true,
+          message: "Backupfile deleted",
+        });
         console.log("Backupfile deleted!");
       }
     );

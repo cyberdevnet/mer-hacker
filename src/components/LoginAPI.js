@@ -7,7 +7,6 @@ import AlreadyisSignedInModal from "./AlreadyisSignedInModal";
 
 export default function LoginAPI(ac) {
   const [triggertryLogin, settriggertryLogin] = useState(0);
-  console.log("LoginAPI -> triggertryLogin", triggertryLogin);
   const [triggerAlreadyisSignedIn, settriggerAlreadyisSignedIn] = useState(0);
   const [loading, setloading] = useState(false);
 
@@ -28,7 +27,10 @@ export default function LoginAPI(ac) {
   const readCookie = async () => {
     try {
       await axios
-        .post("/node/read-cookie", { username: ac.User })
+        .post("/node/read-cookie", {
+          username: ac.User,
+          isSignedIn: ac.isSignedIn,
+        })
         .then((res) => {
           if (res.data.signedIn === true) {
             ac.setisSignedIn(true);
@@ -50,6 +52,18 @@ export default function LoginAPI(ac) {
     // eslint-disable-next-line
   }, []);
 
+  // function used to upload a Mock backup file on the xpress server
+  const UploadMockBackupFile = async (data) => {
+    const formData = new FormData();
+    const blob = new Blob(["this is\na mock file"], { type: "text/plain" });
+    formData.append("backup", blob, "backup.txt");
+
+    await fetch("/node/upload_backupfile", {
+      method: "POST",
+      body: formData,
+    }).then((res) => res.json());
+  };
+
   const setUser = (e) => {
     e.preventDefault();
     ac.setUser(e.target.value);
@@ -61,12 +75,16 @@ export default function LoginAPI(ac) {
   };
 
   const handleLogin = () => {
-    settriggerAlreadyisSignedIn(triggerAlreadyisSignedIn + 1);
+    if (ac.User && ac.Password.length > 0) {
+      settriggerAlreadyisSignedIn(triggerAlreadyisSignedIn + 1);
+    }
   };
 
   const handleLoginEnter = (e) => {
-    if (e.key === "Enter") {
-      settriggerAlreadyisSignedIn(triggerAlreadyisSignedIn + 1);
+    if (ac.User && ac.Password.length > 0) {
+      if (e.key === "Enter") {
+        settriggerAlreadyisSignedIn(triggerAlreadyisSignedIn + 1);
+      }
     }
   };
 
@@ -99,10 +117,10 @@ export default function LoginAPI(ac) {
         .then((data) => {
           let response = data.signed;
 
-          if (response === "true") {
+          if (response === true) {
             // deny login because another user is using the application
             ac.setshowAlreadyisSignedInModal(true);
-          } else if (response === "false") {
+          } else if (response === false) {
             //no another user is using the application, trigger the real Login
             settriggertryLogin(triggertryLogin + 1);
           }
@@ -140,15 +158,16 @@ export default function LoginAPI(ac) {
         //simulate delay
         setTimeout(() => {
           if (res.data === "Allowed") {
+            UploadMockBackupFile();
             ac.sethideLogin({ display: "none" });
             setCookie();
             ac.setswitchLoggedIn(true);
             ac.setisSignedIn(res.data.signedIn);
             setloading(false);
-            axios.post("/node/post-AlreadyisSignedIn", {
-              username: ac.User,
-              signed: "true",
-            });
+            // axios.post("/node/post-AlreadyisSignedIn", {
+            //   username: ac.User,
+            //   signed: "true",
+            // });
           } else {
             setloading(false);
             seterrorMessageLogin(

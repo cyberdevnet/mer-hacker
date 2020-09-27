@@ -69,6 +69,8 @@ function App() {
   const [loadingOrg, setloadingOrg] = useState(false);
   const [loadingNet, setloadingNet] = useState(false);
   const [toolSelected, settoolSelected] = useState(false);
+  const [sessionStore, setsessionStore] = useState([]);
+  console.log("App -> sessionStore", sessionStore);
   const [showAlreadyisSignedInModal, setshowAlreadyisSignedInModal] = useState(
     false
   );
@@ -82,31 +84,6 @@ function App() {
     7: false,
     8: false,
   });
-
-  // let history = useHistory();
-
-  // const readCookie = async () => {
-  //   try {
-  //     const res = await axios.get("/node/read-cookie");
-
-  //     if (res.data.signedIn === true) {
-  //       console.log("readCookie -> res.data.signedIn", res.data.signedIn);
-  //       setisSignedIn(true);
-  //     } else {
-  //       setisSignedIn(false);
-  //       history.push("/login");
-  //       $(this).addClass("closed");
-  //       $(".navbar-side").css({ left: "-260px" });
-  //       $("#page-wrapper").css({ "margin-left": "0px" });
-  //     }
-  //   } catch (e) {
-  //     setisSignedIn(false);
-  //   }
-  // };
-
-  // setTimeout(() => {
-  //   readCookie();
-  // }, 15000);
 
   //set the logged user in local storage to be retrieved from getKey() function
   const [User, setUser] = useState(() => {
@@ -490,6 +467,8 @@ function App() {
     settoolSelected,
     showAlreadyisSignedInModal,
     setshowAlreadyisSignedInModal,
+    sessionStore,
+    setsessionStore,
   };
 
   return (

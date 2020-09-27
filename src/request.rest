@@ -19,7 +19,15 @@ GET http://localhost:3001/node/clear-cookie
 
 
 ###
-GET http://localhost:3001/node/read-cookie
+POST http://localhost:3001/node/read-cookie
+Content-Type: application/json 
+Accept : */*
+
+{
+    
+    "username": "admin"
+    
+}
 
 ###
 
@@ -41,7 +49,7 @@ Accept : */*
 
 {
     "username": "admin", "password": "1234", "apiKey":"tzu",
-    "signed": "false","session":"session"
+    "signed": "false"
 
 }
 

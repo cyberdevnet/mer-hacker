@@ -126,12 +126,30 @@ app.post("/node/authenticate", async (req, res, next) => {
 
 //session set - read - clear
 
+var mongooseSessions = Mongoose.createConnection(
+  "mongodb://localhost/sessions",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  }
+);
+
+// const SessionSchema = new Mongoose.Schema({ any: {} });
+
+const SessionSchema = new Mongoose.Schema({
+  _id: String,
+  expires: String,
+  session: Object,
+});
+
+const SessionModel = mongooseSessions.model("sessions", SessionSchema);
+
 app.use(
   session({
     secret: "82e4e438a0705fabf61f9854e3b575af",
     store: new MongoStore({
-      mongooseConnection: mongooseConnection,
-      collection: "users",
+      mongooseConnection: mongooseSessions,
       ttl: 3600,
     }),
     saveUninitialized: false,
@@ -140,38 +158,63 @@ app.use(
 );
 
 app.post("/node/set-cookie", (req, res) => {
-  console.log("req", req.body.user);
   req.session.user = req.body.user;
-  res.send({ signedIn: true });
+  res.send({
+    signedIn: true,
+    sessionID: req.sessionID,
+    username: req.session.user,
+  });
   res.end("done");
 });
 
-app.get("/node/read-cookie", (req, res) => {
-  if (req.session.user) {
-    console.log("LOGGED IN AS:", req.session.user);
-    res.send({ signedIn: true });
-  } else {
-    console.log("LOGGED OUT");
+app.post("/node/read-cookie", async (req, res, next) => {
+  try {
+    var sessionID = await SessionModel.findOne({}).exec();
+    if (sessionID) {
+      const ID = sessionID._id;
+      console.log("ID", ID);
+      const json = JSON.parse(sessionID.session);
+      console.log(json.user);
 
-    res.send({ signedIn: false });
+      if (json.user === req.body.username) {
+        res.send({ signedIn: true, sessionID: ID });
+      } else {
+        console.log("LOGGED OUT");
+        res.send({ signedIn: false });
+      }
+    } else {
+      console.log("LOGGED OUT");
+      res.send({ signedIn: false });
+    }
+  } catch (error) {
+    res.status(500).send(error);
+    return next(new Error(error));
   }
 });
 
-app.get("/node/clear-cookie", (req, res) => {
-  console.log("SESSION DESTROYED ");
+app.post("/node/clear-cookie", async (req, res) => {
+  let sessionID = req.body.sessionID;
+
+  mongooseSessions
+    .collection("sessions")
+    .findOneAndDelete({ _id: sessionID }, function (err, session) {
+      res.send({ session: session, signedIn: false });
+      res.redirect("/login"); // will always fire after session is destroyed
+
+      console.log("SESSION DESTROYED ");
+    });
 
   // req.session.destroy((err) => {
-  //   res.redirect("/"); // will always fire after session is destroyed
+  //   res.redirect("/login"); // will always fire after session is destroyed
   // });
 
-  req.session.destroy();
-  res.send({ signedIn: false });
+  // req.session.destroy();
+  // res.send({ signedIn: false });
 });
 
 // Check if AlreadyisSignedIn
 
 app.post("/node/post-AlreadyisSignedIn", async (req, res, next) => {
-  console.log("req", req.body);
   try {
     let signed = await UserModel.findOneAndUpdate(
       { username: req.body.username },
@@ -204,7 +247,6 @@ app.post("/node/get-AlreadyisSignedIn", async (req, res, next) => {
 // store and retrieve API key
 
 app.post("/node/post-api-key", async (req, res, next) => {
-  console.log("req", req.boy);
   try {
     if (req.body.username !== "leer") {
       //user is still logged
@@ -430,8 +472,6 @@ app.post("/node/upload_build_meraki_switchconfig", async (req, res) => {
 
 app.post("/node/delete_backupfile", async (req, res) => {
   try {
-    // delete file named 'backup.txt'
-    // fs.unlink("/home/cyberdevnet/mer-hacker-dev/api/cisco_meraki_migrate_tool/config_backups/backups/backup.txt", function (err) {
     fs.unlink(
       path.join(
         __dirname,

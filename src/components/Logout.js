@@ -11,9 +11,25 @@ export default function Logout(ac, props) {
 
   const deleteCookie = async () => {
     try {
-      await axios.get("/node/clear-cookie");
-      ac.setisSignedIn(false);
-      history.push("/login");
+      await axios
+        .post("/node/read-cookie", { username: ac.User })
+        .then((res) => {
+          fetch("/node/clear-cookie", {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: ac.User,
+              sessionID: res.data.sessionID,
+            }),
+          });
+        })
+        .then(() => {
+          ac.setisSignedIn(false);
+          history.push("/login");
+        });
     } catch (e) {
       console.log(e);
     }

@@ -202,15 +202,21 @@ app.post("/node/clear-cookie", async (req, res, next) => {
 
 app.post("/node/get-AlreadyisSignedIn", async (req, res, next) => {
   try {
-    if (req.sessionID) {
-      console.log("ALREADY SIGNED");
-      let signed = true;
-      res.send({ signed: signed });
-    } else {
-      console.log("NOT SIGNED");
-      let signed = false;
-      res.send({ signed: signed });
-    }
+    SessionModel.findOne({}, function (err, result) {
+      if (err) {
+        console.log(err);
+      } else {
+        if (result) {
+          console.log("ALREADY SIGNED");
+          let signed = true;
+          res.send({ signed: signed });
+        } else {
+          console.log("NOT SIGNED");
+          let signed = false;
+          res.send({ signed: signed });
+        }
+      }
+    });
   } catch (error) {
     res.status(500).send(error);
     return next(new Error(error));

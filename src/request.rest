@@ -1,10 +1,8 @@
 
 
-###
-GET http://localhost:3001/node/clear-cookie
 
-###
-GET http://localhost:3001/node/read-cookie
+
+
 
 ###
 ###
@@ -18,7 +16,39 @@ GET http://localhost:3001/node/flask/backup_restore/meraki_restore_network.py
 
 
 
-GET http://localhost:3001/node/set-cookie
+###
+POST http://localhost:3001/node/clear-cookie
+Content-Type: application/json 
+Accept : */*
+
+{
+    
+     "sessionID": "7H_F5XhfzFEgp0bn8n6zP8SUbw_jAF77"
+    
+}
+
+###
+POST http://localhost:3001/node/read-cookie
+Content-Type: application/json 
+Accept : */*
+
+{
+    
+    "username": "admin"
+    
+}
+
+###
+
+POST http://localhost:3001/node/set-cookie
+Content-Type: application/json 
+Accept : */*
+
+{
+    
+    "user": "admin"
+    
+}
 
 ###
 
@@ -27,7 +57,8 @@ Content-Type: application/json
 Accept : */*
 
 {
-    "username": "mer-hacker", "password": "mer-hacker"
+    "username": "admin", "password": "1234", "apiKey":"tzu",
+    "signed": "false"
 
 }
 
@@ -59,12 +90,27 @@ GET http://localhost:3001/node/dump
 GET http://localhost:3001/node/get-api-key
 
 
+
+
+
+###
+POST http://localhost:3001/node/get-api-key
+Content-Type: application/json
+
+{
+    "username": "ENCRYPT"
+
+}
+
+
+
 ###
 POST http://localhost:3001/node/post-api-key
 Content-Type: application/json
 
 {
-    "key": "778zeuhsh"
+    "username": "ENCRYPT",
+    "apiKey": "zulu"
 
 }
 
@@ -81,7 +127,13 @@ GET http://localhost:5000/flask/change_log
 
 
 ###
-GET http://localhost:3001/node/get-AlreadyisSignedIn
+POST http://localhost:3001/node/get-AlreadyisSignedIn
+Content-Type: application/json
+
+
+{
+    "username": "admin"
+}
 
 
 ###
@@ -89,9 +141,20 @@ POST http://localhost:3001/node/post-AlreadyisSignedIn
 Content-Type: application/json
 
 {
-    "AlreadyisSignedIn": false
+    "username": "admin",
+    "signed": false
 
 }
+
+
+###
+POST http://localhost:3001/node/upload_backupfile
+Content-Type: text/plain
+
+
+"ciao"
+
+
 
 
 ###

@@ -1,8 +1,6 @@
 const express = require("express");
 const app = express();
 const multer = require("multer");
-const uuid = require("uuid");
-const morgan = require("morgan");
 const fileUpload = require("express-fileupload");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -10,10 +8,14 @@ const bcrypt = require("bcrypt");
 const Mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
+const session = require("express-session");
+const MongoStore = require("connect-mongo")(session);
 
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(__dirname + "/views"));
 let urlencodedParser = bodyParser.urlencoded({ extended: true });
 var jsonParser = bodyParser.json();
 
@@ -40,14 +42,20 @@ app.use(cookieParser("82e4e438a0705fabf61f9854e3b575af"));
 
 // Mongodb initialization to users database
 
-var conn = Mongoose.createConnection("mongodb://localhost/users", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+var mongooseConnection = Mongoose.createConnection(
+  "mongodb://localhost/users",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  }
+);
 
 const UserSchema = new Mongoose.Schema({
   username: String,
   password: String,
+  apiKey: String,
+  signed: String,
 });
 
 //check to see if the user is being created or changed.
@@ -61,14 +69,14 @@ UserSchema.pre("save", function (next) {
   next();
 });
 
-//function take the provided data, compare it against our hashed data,
+//function take the provided user data, compare it against our hashed user data,
 //and then return the boolean res within the callback.
 
 UserSchema.methods.comparePassword = function (plaintext, callback) {
   return callback(null, bcrypt.compareSync(plaintext, this.password));
 };
 
-const UserModel = conn.model("user", UserSchema);
+const UserModel = mongooseConnection.model("user", UserSchema);
 
 //connection to the Mongodb database to check the users
 app.get("/node/dump", async (req, res) => {
@@ -84,6 +92,7 @@ app.get("/node/dump", async (req, res) => {
 app.post("/node/hash-users", async (req, res) => {
   try {
     const user = new UserModel(req.body);
+    console.log("user", user);
     const result = await user.save();
     res.send(result);
     res.status(201).send();
@@ -110,67 +119,104 @@ app.post("/node/authenticate", async (req, res, next) => {
   }
 });
 
-//cookie set - read - clear
-app.get("/node/set-cookie", (req, res) => {
-  const options = {
-    maxAge: 1000 * 60 * 60, // would expire after 60 minutes
-    httpOnly: true, // The cookie only accessible by the web server
-    signed: true, // Indicates if the cookie should be signed
-  };
-  res.cookie("cookie", "somerandomstuff", options).send({ signedIn: true });
-});
+//session set - read - clear
 
-app.get("/node/read-cookie", (req, res) => {
-  if (req.signedCookies.cookie === "somerandomstuff") {
-    res.send({ signedIn: true });
-  } else {
-    res.send({ signedIn: false });
+var mongooseSessions = Mongoose.createConnection(
+  "mongodb://localhost/sessions",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
   }
-});
-
-app.get("/node/clear-cookie", (req, res) => {
-  res.clearCookie("cookie").end();
-});
-
-// Check if AlreadyisSignedIn
-
-// Mongodb initialization to AlreadyisSignedIn database
-
-var conn3 = Mongoose.createConnection("mongodb://localhost/AlreadyisSignedIn", {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-});
-
-const AlreadyisSignedInModel = conn3.model(
-  "AlreadyisSignedIn",
-  { AlreadyisSignedIn: Boolean },
-  "AlreadyisSignedIn"
 );
 
-//post route to the AlreadyisSignedIn database to update the AlreadyisSignedIn boolean
-app.post("/node/post-AlreadyisSignedIn", async (req, res, next) => {
-  try {
-    let AlreadyisSignedIn = await AlreadyisSignedInModel.findOneAndUpdate(
-      {},
-      { AlreadyisSignedIn: req.body.AlreadyisSignedIn },
-      { new: true }
-    );
+// const SessionSchema = new Mongoose.Schema({ any: {} });
 
-    res.send(AlreadyisSignedIn);
+const SessionSchema = new Mongoose.Schema({
+  _id: String,
+  expires: String,
+  session: Object,
+});
+
+const SessionModel = mongooseSessions.model("sessions", SessionSchema);
+
+app.use(
+  session({
+    secret: "82e4e438a0705fabf61f9854e3b575af",
+    store: new MongoStore({
+      mongooseConnection: mongooseSessions,
+      ttl: 3600,
+    }),
+    saveUninitialized: false,
+    resave: false,
+  })
+);
+
+app.post("/node/set-cookie", (req, res, next) => {
+  try {
+    if (req.session.user !== req.body.user) {
+      req.session.user = req.body.user;
+      res.send({
+        signedIn: true,
+        sessionID: req.sessionID,
+        username: req.session.user,
+      });
+    }
+    res.end("done");
   } catch (error) {
     res.status(500).send(error);
     return next(new Error(error));
   }
 });
 
-//get route to the AlreadyisSignedIn database to retrieve the AlreadyisSignedIn boolean
-
-app.get("/node/get-AlreadyisSignedIn", async (req, res, next) => {
+app.post("/node/read-cookie", async (req, res, next) => {
   try {
-    var AlreadyisSignedIn = await AlreadyisSignedInModel.find();
-    res.send(AlreadyisSignedIn);
+    if (req.body.username === req.session.user) {
+      console.log("LOGGED IN");
+      res.send({ signedIn: true, sessionID: req.sessionID });
+    } else {
+      res.send({ signedIn: false, sessionID: req.sessionID });
+    }
+  } catch (error) {
+    res.status(500).send(error);
+    return next(new Error(error));
+  }
+});
+
+app.post("/node/clear-cookie", async (req, res, next) => {
+  try {
+    if (req.body.sessionID === req.sessionID) {
+      req.session.destroy();
+      console.log("SESSION DESTROYED ");
+      res.send({ signedIn: false });
+    }
+  } catch (error) {
+    res.status(500).send(error);
+    return next(new Error(error));
+  }
+});
+
+// Check if AlreadyisSignedIn
+
+//post route to the database to retrieve the AlreadyisSignedIn boolean
+
+app.post("/node/get-AlreadyisSignedIn", async (req, res, next) => {
+  try {
+    SessionModel.findOne({}, function (err, result) {
+      if (err) {
+        console.log(err);
+      } else {
+        if (result) {
+          console.log("ALREADY SIGNED");
+          let signed = true;
+          res.send({ signed: signed });
+        } else {
+          console.log("NOT SIGNED");
+          let signed = false;
+          res.send({ signed: signed });
+        }
+      }
+    });
   } catch (error) {
     res.status(500).send(error);
     return next(new Error(error));
@@ -179,29 +225,41 @@ app.get("/node/get-AlreadyisSignedIn", async (req, res, next) => {
 
 // store and retrieve API key
 
-// Mongodb initialization to apikeys database
-
-var conn2 = Mongoose.createConnection("mongodb://localhost/apikeys", {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-});
-
-const ApiKeysModel = conn2.model("apikeys", { key: String });
-
-//this route updates an existing entry in the database with the api key sent from client
-// if for every reason there were no entry, create a new one with the route above:
-
 app.post("/node/post-api-key", async (req, res, next) => {
   try {
-    const key = ApiKeysModel.findOneAndUpdate(
-      {},
-      { key: req.body.key },
-      req.body
+    if (req.body.username !== "leer") {
+      //user is still logged
+      const key = await UserModel.findOneAndUpdate(
+        { username: req.body.username },
+        { apiKey: req.body.apiKey },
+        req.body
+      ).exec();
+      res.json(key);
+      res.status(201).send();
+    } else {
+      const key = await UserModel.updateMany(
+        //user has already logged-out, remove api-key from database
+        {},
+        { apiKey: req.body.apiKey },
+        req.body
+      ).exec();
+      res.json(key);
+      res.status(201).send();
+    }
+  } catch (error) {
+    res.status(500).send(error);
+    return next(new Error(error));
+  }
+});
+
+//connection to the apikeys database to retrieve the key
+app.post("/node/get-api-key", async (req, res, next) => {
+  try {
+    var apiKey = await UserModel.findOne(
+      { username: req.body.username },
+      { apiKey: "apiKey" }
     ).exec();
-    res.json(key);
-    res.status(201).send();
+    res.send(apiKey);
   } catch (error) {
     res.status(500).send(error);
     return next(new Error(error));
@@ -209,6 +267,9 @@ app.post("/node/post-api-key", async (req, res, next) => {
 });
 
 //  <======== DO NOT DELETE THIS ROUTE =========>
+
+//this route updates an existing entry in the database with the api key sent from client
+// if for every reason there were no entry, create a new one with the route above:
 
 //this route can be used to create a new entry in the database if not present
 
@@ -224,17 +285,6 @@ app.post("/node/post-api-key", async (req, res, next) => {
 // })
 
 //  <======== DO NOT DELETE THIS =========>
-
-//connection to the apikeys database to retrieve the key
-app.get("/node/get-api-key", async (req, res, next) => {
-  try {
-    var apiKey = await ApiKeysModel.findOne({}, { key: "key" }).exec();
-    res.send(apiKey);
-  } catch (error) {
-    res.status(500).send(error);
-    return next(new Error(error));
-  }
-});
 
 // serve static files for backup/restore script
 
@@ -341,7 +391,6 @@ app.post("/node/upload_backupfile", async (req, res) => {
       if (req.files.backup.mimetype === "text/plain") {
         const { backup } = req.files;
 
-        // backup.mv("/home/cyberdevnet/mer-hacker-dev/api/cisco_meraki_migrate_tool/config_backups/backups/backup.txt")
         backup.mv(
           path.join(
             __dirname,
@@ -401,8 +450,6 @@ app.post("/node/upload_build_meraki_switchconfig", async (req, res) => {
 
 app.post("/node/delete_backupfile", async (req, res) => {
   try {
-    // delete file named 'backup.txt'
-    // fs.unlink("/home/cyberdevnet/mer-hacker-dev/api/cisco_meraki_migrate_tool/config_backups/backups/backup.txt", function (err) {
     fs.unlink(
       path.join(
         __dirname,
@@ -411,9 +458,17 @@ app.post("/node/delete_backupfile", async (req, res) => {
       function (err) {
         if (err) {
           console.log(err);
+          res.send({
+            status: false,
+            message: "Backupfile not deleted",
+          });
         }
 
         // if no error, file has been deleted successfully
+        res.send({
+          status: true,
+          message: "Backupfile deleted",
+        });
         console.log("Backupfile deleted!");
       }
     );

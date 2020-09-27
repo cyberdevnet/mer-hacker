@@ -8,7 +8,6 @@ const MainContext = React.createContext(null);
 function App() {
   // eslint-disable-next-line
   const [apiKey, setapiKey] = useState([]);
-  const [User, setUser] = useState([]);
   const [Password, setPassword] = useState([]);
   const [triggerGetOrg, settriggerGetOrg] = useState(0);
   const [triggerSelectOrg, settriggerSelectOrg] = useState(0);
@@ -34,7 +33,6 @@ function App() {
   const [inputKey, setinputKey] = useState("");
   const [inputConfKey, setinputConfKey] = useState("");
   const [isLoggedIn, setisLoggedIn] = useState(false);
-  const [isSignedIn, setisSignedIn] = useState(false);
   const [switchLoginAPI, setswitchLoginAPI] = useState(true);
   const [switchDashboard, setswitchDashboard] = useState(false);
   const [switchLoggedIn, setswitchLoggedIn] = useState(false);
@@ -82,21 +80,49 @@ function App() {
     8: false,
   });
 
+  //set the logged user in local storage to be retrieved from getKey() function
+  const [User, setUser] = useState(() => {
+    const stickyValue = localStorage.getItem("my-User");
+    return stickyValue !== null ? JSON.parse(stickyValue) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("my-User", JSON.stringify(User));
+  }, [User]);
+
+  const [isSignedIn, setisSignedIn] = useState(() => {
+    const stickyValue = localStorage.getItem("my-isSignedIn");
+    return stickyValue !== null ? JSON.parse(stickyValue) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("my-isSignedIn", JSON.stringify(isSignedIn));
+  }, [isSignedIn]);
+
   // automatic get key from server on-render and on-refresh
   useEffect(() => {
     async function getKey() {
-      try {
-        fetch("node/get-api-key")
-          .then((res) => res.json())
-          .then((data) => {
-            setapiKey(data.key);
-          })
-          .catch((error) => console.log("An error occured ", error));
-      } catch (e) {
-        console.log("Error:", e);
-      }
+      fetch("/node/get-api-key", {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: `${User}` }),
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          setapiKey(data.apiKey);
+        })
+        .catch((error) => {
+          console.log("An error occured ", error);
+        });
     }
+
     getKey();
+    // eslint-disable-next-line
   }, []);
 
   const APIbody = {

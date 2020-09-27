@@ -11,9 +11,21 @@ export default function Logout(ac, props) {
 
   const deleteCookie = async () => {
     try {
-      await axios.get("/node/clear-cookie");
-      ac.setisSignedIn(false);
-      history.push("/login");
+      await axios
+        .post("/node/read-cookie", {
+          username: ac.User,
+          isSignedIn: ac.isSignedIn,
+        })
+        .then((res) => {
+          return axios.post("/node/clear-cookie", {
+            username: ac.User,
+            sessionID: res.data.sessionID,
+          });
+        })
+        .then(() => {
+          ac.setisSignedIn(false);
+          history.push("/login");
+        });
     } catch (e) {
       console.log(e);
     }
@@ -27,7 +39,10 @@ export default function Logout(ac, props) {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ key: "leer" }),
+      body: JSON.stringify({
+        username: "leer",
+        apiKey: "leer",
+      }),
     });
     return await rawResponse.json();
   }
@@ -54,9 +69,6 @@ export default function Logout(ac, props) {
     ac.sethideLogin({ display: "block" });
     axios.post("/node/delete_backupfile", {});
     axios.post("/flask/delete_debugfile", {});
-    axios.post("/node/post-AlreadyisSignedIn", {
-      AlreadyisSignedIn: false,
-    });
   };
 
   const Cancel = () => {

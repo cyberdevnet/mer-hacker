@@ -18,23 +18,30 @@ export default function LoginAPI(ac) {
   const setCookie = async () => {
     try {
       // eslint-disable-next-line
-      const res = await axios.get("/node/set-cookie");
+      const res = await axios.post("/node/set-cookie", { user: ac.User });
+      ac.setisSignedIn(true);
     } catch (e) {}
   };
 
   // readCookie Function checks if SignedIN or not
   const readCookie = async () => {
     try {
-      const res = await axios.get("/node/read-cookie");
-
-      if (res.data.signedIn === true) {
-        ac.setisSignedIn(res.data.signedIn);
-      } else {
-        history.push("/login");
-        $(this).addClass("closed");
-        $(".navbar-side").css({ left: "-260px" });
-        $("#page-wrapper").css({ "margin-left": "0px" });
-      }
+      await axios
+        .post("/node/read-cookie", {
+          username: ac.User,
+          isSignedIn: ac.isSignedIn,
+        })
+        .then((res) => {
+          if (res.data.signedIn === true) {
+            ac.setisSignedIn(true);
+          } else {
+            ac.setisSignedIn(false);
+            history.push("/login");
+            $(this).addClass("closed");
+            $(".navbar-side").css({ left: "-260px" });
+            $("#page-wrapper").css({ "margin-left": "0px" });
+          }
+        });
     } catch (e) {
       ac.setisSignedIn(false);
     }
@@ -44,6 +51,18 @@ export default function LoginAPI(ac) {
     readCookie();
     // eslint-disable-next-line
   }, []);
+
+  // function used to upload a Mock backup file on the xpress server
+  const UploadMockBackupFile = async (data) => {
+    const formData = new FormData();
+    const blob = new Blob(["this is\na mock file"], { type: "text/plain" });
+    formData.append("backup", blob, "backup.txt");
+
+    await fetch("/node/upload_backupfile", {
+      method: "POST",
+      body: formData,
+    }).then((res) => res.json());
+  };
 
   const setUser = (e) => {
     e.preventDefault();
@@ -56,12 +75,16 @@ export default function LoginAPI(ac) {
   };
 
   const handleLogin = () => {
-    settriggerAlreadyisSignedIn(triggerAlreadyisSignedIn + 1);
+    if (ac.User && ac.Password.length > 0) {
+      settriggerAlreadyisSignedIn(triggerAlreadyisSignedIn + 1);
+    }
   };
 
   const handleLoginEnter = (e) => {
-    if (e.key === "Enter") {
-      settriggerAlreadyisSignedIn(triggerAlreadyisSignedIn + 1);
+    if (ac.User && ac.Password.length > 0) {
+      if (e.key === "Enter") {
+        settriggerAlreadyisSignedIn(triggerAlreadyisSignedIn + 1);
+      }
     }
   };
 
@@ -75,18 +98,24 @@ export default function LoginAPI(ac) {
 
   useEffect(() => {
     const abortController = new AbortController();
-    const signal = abortController.signal;
     if (isFirstAlreadyisSignedIn.current) {
       isFirstAlreadyisSignedIn.current = false;
       return;
     }
     async function AlreadyisSignedIn() {
-      fetch("/node/get-AlreadyisSignedIn", { signal: signal })
+      fetch("/node/get-AlreadyisSignedIn", {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: `${ac.User}` }),
+      })
         .then((res) => {
           return res.json();
         })
         .then((data) => {
-          let response = data[0].AlreadyisSignedIn;
+          let response = data.signed;
 
           if (response === true) {
             // deny login because another user is using the application
@@ -129,14 +158,16 @@ export default function LoginAPI(ac) {
         //simulate delay
         setTimeout(() => {
           if (res.data === "Allowed") {
+            UploadMockBackupFile();
             ac.sethideLogin({ display: "none" });
             setCookie();
             ac.setswitchLoggedIn(true);
             ac.setisSignedIn(res.data.signedIn);
             setloading(false);
-            axios.post("/node/post-AlreadyisSignedIn", {
-              AlreadyisSignedIn: true,
-            });
+            // axios.post("/node/post-AlreadyisSignedIn", {
+            //   username: ac.User,
+            //   signed: "true",
+            // });
           } else {
             setloading(false);
             seterrorMessageLogin(

@@ -4,7 +4,6 @@ import { Route, Redirect, useHistory } from "react-router-dom";
 
 const ProtectedRoute = ({ component: Component, ac, ...rest }) => {
   const [tempState, settempState] = useState(false);
-  console.log("ProtectedRoute -> tempState", tempState);
 
   useEffect(() => {
     readCookie();
@@ -16,12 +15,19 @@ const ProtectedRoute = ({ component: Component, ac, ...rest }) => {
   const readCookie = async () => {
     try {
       await axios
-        .post("/node/read-cookie", { username: rest.User })
+        .post("/node/read-cookie", {
+          username: rest.User,
+          // isSignedIn: true,
+          isSignedIn: rest.isSignedIn,
+        })
         .then((res) => {
           if (res.data.signedIn === true) {
             settempState(res.data.signedIn);
+            rest.setisSignedIn(true);
             return res.data.signedIn;
           } else {
+            rest.setisSignedIn(false);
+
             history.push("/login");
           }
         });

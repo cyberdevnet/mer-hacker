@@ -14,9 +14,18 @@ GET http://localhost:3001/node/flask/backup_restore/meraki_restore_network.py
 
 ###
 
-###
-GET http://localhost:3001/node/clear-cookie
 
+
+###
+POST http://localhost:3001/node/clear-cookie
+Content-Type: application/json 
+Accept : */*
+
+{
+    
+     "sessionID": "7H_F5XhfzFEgp0bn8n6zP8SUbw_jAF77"
+    
+}
 
 ###
 POST http://localhost:3001/node/read-cookie
@@ -136,6 +145,16 @@ Content-Type: application/json
     "signed": false
 
 }
+
+
+###
+POST http://localhost:3001/node/upload_backupfile
+Content-Type: text/plain
+
+
+"ciao"
+
+
 
 
 ###

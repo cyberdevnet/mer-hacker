@@ -79,7 +79,13 @@ export default function GetAllSubnets(ac) {
             }
           })
           .then(() => setloading(false))
-          .then(() => setshowtable(true));
+          .then(() => {
+            if (dataInventory.length > 0) {
+              setshowtable(true);
+            } else {
+              setloading(false);
+            }
+          });
       } else {
         ac.dc.setswitchAlertModal(true);
         ac.dc.setAlertModalError("Please set Organization and Network.");
@@ -93,6 +99,7 @@ export default function GetAllSubnets(ac) {
       ac.dc.setflashMessages([]);
       ac.dc.setvlanList([]);
       setshowtable(false);
+      setloading(false);
     };
     // eslint-disable-next-line
   }, [trigger]);

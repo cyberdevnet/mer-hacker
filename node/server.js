@@ -92,7 +92,6 @@ app.get("/node/dump", async (req, res) => {
 app.post("/node/hash-users", async (req, res) => {
   try {
     const user = new UserModel(req.body);
-    console.log("user", user);
     const result = await user.save();
     res.send(result);
     res.status(201).send();
@@ -203,13 +202,25 @@ app.post("/node/clear-cookie", async (req, res, next) => {
 app.post("/node/get-AlreadyisSignedIn", async (req, res, next) => {
   try {
     SessionModel.findOne({}, function (err, result) {
+      // console.log("result", result);
+      // let session = JSON.parse(result.session);
+      // let user = session.user;
       if (err) {
         console.log(err);
       } else {
-        if (result) {
-          console.log("ALREADY SIGNED");
-          let signed = true;
-          res.send({ signed: signed });
+        if (result !== null) {
+          console.log("result", result);
+          let session = JSON.parse(result.session);
+          let user = session.user;
+          if (result && user === req.body.username) {
+            console.log("ALREADY SIGNED");
+            let signed = true;
+            res.send({ signed: signed });
+          } else {
+            console.log("NOT SIGNED");
+            let signed = false;
+            res.send({ signed: signed });
+          }
         } else {
           console.log("NOT SIGNED");
           let signed = false;
@@ -479,15 +490,38 @@ app.post("/node/delete_backupfile", async (req, res) => {
 
 //Reading template file
 
-app.get("/node/read_templateFile", async (req, res, next) => {
-  const jsonFile = require("fs");
+var mongooseTemplates = Mongoose.createConnection(
+  "mongodb://127.0.0.1/templates",
+  {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  }
+);
+
+const SwitchPortTemplateSchema = new Mongoose.Schema(
+  {
+    user: String,
+    templates: {},
+  },
+  { strict: false }
+);
+
+const SwitchportTemplateModel = mongooseTemplates.model(
+  "template",
+  SwitchPortTemplateSchema
+);
+
+app.post("/node/read_templateFile", async (req, res, next) => {
   try {
-    // let rawTemplate = jsonFile.readFileSync(path.join(__dirname, '/../src/components/Tools/switchPortTemplate.json'));
-    let rawTemplate = jsonFile.readFileSync(
-      path.join(__dirname, "/templates/switchPortTemplate.json")
-    );
-    let templateFile = JSON.parse(rawTemplate);
-    res.send(templateFile);
+    var template = await SwitchportTemplateModel.find({
+      user: req.body.user,
+    }).exec();
+    console.log("template", template);
+    // let templateFile = JSON.parse(template);
+
+    res.send(template);
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
@@ -495,19 +529,63 @@ app.get("/node/read_templateFile", async (req, res, next) => {
   }
 });
 
-// //write template file
+// //write template
 
 app.post("/node/write_templateFile", async (req, res) => {
-  const jsonFile = require("fs");
+  try {
+    var notification = new SwitchportTemplateModel({
+      user: req.body.user,
+      templates: req.body.template,
+    });
+    notification.save(function (err, result) {
+      if (err) {
+        console.log("err", err);
+      } else {
+        console.log("saved");
+      }
+    });
+    res.send(notification);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
+// //update template
+
+app.post("/node/update_templateFile", async (req, res) => {
+  const id = req.body._id;
+  const templates = req.body.template;
 
   try {
-    let data = JSON.stringify(req.body, null, 2);
-    // jsonFile.writeFileSync(path.join(__dirname, '/../src/components/Tools/switchPortTemplate.json'));
-    jsonFile.writeFileSync(
-      path.join(__dirname, "/templates/switchPortTemplate.json"),
-      data
+    await SwitchportTemplateModel.findOneAndUpdate(
+      { _id: id },
+      { templates: templates },
+      function (err, docs) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.send(docs);
+        }
+      }
     );
-    res.send(data);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+// //delete template
+
+app.post("/node/delete_templateFile", async (req, res) => {
+  const id = req.body._id;
+  try {
+    await SwitchportTemplateModel.findByIdAndDelete(id, function (err, docs) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(docs);
+      }
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send(error);

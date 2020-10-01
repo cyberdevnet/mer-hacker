@@ -38,6 +38,20 @@ module.exports = function (app) {
     })
   );
   app.use(
+    "/node/update_templateFile",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/node/delete_templateFile",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
     "/node/delete_backupfile",
     createProxyMiddleware({
       target: "http://127.0.0.1:3001",

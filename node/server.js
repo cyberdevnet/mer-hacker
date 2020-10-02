@@ -9,6 +9,10 @@ const Mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
 const session = require("express-session");
+const FileType = require("file-type");
+const assert = require("assert");
+var Stream = require("stream");
+var FormData = require("form-data");
 const MongoStore = require("connect-mongo")(session);
 
 app.use(cors());
@@ -92,6 +96,7 @@ app.get("/node/dump", async (req, res) => {
 app.post("/node/hash-users", async (req, res) => {
   try {
     const user = new UserModel(req.body);
+
     const result = await user.save();
     res.send(result);
     res.status(201).send();
@@ -300,12 +305,12 @@ app.post("/node/get-api-key", async (req, res, next) => {
 // serve static files for backup/restore script
 
 app.use(
-  "/node/flask/backup_restore/",
-  express.static(path.join(__dirname, "/../flask/backup_restore/"))
+  "/node/backupRestoreFiles",
+  express.static(path.join(__dirname, "/../flask/backup_restore"))
 );
 
-app.get("/node/flask/backup_restore/", function (req, res) {
-  express.static(path.join(__dirname, "/../flask/backup_restore/"))(req, res);
+app.get("/node/backupRestoreFiles", function (req, res) {
+  express.static(path.join(__dirname, "/../flask/backup_restore"))(req, res);
 });
 
 // serve static files for ios_to_meraki script
@@ -360,7 +365,7 @@ app.post("/node/upload", async (req, res) => {
       file.mv(
         path.join(
           __dirname,
-          "/../flask/backup_restore/meraki_restore_network.py"
+          `/../flask/backup_restore/${req.session.user}_meraki_restore_network.py`
         )
       );
 
@@ -518,8 +523,6 @@ app.post("/node/read_templateFile", async (req, res, next) => {
     var template = await SwitchportTemplateModel.find({
       user: req.body.user,
     }).exec();
-    console.log("template", template);
-    // let templateFile = JSON.parse(template);
 
     res.send(template);
   } catch (error) {

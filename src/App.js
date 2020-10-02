@@ -129,6 +129,7 @@ function App() {
     "X-Cisco-Meraki-API-Key": `${apiKey}`,
     organizationId: `${organizationID}`,
     NET_ID: `${networkID}`,
+    USER: `${User}`,
   };
 
   const isFirstRunOrg = useRef(true);

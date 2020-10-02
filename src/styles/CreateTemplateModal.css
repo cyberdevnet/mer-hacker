@@ -91,6 +91,8 @@
 
 .form-control.editor.edit-select {
   font-family: "Open Sans", sans-serif;
+  margin-bottom: -5px;
+  margin-top: -5px;
   font-size: 15px;
   line-height: 1.42857143;
   margin-left: 2px;

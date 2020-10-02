@@ -13,7 +13,7 @@ import find_ports
 import top_report
 import switchporttemplate
 from backup_restore import meraki_backup_network
-from backup_restore import meraki_restore_network
+# from backup_restore import meraki_restore_network
 from cisco_meraki_migrate_tool import ios_to_meraki
 from cisco_meraki_migrate_tool import build_meraki_switchconfig
 import logging
@@ -59,26 +59,6 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 app.config['SECRET_KEY'] = 'meraki'
 socketio = SocketIO(app)
 CORS(app)
-
-
-# @app.errorhandler(500)
-# def internal_error(error):
-#     return ("500 error"), 500
-
-
-# flask will check if raised exception is of type 'SomeException' (or lower)
-# if so, will just execute this method
-# @app.errorhandler(Exception)
-# def handle_error(e):
-#     code = 500
-#     if isinstance(e, HTTPException):
-#         code = e.code
-#     return jsonify(error=str(e)), code
-
-# # An exception will be raised, hopefully to be caught by 'handle_error'
-# @app.route('/error_handling', methods=['GET'])
-# def error_handling():
-#     return (1 / 'ciao')
 
 
 #  CLEAR debug_file after user has been logged out
@@ -365,8 +345,9 @@ def run_backup():
             NET_ID = data['NET_ID']
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             ARG_ORGID = data['ARG_ORGID']
+            USER = data['USER']
 
-            return {'backup': meraki_backup_network.backup_network(ARG_ORGID, NET_ID, ARG_APIKEY)}
+            return {'backup': meraki_backup_network.backup_network(ARG_ORGID, NET_ID, ARG_APIKEY, USER)}
         else:
 
             return {'backup': 'backup'}
@@ -381,13 +362,17 @@ def run_backup():
 def run_restore():
     try:
         if request.method == 'POST':
-            importlib.reload(meraki_restore_network)
+            # importlib.reload(backupRestoreFiles)
             global data
             data = request.get_json(force=True, silent=True)
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             ARG_ORGID = data['ARG_ORGID']
+            USER = data['USER']
 
-            return {'backup': meraki_restore_network.restore_network(ARG_ORGID, ARG_APIKEY)}
+            modulename = "backup_restore.{}_meraki_restore_network".format(
+                USER)
+            module = importlib.import_module(modulename, ".")
+            return {'backup': module.restore_network(ARG_ORGID, ARG_APIKEY, USER)}
         else:
 
             return {'backup': 'backup'}
@@ -400,12 +385,17 @@ def run_restore():
 def run_restore_switch():
     try:
         if request.method == 'POST':
-            importlib.reload(meraki_restore_network)
+            # importlib.reload(meraki_restore_network)
             global data
             data = request.get_json(force=True, silent=True)
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
+            USER = data['USER']
 
-            return {'backup': meraki_restore_network.restore_switchports(ARG_APIKEY)}
+            modulename = "backup_restore.{}_meraki_restore_network".format(
+                USER)
+            module = importlib.import_module(modulename, ".")
+
+            return {'backup': module.restore_switchports(ARG_APIKEY, USER)}
         else:
 
             return {'backup': 'backup'}
@@ -533,7 +523,6 @@ def site2site():
             NET_ID_LIST = data['NET_ID_LIST']
             site2site = []
             for ID in NET_ID_LIST:
-                print("CALLED ID", ID)
                 headers = {
                     "Content-Type": "application/json",
                     "Accept": "application/json",
@@ -542,12 +531,7 @@ def site2site():
                 NET_ID = ID
                 url = f"https://api.meraki.com/api/v0/networks/{NET_ID}/siteToSiteVpn"
                 response = requests.request('GET', url, headers=headers)
-                print(json.loads(response.text))
-                # dashboard = meraki.DashboardAPI(ARG_APIKEY)
-                # site2sitecall = dashboard.networks.getNetworkSiteToSiteVpn(NET_ID)
-                print(response.text.encode('utf8'))
                 site2site.append(json.loads(response.text))
-                # print(json.loads(response.text))
             return {'site2site': site2site}
     except meraki.APIError as err:
         print('Error: ', err)

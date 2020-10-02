@@ -71,7 +71,7 @@ export default function ToolsTemplate(ac) {
               <NavLink exact to="tools" href="#null">
                 <i className="fa fa-wrench"></i> Tools/{ac.toolSelected}
               </NavLink>
-              <LiveLog />
+              <LiveLog dc={ac} />
             </div>
           </div>
         </div>

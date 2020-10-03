@@ -36,8 +36,21 @@ export default function SessionTimeout(ac) {
 
   const deleteCookie = async () => {
     try {
-      await axios.get("/node/clear-cookie");
-      ac.dc.setisSignedIn(false);
+      await axios
+        .post("/node/read-cookie", {
+          username: ac.dc.User,
+          isSignedIn: ac.dc.isSignedIn,
+        })
+        .then((res) => {
+          return axios.post("/node/clear-cookie", {
+            username: ac.dc.User,
+            sessionID: res.data.sessionID,
+          });
+        })
+        .then(() => {
+          ac.setisSignedIn(false);
+          history.push("/login");
+        });
     } catch (e) {
       console.log(e);
     }
@@ -94,9 +107,6 @@ export default function SessionTimeout(ac) {
       ac.dc.sethideLogin({ display: "block" });
       deleteCookie();
       postKey();
-      axios.post("/node/post-AlreadyisSignedIn", {
-        AlreadyisSignedIn: false,
-      });
       ac.dc.setswitchLoginAPI(true);
       setsessionTimeout(false);
       setsessionTime(0);
@@ -114,6 +124,10 @@ export default function SessionTimeout(ac) {
       $(this).addClass("closed");
       $(".navbar-side").css({ left: "-260px" });
       $("#page-wrapper").css({ "margin-left": "0px" });
+      axios.post("/node/delete_backupfile", {});
+      axios.post("/flask/delete_debugfile", {});
+      axios.post("/node/deletebackupRestoreFiles", {});
+      axios.post("/node/deletebuild_meraki_switchconfigFiles", {});
       history.push("/login");
     }
   };

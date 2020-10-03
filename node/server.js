@@ -360,6 +360,10 @@ app.post("/node/deletebackupRestoreFiles", async (req, res) => {
     fs.access(file, fs.F_OK, (err) => {
       if (err) {
         console.log("restore file not exists");
+        res.send({
+          status: false,
+          message: "restore file not exists",
+        });
         return;
       }
       //file exists and will be deleted
@@ -396,6 +400,10 @@ app.post("/node/deletebuild_meraki_switchconfigFiles", async (req, res) => {
     fs.access(file, fs.F_OK, (err) => {
       if (err) {
         console.log("build_meraki_switchconfig file not exists");
+        res.send({
+          status: false,
+          message: "build_meraki_switchconfig file not exists",
+        });
         return;
       }
       //file exists and will be deleted
@@ -546,6 +554,10 @@ app.post("/node/delete_backupfile", async (req, res) => {
     fs.access(file, fs.F_OK, (err) => {
       if (err) {
         console.log("Backupfile file not exists");
+        res.send({
+          status: false,
+          message: "Backupfile file not exists",
+        });
         return;
       }
       fs.unlink(file, function (err) {

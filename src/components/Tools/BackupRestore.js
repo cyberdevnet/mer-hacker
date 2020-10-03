@@ -19,6 +19,9 @@ export default function BackupRestore(ac) {
     false
   );
   const [displayButtons, setdisplayButtons] = useState({ display: "none" });
+  const [displayDownloadButton, setdisplayDownloadButton] = useState({
+    display: "none",
+  });
   const [displayRestoreButtons, setdisplayRestoreButtons] = useState({
     display: "none",
   });
@@ -146,6 +149,7 @@ export default function BackupRestore(ac) {
     async function Backup() {
       if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
         setdisplayRestoreButtons({ display: "none" });
+        setdisplayDownloadButton({ display: "none" });
 
         setloadingButtonBackup(true);
 
@@ -203,6 +207,7 @@ export default function BackupRestore(ac) {
         .then(() => {
           ac.dc.setshowRestorescript(true);
           setdisplayRestoreButtons({ display: "inline-block" });
+          setdisplayDownloadButton({ display: "inline-block" });
         })
 
         .catch((err) => {
@@ -280,14 +285,9 @@ export default function BackupRestore(ac) {
           content_type: "application/json",
         },
         body: JSON.stringify(APIbody2),
-      })
-        .then((res) => {
-          console.log("POST response: ", res);
-        })
-
-        .then(() => {
-          setloadingButtonRestoreSwitch(false);
-        });
+      }).then(() => {
+        setloadingButtonRestoreSwitch(false);
+      });
     }
     RestoreSwitch();
     return () => {
@@ -452,7 +452,7 @@ export default function BackupRestore(ac) {
                 Show Script
               </button>
               <button
-                style={displayButtons}
+                style={displayDownloadButton}
                 id="downloadscript"
                 className="btn btn-primary"
                 onClick={downloadScript}

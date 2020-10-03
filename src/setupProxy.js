@@ -10,6 +10,20 @@ module.exports = function (app) {
     })
   );
   app.use(
+    "/node/deletebackupRestoreFiles/",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/node/deletebuild_meraki_switchconfigFiles/",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
     "/node/flask/cisco_meraki_migrate_tool/",
     createProxyMiddleware({
       target: "http://127.0.0.1:3001",

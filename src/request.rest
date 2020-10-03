@@ -57,7 +57,7 @@ Content-Type: application/json
 Accept : */*
 
 {
-    "username": "admin", "password": "1234", "apiKey":"tzu",
+    "username": "test", "password": "1234", "apiKey":"tzu",
     "signed": "false"
 
 }
@@ -69,6 +69,17 @@ Content-Type: application/json
 
 {
     "username": "admin", "password": "s0sosd"
+
+}
+
+
+###
+
+POST http://localhost:3001/node/write_templateFile
+Content-Type: application/json
+
+{
+    "test": "ciao"
 
 }
 

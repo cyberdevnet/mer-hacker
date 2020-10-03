@@ -15,12 +15,6 @@ import meraki as merakiDashboard
 import requests
 
 
-dirname = os.path.dirname(__file__)
-abspath = os.path.abspath(__file__)
-log_file = os.path.abspath(__file__ + "/../../logs/log_file.log")
-error_file = os.path.abspath(__file__ + "/../../logs/error_file.log")
-
-
 def write_restore_header(file):
 
     file.write("#!/usr/bin/env python3\n")
@@ -36,10 +30,10 @@ def write_restore_header(file):
     file.write("\n")
     # file.write("networkid=''\n");
     file.write("\n")
-    file.write("def restore_network(ARG_ORGID, ARG_APIKEY):\n")
+    file.write("def restore_network(ARG_ORGID, ARG_APIKEY,USER):\n")
     file.write("\tabspath = os.path.abspath(__file__)\n")
     file.write(
-        "\tlog_file = os.path.abspath(__file__  + ""'/../../logs/log_file.log'"")\n")
+        "\tlog_file = os.path.abspath(__file__  + ""'/../../logs/{}_log_file.log'.format(USER)"")\n")
     file.write("\tf = open(log_file, 'w')\n")
     file.write("\n")
     file.write("\theaders = {\n")
@@ -294,6 +288,7 @@ def write_mydevices(file, networkid, ARG_APIKEY, f):
                                str(row['serial'])+"/switchPorts/"+str(port['number'])+"'\n")
                     file.write("\t\tprint('Restoring configuration Port" +
                                str(port['number'])+" switch "+str(row['serial'])+"',file=f)\n")
+                    file.write("\t\tf.flush()\n")
                     file.write("\t\tpayload = '"+dumpsport+"'\n")
                     file.write(
                         "\t\tresponse = requests.request('PUT', puturl, headers=headers, data = payload)\n")
@@ -307,17 +302,22 @@ def write_mydevices(file, networkid, ARG_APIKEY, f):
         f.flush()
 
 
-def backup_network(ARG_ORGID, NET_ID, ARG_APIKEY):
+def backup_network(ARG_ORGID, NET_ID, ARG_APIKEY, USER):
 
     meraki = MerakiSdkClient(ARG_APIKEY)
     dirname = os.path.dirname(__file__)
-    filename = os.path.join(dirname, 'meraki_restore_network.py')
+    abspath = os.path.abspath(__file__)
+    log_file = os.path.abspath(
+        __file__ + "/../../logs/{}_log_file.log".format(USER))
+    filename = os.path.join(
+        dirname, '{}_meraki_restore_network.py'.format(USER))
+
     with io.open(filename, 'w', encoding='utf-8', errors='ignore') as file:
         write_restore_header(file)
         f = open(log_file, 'w')
         print('Starting Backup', file=f)
         f.flush()
-        print('Writing script file meraki_restore_network.py', file=f)
+        print('Writing script file {}_meraki_restore_network.py'.format(USER), file=f)
         f.flush()
         file.write(
             "# Edit script below this line to control what is #restored.\n")
@@ -436,10 +436,10 @@ def backup_network(ARG_ORGID, NET_ID, ARG_APIKEY):
         file.write("\n")
 
         # Start second Function block
-        file.write("def restore_switchports(ARG_APIKEY):\n")
+        file.write("def restore_switchports(ARG_APIKEY,USER):\n")
         file.write("\tabspath = os.path.abspath(__file__)\n")
         file.write(
-            "\tlog_file = os.path.abspath(__file__  + ""'/../../logs/log_file.log'"")\n")
+            "\tlog_file = os.path.abspath(__file__  + ""'/../../logs/{}_log_file.log'.format(USER)"")\n")
         file.write("\tf = open(log_file, 'w')\n")
         file.write("\n")
         file.write("\theaders = {\n")
@@ -453,6 +453,7 @@ def backup_network(ARG_ORGID, NET_ID, ARG_APIKEY):
         file.write("\n")
         file.write("\ttry:\n")
         file.write("\t\tprint('Starting restoring switchports',file=f)\n")
+        file.write("\t\tf.flush()\n")
 
         try:
             print('Writing switch ports', file=f)

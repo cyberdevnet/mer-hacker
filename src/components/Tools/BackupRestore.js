@@ -19,6 +19,9 @@ export default function BackupRestore(ac) {
     false
   );
   const [displayButtons, setdisplayButtons] = useState({ display: "none" });
+  const [displayDownloadButton, setdisplayDownloadButton] = useState({
+    display: "none",
+  });
   const [displayRestoreButtons, setdisplayRestoreButtons] = useState({
     display: "none",
   });
@@ -44,6 +47,7 @@ export default function BackupRestore(ac) {
     SERIAL_NUM: `${ac.dc.SNtopUsers}`,
     NET_ID: `${ac.dc.networkID}`,
     ARG_ORGID: `${ac.dc.organizationID}`,
+    USER: `${ac.dc.User}`,
   };
 
   const handleBackup = (e) => {
@@ -119,7 +123,7 @@ export default function BackupRestore(ac) {
     const element = document.createElement("a");
     const file = new Blob([ac.dc.restoreScript], { type: "text/plain" });
     element.href = URL.createObjectURL(file);
-    element.download = "meraki_restore_network.py";
+    element.download = `${ac.dc.User}_meraki_restore_network.py`;
     document.body.appendChild(element); // Required for this to work in FireFox
     element.click();
   };
@@ -129,7 +133,7 @@ export default function BackupRestore(ac) {
   const UploadModifiedScript = (value) => {
     const data = new FormData();
     const file = new Blob([value], { type: "text/plain" });
-    data.append("file", file, "meraki_restore_network.py");
+    data.append("file", file, `${ac.dc.User}_meraki_restore_network.py`);
     axios.post("/node/upload", data);
   };
 
@@ -144,6 +148,9 @@ export default function BackupRestore(ac) {
 
     async function Backup() {
       if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
+        setdisplayRestoreButtons({ display: "none" });
+        setdisplayDownloadButton({ display: "none" });
+
         setloadingButtonBackup(true);
 
         fetch("/flask/run_backup/", {
@@ -159,7 +166,6 @@ export default function BackupRestore(ac) {
           .then(() => {
             setloadingButtonBackup(false);
             setdisplayButtons({ display: "inline-block" });
-            setdisplayRestoreButtons({ display: "inline-block" });
           });
 
         // });
@@ -186,9 +192,12 @@ export default function BackupRestore(ac) {
       return;
     }
     async function OpenFile() {
-      fetch("/node/flask/backup_restore/meraki_restore_network.py", {
-        signal: signal,
-      })
+      fetch(
+        `/node/backupRestoreFiles/${ac.dc.User}_meraki_restore_network.py`,
+        {
+          signal: signal,
+        }
+      )
         .then((response) => {
           return response.text();
         })
@@ -197,6 +206,8 @@ export default function BackupRestore(ac) {
         })
         .then(() => {
           ac.dc.setshowRestorescript(true);
+          setdisplayRestoreButtons({ display: "inline-block" });
+          setdisplayDownloadButton({ display: "inline-block" });
         })
 
         .catch((err) => {
@@ -234,7 +245,7 @@ export default function BackupRestore(ac) {
         body: JSON.stringify(APIbody2),
       })
         .then((res) => {
-          console.log("POST response: ", res);
+          console.log("POST response: ");
         })
 
         .then(() => {
@@ -274,14 +285,9 @@ export default function BackupRestore(ac) {
           content_type: "application/json",
         },
         body: JSON.stringify(APIbody2),
-      })
-        .then((res) => {
-          console.log("POST response: ", res);
-        })
-
-        .then(() => {
-          setloadingButtonRestoreSwitch(false);
-        });
+      }).then(() => {
+        setloadingButtonRestoreSwitch(false);
+      });
     }
     RestoreSwitch();
     return () => {
@@ -305,7 +311,9 @@ export default function BackupRestore(ac) {
     if (showLiveLogs) {
       interval = setInterval(() => {
         try {
-          fetch("/node/flask/logs/log_file.log", { signal: signal })
+          fetch(`/node/flask/logs/${ac.dc.User}_log_file.log`, {
+            signal: signal,
+          })
             .then((response) => {
               return response.text();
             })
@@ -444,7 +452,7 @@ export default function BackupRestore(ac) {
                 Show Script
               </button>
               <button
-                style={displayButtons}
+                style={displayDownloadButton}
                 id="downloadscript"
                 className="btn btn-primary"
                 onClick={downloadScript}

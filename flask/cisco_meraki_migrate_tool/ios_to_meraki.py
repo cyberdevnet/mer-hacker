@@ -6,23 +6,25 @@ from pathlib import Path
 import json
 
 
+# dirname = os.path.dirname(__file__)
+# abspath = os.path.abspath(__file__)
+# log_file = os.path.abspath(__file__ + "/../../logs/log_file.log")
 
 
-dirname = os.path.dirname(__file__)
-abspath = os.path.abspath(__file__)
-log_file = os.path.abspath(__file__  + "/../../logs/log_file.log")
-error_file = os.path.abspath(__file__  + "/../../logs/error_file.log")
-
-
-def ios_to_meraki(serial_numbers):
+def ios_to_meraki(serial_numbers, USER):
+    dirname = os.path.dirname(__file__)
+    abspath = os.path.abspath(__file__)
+    log_file = os.path.abspath(
+        __file__ + "/../../logs/{}_log_file.log".format(USER))
     backup_path = os.path.abspath(__file__ + "/../config_backups/backups")
     for filename in os.listdir(backup_path):
         try:
             backup_file = (backup_path + '/{}'.format(filename))
             dirname = os.path.dirname(__file__)
-            filename = os.path.join(dirname, 'build_meraki_switchconfig.py')
-            template_file = dirname+'/ttp/interfaces.j2'
+            filename = os.path.join(
+                dirname, '{}_build_meraki_switchconfig.py'.format(USER))
 
+            template_file = dirname+'/ttp/interfaces.j2'
 
             # comma separated SN if stack-switch
             # serial_numbers = ['GGG-JJJ-KKK', 'HHH-JJJ-KKK', 'RRR-HHH-ZZZ']
@@ -51,7 +53,8 @@ def ios_to_meraki(serial_numbers):
 
             with io.open(filename, 'w', encoding='utf-8', errors='ignore') as file:
                 f = open(log_file, 'w')
-                print('Writing script file build_meraki_switchConfig.py', file=f)
+                print('Writing script file {}_build_meraki_switchconfig.py'.format(
+                    USER), file=f)
                 f.flush()
 
                 # Start writing Function block
@@ -64,10 +67,10 @@ def ios_to_meraki(serial_numbers):
                 file.write("import requests\n")
                 file.write("\n")
                 file.write("\n")
-                file.write("def build_switchports(ARG_APIKEY):\n")
+                file.write("def build_switchports(ARG_APIKEY,USER):\n")
                 file.write("\tabspath = os.path.abspath(__file__)\n")
                 file.write(
-                    "\tlog_file = os.path.abspath(__file__  + ""'/../../logs/log_file.log'"")\n")
+                    "\tlog_file = os.path.abspath(__file__  + ""'/../../logs/{}_log_file.log'.format(USER)"")\n")
                 file.write("\tf = open(log_file, 'w')\n")
                 file.write("\n")
                 file.write("\theaders = {\n")
@@ -138,104 +141,97 @@ def ios_to_meraki(serial_numbers):
                         print('Writing Switchport', x['interface'], file=f)
                         f.flush()
                         length = len(x['interface'])
-                    
-                    
 
                         # parsing interface type FastEthernet0/1 or FastEthernet1/0/1
                         if interface_type == 'FastEthernet' and length == 15:
                             number = x['interface'][length - 1:]
                             stack_number = x['interface'][12]
                             SN = serial_numbers[int(stack_number)]
-                            print('Switch '+SN,file=f)
+                            print('Switch '+SN, file=f)
                             file.write("\t\tputurl = 'https://api.meraki.com/api/v0/devices/" +
-                                    SN+"/switchPorts/"+number+"'\n")
+                                       SN+"/switchPorts/"+number+"'\n")
                             file.write(
                                 "\t\tprint('Building configuration SwitchPort"+number+" switch "+SN+"',file=f)\n")
                             payloadModel.update({"number": number})
                             file.write("\t\tf.flush()\n")
-                            
 
                         if interface_type == 'FastEthernet' and length == 16:
                             number = x['interface'][length - 2:]
                             stack_number = x['interface'][12]
                             SN = serial_numbers[int(stack_number)]
-                            print('Switch '+SN,file=f)
+                            print('Switch '+SN, file=f)
                             file.write("\t\tputurl = 'https://api.meraki.com/api/v0/devices/" +
-                                    SN+"/switchPorts/"+number+"'\n")
+                                       SN+"/switchPorts/"+number+"'\n")
                             file.write(
                                 "\t\tprint('Building configuration SwitchPort"+number+" switch "+SN+"',file=f)\n")
                             payloadModel.update({"number": number})
                             file.write("\t\tf.flush()\n")
-                            
 
                         if interface_type == 'FastEthernet' and length == 17:
                             if x['interface'][14] == '0':
                                 number = x['interface'][length - 1:]
                                 stack_number = x['interface'][12]
                                 SN = serial_numbers[int(stack_number) - 1]
-                                print('Switch '+SN,file=f)
+                                print('Switch '+SN, file=f)
                                 file.write("\t\tputurl = 'https://api.meraki.com/api/v0/devices/" +
-                                        SN+"/switchPorts/"+number+"'\n")
+                                           SN+"/switchPorts/"+number+"'\n")
                                 file.write(
                                     "\t\tprint('Building configuration SwitchPort"+number+" switch "+SN+"',file=f)\n")
                                 payloadModel.update({"number": number})
                                 file.write("\t\tf.flush()\n")
-                                
 
                         if interface_type == 'FastEthernet' and length == 18:
                             if x['interface'][14] == '0':
                                 number = x['interface'][length - 2:]
                                 stack_number = x['interface'][12]
                                 SN = serial_numbers[int(stack_number) - 1]
-                                print('Switch '+SN,file=f)
+                                print('Switch '+SN, file=f)
                                 file.write("\t\tputurl = 'https://api.meraki.com/api/v0/devices/" +
-                                        SN+"/switchPorts/"+number+"'\n")
+                                           SN+"/switchPorts/"+number+"'\n")
                                 file.write(
                                     "\t\tprint('Building configuration SwitchPort"+number+" switch "+SN+"',file=f)\n")
                                 payloadModel.update({"number": number})
                                 file.write("\t\tf.flush()\n")
-                                
 
                         # parsing interface type GigabitEthernet0/1 or GigabitEthernet1/0/1
                         if interface_type == 'GigabitEthernet' and length == 18:
                             number = x['interface'][length - 1:]
                             stack_number = x['interface'][15]
                             SN = serial_numbers[int(stack_number)]
-                            print('Switch '+SN,file=f)
+                            print('Switch '+SN, file=f)
                             file.write("\t\tputurl = 'https://api.meraki.com/api/v0/devices/" +
-                                    SN+"/switchPorts/"+number+"'\n")
+                                       SN+"/switchPorts/"+number+"'\n")
                             file.write(
                                 "\t\tprint('Building configuration SwitchPort"+number+" switch "+SN+"',file=f)\n")
                             payloadModel.update({"number": number})
                             file.write("\t\tf.flush()\n")
-                            
+
                         if interface_type == 'GigabitEthernet' and length == 19:
                             number = x['interface'][length - 2:]
                             stack_number = x['interface'][15]
                             SN = serial_numbers[int(stack_number)]
-                            print('Switch '+SN,file=f)
+                            print('Switch '+SN, file=f)
                             file.write("\t\tputurl = 'https://api.meraki.com/api/v0/devices/" +
-                                    SN+"/switchPorts/"+number+"'\n")
+                                       SN+"/switchPorts/"+number+"'\n")
                             file.write(
                                 "\t\tprint('Building configuration SwitchPort"+number+" switch "+SN+"',file=f)\n")
                             payloadModel.update({"number": number})
                             file.write("\t\tf.flush()\n")
-                            
+
                         if interface_type == 'GigabitEthernet' and length == 20:
                             if x['interface'][17] == '0':
                                 number = x['interface'][length - 1:]
                                 stack_number = x['interface'][15]
 
                                 SN = serial_numbers[int(stack_number) - 1]
-                                print('Switch '+SN,file=f)
+                                print('Switch '+SN, file=f)
 
                                 file.write("\t\tputurl = 'https://api.meraki.com/api/v0/devices/" +
-                                        SN+"/switchPorts/"+number+"'\n")
+                                           SN+"/switchPorts/"+number+"'\n")
                                 file.write(
                                     "\t\tprint('Building configuration SwitchPort"+number+" switch "+SN+"',file=f)\n")
                                 payloadModel.update({"number": number})
                                 file.write("\t\tf.flush()\n")
-                                
 
                         if interface_type == 'GigabitEthernet' and length == 21:
                             if x['interface'][17] == '0':
@@ -243,15 +239,14 @@ def ios_to_meraki(serial_numbers):
                                 stack_number = x['interface'][15]
 
                                 SN = serial_numbers[int(stack_number) - 1]
-                                print('Switch '+SN,file=f)
+                                print('Switch '+SN, file=f)
 
                                 file.write("\t\tputurl = 'https://api.meraki.com/api/v0/devices/" +
-                                        SN+"/switchPorts/"+number+"'\n")
+                                           SN+"/switchPorts/"+number+"'\n")
                                 file.write(
                                     "\t\tprint('Building configuration SwitchPort"+number+" switch "+SN+"',file=f)\n")
                                 payloadModel.update({"number": number})
                                 file.write("\t\tf.flush()\n")
-                                
 
                         if 'description' in x:
                             name = x['description']
@@ -304,7 +299,8 @@ def ios_to_meraki(serial_numbers):
                         if 'spanning_tree' in x:
                             if x['spanning_tree'] == 'portfast':
                                 rstpEnabled = 'true'
-                                payloadModel.update({'rstpEnabled': rstpEnabled})
+                                payloadModel.update(
+                                    {'rstpEnabled': rstpEnabled})
                         else:
                             pass
                         if 'spanning_tree_bpduguard' in x:
@@ -329,7 +325,8 @@ def ios_to_meraki(serial_numbers):
                             file.write("\t\tpayload = '"+dumpsport+"'\n")
                             file.write(
                                 "\t\tresponse = requests.request('PUT', puturl, headers=headers, data = payload)\n")
-                            file.write("\t\tprint('Response: ',response.status_code,file=f)\n")
+                            file.write(
+                                "\t\tprint('Response: ',response.status_code,file=f)\n")
 
                         else:
                             pass
@@ -340,7 +337,8 @@ def ios_to_meraki(serial_numbers):
                                 file.write("\t\tpayload = '"+dumpsport+"'\n")
                                 file.write(
                                     "\t\tresponse = requests.request('PUT', puturl, headers=headers, data = payload)\n")
-                                file.write("\t\tprint('Response: ',response.status_code,file=f)\n")
+                                file.write(
+                                    "\t\tprint('Response: ',response.status_code,file=f)\n")
 
                             else:
                                 pass
@@ -351,7 +349,8 @@ def ios_to_meraki(serial_numbers):
                             file.write("\t\tpayload = '"+dumpsport+"'\n")
                             file.write(
                                 "\t\tresponse = requests.request('PUT', puturl, headers=headers, data = payload)\n")
-                            file.write("\t\tprint('Response: ',response.status_code,file=f)\n")
+                            file.write(
+                                "\t\tprint('Response: ',response.status_code,file=f)\n")
 
                         else:
                             pass
@@ -362,7 +361,8 @@ def ios_to_meraki(serial_numbers):
                                 file.write("\t\tpayload = '"+dumpsport+"'\n")
                                 file.write(
                                     "\t\tresponse = requests.request('PUT', puturl, headers=headers, data = payload)\n")
-                                file.write("\t\tprint('Response: ',response.status_code,file=f)\n")
+                                file.write(
+                                    "\t\tprint('Response: ',response.status_code,file=f)\n")
 
                             else:
                                 pass
@@ -387,9 +387,10 @@ def ios_to_meraki(serial_numbers):
                 # f.close()
         except Exception as err:
             print('ciao')
-            print('No interfaces found,invalid file or serial-number not in list.', file=f)
-            print('Exception: ',err)
-            print('Exception: ',err, file=f)
+            print(
+                'No interfaces found,invalid file or serial-number not in list.', file=f)
+            print('Exception: ', err)
+            print('Exception: ', err, file=f)
             with io.open(filename, 'w', encoding='utf-8', errors='ignore') as file:
                 # Start writing Function block
                 file.write("#!/usr/bin/env python3\n")
@@ -406,7 +407,7 @@ def ios_to_meraki(serial_numbers):
                 file.write("def build_switchports(ARG_APIKEY):\n")
                 file.write("\tabspath = os.path.abspath(__file__)\n")
                 file.write(
-                    "\tlog_file = os.path.abspath(__file__  + ""'/../../logs/log_file.log'"")\n")
+                    "\tlog_file = os.path.abspath(__file__  + ""'/../../logs/{}_log_file.log'.format(USER)"")\n")
                 file.write("\tf = open(log_file, 'w')\n")
                 file.write("\n")
                 file.write("\theaders = {\n")
@@ -418,12 +419,9 @@ def ios_to_meraki(serial_numbers):
                 file.write("\tsession = requests.Session()\n")
                 file.write("\n")
                 file.write("\n")
-            return  {'error': err}
+            return {'error': err}
     # file.close()
-        
 
 
-if __name__ == "__main__":
-    ios_to_meraki()
-
-
+# if __name__ == "__main__":
+#     ios_to_meraki(serial_numbers, USER)

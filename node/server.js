@@ -340,11 +340,84 @@ app.get("/node/flask/logs", function (req, res) {
 // download restore script
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
+    console.log("req", req);
     cb(null, "./flask/backup_restore/");
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
   },
+});
+
+// delete backup_restore script(if exists)
+
+app.post("/node/deletebackupRestoreFiles", async (req, res) => {
+  try {
+    const file = path.join(
+      __dirname,
+      `/../flask/backup_restore/${req.session.user}_meraki_restore_network.py`
+    );
+    // check if file exists before deleting it
+    fs.access(file, fs.F_OK, (err) => {
+      if (err) {
+        console.log("restore file not exists");
+        return;
+      }
+      //file exists and will be deleted
+      fs.unlink(file, function (err) {
+        if (err) {
+          console.log(err);
+          res.send({
+            status: false,
+            message: "restore file not deleted",
+          });
+        }
+        // if no error, file has been deleted successfully
+        res.send({
+          status: true,
+          message: "restore file deleted",
+        });
+        console.log("restore file deleted!");
+      });
+    });
+  } catch (e) {
+    res.status(500).send(e);
+  }
+});
+
+// delete build_meraki_switchconfig script(if exists)
+
+app.post("/node/deletebuild_meraki_switchconfigFiles", async (req, res) => {
+  try {
+    const file = path.join(
+      __dirname,
+      `/../flask/cisco_meraki_migrate_tool/${req.session.user}_build_meraki_switchconfig.py`
+    );
+    // check if file exists before deleting it
+    fs.access(file, fs.F_OK, (err) => {
+      if (err) {
+        console.log("build_meraki_switchconfig file not exists");
+        return;
+      }
+      //file exists and will be deleted
+      fs.unlink(file, function (err) {
+        if (err) {
+          console.log(err);
+          res.send({
+            status: false,
+            message: "build_meraki_switchconfig file not deleted",
+          });
+        }
+        // if no error, file has been deleted successfully
+        res.send({
+          status: true,
+          message: "build_meraki_switchconfig file deleted",
+        });
+        console.log("build_meraki_switchconfig file deleted!");
+      });
+    });
+  } catch (e) {
+    res.status(500).send(e);
+  }
 });
 
 var upload = multer({ storage: storage }).single("file");
@@ -371,7 +444,7 @@ app.post("/node/upload", async (req, res) => {
 
       res.send({
         status: true,
-        message: "Backupfile uploaded",
+        message: "restore file uploaded",
       });
     }
   } catch (e) {
@@ -447,7 +520,7 @@ app.post("/node/upload_build_meraki_switchconfig", async (req, res) => {
       file.mv(
         path.join(
           __dirname,
-          "/../flask/cisco_meraki_migrate_tool/build_meraki_switchconfig.py"
+          `/../flask/cisco_meraki_migrate_tool/${req.session.user}_build_meraki_switchconfig.py`
         )
       );
 
@@ -462,16 +535,20 @@ app.post("/node/upload_build_meraki_switchconfig", async (req, res) => {
   }
 });
 
-// DELETE backupfile for build_meraki_switchconfig
+// DELETE backupfile for build_meraki_switchconfig(if exists)
 
 app.post("/node/delete_backupfile", async (req, res) => {
+  let file = path.join(
+    __dirname,
+    "/../flask/cisco_meraki_migrate_tool/config_backups/backups/backup.txt"
+  );
   try {
-    fs.unlink(
-      path.join(
-        __dirname,
-        "/../flask/cisco_meraki_migrate_tool/config_backups/backups/backup.txt"
-      ),
-      function (err) {
+    fs.access(file, fs.F_OK, (err) => {
+      if (err) {
+        console.log("Backupfile file not exists");
+        return;
+      }
+      fs.unlink(file, function (err) {
         if (err) {
           console.log(err);
           res.send({
@@ -486,8 +563,8 @@ app.post("/node/delete_backupfile", async (req, res) => {
           message: "Backupfile deleted",
         });
         console.log("Backupfile deleted!");
-      }
-    );
+      });
+    });
   } catch (e) {
     res.status(500).send(e);
   }

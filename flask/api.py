@@ -15,7 +15,7 @@ import switchporttemplate
 from backup_restore import meraki_backup_network
 # from backup_restore import meraki_restore_network
 from cisco_meraki_migrate_tool import ios_to_meraki
-from cisco_meraki_migrate_tool import build_meraki_switchconfig
+# from cisco_meraki_migrate_tool import build_meraki_switchconfig
 import logging
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
@@ -23,7 +23,6 @@ from flask_socketio import SocketIO, emit
 # dirname = os.path.dirname(__file__)
 dirname = os.path.dirname(os.path.abspath(__file__))
 debug_file = dirname + '/logs/debug_file.log'
-print(debug_file)
 log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 logging.basicConfig(filename=debug_file, level=logging.DEBUG,
                     format=log_format, filemode='w')
@@ -372,6 +371,8 @@ def run_restore():
             modulename = "backup_restore.{}_meraki_restore_network".format(
                 USER)
             module = importlib.import_module(modulename, ".")
+            importlib.reload(module)
+
             return {'backup': module.restore_network(ARG_ORGID, ARG_APIKEY, USER)}
         else:
 
@@ -394,6 +395,7 @@ def run_restore_switch():
             modulename = "backup_restore.{}_meraki_restore_network".format(
                 USER)
             module = importlib.import_module(modulename, ".")
+            importlib.reload(module)
 
             return {'backup': module.restore_switchports(ARG_APIKEY, USER)}
         else:
@@ -408,13 +410,13 @@ def run_restore_switch():
 def ios2meraki():
     try:
         if request.method == 'POST':
-            importlib.reload(build_meraki_switchconfig)
+            # importlib.reload(build_meraki_switchconfig)
             global data
             data = request.get_json(force=True, silent=True)
             serial_numbers = data['serial_numbers']
-            print(serial_numbers)
+            USER = data['USER']
 
-            return {'ios_to_meraki': ios_to_meraki.ios_to_meraki(serial_numbers)}
+            return {'ios_to_meraki': ios_to_meraki.ios_to_meraki(serial_numbers, USER)}
         else:
 
             return {'ios_to_meraki': 'ios_to_meraki'}
@@ -428,12 +430,18 @@ def ios2meraki():
 def migrate_switch_config():
     try:
         if request.method == 'POST':
-            importlib.reload(build_meraki_switchconfig)
+            # importlib.reload(build_meraki_switchconfig)
             global data
             data = request.get_json(force=True, silent=True)
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
+            USER = data['USER']
 
-            return {'ios_to_meraki': build_meraki_switchconfig.build_switchports(ARG_APIKEY)}
+            modulename = "cisco_meraki_migrate_tool.{}_build_meraki_switchconfig".format(
+                USER)
+            module = importlib.import_module(modulename, ".")
+            importlib.reload(module)
+
+            return {'ios_to_meraki': module.build_switchports(ARG_APIKEY, USER)}
         else:
             return {'ios_to_meraki': 'ios_to_meraki'}
     except Exception as err:

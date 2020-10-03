@@ -15,14 +15,6 @@ import meraki as merakiDashboard
 import requests
 
 
-# dirname = os.path.dirname(__file__)
-# abspath = os.path.abspath(__file__)
-# log_file = os.path.abspath(
-#     __file__ + "/../../logs/{}_log_file.log".format(USER))
-# error_file = os.path.abspath(
-#     __file__ + "/../../logs/{}_error_file.log".format(USER))
-
-
 def write_restore_header(file):
 
     file.write("#!/usr/bin/env python3\n")
@@ -317,8 +309,6 @@ def backup_network(ARG_ORGID, NET_ID, ARG_APIKEY, USER):
     abspath = os.path.abspath(__file__)
     log_file = os.path.abspath(
         __file__ + "/../../logs/{}_log_file.log".format(USER))
-    error_file = os.path.abspath(
-        __file__ + "/../../logs/{}_error_file.log".format(USER))
     filename = os.path.join(
         dirname, '{}_meraki_restore_network.py'.format(USER))
 

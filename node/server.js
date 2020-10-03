@@ -9,6 +9,10 @@ const Mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
 const session = require("express-session");
+const FileType = require("file-type");
+const assert = require("assert");
+var Stream = require("stream");
+var FormData = require("form-data");
 const MongoStore = require("connect-mongo")(session);
 
 app.use(cors());
@@ -92,7 +96,7 @@ app.get("/node/dump", async (req, res) => {
 app.post("/node/hash-users", async (req, res) => {
   try {
     const user = new UserModel(req.body);
-    console.log("user", user);
+
     const result = await user.save();
     res.send(result);
     res.status(201).send();
@@ -203,13 +207,25 @@ app.post("/node/clear-cookie", async (req, res, next) => {
 app.post("/node/get-AlreadyisSignedIn", async (req, res, next) => {
   try {
     SessionModel.findOne({}, function (err, result) {
+      // console.log("result", result);
+      // let session = JSON.parse(result.session);
+      // let user = session.user;
       if (err) {
         console.log(err);
       } else {
-        if (result) {
-          console.log("ALREADY SIGNED");
-          let signed = true;
-          res.send({ signed: signed });
+        if (result !== null) {
+          console.log("result", result);
+          let session = JSON.parse(result.session);
+          let user = session.user;
+          if (result && user === req.body.username) {
+            console.log("ALREADY SIGNED");
+            let signed = true;
+            res.send({ signed: signed });
+          } else {
+            console.log("NOT SIGNED");
+            let signed = false;
+            res.send({ signed: signed });
+          }
         } else {
           console.log("NOT SIGNED");
           let signed = false;
@@ -289,12 +305,12 @@ app.post("/node/get-api-key", async (req, res, next) => {
 // serve static files for backup/restore script
 
 app.use(
-  "/node/flask/backup_restore/",
-  express.static(path.join(__dirname, "/../flask/backup_restore/"))
+  "/node/backupRestoreFiles",
+  express.static(path.join(__dirname, "/../flask/backup_restore"))
 );
 
-app.get("/node/flask/backup_restore/", function (req, res) {
-  express.static(path.join(__dirname, "/../flask/backup_restore/"))(req, res);
+app.get("/node/backupRestoreFiles", function (req, res) {
+  express.static(path.join(__dirname, "/../flask/backup_restore"))(req, res);
 });
 
 // serve static files for ios_to_meraki script
@@ -324,11 +340,84 @@ app.get("/node/flask/logs", function (req, res) {
 // download restore script
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
+    console.log("req", req);
     cb(null, "./flask/backup_restore/");
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
   },
+});
+
+// delete backup_restore script(if exists)
+
+app.post("/node/deletebackupRestoreFiles", async (req, res) => {
+  try {
+    const file = path.join(
+      __dirname,
+      `/../flask/backup_restore/${req.session.user}_meraki_restore_network.py`
+    );
+    // check if file exists before deleting it
+    fs.access(file, fs.F_OK, (err) => {
+      if (err) {
+        console.log("restore file not exists");
+        return;
+      }
+      //file exists and will be deleted
+      fs.unlink(file, function (err) {
+        if (err) {
+          console.log(err);
+          res.send({
+            status: false,
+            message: "restore file not deleted",
+          });
+        }
+        // if no error, file has been deleted successfully
+        res.send({
+          status: true,
+          message: "restore file deleted",
+        });
+        console.log("restore file deleted!");
+      });
+    });
+  } catch (e) {
+    res.status(500).send(e);
+  }
+});
+
+// delete build_meraki_switchconfig script(if exists)
+
+app.post("/node/deletebuild_meraki_switchconfigFiles", async (req, res) => {
+  try {
+    const file = path.join(
+      __dirname,
+      `/../flask/cisco_meraki_migrate_tool/${req.session.user}_build_meraki_switchconfig.py`
+    );
+    // check if file exists before deleting it
+    fs.access(file, fs.F_OK, (err) => {
+      if (err) {
+        console.log("build_meraki_switchconfig file not exists");
+        return;
+      }
+      //file exists and will be deleted
+      fs.unlink(file, function (err) {
+        if (err) {
+          console.log(err);
+          res.send({
+            status: false,
+            message: "build_meraki_switchconfig file not deleted",
+          });
+        }
+        // if no error, file has been deleted successfully
+        res.send({
+          status: true,
+          message: "build_meraki_switchconfig file deleted",
+        });
+        console.log("build_meraki_switchconfig file deleted!");
+      });
+    });
+  } catch (e) {
+    res.status(500).send(e);
+  }
 });
 
 var upload = multer({ storage: storage }).single("file");
@@ -349,13 +438,13 @@ app.post("/node/upload", async (req, res) => {
       file.mv(
         path.join(
           __dirname,
-          "/../flask/backup_restore/meraki_restore_network.py"
+          `/../flask/backup_restore/${req.session.user}_meraki_restore_network.py`
         )
       );
 
       res.send({
         status: true,
-        message: "Backupfile uploaded",
+        message: "restore file uploaded",
       });
     }
   } catch (e) {
@@ -431,7 +520,7 @@ app.post("/node/upload_build_meraki_switchconfig", async (req, res) => {
       file.mv(
         path.join(
           __dirname,
-          "/../flask/cisco_meraki_migrate_tool/build_meraki_switchconfig.py"
+          `/../flask/cisco_meraki_migrate_tool/${req.session.user}_build_meraki_switchconfig.py`
         )
       );
 
@@ -446,16 +535,20 @@ app.post("/node/upload_build_meraki_switchconfig", async (req, res) => {
   }
 });
 
-// DELETE backupfile for build_meraki_switchconfig
+// DELETE backupfile for build_meraki_switchconfig(if exists)
 
 app.post("/node/delete_backupfile", async (req, res) => {
+  let file = path.join(
+    __dirname,
+    "/../flask/cisco_meraki_migrate_tool/config_backups/backups/backup.txt"
+  );
   try {
-    fs.unlink(
-      path.join(
-        __dirname,
-        "/../flask/cisco_meraki_migrate_tool/config_backups/backups/backup.txt"
-      ),
-      function (err) {
+    fs.access(file, fs.F_OK, (err) => {
+      if (err) {
+        console.log("Backupfile file not exists");
+        return;
+      }
+      fs.unlink(file, function (err) {
         if (err) {
           console.log(err);
           res.send({
@@ -470,8 +563,8 @@ app.post("/node/delete_backupfile", async (req, res) => {
           message: "Backupfile deleted",
         });
         console.log("Backupfile deleted!");
-      }
-    );
+      });
+    });
   } catch (e) {
     res.status(500).send(e);
   }
@@ -479,15 +572,36 @@ app.post("/node/delete_backupfile", async (req, res) => {
 
 //Reading template file
 
-app.get("/node/read_templateFile", async (req, res, next) => {
-  const jsonFile = require("fs");
+var mongooseTemplates = Mongoose.createConnection(
+  "mongodb://127.0.0.1/templates",
+  {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  }
+);
+
+const SwitchPortTemplateSchema = new Mongoose.Schema(
+  {
+    user: String,
+    templates: {},
+  },
+  { strict: false }
+);
+
+const SwitchportTemplateModel = mongooseTemplates.model(
+  "template",
+  SwitchPortTemplateSchema
+);
+
+app.post("/node/read_templateFile", async (req, res, next) => {
   try {
-    // let rawTemplate = jsonFile.readFileSync(path.join(__dirname, '/../src/components/Tools/switchPortTemplate.json'));
-    let rawTemplate = jsonFile.readFileSync(
-      path.join(__dirname, "/templates/switchPortTemplate.json")
-    );
-    let templateFile = JSON.parse(rawTemplate);
-    res.send(templateFile);
+    var template = await SwitchportTemplateModel.find({
+      user: req.body.user,
+    }).exec();
+
+    res.send(template);
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
@@ -495,19 +609,63 @@ app.get("/node/read_templateFile", async (req, res, next) => {
   }
 });
 
-// //write template file
+// //write template
 
 app.post("/node/write_templateFile", async (req, res) => {
-  const jsonFile = require("fs");
+  try {
+    var notification = new SwitchportTemplateModel({
+      user: req.body.user,
+      templates: req.body.template,
+    });
+    notification.save(function (err, result) {
+      if (err) {
+        console.log("err", err);
+      } else {
+        console.log("saved");
+      }
+    });
+    res.send(notification);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
+// //update template
+
+app.post("/node/update_templateFile", async (req, res) => {
+  const id = req.body._id;
+  const templates = req.body.template;
 
   try {
-    let data = JSON.stringify(req.body, null, 2);
-    // jsonFile.writeFileSync(path.join(__dirname, '/../src/components/Tools/switchPortTemplate.json'));
-    jsonFile.writeFileSync(
-      path.join(__dirname, "/templates/switchPortTemplate.json"),
-      data
+    await SwitchportTemplateModel.findOneAndUpdate(
+      { _id: id },
+      { templates: templates },
+      function (err, docs) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.send(docs);
+        }
+      }
     );
-    res.send(data);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+// //delete template
+
+app.post("/node/delete_templateFile", async (req, res) => {
+  const id = req.body._id;
+  try {
+    await SwitchportTemplateModel.findByIdAndDelete(id, function (err, docs) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(docs);
+      }
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send(error);

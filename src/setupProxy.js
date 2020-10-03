@@ -3,7 +3,21 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 module.exports = function (app) {
   // START Express-Server Part
   app.use(
-    "/node/flask/backup_restore/",
+    "/node/backupRestoreFiles/",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/node/deletebackupRestoreFiles/",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/node/deletebuild_meraki_switchconfigFiles/",
     createProxyMiddleware({
       target: "http://127.0.0.1:3001",
       changeOrigin: true,
@@ -38,6 +52,20 @@ module.exports = function (app) {
     })
   );
   app.use(
+    "/node/update_templateFile",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/node/delete_templateFile",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
     "/node/delete_backupfile",
     createProxyMiddleware({
       target: "http://127.0.0.1:3001",
@@ -46,6 +74,20 @@ module.exports = function (app) {
   );
   app.use(
     "/node/upload",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/node/readBackupRestore",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/node/downloadBackupRestore",
     createProxyMiddleware({
       target: "http://127.0.0.1:3001",
       changeOrigin: true,

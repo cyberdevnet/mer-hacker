@@ -18,7 +18,7 @@ export default function LiveLog(ac) {
     if (showDebug) {
       interval = setInterval(() => {
         try {
-          fetch("/node/flask/logs/debug_file.log")
+          fetch(`/node/flask/logs/debug_file.log`)
             .then((response) => {
               return response.text();
             })
@@ -37,7 +37,6 @@ export default function LiveLog(ac) {
         } catch (err) {
           if (err) {
             console.log(err);
-            ac.dc.setalert(true);
           }
         }
       }, 1500);

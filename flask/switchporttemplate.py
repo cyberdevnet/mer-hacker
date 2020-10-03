@@ -40,7 +40,6 @@ def deploy(ARG_APIKEY, SERIAL_NUM, payload):
     try:
         data = []
         for x in payload:
-
             # delete not necessary entries from payload
             del x['payload']['id']
             del x['payload']['templateName']

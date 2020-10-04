@@ -105,9 +105,7 @@ def get_networks():
                 data['organizationId'])
             return {'networks': networks}
     except meraki.APIError as err:
-        print('Error: ', err)
-        error = (err.message['errors'][0])
-        flash(error)
+        flash(err)
         return {'error': [render_template('flash_template.html'), err.status]}
 
 
@@ -126,8 +124,6 @@ def get_devices():
             return {'devices': devices}
     except meraki.APIError as err:
         print('Error: ', err)
-        error = (err.message['errors'][0])
-        flash(error)
         return {'error': [render_template('flash_template.html'), err.status]}
 
 
@@ -169,8 +165,6 @@ def clients():
             return {'clients': clients}
     except meraki.APIError as err:
         print('Error: ', err)
-        error = (err.message['errors'][0])
-        flash(error)
         return {'error': [render_template('flash_template.html'), err.status]}
 
 
@@ -230,8 +224,6 @@ def uplink_loss():
             return {'uplinkLoss': uplinkLoss}
     except meraki.APIError as err:
         print('Error: ', err)
-        error = (err.message['errors'][0])
-        flash(error)
         return {'error': [render_template('flash_template.html'), err.status]}
 
 
@@ -367,12 +359,21 @@ def run_restore():
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             ARG_ORGID = data['ARG_ORGID']
             USER = data['USER']
+<<<<<<< HEAD
 
             modulename = "backup_restore.{}_meraki_restore_network".format(
                 USER)
             module = importlib.import_module(modulename, ".")
             importlib.reload(module)
 
+=======
+
+            modulename = "backup_restore.{}_meraki_restore_network".format(
+                USER)
+            module = importlib.import_module(modulename, ".")
+            importlib.reload(module)
+
+>>>>>>> 4b5083b19b1783303099fd5efe6f1390ef955991
             return {'backup': module.restore_network(ARG_ORGID, ARG_APIKEY, USER)}
         else:
 
@@ -391,12 +392,21 @@ def run_restore_switch():
             data = request.get_json(force=True, silent=True)
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             USER = data['USER']
+<<<<<<< HEAD
 
             modulename = "backup_restore.{}_meraki_restore_network".format(
                 USER)
             module = importlib.import_module(modulename, ".")
             importlib.reload(module)
 
+=======
+
+            modulename = "backup_restore.{}_meraki_restore_network".format(
+                USER)
+            module = importlib.import_module(modulename, ".")
+            importlib.reload(module)
+
+>>>>>>> 4b5083b19b1783303099fd5efe6f1390ef955991
             return {'backup': module.restore_switchports(ARG_APIKEY, USER)}
         else:
 
@@ -676,8 +686,6 @@ def get_licenseState():
             return {'licenseState': licenseState}
     except meraki.APIError as err:
         print('Error: ', err)
-        error = (err.message['errors'][0])
-        flash(error)
         return {'error': [render_template('flash_template.html'), err.status]}
 
 

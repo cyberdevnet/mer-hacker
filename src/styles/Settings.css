@@ -1,0 +1,11 @@
+.col-xs-12.settings {
+  padding-right: 25px;
+  padding-left: 25px;
+}
+
+.my-password-field {
+  font-family: text-security-disc;
+  /* Use -webkit-text-security if the browser supports it */
+  -webkit-text-security: disc;
+  font-size: 14px;
+}

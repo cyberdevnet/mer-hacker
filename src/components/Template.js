@@ -3,15 +3,17 @@ import { Switch, Route, NavLink, useHistory } from "react-router-dom";
 import History from "../History";
 import Select from "react-select";
 import ProtectedRoute from "../ProtectedRoute";
+import ProtectedRouteSettings from "../ProtectedRouteSettings";
 import Home from "./Home";
-import LoginAPI from "./LoginAPI";
+import AdminPanel from "./AdminPanel/AdminPanel";
+import LoginAPI from "../components/Login/LoginAPI";
 import Dashboard from "./Dashboard";
-import LoggedIn from "./LoggedIn";
-import Logout from "./Logout";
+import LoggedIn from "../components/Login/LoggedIn";
+import Logout from "../components/Login/Logout";
 import PageNotFound from "../PageNotFound";
 import ToolsTemplate from "./ToolsTemplate";
 import AlertModal from "./AlertsModal";
-import Topology from "./Topology";
+import Topology from "../components/Tools/Topology/Topology";
 import $ from "jquery";
 import ReactTooltip from "react-tooltip";
 import SessionTimeout from "../SessionTimeout";
@@ -142,6 +144,15 @@ export default function Template(ac, dc) {
               )}
             </li>
             <li>
+              {ac.dc.isSignedIn && ac.dc.User === "admin" ? (
+                <NavLink exact to="settings" href="#settings">
+                  <i className="fas fa-tools"></i> Admin Panel
+                </NavLink>
+              ) : (
+                <div></div>
+              )}
+            </li>
+            <li>
               <NavLink exact to="home" href="#home">
                 <i className="fa fa-home" aria-hidden="true"></i> Home
               </NavLink>
@@ -191,6 +202,9 @@ export default function Template(ac, dc) {
               options={NETWORKS}
               placeholder={ac.dc.network}
               onChange={HandleNetwork}
+              onMenuOpen={() =>
+                ac.dc.settriggerSelectNetwork(ac.dc.triggerSelectNetwork + 1)
+              }
               classNamePrefix="foo"
               isLoading={ac.dc.loadingNet}
             />
@@ -267,6 +281,13 @@ export default function Template(ac, dc) {
             exact
             path="/login"
             render={(dc) => <LoginAPI {...ac.dc} dc={dc} />}
+          />
+          <ProtectedRouteSettings
+            exact
+            path="/settings"
+            component={AdminPanel}
+            {...ac.dc}
+            dc={dc}
           />
           <ProtectedRoute exact path="/" component={Home} {...ac.dc} dc={dc} />
           <ProtectedRoute

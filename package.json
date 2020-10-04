@@ -56,7 +56,7 @@
     "react-dom": "^16.13.1",
     "react-dropdown-select": "^4.4.2",
     "react-full-screen": "^0.2.4",
-    "react-hook-form": "^6.0.7",
+    "react-hook-form": "^6.9.0",
     "react-idle-timer": "^4.3.6",
     "react-lazylog": "^4.5.2",
     "react-loader-spinner": "^3.1.14",
@@ -73,6 +73,10 @@
     "socket.io-client": "^2.3.0",
     "stream": "0.0.2",
     "supertest": "^5.0.0",
+<<<<<<< HEAD
+=======
+    "text-security": "^3.1.1",
+>>>>>>> 4b5083b19b1783303099fd5efe6f1390ef955991
     "victory": "^35.0.5",
     "victory-chart": "^35.0.5"
   },
@@ -81,7 +85,7 @@
     "start-server": "cd node && npx nodemon server.js",
     "start-api": "cd flask && python3 api.py",
     "start-all": "npm run start & (cd api && python api.py --no-debugger) ",
-    "build": "react-app-rewired build",
+    "build": "GENERATE_SOURCEMAP=false react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },

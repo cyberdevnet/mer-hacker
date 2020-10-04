@@ -12,8 +12,6 @@ import {
   VictoryTooltip,
 } from "victory";
 import "../styles/Dashboard.css";
-// import "@fortawesome/fontawesome-free/css/all.min.css";
-// import "bootstrap-css-only/css/bootstrap.min.css";
 
 export default function Dashboard(ac) {
   const [showtable, setshowtable] = useState(false);
@@ -24,6 +22,11 @@ export default function Dashboard(ac) {
   const [LicenceDevices, setLicenceDevices] = useState([]);
   const [pagination, setpagination] = useState(false);
   const [fullPagination, setfullPagination] = useState(false);
+  const [latencyLossText, setlatencyLossText] = useState("Latency/Loss");
+  const [latencyLossColor, setlatencyLossColor] = useState([
+    "#FABE28",
+    "#1ABC9C",
+  ]); 
 
   // eslint-disable-next-line
   const [deviceStatusData, setdeviceStatusData] = useState([
@@ -268,12 +271,7 @@ export default function Dashboard(ac) {
             .then((res) => res.json())
             .then((data) => {
               if (data.error) {
-                ac.setflashMessages(
-                  <div className="form-input-error-msg alert alert-danger">
-                    <span className="glyphicon glyphicon-exclamation-sign"></span>
-                    {data.error[0]}
-                  </div>
-                );
+              console.log("UplinkStatus -> data.error", data.error);
               } else {
                 try {
                   var UplinkLossNetObj = data.uplinkLoss.filter(function (obj) {
@@ -339,9 +337,13 @@ export default function Dashboard(ac) {
                   UplinkLossData[objI2D3].y = lossPercent[2];
                   UplinkLossData[obj2ID4].y = lossPercent[3];
                   UplinkLossData[obj2ID5].y = lossPercent[4];
+                  setlatencyLossText("Latency/Loss");
+                  setlatencyLossColor(["#FABE28", "#1ABC9C"]);
                 } catch (err) {
                   if (err) {
                     console.log(err);
+                    setlatencyLossText("data not available");
+                    setlatencyLossColor(["#333", "#d6d6d6"]);
                   }
                 }
               }
@@ -557,7 +559,7 @@ export default function Dashboard(ac) {
                 <div className="mixed-chart">
                   <VictoryChart theme={VictoryTheme.material} domainPadding={1}>
                     <VictoryLabel
-                      text="Latency/Loss"
+                      text={latencyLossText}
                       x={180}
                       y={25}
                       textAnchor="middle"
@@ -569,7 +571,7 @@ export default function Dashboard(ac) {
                         fontFamily: "Open Sans, sans-serif",
                       }}
                     />
-                    <VictoryStack colorScale={["#FABE28", "#1ABC9C"]}>
+                    <VictoryStack colorScale={latencyLossColor}>
                       <VictoryArea
                         animate={{
                           duration: 2000,

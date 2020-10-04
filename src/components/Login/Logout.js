@@ -4,7 +4,7 @@ import Dialog from "@material-ui/core/Dialog";
 import axios from "axios";
 
 import $ from "jquery";
-import "../styles/Logout.css";
+import "../../styles/Logout.css";
 
 export default function Logout(ac, props) {
   let history = useHistory();

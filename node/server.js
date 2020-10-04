@@ -57,6 +57,7 @@ var mongooseConnection = Mongoose.createConnection(
 
 const UserSchema = new Mongoose.Schema({
   username: String,
+  email: String,
   password: String,
   apiKey: String,
   signed: String,
@@ -293,6 +294,27 @@ app.post("/node/get-AlreadyisSignedIn", async (req, res, next) => {
         }
       }
     });
+  } catch (error) {
+    res.status(500).send(error);
+    return next(new Error(error));
+  }
+});
+
+// edit API key from admin panel
+
+app.post("/node/edit-api-key", async (req, res, next) => {
+  try {
+    if (req.body.username) {
+      const key = await UserModel.findOneAndUpdate(
+        { username: req.body.username },
+        { apiKey: req.body.editedkey },
+        req.body
+      ).exec();
+      res.json(key);
+      res.status(201).send();
+    } else {
+      console.log("key not edited");
+    }
   } catch (error) {
     res.status(500).send(error);
     return next(new Error(error));

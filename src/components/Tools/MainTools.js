@@ -9,7 +9,7 @@ import FindPorts from "./FindPorts";
 import TrafficAnalysis from "./TrafficAnalysis";
 import BackupRestore from "./BackupRestore";
 import MigrateTool from "./MigrateTool";
-import SwitchPortTemplate from "./SwitchPortTemplate";
+import SwitchPortTemplate from "./SwitchPortTemplates/SwitchPortTemplate";
 import ChangeLog from "./ChangeLog";
 import GetInventory from "./GetInventory";
 import "../../styles/MainTools.css";

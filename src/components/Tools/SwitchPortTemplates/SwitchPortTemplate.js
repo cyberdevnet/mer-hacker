@@ -3,7 +3,7 @@ import Select from "react-select";
 import CreateTemplateModal from "./CreateTemplateModal";
 import ShowTemplateModal from "./ShowTemplateModal";
 import SwitchPortTemplateSummary from "./SwitchPortTemplateSummary";
-import SwitchPortConfig from "./SwitchPortConfig";
+import SwitchPortConfig from "./SwitchPortConfig.js";
 import BootstrapTable from "react-bootstrap-table-next";
 import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";

@@ -57,6 +57,7 @@ var mongooseConnection = Mongoose.createConnection(
 
 const UserSchema = new Mongoose.Schema({
   username: String,
+  email: String,
   password: String,
   apiKey: String,
   signed: String,
@@ -99,6 +100,34 @@ app.post("/node/hash-users", async (req, res) => {
 
     const result = await user.save();
     res.send(result);
+    res.status(201).send();
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+app.post("/node/delete-user", async (req, res, next) => {
+  console.log("req", req.body.ID);
+  console.log("req", req.body);
+  try {
+    await UserModel.findByIdAndDelete(req.body.ID, function (err, docs) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(docs);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
+//get all users in the database
+app.post("/node/get-all-users", async (req, res) => {
+  try {
+    var users = await UserModel.find({}).exec();
+    res.send(users);
     res.status(201).send();
   } catch (error) {
     res.status(500).send(error);
@@ -177,9 +206,17 @@ app.post("/node/read-cookie", async (req, res, next) => {
   try {
     if (req.body.username === req.session.user) {
       console.log("LOGGED IN");
-      res.send({ signedIn: true, sessionID: req.sessionID });
+      res.send({
+        signedIn: true,
+        sessionID: req.sessionID,
+        user: req.session.user,
+      });
     } else {
-      res.send({ signedIn: false, sessionID: req.sessionID });
+      res.send({
+        signedIn: false,
+        sessionID: req.sessionID,
+        user: req.session.user,
+      });
     }
   } catch (error) {
     res.status(500).send(error);
@@ -200,7 +237,31 @@ app.post("/node/clear-cookie", async (req, res, next) => {
   }
 });
 
-// Check if AlreadyisSignedIn
+app.post("/node/delete-session", async (req, res, next) => {
+  console.log("req", req.body.ID);
+  try {
+    await SessionModel.findByIdAndDelete(req.body.ID, function (err, docs) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(docs);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
+app.post("/node/get-all-sessions", async (req, res) => {
+  try {
+    var sessions = await SessionModel.find({}).exec();
+    res.send(sessions);
+    res.status(201).send();
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
 
 //post route to the database to retrieve the AlreadyisSignedIn boolean
 
@@ -233,6 +294,27 @@ app.post("/node/get-AlreadyisSignedIn", async (req, res, next) => {
         }
       }
     });
+  } catch (error) {
+    res.status(500).send(error);
+    return next(new Error(error));
+  }
+});
+
+// edit API key from admin panel
+
+app.post("/node/edit-api-key", async (req, res, next) => {
+  try {
+    if (req.body.username) {
+      const key = await UserModel.findOneAndUpdate(
+        { username: req.body.username },
+        { apiKey: req.body.editedkey },
+        req.body
+      ).exec();
+      res.json(key);
+      res.status(201).send();
+    } else {
+      console.log("key not edited");
+    }
   } catch (error) {
     res.status(500).send(error);
     return next(new Error(error));

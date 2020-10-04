@@ -68,6 +68,7 @@
   font-weight: 600;
   width: 50%;
   cursor: pointer;
+  outline: none;
 }
 .register .nav-tabs {
   margin-top: 3%;
@@ -100,4 +101,13 @@
   margin-top: 8%;
   margin-bottom: -15%;
   color: #495057;
+}
+.link-button-forgot-password {
+  outline: none;
+  float: right;
+  background: none;
+  border: none;
+  color: #0066ff;
+  text-decoration: underline;
+  cursor: pointer;
 }

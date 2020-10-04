@@ -346,6 +346,7 @@ export default function BackupRestore(ac) {
       abortController.abort();
       clearInterval(interval);
     };
+    // eslint-disable-next-line
   }, [showLiveLogs]);
 
   return (

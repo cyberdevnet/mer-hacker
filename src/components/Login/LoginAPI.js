@@ -2,8 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import $ from "jquery";
 import axios from "axios";
-import "../styles/LoginAPI.css";
-import AlreadyisSignedInModal from "./AlreadyisSignedInModal";
+import ForgotPassword from "./ForgotPassword";
+import AlreadyisSignedInModal from "../AlreadyisSignedInModal";
+import "../../styles/LoginAPI.css";
 
 export default function LoginAPI(ac) {
   const [triggertryLogin, settriggertryLogin] = useState(0);
@@ -34,7 +35,11 @@ export default function LoginAPI(ac) {
         .then((res) => {
           if (res.data.signedIn === true) {
             ac.setisSignedIn(true);
+            //if user is authenticated redirect to home
+            history.push("/home");
           } else {
+            //if user is not authenticated redirect to login
+
             ac.setisSignedIn(false);
             history.push("/login");
             $(this).addClass("closed");
@@ -120,6 +125,7 @@ export default function LoginAPI(ac) {
           if (response === true) {
             // deny login because another user is using the application
             ac.setshowAlreadyisSignedInModal(true);
+            ac.setPassword([]);
           } else if (response === false) {
             //no another user is using the application, trigger the real Login
             settriggertryLogin(triggertryLogin + 1);
@@ -164,10 +170,7 @@ export default function LoginAPI(ac) {
             ac.setswitchLoggedIn(true);
             ac.setisSignedIn(res.data.signedIn);
             setloading(false);
-            // axios.post("/node/post-AlreadyisSignedIn", {
-            //   username: ac.User,
-            //   signed: "true",
-            // });
+            ac.setPassword([]);
           } else {
             setloading(false);
             seterrorMessageLogin(
@@ -178,6 +181,7 @@ export default function LoginAPI(ac) {
                 again later
               </div>
             );
+            ac.setPassword([]);
           }
         }, 1500);
       } catch (e) {
@@ -189,6 +193,8 @@ export default function LoginAPI(ac) {
             password, your Internet connection or try again later
           </div>
         );
+        ac.setPassword([]);
+
         console.log(e);
       }
     };
@@ -208,6 +214,11 @@ export default function LoginAPI(ac) {
     <div style={ac.hideLogin} className="container register">
       {ac.showAlreadyisSignedInModal ? (
         <AlreadyisSignedInModal {...ac} dc={dc} />
+      ) : (
+        <div></div>
+      )}
+      {ac.showforgotPasswordModal ? (
+        <ForgotPassword {...ac} dc={dc} />
       ) : (
         <div></div>
       )}
@@ -264,6 +275,15 @@ export default function LoginAPI(ac) {
                       />
                     </div>
                   </form>
+                  {/* <===========================================================>
+                                        UNDER DEVELOPMENT
+                  <button
+                    onClick={() => ac.setshowforgotPasswordModal(true)}
+                    type="submit"
+                    className="link-button-forgot-password"
+                  >
+                    Forgot password?
+                  </button> */}
                   <button
                     onClick={!loading ? handleLogin : null}
                     disabled={loading}

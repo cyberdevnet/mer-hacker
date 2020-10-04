@@ -5,7 +5,7 @@ import TopologyVPNModal from "./TopologyVPNModal";
 import Select from "react-select";
 import Tree from "react-d3-tree";
 import "react-tree-graph/dist/style.css";
-import "../styles/Topology.css";
+import "../../../styles/Topology.css";
 
 export default function Topology(ac) {
   const [switchTopologyModal, setswitchTopologyModal] = useState(false);

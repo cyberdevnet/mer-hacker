@@ -11,6 +11,7 @@ function App() {
   const [Password, setPassword] = useState([]);
   const [triggerGetOrg, settriggerGetOrg] = useState(0);
   const [triggerSelectOrg, settriggerSelectOrg] = useState(0);
+  const [triggerSelectNetwork, settriggerSelectNetwork] = useState(0);
   const [getOrgStatusCode, setgetOrgStatusCode] = useState(0);
   const [organizationList, setorganizationList] = useState([]);
   const [networkList, setnetworkList] = useState([]);
@@ -164,6 +165,7 @@ function App() {
                 internet connection
               </div>
             );
+            setloadingOrg(false);
           }
           setgetOrgStatusCode(res.status);
           return res.json();
@@ -176,6 +178,7 @@ function App() {
                 {data.error}
               </div>
             );
+            setloadingOrg(false);
           } else {
             setorganizationList(data.organizations);
             setloadingOrg(false);
@@ -214,7 +217,19 @@ function App() {
           return response.json;
         });
         fetch("/flask/networks", { signal: signal })
-          .then((r) => r.json())
+          .then((res) => {
+            if (res.status === 500) {
+              setflashMessages(
+                <div className="form-input-error-msg alert alert-danger">
+                  <span className="glyphicon glyphicon-exclamation-sign"></span>
+                  There was an error loading the networks, please try again.
+                </div>
+              );
+              setloadingNet(false);
+            }
+            setgetOrgStatusCode(res.status);
+            return res.json();
+          })
           .then((data) => {
             if (data.error) {
               setflashMessages(
@@ -223,6 +238,7 @@ function App() {
                   {data.error[0]}
                 </div>
               );
+              setloadingNet(false);
             } else {
               const NET = Object.values(data.networks);
 
@@ -269,7 +285,7 @@ function App() {
     callNetworks();
 
     // eslint-disable-next-line
-  }, [organization]);
+  }, [organization, triggerSelectNetwork]);
 
   const isFirstRunHosts = useRef(true);
   useEffect(() => {
@@ -295,12 +311,7 @@ function App() {
           .then((res) => res.json())
           .then((data) => {
             if (data.error) {
-              setflashMessages(
-                <div className="form-input-error-msg alert alert-danger">
-                  <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {data.error[0]}
-                </div>
-              );
+              console.log("callClients -> data.error", data.error);
             } else {
               sethostList(data.clients);
               settotalHosts(data.clients.length);
@@ -329,12 +340,7 @@ function App() {
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {
-            setflashMessages(
-              <div className="form-input-error-msg alert alert-danger">
-                <span className="glyphicon glyphicon-exclamation-sign"></span>
-                {data.error[0]}
-              </div>
-            );
+            console.log("devices -> data.error", data.error);
           } else {
             setdeviceList(data.devices);
             let Dev1 = {};
@@ -457,6 +463,8 @@ function App() {
     setswitchAllTools,
     triggerSelectOrg,
     settriggerSelectOrg,
+    triggerSelectNetwork,
+    settriggerSelectNetwork,
     isSignedIn,
     setisSignedIn,
     User,

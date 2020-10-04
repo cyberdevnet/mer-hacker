@@ -82,7 +82,7 @@
     "start-server": "cd node && npx nodemon server.js",
     "start-api": "cd flask && python3 api.py",
     "start-all": "npm run start & (cd api && python api.py --no-debugger) ",
-    "build": "react-app-rewired build",
+    "build": "GENERATE_SOURCEMAP=false react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },

@@ -38,3 +38,4 @@ flask/logs/log_file.log
 .yarn.lock
 *.cpuprofile
 *.vscode
+request.rest

@@ -105,6 +105,34 @@ app.post("/node/hash-users", async (req, res) => {
   }
 });
 
+app.post("/node/delete-user", async (req, res, next) => {
+  console.log("req", req.body.ID);
+  console.log("req", req.body);
+  try {
+    await UserModel.findByIdAndDelete(req.body.ID, function (err, docs) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(docs);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
+//get all users in the database
+app.post("/node/get-all-users", async (req, res) => {
+  try {
+    var users = await UserModel.find({}).exec();
+    res.send(users);
+    res.status(201).send();
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 //login from client checking if user match and password match with salt + hash
 app.post("/node/authenticate", async (req, res, next) => {
   try {
@@ -177,9 +205,17 @@ app.post("/node/read-cookie", async (req, res, next) => {
   try {
     if (req.body.username === req.session.user) {
       console.log("LOGGED IN");
-      res.send({ signedIn: true, sessionID: req.sessionID });
+      res.send({
+        signedIn: true,
+        sessionID: req.sessionID,
+        user: req.session.user,
+      });
     } else {
-      res.send({ signedIn: false, sessionID: req.sessionID });
+      res.send({
+        signedIn: false,
+        sessionID: req.sessionID,
+        user: req.session.user,
+      });
     }
   } catch (error) {
     res.status(500).send(error);
@@ -200,7 +236,31 @@ app.post("/node/clear-cookie", async (req, res, next) => {
   }
 });
 
-// Check if AlreadyisSignedIn
+app.post("/node/delete-session", async (req, res, next) => {
+  console.log("req", req.body.ID);
+  try {
+    await SessionModel.findByIdAndDelete(req.body.ID, function (err, docs) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(docs);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
+app.post("/node/get-all-sessions", async (req, res) => {
+  try {
+    var sessions = await SessionModel.find({}).exec();
+    res.send(sessions);
+    res.status(201).send();
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
 
 //post route to the database to retrieve the AlreadyisSignedIn boolean
 

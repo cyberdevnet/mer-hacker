@@ -3,7 +3,9 @@ import { Switch, Route, NavLink, useHistory } from "react-router-dom";
 import History from "../History";
 import Select from "react-select";
 import ProtectedRoute from "../ProtectedRoute";
+import ProtectedRouteSettings from "../ProtectedRouteSettings";
 import Home from "./Home";
+import Settings from "../components/Settings/Settings";
 import LoginAPI from "./LoginAPI";
 import Dashboard from "./Dashboard";
 import LoggedIn from "./LoggedIn";
@@ -142,6 +144,15 @@ export default function Template(ac, dc) {
               )}
             </li>
             <li>
+              {ac.dc.isSignedIn && ac.dc.User === "admin" ? (
+                <NavLink exact to="settings" href="#settings">
+                  <i className="fas fa-tools"></i> Settings
+                </NavLink>
+              ) : (
+                <div></div>
+              )}
+            </li>
+            <li>
               <NavLink exact to="home" href="#home">
                 <i className="fa fa-home" aria-hidden="true"></i> Home
               </NavLink>
@@ -267,6 +278,13 @@ export default function Template(ac, dc) {
             exact
             path="/login"
             render={(dc) => <LoginAPI {...ac.dc} dc={dc} />}
+          />
+          <ProtectedRouteSettings
+            exact
+            path="/settings"
+            component={Settings}
+            {...ac.dc}
+            dc={dc}
           />
           <ProtectedRoute exact path="/" component={Home} {...ac.dc} dc={dc} />
           <ProtectedRoute

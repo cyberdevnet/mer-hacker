@@ -115,6 +115,20 @@ module.exports = function (app) {
     })
   );
   app.use(
+    "/node/get-all-users",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/node/get-all-sessions",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
     "/node/hash-users",
     createProxyMiddleware({
       target: "http://127.0.0.1:3001",
@@ -144,6 +158,20 @@ module.exports = function (app) {
   );
   app.use(
     "/node/clear-cookie",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/node/delete-session",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/node/delete-user",
     createProxyMiddleware({
       target: "http://127.0.0.1:3001",
       changeOrigin: true,

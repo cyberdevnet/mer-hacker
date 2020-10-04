@@ -202,6 +202,9 @@ export default function Template(ac, dc) {
               options={NETWORKS}
               placeholder={ac.dc.network}
               onChange={HandleNetwork}
+              onMenuOpen={() =>
+                ac.dc.settriggerSelectNetwork(ac.dc.triggerSelectNetwork + 1)
+              }
               classNamePrefix="foo"
               isLoading={ac.dc.loadingNet}
             />

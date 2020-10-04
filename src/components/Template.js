@@ -5,15 +5,15 @@ import Select from "react-select";
 import ProtectedRoute from "../ProtectedRoute";
 import ProtectedRouteSettings from "../ProtectedRouteSettings";
 import Home from "./Home";
-import Settings from "../components/Settings/Settings";
-import LoginAPI from "./LoginAPI";
+import AdminPanel from "./AdminPanel/AdminPanel";
+import LoginAPI from "../components/Login/LoginAPI";
 import Dashboard from "./Dashboard";
-import LoggedIn from "./LoggedIn";
-import Logout from "./Logout";
+import LoggedIn from "../components/Login/LoggedIn";
+import Logout from "../components/Login/Logout";
 import PageNotFound from "../PageNotFound";
 import ToolsTemplate from "./ToolsTemplate";
 import AlertModal from "./AlertsModal";
-import Topology from "./Topology";
+import Topology from "../components/Tools/Topology/Topology";
 import $ from "jquery";
 import ReactTooltip from "react-tooltip";
 import SessionTimeout from "../SessionTimeout";
@@ -146,7 +146,7 @@ export default function Template(ac, dc) {
             <li>
               {ac.dc.isSignedIn && ac.dc.User === "admin" ? (
                 <NavLink exact to="settings" href="#settings">
-                  <i className="fas fa-tools"></i> Settings
+                  <i className="fas fa-tools"></i> Admin Panel
                 </NavLink>
               ) : (
                 <div></div>
@@ -282,7 +282,7 @@ export default function Template(ac, dc) {
           <ProtectedRouteSettings
             exact
             path="/settings"
-            component={Settings}
+            component={AdminPanel}
             {...ac.dc}
             dc={dc}
           />

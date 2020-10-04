@@ -3,16 +3,15 @@ import axios from "axios";
 import SettingsAlertsModal from "./SettingsAlertModal";
 import SettingsCreateUser from "./SettingsCreateUser";
 import SettingsDeleteUser from "./SettingsDeleteUser";
-import SettingsEditUser from "./SettingsEditUser";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import cellEditFactory from "react-bootstrap-table2-editor";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css";
 import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
 import "../../styles/Settings.css";
-// import "../../styles/Settings.css";
 
-export default function Settings(ac) {
+export default function AdminPanel(ac) {
   const [showtable, setshowtable] = useState(false);
   const [showtablesessions, setshowtablesessions] = useState(false);
   const [allUsers, setallUsers] = useState([]);
@@ -24,14 +23,16 @@ export default function Settings(ac) {
   const [switchAlertModal, setswitchAlertModal] = useState(false);
   const [switchCreateUser, setswitchCreateUser] = useState(false);
   const [switchDeleteUser, setswitchDeleteUser] = useState(false);
-  const [switchEditUser, setswitchEditUser] = useState(false);
   const [sessionID, setsessionID] = useState([]);
   const [userID, setuserID] = useState([]);
   const [isAdminUser, setisAdminUser] = useState(false);
   const [buttonStyle, setbuttonStyle] = useState({ display: "block" });
+  const [notEditableUsers, setnotEditableUsers] = useState([]);
 
   useEffect(() => {
     async function GetAllUsers() {
+      let users = [];
+
       fetch("/node/get-all-users", {
         method: ["POST"],
         cache: "no-cache",
@@ -55,14 +56,24 @@ export default function Settings(ac) {
             data.map((item) => {
               var rowModel = {
                 username: item.username,
+                password: item.password,
+                email: item.email,
                 apiKey: item.apiKey,
                 id: item._id,
                 signed: item.signed,
               };
               row.push(rowModel);
+              users.push(item.username);
               userData.push(rowModel);
               setallUsers({ ...columns, rows: row });
             });
+          }
+        })
+        .then(() => {
+          let indexofCurrentuser = users.indexOf(ac.User);
+          if (indexofCurrentuser > -1) {
+            users.splice(indexofCurrentuser, 1);
+            setnotEditableUsers(users);
           }
         })
         .then(() => setshowtable(true));
@@ -136,6 +147,40 @@ export default function Settings(ac) {
       },
     },
     {
+      dataField: "email",
+      text: "E-mail",
+      editable: false,
+      key: "email",
+      sort: false,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+      style: (colum, colIndex) => {
+        return {
+          textOverflow: "ellipsis",
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+        };
+      },
+    },
+    {
+      dataField: "password",
+      text: "Hashed Password",
+      editable: false,
+      key: "password",
+      sort: false,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+      style: (colum, colIndex) => {
+        return {
+          textOverflow: "ellipsis",
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+        };
+      },
+    },
+    {
       dataField: "id",
       text: "User ID",
       editable: false,
@@ -144,15 +189,30 @@ export default function Settings(ac) {
       headerStyle: (colum, colIndex) => {
         return { textAlign: "center" };
       },
+      style: (colum, colIndex) => {
+        return {
+          textOverflow: "ellipsis",
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+        };
+      },
     },
     {
       dataField: "apiKey",
       text: "API Key",
-      editable: false,
+      editable: true,
       key: "apiKey",
       sort: false,
+      formatter: apikeyHide,
       headerStyle: (colum, colIndex) => {
         return { textAlign: "center" };
+      },
+      style: (colum, colIndex) => {
+        return {
+          textOverflow: "ellipsis",
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+        };
       },
     },
     {
@@ -197,6 +257,13 @@ export default function Settings(ac) {
       headerStyle: (colum, colIndex) => {
         return { textAlign: "center" };
       },
+      style: (colum, colIndex) => {
+        return {
+          textOverflow: "ellipsis",
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+        };
+      },
     },
     {
       dataField: "expires",
@@ -206,6 +273,13 @@ export default function Settings(ac) {
       sort: true,
       headerStyle: (colum, colIndex) => {
         return { textAlign: "center" };
+      },
+      style: (colum, colIndex) => {
+        return {
+          textOverflow: "ellipsis",
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+        };
       },
     },
     {
@@ -226,11 +300,6 @@ export default function Settings(ac) {
       <div
         style={{ textAlign: "center", cursor: "pointer", lineHeight: "normal" }}
       >
-        <i
-          className="fas fa-edit"
-          style={{ marginRight: "15px" }}
-          onClick={() => editUser(row)}
-        ></i>
         <i className="far fa-trash-alt" onClick={() => deleteUser(row)}></i>
       </div>
     );
@@ -278,21 +347,13 @@ export default function Settings(ac) {
     }
   };
 
-  const editUser = (row) => {
-    if (row.username === "admin") {
-      setisAdminUser(true);
-      setbuttonStyle({ display: "none" });
-      setuserID(row.id);
-      setswitchEditUser(true);
-      setAlertDeleteError(`admin user cannot be deleted!`);
-    } else {
-      setuserID(row.id);
-      setswitchEditUser(true);
-
-      setAlertDeleteError(
-        `Are you sure you want to delete the user ${row.username}?`
-      );
-    }
+  const editApiKeyCell = async (oldValue, newValue, row, column) => {
+    let username = row.username;
+    let editedkey = newValue;
+    await axios.post("/node/edit-api-key", {
+      username: username,
+      editedkey: editedkey,
+    });
   };
 
   const dc = {
@@ -312,8 +373,6 @@ export default function Settings(ac) {
     setAlertDeleteError,
     switchDeleteUser,
     setswitchDeleteUser,
-    switchEditUser,
-    setswitchEditUser,
     userID,
     setuserID,
     isAdminUser,
@@ -321,6 +380,28 @@ export default function Settings(ac) {
     buttonStyle,
     setbuttonStyle,
   };
+
+  function apikeyHide(cell, row) {
+    if (row.apiKey) {
+      return (
+        <table>
+          <tbody>
+            <tr>
+              <td
+                href="node_modules/text-security/text-security.css"
+                rel="stylesheet"
+                type="text/css"
+                className="my-password-field"
+              >
+                {cell}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      );
+    }
+    return <span>{cell}</span>;
+  }
 
   return (
     <div id="page-inner-main-templates">
@@ -339,7 +420,6 @@ export default function Settings(ac) {
       ) : (
         <div></div>
       )}
-      {switchEditUser ? <SettingsEditUser {...ac.dc} dc={dc} /> : <div></div>}
       <div className="col-xs-12">
         <div className="panel-debug panel-default">
           <div className="panel-body">
@@ -371,7 +451,26 @@ export default function Settings(ac) {
                   >
                     {(props) => (
                       <div>
-                        <BootstrapTable {...props.baseProps} striped hover />
+                        <BootstrapTable
+                          {...props.baseProps}
+                          striped
+                          hover
+                          cellEdit={cellEditFactory({
+                            mode: "click",
+                            blurToSave: true,
+                            nonEditableRows: () => {
+                              return notEditableUsers;
+                            },
+                            afterSaveCell: (
+                              oldValue,
+                              newValue,
+                              row,
+                              column
+                            ) => {
+                              editApiKeyCell(oldValue, newValue, row, column);
+                            },
+                          })}
+                        />
                       </div>
                     )}
                   </ToolkitProvider>
@@ -395,7 +494,7 @@ export default function Settings(ac) {
                 color: "#337ab7",
                 cursor: "pointer",
               }}
-              class="fa fa-refresh"
+              className="fa fa-refresh"
               aria-hidden="true"
               onClick={() => settriggerSessions(triggerSessions + 1)}
             ></i>

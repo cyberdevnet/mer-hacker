@@ -42,6 +42,8 @@
 }
 .login-form .form-group {
   margin-bottom: 20px;
+  margin-right: 2px;
+  margin-left: -18px;
 }
 .login-form .form-control,
 .login-form .btn {

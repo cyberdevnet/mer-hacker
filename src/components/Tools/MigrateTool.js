@@ -373,6 +373,7 @@ export default function MigrateTool(ac) {
       abortController.abort();
       clearInterval(interval);
     };
+    // eslint-disable-next-line
   }, [showLiveLogs]);
 
   return (

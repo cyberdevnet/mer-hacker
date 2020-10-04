@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import Dialog from "@material-ui/core/Dialog";
 import Form from "@rjsf/core";
-import "../../styles/CreateTemplateModal.css";
+import "../../../styles/CreateTemplateModal.css";
 
-export default function ShowTemplateModal(ac) {
-  const [loading, setloading] = useState(false);
+export default function CreateTemplateModal(ac) {
+  const [flashMessages, setflashMessages] = useState([]);
   const [loadingSubmit, setloadingSubmit] = useState(false);
 
   const schema = {
-    title: "Show Template",
+    title: "Create Template",
     type: "object",
     required: ["templateName"],
     properties: {
@@ -404,224 +404,80 @@ export default function ShowTemplateModal(ac) {
     });
   }
 
-  async function updateTemplate(e) {
+  async function writeTemplate(e) {
+    setflashMessages([]);
     setloadingSubmit(true);
     try {
-      fetch("/node/read_templateFile", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ user: ac.cc.User }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          const newArr = data.slice();
-          const singleArr = [];
-          const existingObj = newArr.find(
-            (item) => item.templates.id === e.formData.id
-          );
+      let id = Math.floor(Math.random() * 5000) + 1000;
+      const newArr = [];
+      const existingObj = newArr.find(
+        (item) => item.templateName === e.formData.templateName
+      );
+      if (existingObj) {
+        //Object does exist
+        Object.assign(existingObj, e.formData);
+        setflashMessages(
+          <div className="form-input-error-msg alert alert-danger">
+            <span className="glyphicon glyphicon-exclamation-sign"></span>
+            Template already exists
+          </div>
+        );
+        setloadingSubmit(false);
+      } else {
+        e.formData.id = id;
+        //Object does NOT exist
+        newArr.push(e.formData);
+        try {
+          fetch("/node/write_templateFile", {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ template: e.formData, user: ac.cc.User }),
+          })
+            .then((res) => {
+              return res.json();
+            })
 
-          if (existingObj.templates.templateName === e.formData.templateName) {
-            e.formData.id = Math.floor(Math.random() * 5000) + 1000;
-            //Object does exist
-            let modified = Object.assign(existingObj.templates, e.formData);
-            let _id = existingObj._id;
-            singleArr.push(modified);
-            try {
-              fetch("/node/update_templateFile", {
-                method: "POST",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  template: modified,
-                  user: ac.cc.User,
-                  _id: _id,
-                }),
-              })
-                .then((res) => {
-                  return res.json();
-                })
-
-                .then(() => {
-                  setTimeout(() => {
-                    //reset select form
-                    ac.dc.settemplatesSelectKey(
-                      ac.dc.initialFormTemplatesState
-                    );
-                    ac.dc.setshowTemplateModal(false);
-                    setloadingSubmit(false);
-                    //call readTemplate() from parent to update available templates
-                    ac.dc.readTemplate();
-                  }, 1500);
-                })
-                .then(
-                  setTimeout(() => {
-                    ac.cc.setflashMessages(
-                      <div className="form-input-error-msg alert alert-success">
-                        <span className="glyphicon glyphicon-exclamation-sign"></span>
-                        Template modified
-                      </div>
-                    );
-                  }, 2000)
-                )
-                .then(() => {
-                  setTimeout(() => {
-                    ac.cc.setflashMessages([]);
-                  }, 6000);
-                });
-            } catch (e) {
-              console.log("Error:", e);
-            }
-          } else {
-            //Object does NOT exist
-            singleArr.push(e.formData);
-            e.formData.id = Math.floor(Math.random() * 5000) + 1000;
-
-            try {
-              fetch("/node/write_templateFile", {
-                method: "POST",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  template: e.formData,
-                  user: ac.cc.User,
-                }),
-              })
-                .then((res) => {
-                  return res.json();
-                })
-
-                .then(() => {
-                  setTimeout(() => {
-                    //reset select form
-                    ac.dc.settemplatesSelectKey(
-                      ac.dc.initialFormTemplatesState
-                    );
-                    ac.dc.setshowTemplateModal(false);
-                    setloadingSubmit(false);
-                    //call readTemplate() from parent to update available templates
-                    ac.dc.readTemplate();
-                  }, 1500);
-                })
-                .then(
-                  setTimeout(() => {
-                    ac.cc.setflashMessages(
-                      <div className="form-input-error-msg alert alert-success">
-                        <span className="glyphicon glyphicon-exclamation-sign"></span>
-                        Template created
-                      </div>
-                    );
-                  }, 2000)
-                )
-                .then(() => {
-                  setTimeout(() => {
-                    ac.cc.setflashMessages([]);
-                  }, 6000);
-                });
-            } catch (e) {
-              console.log("Error:", e);
-            }
-          }
-        })
-        .catch((error) => console.log("An error occured ", error));
+            .then(() => {
+              setTimeout(() => {
+                //reset select form
+                ac.dc.settemplatesSelectKey(ac.dc.initialFormTemplatesState);
+                ac.dc.setcreateTemplateModal(false);
+                setloadingSubmit(false);
+                //call readTemplate() from parent to update available templates
+                ac.dc.readTemplate();
+              }, 1500);
+            })
+            .then(
+              setTimeout(() => {
+                ac.cc.setflashMessages(
+                  <div className="form-input-error-msg alert alert-success">
+                    <span className="glyphicon glyphicon-exclamation-sign"></span>
+                    Template created
+                  </div>
+                );
+              }, 2000)
+            )
+            .then(() => {
+              setTimeout(() => {
+                ac.cc.setflashMessages([]);
+              }, 6500);
+            });
+        } catch (e) {
+          console.log("Error:", e);
+        }
+      }
     } catch (e) {
       console.log("Error:", e);
     }
   }
 
   const closeModal = () => {
-    ac.dc.setshowTemplateModal(false);
+    ac.dc.setcreateTemplateModal(false);
     ac.dc.settemplatesSelectKey(ac.dc.initialFormTemplatesState);
   };
-
-  async function deleteTemplate(e) {
-    setloading(true);
-    try {
-      fetch("/node/read_templateFile", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ user: ac.cc.User }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          const newArr = data.slice();
-          const existingObj = newArr.find(
-            (item) =>
-              item.templates.templateName === ac.dc.formData.opt.templateName &&
-              item.templates.id === ac.dc.formData.opt.id
-          );
-
-          let _id = existingObj._id;
-
-          if (existingObj) {
-            //Object does exist
-            try {
-              fetch("/node/delete_templateFile", {
-                method: "POST",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ _id: _id, user: ac.cc.User }),
-              })
-                .then((res) => {
-                  return res.json();
-                })
-                .then(() => {
-                  setTimeout(() => {
-                    //reset select form
-                    ac.dc.settemplatesSelectKey(
-                      ac.dc.initialFormTemplatesState
-                    );
-                    ac.dc.setshowTemplateModal(false);
-                    setloading(false);
-                    //call readTemplate() from parent to update available templates
-                    ac.dc.readTemplate();
-                  }, 1500);
-                })
-                .then(() => {
-                  setTimeout(() => {
-                    ac.cc.setflashMessages(
-                      <div className="form-input-error-msg alert alert-success">
-                        <span className="glyphicon glyphicon-exclamation-sign"></span>
-                        Template deleted
-                      </div>
-                    );
-                  }, 2000);
-                })
-                .then(() => {
-                  setTimeout(() => {
-                    ac.cc.setflashMessages([]);
-                  }, 6000);
-                });
-            } catch (e) {
-              console.log("Error:", e);
-            }
-          } else {
-            //Object does NOT exist
-            ac.cc.setflashMessages(
-              <div className="form-input-error-msg alert alert-danger">
-                <span className="glyphicon glyphicon-exclamation-sign"></span>
-                Cannot delete template
-              </div>
-            );
-            setloading(false);
-          }
-        })
-        .catch((error) => console.log("An error occured ", error));
-    } catch (e) {
-      console.log("Error:", e);
-    }
-  }
 
   return (
     <Dialog open={true} fullWidth maxWidth="md">
@@ -634,13 +490,12 @@ export default function ShowTemplateModal(ac) {
         >
           <span aria-hidden="true">×</span>
         </button>
+        {flashMessages}
         {ac.cc.flashMessages}
         <Form
           schema={schema}
           uiSchema={uiSchema}
-          formData={ac.dc.formData.opt}
-          // className="template-modal"
-          onSubmit={updateTemplate}
+          onSubmit={writeTemplate}
           transformErrors={transformErrors}
           noHtml5Validate
         >
@@ -658,21 +513,6 @@ export default function ShowTemplateModal(ac) {
 
         <button className="btn btn-danger" onClick={closeModal}>
           Close
-        </button>
-        <button
-          className="btn btn-danger"
-          onClick={!loading ? deleteTemplate : null}
-          disabled={loading}
-          style={{ float: "left" }}
-        >
-          {loading && (
-            <i
-              className="fa fa-refresh fa-spin"
-              style={{ marginRight: "5px" }}
-            />
-          )}
-          {loading && <span>Delete Template</span>}
-          {!loading && <span>Delete Template</span>}
         </button>
       </div>
     </Dialog>

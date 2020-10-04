@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 
 import $ from "jquery";
-import "../styles/LoggedIn.css";
+import "../../styles/LoggedIn.css";
 
 export default function LoggedIn(ac) {
   const [loading, setloading] = useState(false);

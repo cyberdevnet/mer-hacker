@@ -69,6 +69,7 @@ function App() {
   const [showAlreadyisSignedInModal, setshowAlreadyisSignedInModal] = useState(
     false
   );
+  const [showforgotPasswordModal, setshowforgotPasswordModal] = useState(false);
   const [switchAllTools, setswitchAllTools] = useState({
     1: false,
     2: false,
@@ -472,6 +473,8 @@ function App() {
     settoolSelected,
     showAlreadyisSignedInModal,
     setshowAlreadyisSignedInModal,
+    showforgotPasswordModal,
+    setshowforgotPasswordModal,
   };
 
   return (

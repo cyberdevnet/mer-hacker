@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import Dialog from "@material-ui/core/Dialog";
 import axios from "axios";
 import "../../styles/AlertsModal.css";
 
-export default function SettingsEditUser(ac) {
+export default function SettingsDeleteUser(ac) {
   const handleDeleteModal = () => {
-    ac.dc.setswitchEditUser(false);
+    ac.dc.setswitchDeleteUser(false);
     ac.dc.setbuttonStyle({ display: "block" });
   };
 
   const handleClearSession = () => {
     axios.post("/node/delete-user", { ID: ac.dc.userID });
-    ac.dc.setswitchEditUser(false);
+    ac.dc.setswitchDeleteUser(false);
     ac.dc.settriggerSessions(ac.dc.triggerSessions + 1);
     ac.dc.settriggerUsers(ac.dc.triggerUsers + 1);
     ac.dc.setbuttonStyle({ display: "block" });

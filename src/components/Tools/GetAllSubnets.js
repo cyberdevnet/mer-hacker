@@ -80,11 +80,7 @@ export default function GetAllSubnets(ac) {
           })
           .then(() => setloading(false))
           .then(() => {
-            if (dataInventory.length > 0) {
-              setshowtable(true);
-            } else {
-              setloading(false);
-            }
+            setshowtable(true);
           });
       } else {
         ac.dc.setswitchAlertModal(true);

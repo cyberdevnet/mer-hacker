@@ -120,7 +120,6 @@ export default function GetAllOrganizationSubnets(ac) {
                     network: Networkname,
                   };
                   row2.push(rowModel);
-                  console.log("APIcall -> rowModel", rowModel);
                   deviceData.push(rowModel);
                   setdataInventory({ ...columns, rows: row2 });
                 });

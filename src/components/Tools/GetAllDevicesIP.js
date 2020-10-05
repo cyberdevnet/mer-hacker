@@ -81,8 +81,7 @@ export default function GetAllDevicesIP(ac) {
             }
           })
           .then(() => setloading(false))
-          .then(() => setshowtable(true))
-          .then(() => setloading(false));
+          .then(() => setshowtable(true));
       } else {
         ac.dc.setswitchAlertModal(true);
         ac.dc.setAlertModalError("Please set Organization and Network.");

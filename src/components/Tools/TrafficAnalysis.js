@@ -121,7 +121,6 @@ export default function TrafficAnalysis(ac) {
               })
 
               .then((data) => {
-                console.log("APIcall -> data", data);
                 if (data.error) {
                   setshowtable(false);
                   ac.dc.setflashMessages(

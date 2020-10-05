@@ -8,7 +8,6 @@ export default function NetworkTopUsers(ac) {
   const [triggerMAC, settriggerMAC] = useState(0);
   const [triggerIP, settriggerIP] = useState(0);
   const [findPort, setfindPort] = useState([]);
-  console.log("NetworkTopUsers -> findPort", findPort);
   const [findPortTable, setfindPortTable] = useState([]);
   const [networkName, setnetworkName] = useState([]);
   const [errorMessageMAC, seterrorMessageMAC] = useState(null);
@@ -67,7 +66,6 @@ export default function NetworkTopUsers(ac) {
             })
               .then((response) => response.json())
               .then((data) => {
-                console.log("transormMacAddress -> data", data);
                 if (data.error) {
                   ac.dc.setflashMessages(
                     <div className="form-input-error-msg alert alert-danger">
@@ -203,8 +201,6 @@ export default function NetworkTopUsers(ac) {
       });
 
       setnetworkName(Networkname);
-      console.log("NetworkTopUsers -> Networkname", Networkname);
-
       setfindPortTable(findPort);
     }
     // eslint-disable-next-line

@@ -4,12 +4,19 @@ import axios from "axios";
 import "../../styles/AlertsModal.css";
 
 export default function SettingsAlertsModal(ac) {
+
+  const Axios = axios.create({
+    withCredentials: true,
+  });
   const handleAlertsModal = () => {
     ac.dc.setswitchAlertModal(false);
   };
 
   const handleClearSession = () => {
-    axios.post("/node/delete-session", { ID: ac.dc.sessionID });
+    Axios.post("/node/delete-session", {
+      ID: ac.dc.sessionID,
+      isSignedIn: ac.cc.isSignedIn,
+    });
     ac.dc.setswitchAlertModal(false);
     ac.dc.settriggerSessions(ac.dc.triggerSessions + 1);
     ac.dc.settriggerUsers(ac.dc.triggerUsers + 1);

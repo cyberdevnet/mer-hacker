@@ -33,7 +33,10 @@ export default function LoggedIn(ac) {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username: `${ac.dc.User}` }),
+        body: JSON.stringify({
+          username: `${ac.dc.User}`,
+          isSignedIn: ac.dc.isSignedIn,
+        }),
       })
         .then((response) => {
           return response.json();

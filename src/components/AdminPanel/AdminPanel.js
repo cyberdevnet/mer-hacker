@@ -29,31 +29,22 @@ export default function AdminPanel(ac) {
   const [buttonStyle, setbuttonStyle] = useState({ display: "block" });
   const [notEditableUsers, setnotEditableUsers] = useState([]);
 
+  const Axios = axios.create({
+    withCredentials: true,
+  });
+
+
   useEffect(() => {
     async function GetAllUsers() {
       let users = [];
 
-      fetch("/node/get-all-users", {
-        method: ["POST"],
-        cache: "no-cache",
-        headers: {
-          content_type: "application/json",
-        },
-      })
-        .then((res) => res.json())
+      try {
+        Axios.post("/node/get-all-users",{isSignedIn:ac.isSignedIn})
         .then((data) => {
-          if (data.error) {
-            ac.setflashMessages(
-              <div className="form-input-error-msg alert alert-danger">
-                <span className="glyphicon glyphicon-exclamation-sign"></span>
-                {data.error[0]}
-              </div>
-            );
-          } else {
             let userData = [];
             let row = [];
             //eslint-disable-next-line
-            data.map((item) => {
+            data.data.map((item) => {
               var rowModel = {
                 username: item.username,
                 password: item.password,
@@ -67,7 +58,7 @@ export default function AdminPanel(ac) {
               userData.push(rowModel);
               setallUsers({ ...columns, rows: row });
             });
-          }
+          
         })
         .then(() => {
           let indexofCurrentuser = users.indexOf(ac.User);
@@ -77,8 +68,16 @@ export default function AdminPanel(ac) {
           }
         })
         .then(() => setshowtable(true));
+        
+      } catch (error) {
+        ac.setflashMessages(
+          <div className="form-input-error-msg alert alert-danger">
+            <span className="glyphicon glyphicon-exclamation-sign"></span>
+            {error.response}
+          </div>
+        ); 
+      }
     }
-
     GetAllUsers();
     return () => {
       //   ac.setclientList([]);
@@ -90,41 +89,38 @@ export default function AdminPanel(ac) {
   useEffect(() => {
     async function GetAllSessions() {
       setshowtablesessions(false);
-      fetch("/node/get-all-sessions", {
-        method: ["POST"],
-        cache: "no-cache",
-        headers: {
-          content_type: "application/json",
-        },
-      })
-        .then((res) => res.json())
+
+      try {
+        Axios.post("/node/get-all-sessions",{isSignedIn:ac.isSignedIn})
         .then((data) => {
-          if (data.error) {
-            ac.setflashMessages(
-              <div className="form-input-error-msg alert alert-danger">
-                <span className="glyphicon glyphicon-exclamation-sign"></span>
-                {data.error[0]}
-              </div>
-            );
-          } else {
-            let userSessions = [];
-            let row = [];
-            //eslint-disable-next-line
-            data.map((item) => {
-              let sessions = JSON.parse(item.session);
-              let ExpDate = item.expires.split("(Coor")[0];
-              var rowModel = {
-                username: sessions.user,
-                sessionID: item._id,
-                expires: ExpDate,
-              };
-              row.push(rowModel);
-              userSessions.push(rowModel);
-              setallSessions({ ...columns, rows: row });
-            });
-          }
-        })
-        .then(() => setshowtablesessions(true));
+  
+          let userSessions = [];
+          let row = [];
+          //eslint-disable-next-line
+          data.data.map((item) => {
+            let sessions = JSON.parse(item.session);
+            let ExpDate = item.expires.split("(Coor")[0];
+            var rowModel = {
+              username: sessions.user,
+              sessionID: item._id,
+              expires: ExpDate,
+            };
+            row.push(rowModel);
+            userSessions.push(rowModel);
+            setallSessions({ ...columns, rows: row });
+          });
+        
+      })
+      .then(() => setshowtablesessions(true));
+      } catch (error) {
+        ac.setflashMessages(
+          <div className="form-input-error-msg alert alert-danger">
+            <span className="glyphicon glyphicon-exclamation-sign"></span>
+            {error.response}
+          </div>
+        );
+        
+      }
     }
 
     GetAllSessions();
@@ -353,6 +349,7 @@ export default function AdminPanel(ac) {
     await axios.post("/node/edit-api-key", {
       username: username,
       editedkey: editedkey,
+      isSignedIn:ac.isSignedIn
     });
   };
 
@@ -406,17 +403,17 @@ export default function AdminPanel(ac) {
   return (
     <div id="page-inner-main-templates">
       {switchAlertModal ? (
-        <SettingsAlertsModal {...ac.dc} dc={dc} />
+        <SettingsAlertsModal {...ac.dc} cc={ac} dc={dc} />
       ) : (
         <div></div>
       )}
       {switchCreateUser ? (
-        <SettingsCreateUser {...ac.dc} dc={dc} />
+        <SettingsCreateUser {...ac.dc} cc={ac} dc={dc} />
       ) : (
         <div></div>
       )}
       {switchDeleteUser ? (
-        <SettingsDeleteUser {...ac.dc} dc={dc} />
+        <SettingsDeleteUser {...ac.dc}    cc={ac} dc={dc} />
       ) : (
         <div></div>
       )}

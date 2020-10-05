@@ -35,6 +35,7 @@ export default function LoginAPI(ac) {
         .then((res) => {
           if (res.data.signedIn === true) {
             ac.setisSignedIn(true);
+            history.push("/home");
           } else {
             ac.setisSignedIn(false);
             history.push("/login");

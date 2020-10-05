@@ -4,13 +4,21 @@ import axios from "axios";
 import "../../styles/AlertsModal.css";
 
 export default function SettingsDeleteUser(ac) {
+
+  const Axios = axios.create({
+    withCredentials: true,
+  });
+
   const handleDeleteModal = () => {
     ac.dc.setswitchDeleteUser(false);
     ac.dc.setbuttonStyle({ display: "block" });
   };
 
   const handleClearSession = () => {
-    axios.post("/node/delete-user", { ID: ac.dc.userID });
+    Axios.post("/node/delete-user", {
+      ID: ac.dc.userID,
+      isSignedIn: ac.cc.isSignedIn,
+    });
     ac.dc.setswitchDeleteUser(false);
     ac.dc.settriggerSessions(ac.dc.triggerSessions + 1);
     ac.dc.settriggerUsers(ac.dc.triggerUsers + 1);

@@ -14,6 +14,7 @@ const assert = require("assert");
 var Stream = require("stream");
 var FormData = require("form-data");
 const MongoStore = require("connect-mongo")(session);
+const axios = require("axios");
 
 app.use(cors());
 app.use(express.json());
@@ -83,55 +84,84 @@ UserSchema.methods.comparePassword = function (plaintext, callback) {
 
 const UserModel = mongooseConnection.model("user", UserSchema);
 
-//connection to the Mongodb database to check the users
-app.get("/node/dump", async (req, res) => {
-  try {
-    var result = await UserModel.find().exec();
-    res.send(result);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
 
 //create a new user on Mongodb + password and salt + hash
 app.post("/node/hash-users", async (req, res) => {
-  try {
-    const user = new UserModel(req.body);
 
-    const result = await user.save();
-    res.send(result);
-    res.status(201).send();
-  } catch (error) {
-    res.status(500).send(error);
+let body = {
+  username: req.body.username,
+  email: req.body.email,
+  password: req.body.password,
+  apiKey: "tzu",
+  signed: "false",
+}
+  
+  if (req.body.adminUser === 'admin' && req.body.isSignedIn) {
+    try {
+      const user = new UserModel(body);
+  
+      const result = await user.save();
+      res.send(result);
+      res.status(201).send();
+    } catch (error) {
+      res.status(500).send(error);
+    }
+
+  } else {
+    console.log('Hacked Attempt');
+    res.status(404).send();
   }
+
+});
+
+//if user is signed id change signed status to true, otherwise false (called by read-cookie)
+app.post("/node/set-user-status", async (req, res, next) => {
+    try {
+        const key = await UserModel.findOneAndUpdate(
+          { username: req.session.user },
+          { signed: req.body.signed },
+          req.body
+        ).exec();
+        res.json(key);
+        res.status(201).send();
+
+    } catch (error) {
+      res.status(500).send(error);
+      return next(new Error(error));
+    }
 });
 
 app.post("/node/delete-user", async (req, res, next) => {
-  console.log("req", req.body.ID);
-  console.log("req", req.body);
-  try {
-    await UserModel.findByIdAndDelete(req.body.ID, function (err, docs) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.send(docs);
-      }
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send(error);
+
+  if (req.body.isSignedIn) {
+    try {
+      await UserModel.findByIdAndDelete(req.body.ID, function (err, docs) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.send(docs);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
   }
+
 });
 
 //get all users in the database
 app.post("/node/get-all-users", async (req, res) => {
-  try {
-    var users = await UserModel.find({}).exec();
-    res.send(users);
-    res.status(201).send();
-  } catch (error) {
-    res.status(500).send(error);
+  if (req.body.isSignedIn) {
+    try {
+      var users = await UserModel.find({}).exec();
+      res.send(users);
+      res.status(200).send();
+    } catch (error) {
+      res.status(500).send(error);
+    }
   }
+
 });
 
 //login from client checking if user match and password match with salt + hash
@@ -206,9 +236,34 @@ app.post("/node/read-cookie", async (req, res, next) => {
   try {
     if (req.body.username === req.session.user) {
       console.log("LOGGED IN");
-      res.send({ signedIn: true, sessionID: req.sessionID });
+      //set user status to signed
+      await UserModel.findOneAndUpdate(
+        { username: req.body.username },
+        { signed: true },
+        req.body
+      ).exec();
+      res.send({
+        signedIn: true,
+        sessionID: req.sessionID,
+        user: req.session.user,
+        signed: true,
+      });
     } else {
-      res.send({ signedIn: false, sessionID: req.sessionID });
+      console.log("LOGGED OUT");
+
+      //set user status to un-signed
+
+      await UserModel.findOneAndUpdate(
+        { username: req.body.username },
+        { signed: false },
+        req.body
+      ).exec();
+      res.send({
+        signedIn: false,
+        sessionID: req.sessionID,
+        user: req.session.user,
+        signed: false,
+      });
     }
   } catch (error) {
     res.status(500).send(error);
@@ -229,7 +284,34 @@ app.post("/node/clear-cookie", async (req, res, next) => {
   }
 });
 
-// Check if AlreadyisSignedIn
+app.post("/node/delete-session", async (req, res, next) => {
+  if (req.body.isSignedIn) {
+  try {
+    await SessionModel.findByIdAndDelete(req.body.ID, function (err, docs) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(docs);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+}
+});
+
+app.post("/node/get-all-sessions", async (req, res) => {
+  if (req.body.isSignedIn) {
+  try {
+    var sessions = await SessionModel.find({}).exec();
+    res.send(sessions);
+    res.status(201).send();
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
+});
 
 //post route to the database to retrieve the AlreadyisSignedIn boolean
 
@@ -243,7 +325,6 @@ app.post("/node/get-AlreadyisSignedIn", async (req, res, next) => {
         console.log(err);
       } else {
         if (result !== null) {
-          console.log("result", result);
           let session = JSON.parse(result.session);
           let user = session.user;
           if (result && user === req.body.username) {
@@ -266,6 +347,29 @@ app.post("/node/get-AlreadyisSignedIn", async (req, res, next) => {
     res.status(500).send(error);
     return next(new Error(error));
   }
+});
+
+// edit API key from admin panel
+
+app.post("/node/edit-api-key", async (req, res, next) => {
+  if (req.body.isSignedIn) {
+  try {
+    if (req.body.username) {
+      const key = await UserModel.findOneAndUpdate(
+        { username: req.body.username },
+        { apiKey: req.body.editedkey },
+        req.body
+      ).exec();
+      res.json(key);
+      res.status(201).send();
+    } else {
+      console.log("key not edited");
+    }
+  } catch (error) {
+    res.status(500).send(error);
+    return next(new Error(error));
+  }
+}
 });
 
 // store and retrieve API key
@@ -299,6 +403,8 @@ app.post("/node/post-api-key", async (req, res, next) => {
 
 //connection to the apikeys database to retrieve the key
 app.post("/node/get-api-key", async (req, res, next) => {
+  if (req.body.isSignedIn) {
+
   try {
     var apiKey = await UserModel.findOne(
       { username: req.body.username },
@@ -309,6 +415,9 @@ app.post("/node/get-api-key", async (req, res, next) => {
     res.status(500).send(error);
     return next(new Error(error));
   }
+} else {
+  res.status(404).send();
+}
 });
 
 //  <======== DO NOT DELETE THIS ROUTE =========>

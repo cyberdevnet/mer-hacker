@@ -136,6 +136,13 @@ module.exports = function (app) {
     })
   );
   app.use(
+    "/node/set-user-status",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:3001",
+      changeOrigin: true,
+    })
+  );
+  app.use(
     "/node/get-auth-status",
     createProxyMiddleware({
       target: "http://127.0.0.1:3001",

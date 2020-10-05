@@ -13,8 +13,11 @@ export default function SettingsCreateUser(ac) {
   const [showRegistredUserError, setshowRegistredUserError] = useState(false);
   const [isRegistredEmailError, setisRegistredEmailError] = useState([]);
   const [showRegistredEmailError, setshowRegistredEmailError] = useState(false);
-
   const { register, handleSubmit, errors } = useForm();
+
+  const Axios = axios.create({
+    withCredentials: true,
+  });
 
   const handleModal = () => {
     ac.dc.setswitchCreateUser(false);
@@ -25,50 +28,58 @@ export default function SettingsCreateUser(ac) {
     let AllUsers = [];
     let AllEmails = [];
 
-    axios.post("/node/get-all-users", {}).then((res) => {
-      // eslint-disable-next-line
-      res.data.map((opt) => {
-        AllUsers.push(opt.username);
-        AllEmails.push(opt.email);
-      });
+    Axios.post("/node/get-all-users", { isSignedIn: ac.cc.isSignedIn }).then(
+      (res) => {
+        // eslint-disable-next-line
+        res.data.map((opt) => {
+          AllUsers.push(opt.username);
+          AllEmails.push(opt.email);
+        });
 
-      let isRegistredUser = AllUsers.indexOf(newUser);
-      let isRegistredEmail = AllEmails.indexOf(newEmail);
+        let isRegistredUser = AllUsers.indexOf(newUser);
+        let isRegistredEmail = AllEmails.indexOf(newEmail);
 
-      if (isRegistredUser === -1) {
-        if (isRegistredEmail === -1) {
-          if (newUser !== "admin") {
-            setTimeout(() => {
-              axios.post("/node/hash-users", {
-                username: newUser,
-                email: newEmail,
-                password: newPassword,
-                apiKey: "tzu",
-                signed: "false",
-              });
+        if (isRegistredUser === -1) {
+          if (isRegistredEmail === -1) {
+            if (newUser !== "admin") {
+              setTimeout(() => {
+                Axios.post(
+                  "/node/hash-users",
+                  {
+                    username: newUser,
+                    email: newEmail,
+                    password: newPassword,
+                    apiKey: "tzu",
+                    signed: "false",
+                    adminUser: ac.cc.User,
+                    isSignedIn: ac.cc.isSignedIn,
+                  },
+                  { withCredentials: true }
+                );
+                setloading(false);
+                ac.dc.setswitchCreateUser(false);
+                ac.dc.settriggerSessions(ac.dc.triggerSessions + 1);
+                ac.dc.settriggerUsers(ac.dc.triggerUsers + 1);
+              }, 3000);
+            } else {
+              setisRegistredUserError("This username is not available");
+              setshowRegistredUserError(true);
               setloading(false);
-              ac.dc.setswitchCreateUser(false);
-              ac.dc.settriggerSessions(ac.dc.triggerSessions + 1);
-              ac.dc.settriggerUsers(ac.dc.triggerUsers + 1);
-            }, 3000);
+            }
           } else {
-            setisRegistredUserError("This username is not available");
-            setshowRegistredUserError(true);
+            setisRegistredEmailError(
+              "The email address is already taken. Please choose another one."
+            );
+            setshowRegistredEmailError(true);
             setloading(false);
           }
         } else {
-          setisRegistredEmailError(
-            "The email address is already taken. Please choose another one."
-          );
-          setshowRegistredEmailError(true);
+          setisRegistredUserError("This username is not available");
+          setshowRegistredUserError(true);
           setloading(false);
         }
-      } else {
-        setisRegistredUserError("This username is not available");
-        setshowRegistredUserError(true);
-        setloading(false);
       }
-    });
+    );
   };
 
   const setUser = (e) => {

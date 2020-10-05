@@ -110,7 +110,7 @@ function App() {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username: `${User}` }),
+        body: JSON.stringify({ username: `${User}`, isSignedIn: isSignedIn }),
       })
         .then((response) => {
           return response.json();

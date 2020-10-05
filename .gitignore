@@ -39,3 +39,4 @@ flask/logs/log_file.log
 *.cpuprofile
 *.vscode
 request.rest
+*pyc

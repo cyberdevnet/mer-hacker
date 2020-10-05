@@ -359,21 +359,12 @@ def run_restore():
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             ARG_ORGID = data['ARG_ORGID']
             USER = data['USER']
-<<<<<<< HEAD
 
             modulename = "backup_restore.{}_meraki_restore_network".format(
                 USER)
             module = importlib.import_module(modulename, ".")
             importlib.reload(module)
 
-=======
-
-            modulename = "backup_restore.{}_meraki_restore_network".format(
-                USER)
-            module = importlib.import_module(modulename, ".")
-            importlib.reload(module)
-
->>>>>>> 4b5083b19b1783303099fd5efe6f1390ef955991
             return {'backup': module.restore_network(ARG_ORGID, ARG_APIKEY, USER)}
         else:
 
@@ -392,21 +383,12 @@ def run_restore_switch():
             data = request.get_json(force=True, silent=True)
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             USER = data['USER']
-<<<<<<< HEAD
 
             modulename = "backup_restore.{}_meraki_restore_network".format(
                 USER)
             module = importlib.import_module(modulename, ".")
             importlib.reload(module)
 
-=======
-
-            modulename = "backup_restore.{}_meraki_restore_network".format(
-                USER)
-            module = importlib.import_module(modulename, ".")
-            importlib.reload(module)
-
->>>>>>> 4b5083b19b1783303099fd5efe6f1390ef955991
             return {'backup': module.restore_switchports(ARG_APIKEY, USER)}
         else:
 

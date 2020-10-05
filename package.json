@@ -73,10 +73,6 @@
     "socket.io-client": "^2.3.0",
     "stream": "0.0.2",
     "supertest": "^5.0.0",
-<<<<<<< HEAD
-=======
-    "text-security": "^3.1.1",
->>>>>>> 4b5083b19b1783303099fd5efe6f1390ef955991
     "victory": "^35.0.5",
     "victory-chart": "^35.0.5"
   },

@@ -35,15 +35,7 @@ export default function LoginAPI(ac) {
         .then((res) => {
           if (res.data.signedIn === true) {
             ac.setisSignedIn(true);
-<<<<<<< HEAD:src/components/LoginAPI.js
           } else {
-=======
-            //if user is authenticated redirect to home
-            history.push("/home");
-          } else {
-            //if user is not authenticated redirect to login
-
->>>>>>> 4b5083b19b1783303099fd5efe6f1390ef955991:src/components/Login/LoginAPI.js
             ac.setisSignedIn(false);
             history.push("/login");
             $(this).addClass("closed");
@@ -174,14 +166,10 @@ export default function LoginAPI(ac) {
             ac.setswitchLoggedIn(true);
             ac.setisSignedIn(res.data.signedIn);
             setloading(false);
-<<<<<<< HEAD:src/components/LoginAPI.js
             // axios.post("/node/post-AlreadyisSignedIn", {
             //   username: ac.User,
             //   signed: "true",
             // });
-=======
-            ac.setPassword([]);
->>>>>>> 4b5083b19b1783303099fd5efe6f1390ef955991:src/components/Login/LoginAPI.js
           } else {
             setloading(false);
             seterrorMessageLogin(

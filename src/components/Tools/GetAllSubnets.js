@@ -13,7 +13,7 @@ export default function GetAllSubnets(ac) {
   const [showtable, setshowtable] = useState(false);
   const [trigger, settrigger] = useState(0);
   const [loading, setloading] = useState(false);
-  const [dataInventory, setdataInventory] = useState([]);
+  const [dataInventory, setdataInventory] = useState(false);
 
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
@@ -36,6 +36,9 @@ export default function GetAllSubnets(ac) {
     async function APIcall() {
       if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
         setloading(true);
+        setshowtable(false);
+        setdataInventory(false);
+
         fetch("/flask/vlans", {
           method: ["POST"],
           cache: "no-cache",
@@ -76,11 +79,12 @@ export default function GetAllSubnets(ac) {
                 deviceData.push(rowModel);
                 setdataInventory({ ...columns, rows: row });
               });
+              setshowtable(true);
             }
           })
           .then(() => setloading(false))
-          .then(() => {
-            setshowtable(true);
+          .catch((error) => {
+            console.log("APIcall -> error", error);
           });
       } else {
         ac.dc.setswitchAlertModal(true);
@@ -208,7 +212,7 @@ export default function GetAllSubnets(ac) {
       },
       {
         text: "All",
-        ...(showtable ? { value: dataInventory.rows.length } : { value: 100 }),
+        ...(showtable ? { value: 500 } : { value: 100 }),
       },
     ],
   };
@@ -236,14 +240,10 @@ export default function GetAllSubnets(ac) {
                   <div id="collapseOne" className="panel-collapse collapse">
                     <div className="panel-body">
                       <dl>
+                        <dt>This scripts returns all VLANs configured in a network.</dt>
                         <dt>
-                          This scripts returns all VLANs configured in a
-                          network.
-                        </dt>
-                        <dt>
-                          The script works only on MX and Z3 devices, does not
-                          work on VPN HUBs, the network must be reachable in the
-                          Meraki Dashboard.
+                          The script works only on MX and Z3 devices, does not work on VPN HUBs, the
+                          network must be reachable in the Meraki Dashboard.
                         </dt>
                       </dl>
                     </div>
@@ -256,12 +256,7 @@ export default function GetAllSubnets(ac) {
                 onClick={!loading ? handleSubnets : null}
                 disabled={loading}
               >
-                {loading && (
-                  <i
-                    className="fa fa-refresh fa-spin"
-                    style={{ marginRight: "5px" }}
-                  />
-                )}
+                {loading && <i className="fa fa-refresh fa-spin" style={{ marginRight: "5px" }} />}
                 {loading && <span>Loading Data</span>}
                 {!loading && <span>RUN</span>}
               </button>
@@ -283,14 +278,8 @@ export default function GetAllSubnets(ac) {
                   >
                     {(props) => (
                       <div>
-                        <SearchBar
-                          style={{ width: "299px" }}
-                          {...props.searchProps}
-                        />
-                        <ExportCSVButton
-                          className="export-csv"
-                          {...props.csvProps}
-                        >
+                        <SearchBar style={{ width: "299px" }} {...props.searchProps} />
+                        <ExportCSVButton className="export-csv" {...props.csvProps}>
                           Export CSV
                         </ExportCSVButton>
                         <BootstrapTable

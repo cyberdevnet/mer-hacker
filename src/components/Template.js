@@ -98,7 +98,7 @@ export default function Template(ac, dc) {
   };
 
   return (
-    <div id="wrapper">
+    <div id="wrapper" >
       <nav className="navbar navbar-default top-navbar" role="navigation">
         <div className="navbar-header">
           <button
@@ -136,8 +136,7 @@ export default function Template(ac, dc) {
             <li>
               {ac.dc.isSignedIn ? (
                 <NavLink exact to="logout" href="#logout">
-                  <i className="fas fa-sign-out-alt" aria-hidden="true"></i>{" "}
-                  Logout
+                  <i className="fas fa-sign-out-alt" aria-hidden="true"></i> Logout
                 </NavLink>
               ) : (
                 <div></div>
@@ -168,13 +167,23 @@ export default function Template(ac, dc) {
             ) : (
               <li data-tip="Select Organization and Network">
                 <ReactTooltip place="right" type="warning" effect="float" />
-                <NavLink
-                  style={navLinkStyle}
-                  exact
-                  to="dashboard"
-                  href="#dashboard"
-                >
+                <NavLink style={navLinkStyle} exact to="dashboard" href="#dashboard">
                   <i className="fa fa-bar-chart"></i> Dashboard
+                </NavLink>
+              </li>
+            )}
+            {ac.dc.organizationID !== 0 && ac.dc.networkID !== 0 ? (
+              <li>
+                <ReactTooltip place="right" type="warning" effect="float" />
+                <NavLink exact to="topology" href="#topology">
+                  <i className="fab fa-connectdevelop" aria-hidden="true"></i> Topology
+                </NavLink>
+              </li>
+            ) : (
+              <li data-tip="Select Organization and Network">
+                <ReactTooltip place="right" type="warning" effect="float" />
+                <NavLink style={navLinkStyle} exact to="topology" href="#topology">
+                  <i className="fab fa-connectdevelop" aria-hidden="true"></i> Topology
                 </NavLink>
               </li>
             )}
@@ -188,9 +197,7 @@ export default function Template(ac, dc) {
               placeholder={ac.dc.organization}
               onChange={HandleOrganization}
               classNamePrefix="foo"
-              onMenuOpen={() =>
-                ac.dc.settriggerSelectOrg(ac.dc.triggerSelectOrg + 1)
-              }
+              onMenuOpen={() => ac.dc.settriggerSelectOrg(ac.dc.triggerSelectOrg + 1)}
               isLoading={ac.dc.loadingOrg}
             />
 
@@ -202,9 +209,7 @@ export default function Template(ac, dc) {
               options={NETWORKS}
               placeholder={ac.dc.network}
               onChange={HandleNetwork}
-              onMenuOpen={() =>
-                ac.dc.settriggerSelectNetwork(ac.dc.triggerSelectNetwork + 1)
-              }
+              onMenuOpen={() => ac.dc.settriggerSelectNetwork(ac.dc.triggerSelectNetwork + 1)}
               classNamePrefix="foo"
               isLoading={ac.dc.loadingNet}
             />
@@ -237,28 +242,7 @@ export default function Template(ac, dc) {
                 />
               </li>
             )}
-            {ac.dc.organizationID !== 0 && ac.dc.networkID !== 0 ? (
-              <li>
-                <ReactTooltip place="right" type="warning" effect="float" />
-                <NavLink exact to="topology" href="#topology">
-                  <i className="fab fa-connectdevelop" aria-hidden="true"></i>{" "}
-                  Topology
-                </NavLink>
-              </li>
-            ) : (
-              <li data-tip="Select Organization and Network">
-                <ReactTooltip place="right" type="warning" effect="float" />
-                <NavLink
-                  style={navLinkStyle}
-                  exact
-                  to="topology"
-                  href="#topology"
-                >
-                  <i className="fab fa-connectdevelop" aria-hidden="true"></i>{" "}
-                  Topology
-                </NavLink>
-              </li>
-            )}
+
           </ul>
           {ac.dc.flashMessages}
         </div>
@@ -270,18 +254,10 @@ export default function Template(ac, dc) {
         {ac.dc.switchAlertModal ? <AlertModal dc={ac.dc} /> : <div></div>}
         {ac.dc.switchLoggedIn ? <LoggedIn dc={ac.dc} /> : <div></div>}
         {ac.dc.switchLoggedout ? <Logout dc={ac.dc} /> : <div></div>}
-        {ac.dc.isSignedIn ? (
-          <SessionTimeout dc={ac.dc} history={History} />
-        ) : (
-          <div></div>
-        )}
+        {ac.dc.isSignedIn ? <SessionTimeout dc={ac.dc} history={History} /> : <div></div>}
 
         <Switch>
-          <Route
-            exact
-            path="/login"
-            render={(dc) => <LoginAPI {...ac.dc} dc={dc} />}
-          />
+          <Route exact path="/login" render={(dc) => <LoginAPI {...ac.dc} dc={dc} />} />
           <ProtectedRouteSettings
             exact
             path="/settings"
@@ -290,41 +266,11 @@ export default function Template(ac, dc) {
             dc={dc}
           />
           <ProtectedRoute exact path="/" component={Home} {...ac.dc} dc={dc} />
-          <ProtectedRoute
-            exact
-            path="/home"
-            component={Home}
-            {...ac.dc}
-            dc={dc}
-          />
-          <ProtectedRoute
-            exact
-            path="/dashboard"
-            component={Dashboard}
-            {...ac.dc}
-            dc={dc}
-          />
-          <ProtectedRoute
-            exact
-            path="/tools"
-            component={ToolsTemplate}
-            {...ac.dc}
-            dc={dc}
-          />
-          <ProtectedRoute
-            exact
-            path="/topology"
-            component={Topology}
-            {...ac.dc}
-            dc={dc}
-          />
-          <ProtectedRoute
-            exact
-            path="/logout"
-            component={Logout}
-            {...ac.dc}
-            dc={dc}
-          />
+          <ProtectedRoute exact path="/home" component={Home} {...ac.dc} dc={dc} />
+          <ProtectedRoute exact path="/dashboard" component={Dashboard} {...ac.dc} dc={dc} />
+          <ProtectedRoute exact path="/tools" component={ToolsTemplate} {...ac.dc} dc={dc} />
+          <ProtectedRoute exact path="/topology" component={Topology} {...ac.dc} dc={dc} />
+          <ProtectedRoute exact path="/logout" component={Logout} {...ac.dc} dc={dc} />
 
           {/* do not cancel this */}
           {/* <Route exact path='/login' render={(dc) => (<LoginAPI {...ac.dc} dc={dc} />)} /> */}

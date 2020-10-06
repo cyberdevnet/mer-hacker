@@ -85,9 +85,9 @@ position: fixed;
 #page-wrapper {
   position: relative;
   top: 55px;
-  box-shadow: 0 0 10px #757575;
-  -moz-box-shadow: 0 0 10px #757575;
-  -webkit-box-shadow: 0 0 10px #757575;
+  /* box-shadow: 0 0 10px #757575; */
+  /* -moz-box-shadow: 0 0 10px #757575;
+  -webkit-box-shadow: 0 0 10px #757575; */
 }
 .top-navbar .nav > li > a:hover, .top-navbar .nav > li > a:focus {text-decoration: none;background-color: #4D4D4D;color: #fff;}
 .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {background-color: #656565;border-color: #F36A5A;color: #fff !important;}
@@ -539,9 +539,12 @@ padding-top: 4px;
 ul.nav.nav-second-level.collapse.in {background: #131212;}
 .sidebar-collapse .nav > li > a:hover,
 .sidebar-collapse .nav > li > a:focus {
-	 outline:0;
-	 background: #575757;
-	 color: #F36A5A;
+	 
+outline:0;
+	 
+background: #575757;
+	 
+color: #F36A5A;
 }
  
 .navbar-side {

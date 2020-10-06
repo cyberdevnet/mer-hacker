@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { CSVLink } from "react-csv";
 import { MDBDataTableV5 } from "mdbreact";
 import {
@@ -18,6 +18,8 @@ export default function Dashboard(ac) {
   const [mapRows, setmapRows] = useState([]);
   const [licenseState, setlicenseState] = useState([]);
   const [showLicense, setshowLicense] = useState(false);
+  const [endDevices, setEndDevices] = useState(false);
+  const [endDeviceStatus, setendDeviceStatus] = useState(false);
   // eslint-disable-next-line
   const [LicenceDevices, setLicenceDevices] = useState([]);
   const [pagination, setpagination] = useState(false);
@@ -127,6 +129,7 @@ export default function Dashboard(ac) {
                 deviceTypeData[objID1].label = Firewalls.length;
                 deviceTypeData[objID2].label = Switches.length;
                 deviceTypeData[objID3].label = AccessPoint.length;
+                setEndDevices(true);
               }
             });
         } catch (err) {
@@ -147,9 +150,15 @@ export default function Dashboard(ac) {
     // eslint-disable-next-line
   }, [ac.networkID]);
 
+  const isFirstRundevice_status = useRef(true);
+
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
+    if (isFirstRundevice_status.current) {
+      isFirstRundevice_status.current = false;
+      return;
+    }
     async function callDeviceStatus() {
       if (ac.organizationID !== 0 && ac.networkID !== 0) {
         setpagination(false);
@@ -231,6 +240,7 @@ export default function Dashboard(ac) {
             })
             .then(() => {
               setshowtable(true);
+              setendDeviceStatus(true);;
             });
         } catch (err) {
           if (err) {
@@ -248,12 +258,18 @@ export default function Dashboard(ac) {
       abortController.abort();
     };
     // eslint-disable-next-line
-  }, [ac.networkID]);
+  }, [endDevices]);
+
+  const isFirstRunuplink_loss = useRef(true);
 
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
     let interval = null;
+    if (isFirstRunuplink_loss.current) {
+      isFirstRunuplink_loss.current = false;
+      return;
+    }
     async function UplinkStatus() {
       if (ac.organizationID !== 0 && ac.networkID !== 0) {
         try {
@@ -271,7 +287,6 @@ export default function Dashboard(ac) {
             .then((res) => res.json())
             .then((data) => {
               if (data.error) {
-              console.log("UplinkStatus -> data.error", data.error);
               } else {
                 try {
                   var UplinkLossNetObj = data.uplinkLoss.filter(function (obj) {
@@ -292,21 +307,11 @@ export default function Dashboard(ac) {
                   }
 
                   //Find index of specific object using findIndex method.
-                  const objID1 = UplinkLatencyData.findIndex(
-                    (obj) => obj.x === "1min"
-                  );
-                  const objID2 = UplinkLatencyData.findIndex(
-                    (obj) => obj.x === "2min"
-                  );
-                  const objID3 = UplinkLatencyData.findIndex(
-                    (obj) => obj.x === "3min"
-                  );
-                  const objID4 = UplinkLatencyData.findIndex(
-                    (obj) => obj.x === "4min"
-                  );
-                  const objID5 = UplinkLatencyData.findIndex(
-                    (obj) => obj.x === "5min"
-                  );
+                  const objID1 = UplinkLatencyData.findIndex((obj) => obj.x === "1min");
+                  const objID2 = UplinkLatencyData.findIndex((obj) => obj.x === "2min");
+                  const objID3 = UplinkLatencyData.findIndex((obj) => obj.x === "3min");
+                  const objID4 = UplinkLatencyData.findIndex((obj) => obj.x === "4min");
+                  const objID5 = UplinkLatencyData.findIndex((obj) => obj.x === "5min");
 
                   //Update object's count property.
                   UplinkLatencyData[objID1].y = latencyMs[0];
@@ -315,21 +320,11 @@ export default function Dashboard(ac) {
                   UplinkLatencyData[objID4].y = latencyMs[3];
                   UplinkLatencyData[objID5].y = latencyMs[4];
 
-                  const obj2ID1 = UplinkLossData.findIndex(
-                    (obj) => obj.x === "1min"
-                  );
-                  const obj2ID2 = UplinkLossData.findIndex(
-                    (obj) => obj.x === "2min"
-                  );
-                  const objI2D3 = UplinkLossData.findIndex(
-                    (obj) => obj.x === "3min"
-                  );
-                  const obj2ID4 = UplinkLossData.findIndex(
-                    (obj) => obj.x === "4min"
-                  );
-                  const obj2ID5 = UplinkLossData.findIndex(
-                    (obj) => obj.x === "5min"
-                  );
+                  const obj2ID1 = UplinkLossData.findIndex((obj) => obj.x === "1min");
+                  const obj2ID2 = UplinkLossData.findIndex((obj) => obj.x === "2min");
+                  const objI2D3 = UplinkLossData.findIndex((obj) => obj.x === "3min");
+                  const obj2ID4 = UplinkLossData.findIndex((obj) => obj.x === "4min");
+                  const obj2ID5 = UplinkLossData.findIndex((obj) => obj.x === "5min");
 
                   //Update object's count property.
                   UplinkLossData[obj2ID1].y = lossPercent[0];
@@ -374,7 +369,7 @@ export default function Dashboard(ac) {
       clearInterval(interval);
     };
     // eslint-disable-next-line
-  }, [ac.networkID]);
+  }, [endDeviceStatus]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -716,7 +711,7 @@ export default function Dashboard(ac) {
                       Expiration date: {licenseState.expirationDate}
                     </p>
                     <div className="p-license">
-                      {Object.keys(licenseState.licensedDeviceCounts).map(
+                      {licenseState.length > 0 ? (Object.keys(licenseState.licensedDeviceCounts).map(
                         (key, i) => (
                           <p className="p-license" key={i}>
                             <span>{key}: </span>
@@ -725,7 +720,8 @@ export default function Dashboard(ac) {
                             </span>
                           </p>
                         )
-                      )}
+                      )):( <div></div> )}
+
                     </div>
                   </div>
                 </div>

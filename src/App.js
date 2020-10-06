@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import StatePersister from "./StatePersister";
 import Template from "./components/Template";
 import { BrowserRouter as Router } from "react-router-dom";
+import { useLocalStorage } from "./useLocalStorage";
 
 const MainContext = React.createContext(null);
 
@@ -12,17 +13,13 @@ function App() {
   const [triggerGetOrg, settriggerGetOrg] = useState(0);
   const [triggerSelectOrg, settriggerSelectOrg] = useState(0);
   const [triggerSelectNetwork, settriggerSelectNetwork] = useState(0);
-  const [getOrgStatusCode, setgetOrgStatusCode] = useState(0);
+  // const [getOrgStatusCode, setgetOrgStatusCode] = useState(0);
   const [organizationList, setorganizationList] = useState([]);
   const [networkList, setnetworkList] = useState([]);
   const [deviceStatusList, setdeviceStatusList] = useState([]);
   const [totaldeviceStatusList, settotaldeviceStatusList] = useState(0);
   const [allNetworksIDList, setallNetworksIDList] = useState([]);
   const [combindeNetworksIDList, setcombindeNetworksIDList] = useState([]);
-  const [organization, setorganization] = useState("Set Organization");
-  const [organizationID, setorganizationID] = useState(0);
-  const [networkID, setnetworkID] = useState(0);
-  const [network, setnetwork] = useState("Networks");
   const [deviceList, setdeviceList] = useState([]);
   const [device, setdevice] = useState([]);
   const [hostList, sethostList] = useState([]);
@@ -34,7 +31,7 @@ function App() {
   const [inputKey, setinputKey] = useState("");
   const [inputConfKey, setinputConfKey] = useState("");
   const [isLoggedIn, setisLoggedIn] = useState(false);
-  const [switchLoginAPI, setswitchLoginAPI] = useState(true);
+  // const [switchLoginAPI, setswitchLoginAPI] = useState(true);
   const [switchDashboard, setswitchDashboard] = useState(false);
   const [switchLoggedIn, setswitchLoggedIn] = useState(false);
   const [switchLoggedout, setswitchLoggedout] = useState(false);
@@ -57,12 +54,12 @@ function App() {
   const [triggerTopReports, settriggerTopReports] = useState(1);
   const [loadingButton, setloadingButton] = useState(false);
   const [datab, setdatab] = useState([]);
-  const [isOrgSelected, setisOrgSelected] = useState(false);
-  const [isNetSelected, setisNetSelected] = useState(false);
+  // const [isOrgSelected, setisOrgSelected] = useState(false);
+  // const [isNetSelected, setisNetSelected] = useState(false);
   const [flashMessages, setflashMessages] = useState([]);
   const [restoreScript, setrestoreScript] = useState("");
   const [showRestorescript, setshowRestorescript] = useState(false);
-  const [collapseButton, setcollapseButton] = useState({ display: "none" });
+  // const [collapseButton, setcollapseButton] = useState({ display: "none" });
   const [hideLogin, sethideLogin] = useState({ display: "block" });
   const [loadingOrg, setloadingOrg] = useState(false);
   const [loadingNet, setloadingNet] = useState(false);
@@ -83,14 +80,14 @@ function App() {
   });
 
   //set the logged user in local storage to be retrieved from getKey() function
-  const [User, setUser] = useState(() => {
-    const stickyValue = localStorage.getItem("my-User");
-    return stickyValue !== null ? JSON.parse(stickyValue) : [];
-  });
+  // const [User, setUser] = useState(() => {
+  //   const stickyValue = localStorage.getItem("my-User");
+  //   return stickyValue !== null ? JSON.parse(stickyValue) : [];
+  // });
 
-  useEffect(() => {
-    localStorage.setItem("my-User", JSON.stringify(User));
-  }, [User]);
+  // useEffect(() => {
+  //   localStorage.setItem("my-User", JSON.stringify(User));
+  // }, [User]);
 
   const [isSignedIn, setisSignedIn] = useState(() => {
     const stickyValue = localStorage.getItem("my-isSignedIn");
@@ -100,6 +97,23 @@ function App() {
   useEffect(() => {
     localStorage.setItem("my-isSignedIn", JSON.stringify(isSignedIn));
   }, [isSignedIn]);
+
+  const [organization, setorganization] = useLocalStorage("my-organization","Set Organization");
+  const [User, setUser] = useLocalStorage("my-User",[]);
+  const [network, setnetwork] = useLocalStorage('my-networks',"Networks");
+  const [organizationID, setorganizationID] = useLocalStorage('my-organizationID',0);
+  const [networkID, setnetworkID] = useLocalStorage('my-networkID',0);
+  const [switchLoginAPI, setswitchLoginAPI] = useLocalStorage("my-switchLoginAPI",true);
+  const [getOrgStatusCode, setgetOrgStatusCode] = useLocalStorage("my-getOrgStatusCode",0);
+  const [collapseButton, setcollapseButton] = useLocalStorage("my-collapseButton",{ display: "none" });
+  const [isOrgSelected, setisOrgSelected] = useLocalStorage('my-isOrgSelected',false);
+  const [isNetSelected, setisNetSelected] = useLocalStorage('my-isNetSelected',false);
+
+
+  // const switchLoginAPI = localStorage.getItem("my-switchLoginAPI");
+  // const getOrgStatusCode = localStorage.getItem("my-getOrgStatusCode");
+  // const collapseButton = localStorage.getItem("my-collapseButton");  
+   
 
   // automatic get key from server on-render and on-refresh
   useEffect(() => {

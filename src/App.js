@@ -108,6 +108,7 @@ function App() {
   const [collapseButton, setcollapseButton] = useLocalStorage("my-collapseButton",{ display: "none" });
   const [isOrgSelected, setisOrgSelected] = useLocalStorage('my-isOrgSelected',false);
   const [isNetSelected, setisNetSelected] = useLocalStorage('my-isNetSelected',false);
+  const [isUsingADauth, setisUsingADauth] = useLocalStorage("my-isUsingADauth", false);
 
 
   // const switchLoginAPI = localStorage.getItem("my-switchLoginAPI");
@@ -132,9 +133,7 @@ function App() {
         .then((data) => {
           setapiKey(data.apiKey);
         })
-        .catch((error) => {
-          console.log("An error occured ", error);
-        });
+        .catch((error) => {});
     }
 
     getKey();
@@ -497,6 +496,8 @@ function App() {
     setshowAlreadyisSignedInModal,
     showforgotPasswordModal,
     setshowforgotPasswordModal,
+    isUsingADauth,
+    setisUsingADauth,
   };
 
   return (

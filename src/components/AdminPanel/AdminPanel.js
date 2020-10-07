@@ -29,6 +29,7 @@ export default function AdminPanel(ac) {
   const [buttonStyle, setbuttonStyle] = useState({ display: "block" });
   const [notEditableUsers, setnotEditableUsers] = useState([]);
 
+
   const Axios = axios.create({
     withCredentials: true,
   });
@@ -38,6 +39,10 @@ export default function AdminPanel(ac) {
     async function GetAllUsers() {
       let users = [];
 
+      //If AD Auth i used this function never gets fired
+      if (ac.isUsingADauth) {
+        return
+      }
       try {
         Axios.post("/node/get-all-users",{isSignedIn:ac.isSignedIn})
         .then((data) => {
@@ -49,7 +54,6 @@ export default function AdminPanel(ac) {
                 username: item.username,
                 password: item.password,
                 email: item.email,
-                apiKey: item.apiKey,
                 id: item._id,
                 signed: item.signed,
               };
@@ -194,24 +198,6 @@ export default function AdminPanel(ac) {
       },
     },
     {
-      dataField: "apiKey",
-      text: "API Key",
-      editable: true,
-      key: "apiKey",
-      sort: false,
-      formatter: apikeyHide,
-      headerStyle: (colum, colIndex) => {
-        return { textAlign: "center" };
-      },
-      style: (colum, colIndex) => {
-        return {
-          textOverflow: "ellipsis",
-          overflow: "hidden",
-          whiteSpace: "nowrap",
-        };
-      },
-    },
-    {
       dataField: "signed",
       text: "Signed",
       editable: false,
@@ -300,7 +286,6 @@ export default function AdminPanel(ac) {
       </div>
     );
   }
-
   function rankFormatterSessions(cell, row, rowIndex, formatExtraData) {
     return (
       <div
@@ -343,15 +328,7 @@ export default function AdminPanel(ac) {
     }
   };
 
-  const editApiKeyCell = async (oldValue, newValue, row, column) => {
-    let username = row.username;
-    let editedkey = newValue;
-    await axios.post("/node/edit-api-key", {
-      username: username,
-      editedkey: editedkey,
-      isSignedIn:ac.isSignedIn
-    });
-  };
+
 
   const dc = {
     AlertModalError,
@@ -378,27 +355,7 @@ export default function AdminPanel(ac) {
     setbuttonStyle,
   };
 
-  function apikeyHide(cell, row) {
-    if (row.apiKey) {
-      return (
-        <table>
-          <tbody>
-            <tr>
-              <td
-                href="node_modules/text-security/text-security.css"
-                rel="stylesheet"
-                type="text/css"
-                className="my-password-field"
-              >
-                {cell}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      );
-    }
-    return <span>{cell}</span>;
-  }
+
 
   return (
     <div id="page-inner-main-templates">
@@ -412,12 +369,12 @@ export default function AdminPanel(ac) {
       ) : (
         <div></div>
       )}
-      {switchDeleteUser ? (
+            {switchDeleteUser ? (
         <SettingsDeleteUser {...ac.dc}    cc={ac} dc={dc} />
       ) : (
         <div></div>
       )}
-      <div className="col-xs-12">
+      {ac.isUsingADauth ? ( <div></div> ) : (<div><div className="col-xs-12">
         <div className="panel-debug panel-default">
           <div className="panel-body">
             <i style={{ color: "#337ab7" }} className="fas fa-users"></i> Users
@@ -458,14 +415,14 @@ export default function AdminPanel(ac) {
                             nonEditableRows: () => {
                               return notEditableUsers;
                             },
-                            afterSaveCell: (
-                              oldValue,
-                              newValue,
-                              row,
-                              column
-                            ) => {
-                              editApiKeyCell(oldValue, newValue, row, column);
-                            },
+                            // afterSaveCell: (
+                            //   oldValue,
+                            //   newValue,
+                            //   row,
+                            //   column
+                            // ) => {
+                            //   editApiKeyCell(oldValue, newValue, row, column);
+                            // },
                           })}
                         />
                       </div>
@@ -478,7 +435,8 @@ export default function AdminPanel(ac) {
             )}
           </div>
         </div>
-      </div>
+      </div></div>)}
+
       <div className="col-xs-12">
         <div className="panel-debug panel-default">
           <div className="panel-body">

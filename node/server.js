@@ -37,18 +37,73 @@ app.use(
 
 app.use(expressLogger);
 
-//Auth
 
-// const basicAuth = require('express-basic-auth');
-const cookieParser = require("cookie-parser");
+// <================================================================================>
+//                  ACTIVE DIRECTORY IMPLEMENTATION
+//          commect out this section if MongoDB auth is used
+// <================================================================================>
+let ActiveDirectory = require('activedirectory');
+let config = {
+    url: 'ldap://172.19.85.201',
+    baseDN: 'dc=labmail,dc=com',
+    username: "merhackerADuser",
+    password: 'merhackerADuser'
+};
 
-// A random key for signing the cookie
-app.use(cookieParser("82e4e438a0705fabf61f9854e3b575af"));
+let ad = new ActiveDirectory(config);
 
-// Mongodb initialization to users database
+// authentication against AD, the same login process for MongoDB Login is used
 
-var mongooseConnection = Mongoose.createConnection(
-  "mongodb://localhost/users",
+app.post("/node/authenticate", async (req, res, next) => {
+
+let user = req.body.username
+let pass = req.body.password
+  try {
+    ad.authenticate(user,pass, function(err, auth) {
+      if (err) {
+          console.log('ERROR: '+JSON.stringify(err));
+          res.send("Authentication failed!");
+          return;
+      }
+      if (auth) {
+          console.log('Authenticated!');
+
+          var groupName = 'Mer-hacker';
+ 
+          ad.isUserMemberOf(user, groupName, function(err, isMember) {
+            if (err) {
+              console.log('ERROR: ' +JSON.stringify(err));
+              return;
+            } else {
+              let authResponse = {
+                isUsingADauth: true,
+                auth: isMember
+              }
+              console.log(user + ' isMemberOf ' + groupName + ': ' + isMember);
+              res.send(authResponse);
+            }
+           
+          });
+      }
+      else {
+        res.send("Authentication failed!");
+          console.log('Authentication failed!');
+      }
+    });
+    
+  } catch (error) {
+    return next(new Error("either user or password are not set"));
+    
+  }
+
+
+});
+
+
+// with AD auth api keys are saved in separate apikeys database
+
+var ApiKeyConnection = Mongoose.createConnection(
+  "mongodb://localhost/apikeys",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -56,131 +111,401 @@ var mongooseConnection = Mongoose.createConnection(
   }
 );
 
-const UserSchema = new Mongoose.Schema({
+const ApiKeySchema = new Mongoose.Schema({
   username: String,
-  email: String,
-  password: String,
+  realUsername: String,
   apiKey: String,
-  signed: String,
 });
 
-//check to see if the user is being created or changed.
-//If the user is not being created or changed, we will skip over the hashing part.
+const ApiKeyModel = ApiKeyConnection.model("apikey", ApiKeySchema);
 
-UserSchema.pre("save", function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
-  this.password = bcrypt.hashSync(this.password, 10);
-  next();
-});
+//this route can be used to post and also update the api-key
 
-//function take the provided user data, compare it against our hashed user data,
-//and then return the boolean res within the callback.
+app.post("/node/post-api-key", async (req, res, next) => {
 
-UserSchema.methods.comparePassword = function (plaintext, callback) {
-  return callback(null, bcrypt.compareSync(plaintext, this.password));
-};
+  try {
+    if (req.body.username !== "leer" && req.body.isSignedIn) {
+      // UPDATE OR INSERT NEW USER + KEY
+      const filter = { username: req.body.username };
+      const update = { username: req.body.username, realUsername: req.body.realUsername, apiKey: req.body.apiKey};
 
-const UserModel = mongooseConnection.model("user", UserSchema);
+  await ApiKeyModel.countDocuments(filter); // 0
 
-
-//create a new user on Mongodb + password and salt + hash
-app.post("/node/hash-users", async (req, res) => {
-
-let body = {
-  username: req.body.username,
-  email: req.body.email,
-  password: req.body.password,
-  apiKey: "tzu",
-  signed: "false",
-}
-  
-  if (req.body.adminUser === 'admin' && req.body.isSignedIn) {
-    try {
-      const user = new UserModel(body);
-  
-      const result = await user.save();
-      res.send(result);
-      res.status(201).send();
-    } catch (error) {
-      res.status(500).send(error);
-    }
+  let apiKey = await ApiKeyModel.findOneAndUpdate(filter, update, {
+    new: true,
+    upsert: true // Make this update into an upsert
+    });
+    res.status(201).send(apiKey);
 
   } else {
-    console.log('Hacked Attempt');
-    res.status(404).send();
+          // DELETE  USER + KEY
+    const filter = { realUsername: req.body.realUsername};
+    let apiKey = await ApiKeyModel.findOneAndDelete(filter, {
+      });
+    res.status(201).send(apiKey);
   }
 
+
+  } catch (error) {
+    res.status(500).send(error);
+    return next(new Error(error));
+  }
 });
 
-//if user is signed id change signed status to true, otherwise false (called by read-cookie)
-app.post("/node/set-user-status", async (req, res, next) => {
+app.post("/node/get-api-key", async (req, res, next) => {
+  if (req.body.isSignedIn) {
     try {
-        const key = await UserModel.findOneAndUpdate(
-          { username: req.session.user },
-          { signed: req.body.signed },
-          req.body
-        ).exec();
-        res.json(key);
-        res.status(201).send();
-
+      var apiKey = await ApiKeyModel.findOne({ username: req.body.username }, {}).exec();
+      res.send(apiKey);
     } catch (error) {
       res.status(500).send(error);
       return next(new Error(error));
     }
-});
-
-app.post("/node/delete-user", async (req, res, next) => {
-
-  if (req.body.isSignedIn) {
-    try {
-      await UserModel.findByIdAndDelete(req.body.ID, function (err, docs) {
-        if (err) {
-          console.log(err);
-        } else {
-          res.send(docs);
-        }
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).send(error);
-    }
+  } else {
+    res.status(404).send();
   }
-
 });
 
-//get all users in the database
-app.post("/node/get-all-users", async (req, res) => {
-  if (req.body.isSignedIn) {
-    try {
-      var users = await UserModel.find({}).exec();
-      res.send(users);
-      res.status(200).send();
-    } catch (error) {
-      res.status(500).send(error);
-    }
-  }
+// read-cookie function specific fon AD Authentication
 
-});
-
-//login from client checking if user match and password match with salt + hash
-app.post("/node/authenticate", async (req, res, next) => {
+app.post("/node/read-cookie", async (req, res, next) => {
+let IDs = []
+let sessions = []
+let users = []
   try {
-    var user = await UserModel.findOne({ username: req.body.username }).exec();
-    if (!user) {
-      res.send("Not Allowed user or user not set ");
-    }
-    user.comparePassword(req.body.password, (error, match) => {
-      if (!match) {
-        res.send("Not Allowed password or password not set");
+    SessionModel.find({}, function (err, result) {
+      if (err) {
+        console.log(err);
+        return
+      } else {
+        if (result.length !== 0) {      
+        try {
+          result.map((opt) => {
+            let model = {
+              _id: opt._id,
+              expires: opt.expires,
+              session: JSON.parse(opt.session)
+            }
+            sessions.push(model)
+            IDs.push(opt._id)
+          })
+
+          sessions.map((opt)=>{
+            users.push(opt.session.user)
+          })
+          let isUser = users.indexOf(req.body.username)
+          if ( isUser !== -1) {
+            let UserAndID = sessions.find(o => o.session.user === req.body.username);
+            if (req.body.username === UserAndID.session.user ) {
+              console.log("ALREADY SIGNED");
+                res.send({
+                  signedIn: true,
+                  user: req.body.username,
+                  sessionID: UserAndID._id,
+                  signed: true,
+                });
+  
+          } else {
+            console.log("NOT SIGNED");
+            res.send({
+              signedIn: false,
+              user: req.body.username,
+              signed: false,
+              });
+          }
+          } else {
+            console.log("NOT SIGNED");
+            res.send({
+              signedIn: false,
+              user: req.body.username,
+              signed: false,
+              });
+          }
+        } catch (error) {
+        console.log("error", error)
+        }
+        } else {
+          res.send({
+            signedIn: false,
+            user: req.body.username,
+            signed: false,
+            });
+        }
       }
     });
-    res.send("Allowed");
   } catch (error) {
-    return next(new Error("either user or password are not set"));
+    res.status(500).send(error);
+    return next(new Error(error));
   }
 });
+
+// <================================================================================>
+//              END ACTIVE DIRECTORY IMPLEMENTATION
+// <================================================================================>
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+// <================================================================================>
+//                 MONGODB AUTHENTICATION AND APIKEY MANAGEMENT
+//          commect out this section if AD auth is used
+// <================================================================================>
+
+// // Mongodb initialization to users database
+
+// var mongooseConnection = Mongoose.createConnection(
+//   "mongodb://localhost/users",
+//   {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     useFindAndModify: false,
+//   }
+// );
+
+// const UserSchema = new Mongoose.Schema({
+//   username: String,
+//   email: String,
+//   password: String,
+//   apiKey: String,
+//   signed: String,
+// });
+
+
+
+// //check to see if the user is being created or changed.
+// //If the user is not being created or changed, we will skip over the hashing part.
+
+// UserSchema.pre("save", function (next) {
+//   if (!this.isModified("password")) {
+//     return next();
+//   }
+//   this.password = bcrypt.hashSync(this.password, 10);
+//   next();
+// });
+
+// //function take the provided user data, compare it against our hashed user data,
+// //and then return the boolean res within the callback.
+
+// UserSchema.methods.comparePassword = function (plaintext, callback) {
+//   return callback(null, bcrypt.compareSync(plaintext, this.password));
+// };
+
+// // do NOT move the UserModel from here, it must be after the UserSchema.methods.comparePassword function!
+// const UserModel = mongooseConnection.model("user", UserSchema);
+
+
+
+
+// //create a new user on Mongodb + password and salt + hash
+// app.post("/node/hash-users", async (req, res) => {
+
+// let body = {
+//   username: req.body.username,
+//   email: req.body.email,
+//   password: req.body.password,
+//   apiKey: "tzu",
+//   signed: "false",
+// }
+  
+//   if (req.body.adminUser === 'admin' && req.body.isSignedIn) {
+//     try {
+//       const user = new UserModel(body);
+  
+//       const result = await user.save();
+//       res.send(result);
+//       res.status(201).send();
+//     } catch (error) {
+//       res.status(500).send(error);
+//     }
+
+//   } else {
+//     console.log('Hacked Attempt');
+//     res.status(404).send();
+//   }
+
+// });
+
+// app.post("/node/read-cookie", async (req, res, next) => {
+//   try {
+//     if (req.body.username === req.session.user) {
+//       console.log("LOGGED IN");
+//       //set user status to signed
+//       await UserModel.findOneAndUpdate(
+//         { username: req.body.username },
+//         { signed: true },
+//         req.body
+//       ).exec();
+//       res.send({
+//         signedIn: true,
+//         sessionID: req.sessionID,
+//         user: req.session.user,
+//         signed: true,
+//       });
+//     } else {
+//       console.log("LOGGED OUT");
+
+//       //set user status to un-signed
+
+//       await UserModel.findOneAndUpdate(
+//         { username: req.body.username },
+//         { signed: false },
+//         req.body
+//       ).exec();
+//       res.send({
+//         signedIn: false,
+//         sessionID: req.sessionID,
+//         user: req.session.user,
+//         signed: false,
+//       });
+//     }
+//   } catch (error) {
+//     res.status(500).send(error);
+//     return next(new Error(error));
+//   }
+// });
+
+// //if user is signed id change signed status to true, otherwise false (called by read-cookie)
+// app.post("/node/set-user-status", async (req, res, next) => {
+//     try {
+//         const key = await UserModel.findOneAndUpdate(
+//           { username: req.session.user },
+//           { signed: req.body.signed },
+//           req.body
+//         ).exec();
+//         res.json(key);
+//         res.status(201).send();
+
+//     } catch (error) {
+//       res.status(500).send(error);
+//       return next(new Error(error));
+//     }
+// });
+
+// app.post("/node/delete-user", async (req, res, next) => {
+
+//   if (req.body.isSignedIn) {
+//     try {
+//       await UserModel.findByIdAndDelete(req.body.ID, function (err, docs) {
+//         if (err) {
+//           console.log(err);
+//         } else {
+//           res.send(docs);
+//         }
+//       });
+//     } catch (error) {
+//       console.log(error);
+//       res.status(500).send(error);
+//     }
+//   }
+
+// });
+
+// //get all users in the database
+// app.post("/node/get-all-users", async (req, res) => {
+//   if (req.body.isSignedIn) {
+//     try {
+//       var users = await UserModel.find({}).exec();
+//       res.send(users);
+//       res.status(200).send();
+//     } catch (error) {
+//       res.status(500).send(error);
+//     }
+//   }
+
+// });
+
+
+// // login from client checking if user match and password match with salt + hash
+// app.post("/node/authenticate", async (req, res, next) => {
+//   try {
+//     var user = await UserModel.findOne({ username: req.body.username }).exec();
+//     if (!user) {
+//       res.send("Not Allowed user or user not set ");
+//     }
+//     user.comparePassword(req.body.password,  (error, match) => {
+//       if (!match) {
+//         res.send("Not Allowed password or password not set");
+//       } else {
+//         let authResponse = {
+//           isUsingADauth: false,
+//           auth: match,
+//         };
+//         res.send(authResponse);
+
+//       }
+//     })
+
+//   } catch (error) {
+//     console.log("error", error);
+//     // return next(new Error("either user or password are not set"));
+//   }
+// });
+
+// // store and retrieve API key
+
+// app.post("/node/post-api-key", async (req, res, next) => {
+//   try {
+//     if (req.body.username !== "leer") {
+//       //user is still logged
+//       const key = await UserModel.findOneAndUpdate(
+//         { username: req.body.username },
+//         { apiKey: req.body.apiKey },
+//         req.body
+//       ).exec();
+//       res.json(key);
+//       res.status(201).send();
+//     } else {
+//       const key = await UserModel.updateMany(
+//         //user has already logged-out, remove api-key from database
+//         {},
+//         { apiKey: req.body.apiKey },
+//         req.body
+//       ).exec();
+//       res.json(key);
+//       res.status(201).send();
+//     }
+//   } catch (error) {
+//     res.status(500).send(error);
+//     return next(new Error(error));
+//   }
+// });
+
+// // connection to the apikeys database to retrieve the key
+// app.post("/node/get-api-key", async (req, res, next) => {
+//   if (req.body.isSignedIn) {
+//     try {
+//       var apiKey = await UserModel.findOne({ username: req.body.username }, {}).exec();
+//       res.send(apiKey);
+//     } catch (error) {
+//       res.status(500).send(error);
+//       return next(new Error(error));
+//     }
+//   } else {
+//     res.status(404).send();
+//   }
+// });
+
+// <================================================================================>
+//                           END MONGODB AUTHENTICATION AND APIKEY MANAMENT
+// <================================================================================>
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// <================================================================================>
+//                            COOKIE AND SESSION MANAGEMENT 
+// <================================================================================>
+
+//Auth
+
+// const basicAuth = require('express-basic-auth');
+const cookieParser = require("cookie-parser");
+
+// A random key for signing the cookie
+app.use(cookieParser("82e4e438a0705fabf61f9854e3b575af"));
 
 //session set - read - clear
 
@@ -193,12 +518,12 @@ var mongooseSessions = Mongoose.createConnection(
   }
 );
 
-// const SessionSchema = new Mongoose.Schema({ any: {} });
 
 const SessionSchema = new Mongoose.Schema({
   _id: String,
   expires: String,
   session: Object,
+  apiKey: String,
 });
 
 const SessionModel = mongooseSessions.model("sessions", SessionSchema);
@@ -219,10 +544,12 @@ app.post("/node/set-cookie", (req, res, next) => {
   try {
     if (req.session.user !== req.body.user) {
       req.session.user = req.body.user;
+      req.session.apiKey = "";
       res.send({
         signedIn: true,
         sessionID: req.sessionID,
         username: req.session.user,
+        apiKey: "",
       });
     }
     res.end("done");
@@ -232,44 +559,7 @@ app.post("/node/set-cookie", (req, res, next) => {
   }
 });
 
-app.post("/node/read-cookie", async (req, res, next) => {
-  try {
-    if (req.body.username === req.session.user) {
-      console.log("LOGGED IN");
-      //set user status to signed
-      await UserModel.findOneAndUpdate(
-        { username: req.body.username },
-        { signed: true },
-        req.body
-      ).exec();
-      res.send({
-        signedIn: true,
-        sessionID: req.sessionID,
-        user: req.session.user,
-        signed: true,
-      });
-    } else {
-      console.log("LOGGED OUT");
 
-      //set user status to un-signed
-
-      await UserModel.findOneAndUpdate(
-        { username: req.body.username },
-        { signed: false },
-        req.body
-      ).exec();
-      res.send({
-        signedIn: false,
-        sessionID: req.sessionID,
-        user: req.session.user,
-        signed: false,
-      });
-    }
-  } catch (error) {
-    res.status(500).send(error);
-    return next(new Error(error));
-  }
-});
 
 app.post("/node/clear-cookie", async (req, res, next) => {
   try {
@@ -318,9 +608,6 @@ app.post("/node/get-all-sessions", async (req, res) => {
 app.post("/node/get-AlreadyisSignedIn", async (req, res, next) => {
   try {
     SessionModel.findOne({}, function (err, result) {
-      // console.log("result", result);
-      // let session = JSON.parse(result.session);
-      // let user = session.user;
       if (err) {
         console.log(err);
       } else {
@@ -349,142 +636,17 @@ app.post("/node/get-AlreadyisSignedIn", async (req, res, next) => {
   }
 });
 
-// edit API key from admin panel
 
-app.post("/node/edit-api-key", async (req, res, next) => {
-  if (req.body.isSignedIn) {
-  try {
-    if (req.body.username) {
-      const key = await UserModel.findOneAndUpdate(
-        { username: req.body.username },
-        { apiKey: req.body.editedkey },
-        req.body
-      ).exec();
-      res.json(key);
-      res.status(201).send();
-    } else {
-      console.log("key not edited");
-    }
-  } catch (error) {
-    res.status(500).send(error);
-    return next(new Error(error));
-  }
-}
-});
+// <================================================================================>
+//                          END COOKIE AND SESSION MANAGEMENT 
+// <================================================================================>
 
-// store and retrieve API key
 
-app.post("/node/post-api-key", async (req, res, next) => {
-  try {
-    if (req.body.username !== "leer") {
-      //user is still logged
-      const key = await UserModel.findOneAndUpdate(
-        { username: req.body.username },
-        { apiKey: req.body.apiKey },
-        req.body
-      ).exec();
-      res.json(key);
-      res.status(201).send();
-    } else {
-      const key = await UserModel.updateMany(
-        //user has already logged-out, remove api-key from database
-        {},
-        { apiKey: req.body.apiKey },
-        req.body
-      ).exec();
-      res.json(key);
-      res.status(201).send();
-    }
-  } catch (error) {
-    res.status(500).send(error);
-    return next(new Error(error));
-  }
-});
 
-//connection to the apikeys database to retrieve the key
-app.post("/node/get-api-key", async (req, res, next) => {
-  if (req.body.isSignedIn) {
 
-  try {
-    var apiKey = await UserModel.findOne(
-      { username: req.body.username },
-      {}
-    ).exec();
-    res.send(apiKey);
-  } catch (error) {
-    res.status(500).send(error);
-    return next(new Error(error));
-  }
-} else {
-  res.status(404).send();
-}
-});
-
-//  <======== DO NOT DELETE THIS ROUTE =========>
-
-//this route updates an existing entry in the database with the api key sent from client
-// if for every reason there were no entry, create a new one with the route above:
-
-//this route can be used to create a new entry in the database if not present
-
-// app.post('/node/post-api-key', async (req, res) => {
-//     try {
-//         const key = new ApiKeysModel(req.body);
-//         const apiKey = await key.save();
-//         res.json(apiKey);
-//         res.status(201).send()
-//     } catch (error) {
-//         res.status(500).send(error);
-//     }
-// })
-
-//  <======== DO NOT DELETE THIS =========>
-
-// serve static files for backup/restore script
-
-app.use(
-  "/node/backupRestoreFiles",
-  express.static(path.join(__dirname, "/../flask/backup_restore"))
-);
-
-app.get("/node/backupRestoreFiles", function (req, res) {
-  express.static(path.join(__dirname, "/../flask/backup_restore"))(req, res);
-});
-
-// serve static files for ios_to_meraki script
-
-app.use(
-  "/node/flask/cisco_meraki_migrate_tool/",
-  express.static(path.join(__dirname, "/../flask/cisco_meraki_migrate_tool/"))
-);
-
-app.get("/node/flask/cisco_meraki_migrate_tool/", function (req, res) {
-  express.static(path.join(__dirname, "/../flask/cisco_meraki_migrate_tool/"))(
-    req,
-    res
-  );
-});
-
-// serve static files for live logs
-app.use(
-  "/node/flask/logs/",
-  express.static(path.join(__dirname, "/../flask/logs"))
-);
-
-app.get("/node/flask/logs", function (req, res) {
-  express.static(path.join(__dirname, "/../flask/logs"))(req, res);
-});
-
-// download restore script
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    console.log("req", req);
-    cb(null, "./flask/backup_restore/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
+// <================================================================================>
+//                            BACKUP AND RESTORE 
+// <================================================================================>
 
 // delete backup_restore script(if exists)
 
@@ -526,6 +688,8 @@ app.post("/node/deletebackupRestoreFiles", async (req, res) => {
   }
 });
 
+
+
 // delete build_meraki_switchconfig script(if exists)
 
 app.post("/node/deletebuild_meraki_switchconfigFiles", async (req, res) => {
@@ -566,7 +730,6 @@ app.post("/node/deletebuild_meraki_switchconfigFiles", async (req, res) => {
   }
 });
 
-var upload = multer({ storage: storage }).single("file");
 
 // upload meraki_restore_network script if modified by the AceEditor GUI
 
@@ -609,9 +772,14 @@ var storage2 = multer.diskStorage({
   },
 });
 
-// upload build_meraki_switchconfig script if modified from GUI
+// <================================================================================>
+//                            END BACKUP AND RESTORE 
+// <================================================================================>
 
-var upload2 = multer({ storage2: storage2 }).single("file");
+
+// <================================================================================>
+//                             MIGRATE TOOL 
+// <================================================================================>
 
 // upload backupfile for build_meraki_switchconfig
 
@@ -662,7 +830,6 @@ app.post("/node/upload_build_meraki_switchconfig", async (req, res) => {
     } else {
       const file = req.files.file;
 
-      // file.mv("/home/cyberdevnet/mer-hacker-dev/api/cisco_meraki_migrate_tool/build_meraki_switchconfig.py")
       file.mv(
         path.join(
           __dirname,
@@ -720,6 +887,14 @@ app.post("/node/delete_backupfile", async (req, res) => {
   }
 });
 
+// <================================================================================>
+//                             END MIGRATE TOOL 
+// <================================================================================>
+
+
+// <================================================================================>
+//                             SWITCHPORT TEMPLATES
+// <================================================================================>
 //Reading template file
 
 var mongooseTemplates = Mongoose.createConnection(
@@ -821,6 +996,65 @@ app.post("/node/delete_templateFile", async (req, res) => {
     res.status(500).send(error);
   }
 });
+
+// <================================================================================>
+//                             END SWITCHPORT TEMPLATES
+// <================================================================================>
+
+
+// <================================================================================>
+//                                  UTILITIES
+// <================================================================================>
+
+
+// serve static files for backup/restore script
+
+app.use(
+  "/node/backupRestoreFiles",
+  express.static(path.join(__dirname, "/../flask/backup_restore"))
+);
+
+app.get("/node/backupRestoreFiles", function (req, res) {
+  express.static(path.join(__dirname, "/../flask/backup_restore"))(req, res);
+});
+
+// serve static files for ios_to_meraki script
+
+app.use(
+  "/node/flask/cisco_meraki_migrate_tool/",
+  express.static(path.join(__dirname, "/../flask/cisco_meraki_migrate_tool/"))
+);
+
+app.get("/node/flask/cisco_meraki_migrate_tool/", function (req, res) {
+  express.static(path.join(__dirname, "/../flask/cisco_meraki_migrate_tool/"))(
+    req,
+    res
+  );
+});
+
+// serve static files for live logs
+app.use(
+  "/node/flask/logs/",
+  express.static(path.join(__dirname, "/../flask/logs"))
+);
+
+app.get("/node/flask/logs", function (req, res) {
+  express.static(path.join(__dirname, "/../flask/logs"))(req, res);
+});
+
+// download restore script
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./flask/backup_restore/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+// <================================================================================>
+//                                  END UTILITIES
+// <================================================================================>
 
 const HOST = "localhost";
 const PORT = process.env.PORT || 3001;

@@ -277,14 +277,12 @@ export default function GetAllOrganizationSubnets(ac) {
                     <div className="panel-body">
                       <dl>
                         <dt>
-                          This script iterates through all networks in an
-                          organization and returns all the subnets and VLANs
-                          associated with every network.
+                          This script iterates through all networks in an organization and returns
+                          all the subnets and VLANs associated with every network.
                         </dt>
                         <dt>
-                          The script works only on MX and Z3 devices, does not
-                          work on VPN HUBs, the network must be reachable in the
-                          Meraki Dashboard.
+                          The script works only on MX and Z3 devices, does not work on VPN HUBs, the
+                          network must be reachable in the Meraki Dashboard.
                         </dt>
                       </dl>
                     </div>
@@ -296,12 +294,7 @@ export default function GetAllOrganizationSubnets(ac) {
                 onClick={!loading ? handleOrganizationSubnets : null}
                 disabled={loading}
               >
-                {loading && (
-                  <i
-                    className="fa fa-refresh fa-spin"
-                    style={{ marginRight: "5px" }}
-                  />
-                )}
+                {loading && <i className="fa fa-refresh fa-spin" style={{ marginRight: "5px" }} />}
                 {loading && <span>Loading Data</span>}
                 {!loading && <span>RUN</span>}
               </button>
@@ -323,14 +316,8 @@ export default function GetAllOrganizationSubnets(ac) {
                   >
                     {(props) => (
                       <div>
-                        <SearchBar
-                          style={{ width: "299px" }}
-                          {...props.searchProps}
-                        />
-                        <ExportCSVButton
-                          className="export-csv"
-                          {...props.csvProps}
-                        >
+                        <SearchBar style={{ width: "299px" }} {...props.searchProps} />
+                        <ExportCSVButton className="export-csv" {...props.csvProps}>
                           Export CSV
                         </ExportCSVButton>
                         <BootstrapTable

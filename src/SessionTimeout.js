@@ -52,25 +52,23 @@ export default function SessionTimeout(ac) {
           history.push("/login");
         });
     } catch (e) {
-      console.log(e);
     }
   };
 
   // send a 'leer' string to server on logout to clear the key
 
   async function postKey() {
-    const rawResponse = await fetch("/node/post-api-key", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    try {
+      const rawResponse = await axios.post("/node/post-api-key", {
+        isSignedIn: false,
         username: "leer",
-        apiKey: "leer",
-      }),
-    });
-    return await rawResponse.json();
+        realUsername: ac.dc.User,
+        apiKey: "leer"
+  })
+  return await rawResponse.json();
+      
+    } catch (error) {
+    }
   }
 
   useEffect(() => {
@@ -106,7 +104,6 @@ export default function SessionTimeout(ac) {
     } else {
       ac.dc.sethideLogin({ display: "block" });
       deleteCookie();
-      postKey();
       ac.dc.setswitchLoginAPI(true);
       setsessionTimeout(false);
       setsessionTime(0);
@@ -129,6 +126,8 @@ export default function SessionTimeout(ac) {
       axios.post("/node/deletebackupRestoreFiles", {});
       axios.post("/node/deletebuild_meraki_switchconfigFiles", {});
       history.push("/login");
+      postKey();
+
     }
   };
 

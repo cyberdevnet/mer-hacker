@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import StatePersister from "./StatePersister";
 import Template from "./components/Template";
 import { BrowserRouter as Router } from "react-router-dom";
 import { useLocalStorage } from "./useLocalStorage";
@@ -13,9 +12,7 @@ function App() {
   const [triggerGetOrg, settriggerGetOrg] = useState(0);
   const [triggerSelectOrg, settriggerSelectOrg] = useState(0);
   const [triggerSelectNetwork, settriggerSelectNetwork] = useState(0);
-  // const [getOrgStatusCode, setgetOrgStatusCode] = useState(0);
   const [organizationList, setorganizationList] = useState([]);
-  const [networkList, setnetworkList] = useState([]);
   const [deviceStatusList, setdeviceStatusList] = useState([]);
   const [totaldeviceStatusList, settotaldeviceStatusList] = useState(0);
   const [allNetworksIDList, setallNetworksIDList] = useState([]);
@@ -27,11 +24,9 @@ function App() {
   const [clientList, setclientList] = useState([]);
   const [vlanList, setvlanList] = useState([]);
   const [allVlanList, setallVlanList] = useState([]);
-  const [timeZone, settimeZone] = useState(0);
   const [inputKey, setinputKey] = useState("");
   const [inputConfKey, setinputConfKey] = useState("");
   const [isLoggedIn, setisLoggedIn] = useState(false);
-  // const [switchLoginAPI, setswitchLoginAPI] = useState(true);
   const [switchDashboard, setswitchDashboard] = useState(false);
   const [switchLoggedIn, setswitchLoggedIn] = useState(false);
   const [switchLoggedout, setswitchLoggedout] = useState(false);
@@ -39,34 +34,24 @@ function App() {
   const [switchMainTools, setswitchMainTools] = useState(false);
   const [switchAlertModal, setswitchAlertModal] = useState(false);
   const [switchConfirmRestore, setswitchConfirmRestore] = useState(false);
-  const [switchConfirmRestoreSwitch, setswitchConfirmRestoreSwitch] = useState(
-    false
-  );
+  const [switchConfirmRestoreSwitch, setswitchConfirmRestoreSwitch] = useState(false);
   const [AlertModalError, setAlertModalError] = useState([]);
-  const [switchswitchChangeApiKey, setswitchswitchChangeApiKey] = useState(
-    false
-  );
+  const [switchswitchChangeApiKey, setswitchswitchChangeApiKey] = useState(false);
   const [ulClassorg, setulClassorg] = useState("nav nav-second-level");
   const [ulClassnet, setulClassnet] = useState("nav nav-second-level");
-  const [totalDevices, settotalDevices] = useState(0);
   const [totalHosts, settotalHosts] = useState(0);
   const [reports, setreports] = useState([]);
   const [triggerTopReports, settriggerTopReports] = useState(1);
   const [loadingButton, setloadingButton] = useState(false);
   const [datab, setdatab] = useState([]);
-  // const [isOrgSelected, setisOrgSelected] = useState(false);
-  // const [isNetSelected, setisNetSelected] = useState(false);
   const [flashMessages, setflashMessages] = useState([]);
   const [restoreScript, setrestoreScript] = useState("");
   const [showRestorescript, setshowRestorescript] = useState(false);
-  // const [collapseButton, setcollapseButton] = useState({ display: "none" });
   const [hideLogin, sethideLogin] = useState({ display: "block" });
   const [loadingOrg, setloadingOrg] = useState(false);
   const [loadingNet, setloadingNet] = useState(false);
   const [toolSelected, settoolSelected] = useState(false);
-  const [showAlreadyisSignedInModal, setshowAlreadyisSignedInModal] = useState(
-    false
-  );
+  const [showAlreadyisSignedInModal, setshowAlreadyisSignedInModal] = useState(false);
   const [showforgotPasswordModal, setshowforgotPasswordModal] = useState(false);
   const [switchAllTools, setswitchAllTools] = useState({
     1: false,
@@ -79,15 +64,11 @@ function App() {
     8: false,
   });
 
-  //set the logged user in local storage to be retrieved from getKey() function
-  // const [User, setUser] = useState(() => {
-  //   const stickyValue = localStorage.getItem("my-User");
-  //   return stickyValue !== null ? JSON.parse(stickyValue) : [];
-  // });
+  // <================================================================================>
+  //                             LOCAL STORAGE
+  // <================================================================================>
 
-  // useEffect(() => {
-  //   localStorage.setItem("my-User", JSON.stringify(User));
-  // }, [User]);
+  //set the logged user in local storage to be retrieved from getKey() function
 
   const [isSignedIn, setisSignedIn] = useState(() => {
     const stickyValue = localStorage.getItem("my-isSignedIn");
@@ -98,22 +79,26 @@ function App() {
     localStorage.setItem("my-isSignedIn", JSON.stringify(isSignedIn));
   }, [isSignedIn]);
 
-  const [organization, setorganization] = useLocalStorage("my-organization","Set Organization");
-  const [User, setUser] = useLocalStorage("my-User",[]);
-  const [network, setnetwork] = useLocalStorage('my-networks',"Networks");
-  const [organizationID, setorganizationID] = useLocalStorage('my-organizationID',0);
-  const [networkID, setnetworkID] = useLocalStorage('my-networkID',0);
-  const [switchLoginAPI, setswitchLoginAPI] = useLocalStorage("my-switchLoginAPI",true);
-  const [getOrgStatusCode, setgetOrgStatusCode] = useLocalStorage("my-getOrgStatusCode",0);
-  const [collapseButton, setcollapseButton] = useLocalStorage("my-collapseButton",{ display: "none" });
-  const [isOrgSelected, setisOrgSelected] = useLocalStorage('my-isOrgSelected',false);
-  const [isNetSelected, setisNetSelected] = useLocalStorage('my-isNetSelected',false);
+  const [organization, setorganization] = useLocalStorage("my-organization", "Set Organization");
+  const [User, setUser] = useLocalStorage("my-User", []);
+  const [network, setnetwork] = useLocalStorage("my-networks", "Networks");
+  const [organizationID, setorganizationID] = useLocalStorage("my-organizationID", 0);
+  const [networkID, setnetworkID] = useLocalStorage("my-networkID", 0);
+  const [switchLoginAPI, setswitchLoginAPI] = useLocalStorage("my-switchLoginAPI", true);
+  const [getOrgStatusCode, setgetOrgStatusCode] = useLocalStorage("my-getOrgStatusCode", 0);
+  const [collapseButton, setcollapseButton] = useLocalStorage("my-collapseButton", {
+    display: "none",
+  });
+  const [isOrgSelected, setisOrgSelected] = useLocalStorage("my-isOrgSelected", false);
+  const [isNetSelected, setisNetSelected] = useLocalStorage("my-isNetSelected", false);
+  const [isUsingADauth, setisUsingADauth] = useLocalStorage("my-isUsingADauth", false);
+  const [networkList, setnetworkList] = useLocalStorage("my-networkList", []);
+  const [totalDevices, settotalDevices] = useLocalStorage("my-totalDevices", 0);
+  const [timeZone, settimeZone] = useLocalStorage("my-timeZone", 0);
 
-
-  // const switchLoginAPI = localStorage.getItem("my-switchLoginAPI");
-  // const getOrgStatusCode = localStorage.getItem("my-getOrgStatusCode");
-  // const collapseButton = localStorage.getItem("my-collapseButton");  
-   
+  // <================================================================================>
+  //                            END LOCAL STORAGE
+  // <================================================================================>
 
   // automatic get key from server on-render and on-refresh
   useEffect(() => {
@@ -132,9 +117,7 @@ function App() {
         .then((data) => {
           setapiKey(data.apiKey);
         })
-        .catch((error) => {
-          console.log("An error occured ", error);
-        });
+        .catch((error) => {});
     }
 
     getKey();
@@ -175,8 +158,7 @@ function App() {
             setflashMessages(
               <div className="form-input-error-msg alert alert-danger">
                 <span className="glyphicon glyphicon-exclamation-sign"></span>
-                Organization not found, please check your API key and your
-                internet connection
+                Organization not found, please check your API key and your internet connection
               </div>
             );
             setloadingOrg(false);
@@ -497,6 +479,8 @@ function App() {
     setshowAlreadyisSignedInModal,
     showforgotPasswordModal,
     setshowforgotPasswordModal,
+    isUsingADauth,
+    setisUsingADauth,
   };
 
   return (
@@ -504,8 +488,6 @@ function App() {
       <Router>
         <Template dc={dc} />
       </Router>
-
-      <StatePersister dc={dc} />
     </MainContext.Provider>
   );
 }

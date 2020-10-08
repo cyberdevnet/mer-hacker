@@ -15,6 +15,9 @@ export default function LoginAPI(ac) {
 
   let history = useHistory();
 
+  axios.defaults.withCredentials = true;
+
+
   // setCookie Function if successeful Login
   const setCookie = async () => {
     try {
@@ -27,11 +30,8 @@ export default function LoginAPI(ac) {
   // readCookie Function checks if SignedIN or not
   const readCookie = async () => {
     try {
-      await axios
-        .post("/node/read-cookie", {
-          username: ac.User,
-          isSignedIn: ac.isSignedIn,
-        })
+            // eslint-disable-next-line
+      const res = await axios.post("/node/read-cookie", { username: ac.User, isSignedIn: ac.isSignedIn }  )
         .then((res) => {
           if (res.data.signedIn === true) {
             ac.setisSignedIn(true);
@@ -160,25 +160,20 @@ export default function LoginAPI(ac) {
 
         //simulate delay
         setTimeout(() => {
-          if (res.data === "Allowed") {
+          if (res.data.auth === true) {
             UploadMockBackupFile();
+            ac.setisUsingADauth(res.data.isUsingADauth);;
             ac.sethideLogin({ display: "none" });
             setCookie();
             ac.setswitchLoggedIn(true);
-            ac.setisSignedIn(res.data.signedIn);
             setloading(false);
-            // axios.post("/node/post-AlreadyisSignedIn", {
-            //   username: ac.User,
-            //   signed: "true",
-            // });
           } else {
             setloading(false);
             seterrorMessageLogin(
               <div className="form-input-error-msg alert alert-danger">
                 <span className="glyphicon glyphicon-exclamation-sign-login"></span>
-                {res.data}: We are unable to complete your login please check
-                your username and password, your Internet connection or try
-                again later
+                We are unable to complete your login please check your username and
+                password, your Internet connection or try again later
               </div>
             );
             ac.setPassword([]);

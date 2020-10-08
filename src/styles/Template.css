@@ -136,3 +136,11 @@ a {
   pointer-events: none;
   opacity: 0;
 }
+
+.loggedin-user {
+  position: relative;
+  float: right;
+  margin: 15px;
+  text-transform: uppercase;
+  font-weight: bold;
+}

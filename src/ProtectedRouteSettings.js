@@ -5,6 +5,10 @@ import { Route, Redirect, useHistory } from "react-router-dom";
 const ProtectedRouteSettings = ({ component: Component, ac, ...rest }) => {
   const [tempState, settempState] = useState(false);
 
+
+  axios.defaults.withCredentials = true;
+
+
   useEffect(() => {
     readCookie();
     // eslint-disable-next-line
@@ -14,12 +18,13 @@ const ProtectedRouteSettings = ({ component: Component, ac, ...rest }) => {
 
   const readCookie = async () => {
     try {
-      await axios
+      // eslint-disable-next-line
+      const res = await axios
         .post("/node/read-cookie", {
-          username: rest.User,
-          // isSignedIn: true,
-          isSignedIn: rest.isSignedIn,
-        })
+              username: rest.User,
+              isSignedIn: rest.isSignedIn,
+            })
+
         .then((res) => {
           if (res.data.user === "admin") {
             settempState(res.data.signedIn);

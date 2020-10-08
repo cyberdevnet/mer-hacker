@@ -5,6 +5,9 @@ import { Route, Redirect, useHistory } from "react-router-dom";
 const ProtectedRoute = ({ component: Component, ac, ...rest }) => {
   const [tempState, settempState] = useState(false);
 
+  axios.defaults.withCredentials = true;
+
+
   useEffect(() => {
     readCookie();
     // eslint-disable-next-line
@@ -14,12 +17,13 @@ const ProtectedRoute = ({ component: Component, ac, ...rest }) => {
 
   const readCookie = async () => {
     try {
-      await axios
+      // eslint-disable-next-line
+      const res = await axios
+        
         .post("/node/read-cookie", {
-          username: rest.User,
-          // isSignedIn: true,
-          isSignedIn: rest.isSignedIn,
-        })
+            username: rest.User,
+            isSignedIn: rest.isSignedIn,
+          })
         .then((res) => {
           if (res.data.signedIn === true) {
             settempState(res.data.signedIn);
@@ -32,7 +36,6 @@ const ProtectedRoute = ({ component: Component, ac, ...rest }) => {
           }
         });
     } catch (e) {
-      console.log("ReadCookie Error:", e);
     }
   };
 

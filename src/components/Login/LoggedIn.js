@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
+import axios from 'axios'
 
 import $ from "jquery";
 import "../../styles/LoggedIn.css";
@@ -9,21 +10,24 @@ export default function LoggedIn(ac) {
   const [inputKey, setinputKey] = useState("");
   const [triggerLogin, settriggerLogin] = useState(0);
 
+
+
   // post key to backend
+
   async function postKey() {
-    const rawResponse = await fetch("/node/post-api-key", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    try {
+      const rawResponse = await axios.post("/node/post-api-key", {
+        isSignedIn: ac.dc.isSignedIn,
         username: `${ac.dc.User}`,
+        realUsername: `${ac.dc.User}`,
         apiKey: `${inputKey}`,
-      }),
-    });
-    return await rawResponse.json();
+  })
+  return await rawResponse.json();
+      
+    } catch (error) {
+    }
   }
+
 
   async function getKey() {
     try {
@@ -45,10 +49,8 @@ export default function LoggedIn(ac) {
           ac.dc.setapiKey(data.apiKey);
         })
         .catch((error) => {
-          console.log("An error occured ", error);
         });
     } catch (e) {
-      console.log("Error:", e);
     }
   }
 

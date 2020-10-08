@@ -9,6 +9,9 @@ import "../../styles/Logout.css";
 export default function Logout(ac, props) {
   let history = useHistory();
 
+  axios.defaults.withCredentials = true;
+
+
   const deleteCookie = async () => {
     try {
       await axios
@@ -27,29 +30,28 @@ export default function Logout(ac, props) {
           history.push("/login");
         });
     } catch (e) {
-      console.log(e);
+
     }
   };
 
   // send a 'leer' string to server on logout to clear the key
+
   async function postKey() {
-    const rawResponse = await fetch("/node/post-api-key", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    try {
+      const rawResponse = await axios.post("/node/post-api-key", {
+        isSignedIn: false,
         username: "leer",
-        apiKey: "leer",
-      }),
-    });
-    return await rawResponse.json();
+        realUsername: ac.User,
+        apiKey: "leer"
+  })
+  return await rawResponse.json();
+      
+    } catch (error) {
+    }
   }
 
   const ConfirmLogout = () => {
     deleteCookie();
-    postKey();
     history.push("/login");
     ac.setswitchLoginAPI(true);
     ac.setapiKey("");
@@ -71,6 +73,8 @@ export default function Logout(ac, props) {
     axios.post("/flask/delete_debugfile", {});
     axios.post("/node/deletebackupRestoreFiles", {});
     axios.post("/node/deletebuild_meraki_switchconfigFiles", {});
+    postKey();
+
   };
 
   const Cancel = () => {

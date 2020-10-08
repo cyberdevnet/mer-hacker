@@ -98,8 +98,9 @@ export default function Template(ac, dc) {
   };
 
   return (
-    <div id="wrapper" >
+    <div id="wrapper">
       <nav className="navbar navbar-default top-navbar" role="navigation">
+        {ac.dc.isSignedIn ? (<span className="loggedin-user">{ac.dc.User} </span>):( <div></div> )}
         <div className="navbar-header">
           <button
             type="button"
@@ -127,6 +128,7 @@ export default function Template(ac, dc) {
           <div id="sideNav" href="">
             <i className="fa fa-bars icon" style={ac.dc.collapseButton}></i>
           </div>
+
         </div>
       </nav>
 
@@ -242,7 +244,6 @@ export default function Template(ac, dc) {
                 />
               </li>
             )}
-
           </ul>
           {ac.dc.flashMessages}
         </div>

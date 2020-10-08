@@ -38,9 +38,167 @@ app.use(
 app.use(expressLogger);
 
 
+
+
+
 // <================================================================================>
+//                            COOKIE AND SESSION MANAGEMENT 
+// <================================================================================>
+
+//Auth
+
+
+
+//session set - read - clear
+
+const cookieParser = require("cookie-parser");
+// A random key for signing the cookie
+app.use(cookieParser("82e4e438a0705fabf61f9854e3b575af"));
+var mongooseSessions = Mongoose.createConnection(
+  "mongodb://localhost/sessions",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  }
+);
+app.use(
+  session({
+    secret: "82e4e438a0705fabf61f9854e3b575af",
+    store: new MongoStore({
+      mongooseConnection: mongooseSessions,
+      ttl: 3600,
+    }),
+    saveUninitialized: false,
+    resave: false,
+  })
+);
+
+
+
+
+const SessionSchema = new Mongoose.Schema({
+  _id: String,
+  expires: String,
+  session: Object,
+  apiKey: String,
+});
+
+const SessionModel = mongooseSessions.model("sessions", SessionSchema);
+
+
+
+app.post("/node/set-cookie", (req, res, next) => {
+  try {
+    if (req.session.user !== req.body.user) {
+      req.session.user = req.body.user;
+      req.session.apiKey = "";
+      res.send({
+        signedIn: true,
+        sessionID: req.sessionID,
+        username: req.session.user,
+        apiKey: "",
+      });
+    }
+    res.end("done");
+  } catch (error) {
+    res.status(500).send(error);
+    return next(new Error(error));
+  }
+});
+
+
+
+app.post("/node/clear-cookie", async (req, res, next) => {
+  try {
+    if (req.body.sessionID === req.sessionID) {
+      req.session.destroy();
+      console.log("SESSION DESTROYED ");
+      res.send({ signedIn: false });
+    }
+  } catch (error) {
+    res.status(500).send(error);
+    return next(new Error(error));
+  }
+});
+
+app.post("/node/delete-session", async (req, res, next) => {
+  if (req.body.isSignedIn) {
+  try {
+    await SessionModel.findByIdAndDelete(req.body.ID, function (err, docs) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(docs);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+}
+});
+
+app.post("/node/get-all-sessions", async (req, res) => {
+  if (req.body.isSignedIn) {
+  try {
+    var sessions = await SessionModel.find({}).exec();
+    res.send(sessions);
+    res.status(201).send();
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
+});
+
+//post route to the database to retrieve the AlreadyisSignedIn boolean
+
+app.post("/node/get-AlreadyisSignedIn", async (req, res, next) => {
+  try {
+    SessionModel.findOne({}, function (err, result) {
+      if (err) {
+        console.log(err);
+      } else {
+        if (result !== null) {
+          let session = JSON.parse(result.session);
+          let user = session.user;
+          if (result && user === req.body.username) {
+            console.log("ALREADY SIGNED");
+            let signed = true;
+            res.send({ signed: signed });
+          } else {
+            console.log("NOT SIGNED");
+            let signed = false;
+            res.send({ signed: signed });
+          }
+        } else {
+          console.log("NOT SIGNED");
+          let signed = false;
+          res.send({ signed: signed });
+        }
+      }
+    });
+  } catch (error) {
+    res.status(500).send(error);
+    return next(new Error(error));
+  }
+});
+
+
+// <================================================================================>
+//                          END COOKIE AND SESSION MANAGEMENT 
+// <================================================================================>
+
+
+
+
+
+const ADauthentication = false   // set to false to use MongpDb Sessions/Authentication
+
+
+if (ADauthentication) {
+  // <================================================================================>
 //                  ACTIVE DIRECTORY IMPLEMENTATION
-//          commect out this section if MongoDB auth is used
 // <================================================================================>
 let ActiveDirectory = require('activedirectory');
 let config = {
@@ -166,73 +324,28 @@ app.post("/node/get-api-key", async (req, res, next) => {
   }
 });
 
-// read-cookie function specific fon AD Authentication
+
+// read-cookie function specific for AD Sessions
 
 app.post("/node/read-cookie", async (req, res, next) => {
-let IDs = []
-let sessions = []
-let users = []
   try {
-    SessionModel.find({}, function (err, result) {
-      if (err) {
-        console.log(err);
-        return
-      } else {
-        if (result.length !== 0) {      
-        try {
-          result.map((opt) => {
-            let model = {
-              _id: opt._id,
-              expires: opt.expires,
-              session: JSON.parse(opt.session)
-            }
-            sessions.push(model)
-            IDs.push(opt._id)
-          })
-
-          sessions.map((opt)=>{
-            users.push(opt.session.user)
-          })
-          let isUser = users.indexOf(req.body.username)
-          if ( isUser !== -1) {
-            let UserAndID = sessions.find(o => o.session.user === req.body.username);
-            if (req.body.username === UserAndID.session.user ) {
-              console.log("ALREADY SIGNED");
-                res.send({
-                  signedIn: true,
-                  user: req.body.username,
-                  sessionID: UserAndID._id,
-                  signed: true,
-                });
-  
-          } else {
-            console.log("NOT SIGNED");
-            res.send({
-              signedIn: false,
-              user: req.body.username,
-              signed: false,
-              });
-          }
-          } else {
-            console.log("NOT SIGNED");
-            res.send({
-              signedIn: false,
-              user: req.body.username,
-              signed: false,
-              });
-          }
-        } catch (error) {
-        console.log("error", error)
-        }
-        } else {
-          res.send({
-            signedIn: false,
-            user: req.body.username,
-            signed: false,
-            });
-        }
-      }
-    });
+    if (req.body.username === req.session.user) {
+      console.log("LOGGED IN");
+      res.send({
+        signedIn: true,
+        sessionID: req.sessionID,
+        user: req.session.user,
+        signed: true,
+      });
+    } else {
+      console.log("LOGGED OUT");
+      res.send({
+        signedIn: false,
+        sessionID: req.sessionID,
+        user: req.session.user,
+        signed: false,
+      });
+    }
   } catch (error) {
     res.status(500).send(error);
     return next(new Error(error));
@@ -243,274 +356,15 @@ let users = []
 //              END ACTIVE DIRECTORY IMPLEMENTATION
 // <================================================================================>
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
+} else {
 // <================================================================================>
 //                 MONGODB AUTHENTICATION AND APIKEY MANAGEMENT
-//          commect out this section if AD auth is used
 // <================================================================================>
 
-// // Mongodb initialization to users database
+// Mongodb initialization to users database
 
-// var mongooseConnection = Mongoose.createConnection(
-//   "mongodb://localhost/users",
-//   {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//     useFindAndModify: false,
-//   }
-// );
-
-// const UserSchema = new Mongoose.Schema({
-//   username: String,
-//   email: String,
-//   password: String,
-//   apiKey: String,
-//   signed: String,
-// });
-
-
-
-// //check to see if the user is being created or changed.
-// //If the user is not being created or changed, we will skip over the hashing part.
-
-// UserSchema.pre("save", function (next) {
-//   if (!this.isModified("password")) {
-//     return next();
-//   }
-//   this.password = bcrypt.hashSync(this.password, 10);
-//   next();
-// });
-
-// //function take the provided user data, compare it against our hashed user data,
-// //and then return the boolean res within the callback.
-
-// UserSchema.methods.comparePassword = function (plaintext, callback) {
-//   return callback(null, bcrypt.compareSync(plaintext, this.password));
-// };
-
-// // do NOT move the UserModel from here, it must be after the UserSchema.methods.comparePassword function!
-// const UserModel = mongooseConnection.model("user", UserSchema);
-
-
-
-
-// //create a new user on Mongodb + password and salt + hash
-// app.post("/node/hash-users", async (req, res) => {
-
-// let body = {
-//   username: req.body.username,
-//   email: req.body.email,
-//   password: req.body.password,
-//   apiKey: "tzu",
-//   signed: "false",
-// }
-  
-//   if (req.body.adminUser === 'admin' && req.body.isSignedIn) {
-//     try {
-//       const user = new UserModel(body);
-  
-//       const result = await user.save();
-//       res.send(result);
-//       res.status(201).send();
-//     } catch (error) {
-//       res.status(500).send(error);
-//     }
-
-//   } else {
-//     console.log('Hacked Attempt');
-//     res.status(404).send();
-//   }
-
-// });
-
-// app.post("/node/read-cookie", async (req, res, next) => {
-//   try {
-//     if (req.body.username === req.session.user) {
-//       console.log("LOGGED IN");
-//       //set user status to signed
-//       await UserModel.findOneAndUpdate(
-//         { username: req.body.username },
-//         { signed: true },
-//         req.body
-//       ).exec();
-//       res.send({
-//         signedIn: true,
-//         sessionID: req.sessionID,
-//         user: req.session.user,
-//         signed: true,
-//       });
-//     } else {
-//       console.log("LOGGED OUT");
-
-//       //set user status to un-signed
-
-//       await UserModel.findOneAndUpdate(
-//         { username: req.body.username },
-//         { signed: false },
-//         req.body
-//       ).exec();
-//       res.send({
-//         signedIn: false,
-//         sessionID: req.sessionID,
-//         user: req.session.user,
-//         signed: false,
-//       });
-//     }
-//   } catch (error) {
-//     res.status(500).send(error);
-//     return next(new Error(error));
-//   }
-// });
-
-// //if user is signed id change signed status to true, otherwise false (called by read-cookie)
-// app.post("/node/set-user-status", async (req, res, next) => {
-//     try {
-//         const key = await UserModel.findOneAndUpdate(
-//           { username: req.session.user },
-//           { signed: req.body.signed },
-//           req.body
-//         ).exec();
-//         res.json(key);
-//         res.status(201).send();
-
-//     } catch (error) {
-//       res.status(500).send(error);
-//       return next(new Error(error));
-//     }
-// });
-
-// app.post("/node/delete-user", async (req, res, next) => {
-
-//   if (req.body.isSignedIn) {
-//     try {
-//       await UserModel.findByIdAndDelete(req.body.ID, function (err, docs) {
-//         if (err) {
-//           console.log(err);
-//         } else {
-//           res.send(docs);
-//         }
-//       });
-//     } catch (error) {
-//       console.log(error);
-//       res.status(500).send(error);
-//     }
-//   }
-
-// });
-
-// //get all users in the database
-// app.post("/node/get-all-users", async (req, res) => {
-//   if (req.body.isSignedIn) {
-//     try {
-//       var users = await UserModel.find({}).exec();
-//       res.send(users);
-//       res.status(200).send();
-//     } catch (error) {
-//       res.status(500).send(error);
-//     }
-//   }
-
-// });
-
-
-// // login from client checking if user match and password match with salt + hash
-// app.post("/node/authenticate", async (req, res, next) => {
-//   try {
-//     var user = await UserModel.findOne({ username: req.body.username }).exec();
-//     if (!user) {
-//       res.send("Not Allowed user or user not set ");
-//     }
-//     user.comparePassword(req.body.password,  (error, match) => {
-//       if (!match) {
-//         res.send("Not Allowed password or password not set");
-//       } else {
-//         let authResponse = {
-//           isUsingADauth: false,
-//           auth: match,
-//         };
-//         res.send(authResponse);
-
-//       }
-//     })
-
-//   } catch (error) {
-//     console.log("error", error);
-//     // return next(new Error("either user or password are not set"));
-//   }
-// });
-
-// // store and retrieve API key
-
-// app.post("/node/post-api-key", async (req, res, next) => {
-//   try {
-//     if (req.body.username !== "leer") {
-//       //user is still logged
-//       const key = await UserModel.findOneAndUpdate(
-//         { username: req.body.username },
-//         { apiKey: req.body.apiKey },
-//         req.body
-//       ).exec();
-//       res.json(key);
-//       res.status(201).send();
-//     } else {
-//       const key = await UserModel.updateMany(
-//         //user has already logged-out, remove api-key from database
-//         {},
-//         { apiKey: req.body.apiKey },
-//         req.body
-//       ).exec();
-//       res.json(key);
-//       res.status(201).send();
-//     }
-//   } catch (error) {
-//     res.status(500).send(error);
-//     return next(new Error(error));
-//   }
-// });
-
-// // connection to the apikeys database to retrieve the key
-// app.post("/node/get-api-key", async (req, res, next) => {
-//   if (req.body.isSignedIn) {
-//     try {
-//       var apiKey = await UserModel.findOne({ username: req.body.username }, {}).exec();
-//       res.send(apiKey);
-//     } catch (error) {
-//       res.status(500).send(error);
-//       return next(new Error(error));
-//     }
-//   } else {
-//     res.status(404).send();
-//   }
-// });
-
-// <================================================================================>
-//                           END MONGODB AUTHENTICATION AND APIKEY MANAMENT
-// <================================================================================>
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-// <================================================================================>
-//                            COOKIE AND SESSION MANAGEMENT 
-// <================================================================================>
-
-//Auth
-
-// const basicAuth = require('express-basic-auth');
-const cookieParser = require("cookie-parser");
-
-// A random key for signing the cookie
-app.use(cookieParser("82e4e438a0705fabf61f9854e3b575af"));
-
-//session set - read - clear
-
-var mongooseSessions = Mongoose.createConnection(
-  "mongodb://localhost/sessions",
+var mongooseConnection = Mongoose.createConnection(
+  "mongodb://localhost/users",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -518,55 +372,207 @@ var mongooseSessions = Mongoose.createConnection(
   }
 );
 
-
-const SessionSchema = new Mongoose.Schema({
-  _id: String,
-  expires: String,
-  session: Object,
+const UserSchema = new Mongoose.Schema({
+  username: String,
+  email: String,
+  password: String,
   apiKey: String,
+  signed: String,
 });
 
-const SessionModel = mongooseSessions.model("sessions", SessionSchema);
 
-app.use(
-  session({
-    secret: "82e4e438a0705fabf61f9854e3b575af",
-    store: new MongoStore({
-      mongooseConnection: mongooseSessions,
-      ttl: 3600,
-    }),
-    saveUninitialized: false,
-    resave: false,
-  })
-);
 
-app.post("/node/set-cookie", (req, res, next) => {
+//check to see if the user is being created or changed.
+//If the user is not being created or changed, we will skip over the hashing part.
+
+UserSchema.pre("save", function (next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
+  this.password = bcrypt.hashSync(this.password, 10);
+  next();
+});
+
+//function take the provided user data, compare it against our hashed user data,
+//and then return the boolean res within the callback.
+
+UserSchema.methods.comparePassword = function (plaintext, callback) {
+  return callback(null, bcrypt.compareSync(plaintext, this.password));
+};
+
+// do NOT move the UserModel from here, it must be after the UserSchema.methods.comparePassword function!
+const UserModel = mongooseConnection.model("user", UserSchema);
+
+
+
+
+//create a new user on Mongodb + password and salt + hash
+app.post("/node/hash-users", async (req, res) => {
+
+let body = {
+  username: req.body.username,
+  email: req.body.email,
+  password: req.body.password,
+  apiKey: "tzu",
+  signed: "false",
+}
+  
+  if (req.body.adminUser === 'admin' && req.body.isSignedIn) {
+    try {
+      const user = new UserModel(body);
+  
+      const result = await user.save();
+      res.send(result);
+      res.status(201).send();
+    } catch (error) {
+      res.status(500).send(error);
+    }
+
+  } else {
+    console.log('Hacked Attempt');
+    res.status(404).send();
+  }
+
+});
+
+app.post("/node/read-cookie", async (req, res, next) => {
   try {
-    if (req.session.user !== req.body.user) {
-      req.session.user = req.body.user;
-      req.session.apiKey = "";
+    if (req.body.username === req.session.user) {
+      console.log("LOGGED IN");
+      //set user status to signed
+      await UserModel.findOneAndUpdate(
+        { username: req.body.username },
+        { signed: true },
+        req.body
+      ).exec();
       res.send({
         signedIn: true,
         sessionID: req.sessionID,
-        username: req.session.user,
-        apiKey: "",
+        user: req.session.user,
+        signed: true,
+      });
+    } else {
+      console.log("LOGGED OUT");
+
+      //set user status to un-signed
+
+      await UserModel.findOneAndUpdate(
+        { username: req.body.username },
+        { signed: false },
+        req.body
+      ).exec();
+      res.send({
+        signedIn: false,
+        sessionID: req.sessionID,
+        user: req.session.user,
+        signed: false,
       });
     }
-    res.end("done");
   } catch (error) {
     res.status(500).send(error);
     return next(new Error(error));
   }
 });
 
+//if user is signed id change signed status to true, otherwise false (called by read-cookie)
+app.post("/node/set-user-status", async (req, res, next) => {
+    try {
+        const key = await UserModel.findOneAndUpdate(
+          { username: req.session.user },
+          { signed: req.body.signed },
+          req.body
+        ).exec();
+        res.json(key);
+        res.status(201).send();
+
+    } catch (error) {
+      res.status(500).send(error);
+      return next(new Error(error));
+    }
+});
+
+app.post("/node/delete-user", async (req, res, next) => {
+
+  if (req.body.isSignedIn) {
+    try {
+      await UserModel.findByIdAndDelete(req.body.ID, function (err, docs) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.send(docs);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  }
+
+});
+
+//get all users in the database
+app.post("/node/get-all-users", async (req, res) => {
+  if (req.body.isSignedIn) {
+    try {
+      var users = await UserModel.find({}).exec();
+      res.send(users);
+      res.status(200).send();
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  }
+
+});
 
 
-app.post("/node/clear-cookie", async (req, res, next) => {
+// login from client checking if user match and password match with salt + hash
+app.post("/node/authenticate", async (req, res, next) => {
   try {
-    if (req.body.sessionID === req.sessionID) {
-      req.session.destroy();
-      console.log("SESSION DESTROYED ");
-      res.send({ signedIn: false });
+    var user = await UserModel.findOne({ username: req.body.username }).exec();
+    if (!user) {
+      res.send("Not Allowed user or user not set ");
+    }
+    user.comparePassword(req.body.password,  (error, match) => {
+      if (!match) {
+        res.send("Not Allowed password or password not set");
+      } else {
+        let authResponse = {
+          isUsingADauth: false,
+          auth: match,
+        };
+        res.send(authResponse);
+
+      }
+    })
+
+  } catch (error) {
+    console.log("error", error);
+    // return next(new Error("either user or password are not set"));
+  }
+});
+
+// store and retrieve API key
+
+app.post("/node/post-api-key", async (req, res, next) => {
+  try {
+    if (req.body.username !== "leer") {
+      //user is still logged
+      const key = await UserModel.findOneAndUpdate(
+        { username: req.body.username },
+        { apiKey: req.body.apiKey },
+        req.body
+      ).exec();
+      res.json(key);
+      res.status(201).send();
+    } else {
+      const key = await UserModel.updateMany(
+        //user has already logged-out, remove api-key from database
+        {},
+        { apiKey: req.body.apiKey },
+        req.body
+      ).exec();
+      res.json(key);
+      res.status(201).send();
     }
   } catch (error) {
     res.status(500).send(error);
@@ -574,72 +580,28 @@ app.post("/node/clear-cookie", async (req, res, next) => {
   }
 });
 
-app.post("/node/delete-session", async (req, res, next) => {
+// connection to the apikeys database to retrieve the key
+app.post("/node/get-api-key", async (req, res, next) => {
   if (req.body.isSignedIn) {
-  try {
-    await SessionModel.findByIdAndDelete(req.body.ID, function (err, docs) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.send(docs);
-      }
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send(error);
-  }
-}
-});
-
-app.post("/node/get-all-sessions", async (req, res) => {
-  if (req.body.isSignedIn) {
-  try {
-    var sessions = await SessionModel.find({}).exec();
-    res.send(sessions);
-    res.status(201).send();
-  } catch (error) {
-    res.status(500).send(error);
-  }
-}
-});
-
-//post route to the database to retrieve the AlreadyisSignedIn boolean
-
-app.post("/node/get-AlreadyisSignedIn", async (req, res, next) => {
-  try {
-    SessionModel.findOne({}, function (err, result) {
-      if (err) {
-        console.log(err);
-      } else {
-        if (result !== null) {
-          let session = JSON.parse(result.session);
-          let user = session.user;
-          if (result && user === req.body.username) {
-            console.log("ALREADY SIGNED");
-            let signed = true;
-            res.send({ signed: signed });
-          } else {
-            console.log("NOT SIGNED");
-            let signed = false;
-            res.send({ signed: signed });
-          }
-        } else {
-          console.log("NOT SIGNED");
-          let signed = false;
-          res.send({ signed: signed });
-        }
-      }
-    });
-  } catch (error) {
-    res.status(500).send(error);
-    return next(new Error(error));
+    try {
+      var apiKey = await UserModel.findOne({ username: req.body.username }, {}).exec();
+      res.send(apiKey);
+    } catch (error) {
+      res.status(500).send(error);
+      return next(new Error(error));
+    }
+  } else {
+    res.status(404).send();
   }
 });
-
 
 // <================================================================================>
-//                          END COOKIE AND SESSION MANAGEMENT 
+//                           END MONGODB AUTHENTICATION AND APIKEY MANAMENT
 // <================================================================================>
+
+}
+
+
 
 
 

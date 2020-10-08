@@ -6,6 +6,8 @@ import ProtectedRoute from "../ProtectedRoute";
 import ProtectedRouteSettings from "../ProtectedRouteSettings";
 import Home from "./Home";
 import AdminPanel from "./AdminPanel/AdminPanel";
+import ChangeApiKey from "./AdminPanel/ChangeApiKey";
+import ChangeApiKeyAdmin from "./AdminPanel/ChangeApiKeyAdmin";
 import LoginAPI from "../components/Login/LoginAPI";
 import Dashboard from "./Dashboard";
 import LoggedIn from "../components/Login/LoggedIn";
@@ -100,7 +102,51 @@ export default function Template(ac, dc) {
   return (
     <div id="wrapper">
       <nav className="navbar navbar-default top-navbar" role="navigation">
-        {ac.dc.isSignedIn ? (<span className="loggedin-user">{ac.dc.User} </span>):( <div></div> )}
+        {ac.dc.isSignedIn ? 
+        <div>
+          <div className="c-dropdown dropdown">
+            <div className="c-avatar has-dropdown dropdown-toggle" id="dropdownMenuAvatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img src="https://img.icons8.com/ios-glyphs/30/000000/gear.png" alt='#' style={{marginTop:'10px'}}/>            </div>
+                <div className="c-dropdown__menu dropdown-menu pull-left " aria-labelledby="dropdownMenuAvatar">
+                  <ul className="dropdown-menu pull-left"  role="menu" aria-labelledby="dropdownMenu" style={{display: 'block', position: 'static', marginBottom: '5px',width: '180px'}}>
+                    <li>
+                    {ac.dc.isSignedIn && ac.dc.User === "admin" ? (
+                      <NavLink exact to="settings" href="#settings">
+                        <i className="fas fa-tools"></i> Admin Panel
+                      </NavLink>
+                      ) : (
+                      <div></div>
+                          )}
+                    </li>
+                {ac.dc.isSignedIn && ac.dc.User === 'admin' ? (
+                    <li>
+                  <NavLink exact to="change-apikey-admin" href="#change-apikey">
+                  <i className="fa fa-key" aria-hidden="true"></i> Change API key
+                </NavLink>
+                  </li>
+
+
+                ):(
+                  <li>
+                  <NavLink exact to="change-apikey" href="#change-apikey">
+                    <i className="fa fa-key" aria-hidden="true"></i> Change API key
+                  </NavLink>
+                    </li>
+
+                )}
+
+
+                    <li>
+                    <NavLink exact to="logout" href="#logout">
+                  <i className="fas fa-sign-out-alt" aria-hidden="true"></i> Logout
+                </NavLink>
+                      </li>
+                  </ul>
+          </div>
+          </div>
+          <span className="loggedin-user">{ac.dc.User}</span> 
+        </div>
+        : <div></div>}
         <div className="navbar-header">
           <button
             type="button"
@@ -128,14 +174,13 @@ export default function Template(ac, dc) {
           <div id="sideNav" href="">
             <i className="fa fa-bars icon" style={ac.dc.collapseButton}></i>
           </div>
-
         </div>
       </nav>
 
       <nav className="navbar-default navbar-side" role="navigation">
         <div className="sidebar-collapse">
           <ul className="nav" id="main-menu">
-            <li>
+            {/* <li>
               {ac.dc.isSignedIn ? (
                 <NavLink exact to="logout" href="#logout">
                   <i className="fas fa-sign-out-alt" aria-hidden="true"></i> Logout
@@ -143,16 +188,7 @@ export default function Template(ac, dc) {
               ) : (
                 <div></div>
               )}
-            </li>
-            <li>
-              {ac.dc.isSignedIn && ac.dc.User === "admin" ? (
-                <NavLink exact to="settings" href="#settings">
-                  <i className="fas fa-tools"></i> Admin Panel
-                </NavLink>
-              ) : (
-                <div></div>
-              )}
-            </li>
+            </li> */}
             <li>
               <NavLink exact to="home" href="#home">
                 <i className="fa fa-home" aria-hidden="true"></i> Home
@@ -259,13 +295,29 @@ export default function Template(ac, dc) {
 
         <Switch>
           <Route exact path="/login" render={(dc) => <LoginAPI {...ac.dc} dc={dc} />} />
-          <ProtectedRouteSettings
+            <ProtectedRouteSettings
+                      exact
+                      path="/settings"
+                      component={AdminPanel}
+                      {...ac.dc}
+                      dc={dc}
+                    />
+                    <ProtectedRouteSettings
+                    exact
+                    path="/change-apikey-admin"
+                    component={ChangeApiKeyAdmin}
+                    {...ac.dc}
+                    dc={dc}
+                  />
+            <ProtectedRoute
             exact
-            path="/settings"
-            component={AdminPanel}
+            path="/change-apikey"
+            component={ChangeApiKey}
             {...ac.dc}
             dc={dc}
           />
+          
+
           <ProtectedRoute exact path="/" component={Home} {...ac.dc} dc={dc} />
           <ProtectedRoute exact path="/home" component={Home} {...ac.dc} dc={dc} />
           <ProtectedRoute exact path="/dashboard" component={Dashboard} {...ac.dc} dc={dc} />

@@ -193,7 +193,7 @@ app.post("/node/get-AlreadyisSignedIn", async (req, res, next) => {
 
 
 
-const ADauthentication = false   // set to false to use MongpDb Sessions/Authentication
+const ADauthentication = true   // set to false to use MongpDb Sessions/Authentication
 
 
 if (ADauthentication) {
@@ -280,30 +280,29 @@ const ApiKeyModel = ApiKeyConnection.model("apikey", ApiKeySchema);
 //this route can be used to post and also update the api-key
 
 app.post("/node/post-api-key", async (req, res, next) => {
-
   try {
     if (req.body.username !== "leer" && req.body.isSignedIn) {
       // UPDATE OR INSERT NEW USER + KEY
       const filter = { username: req.body.username };
-      const update = { username: req.body.username, realUsername: req.body.realUsername, apiKey: req.body.apiKey};
+      const update = {
+        username: req.body.username,
+        realUsername: req.body.realUsername,
+        apiKey: req.body.apiKey,
+      };
 
-  await ApiKeyModel.countDocuments(filter); // 0
+      await ApiKeyModel.countDocuments(filter); // 0
 
-  let apiKey = await ApiKeyModel.findOneAndUpdate(filter, update, {
-    new: true,
-    upsert: true // Make this update into an upsert
-    });
-    res.status(201).send(apiKey);
-
-  } else {
-          // DELETE  USER + KEY
-    const filter = { realUsername: req.body.realUsername};
-    let apiKey = await ApiKeyModel.findOneAndDelete(filter, {
+      let apiKey = await ApiKeyModel.findOneAndUpdate(filter, update, {
+        new: true,
+        upsert: true, // Make this update into an upsert
       });
-    res.status(201).send(apiKey);
-  }
-
-
+      res.status(201).send(apiKey);
+    } else {
+      // DELETE  USER + KEY
+      const filter = { realUsername: req.body.realUsername };
+      let apiKey = await ApiKeyModel.findOneAndDelete(filter, {});
+      res.status(201).send(apiKey);
+    }
   } catch (error) {
     res.status(500).send(error);
     return next(new Error(error));
@@ -554,6 +553,8 @@ app.post("/node/authenticate", async (req, res, next) => {
 // store and retrieve API key
 
 app.post("/node/post-api-key", async (req, res, next) => {
+  console.log("req", req.body);
+
   try {
     if (req.body.username !== "leer") {
       //user is still logged

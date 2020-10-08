@@ -140,7 +140,38 @@ a {
 .loggedin-user {
   position: relative;
   float: right;
-  margin: 15px;
   text-transform: uppercase;
   font-weight: bold;
+  margin-right: 5px;
+  margin-top: 20px;
 }
+
+.c-dropdown.dropdown {
+  float: right;
+  margin-right: 10px;
+  margin-top: 5px;
+}
+
+
+
+.c-avatar .has-dropdown .dropdown-toggle {
+  background-color: #fff;
+}
+
+.top-navbar .dropdown-menu {
+  top: 60px;
+  max-width: 230px;
+  border-radius: 0 0 4px 4px;
+  border: 0;
+  margin: px;
+  margin-right: 0px;
+  left: -144px;
+  bottom: 10px;
+  min-width: 100px;
+  background-color: #fff;
+}
+
+
+
+
+

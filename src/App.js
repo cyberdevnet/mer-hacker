@@ -34,13 +34,9 @@ function App() {
   const [switchMainTools, setswitchMainTools] = useState(false);
   const [switchAlertModal, setswitchAlertModal] = useState(false);
   const [switchConfirmRestore, setswitchConfirmRestore] = useState(false);
-  const [switchConfirmRestoreSwitch, setswitchConfirmRestoreSwitch] = useState(
-    false
-  );
+  const [switchConfirmRestoreSwitch, setswitchConfirmRestoreSwitch] = useState(false);
   const [AlertModalError, setAlertModalError] = useState([]);
-  const [switchswitchChangeApiKey, setswitchswitchChangeApiKey] = useState(
-    false
-  );
+  const [switchswitchChangeApiKey, setswitchswitchChangeApiKey] = useState(false);
   const [ulClassorg, setulClassorg] = useState("nav nav-second-level");
   const [ulClassnet, setulClassnet] = useState("nav nav-second-level");
   const [totalHosts, settotalHosts] = useState(0);
@@ -55,9 +51,7 @@ function App() {
   const [loadingOrg, setloadingOrg] = useState(false);
   const [loadingNet, setloadingNet] = useState(false);
   const [toolSelected, settoolSelected] = useState(false);
-  const [showAlreadyisSignedInModal, setshowAlreadyisSignedInModal] = useState(
-    false
-  );
+  const [showAlreadyisSignedInModal, setshowAlreadyisSignedInModal] = useState(false);
   const [showforgotPasswordModal, setshowforgotPasswordModal] = useState(false);
   const [switchAllTools, setswitchAllTools] = useState({
     1: false,
@@ -71,7 +65,7 @@ function App() {
   });
 
   // <================================================================================>
-  //                             LOCAL STORAGE 
+  //                             LOCAL STORAGE
   // <================================================================================>
 
   //set the logged user in local storage to be retrieved from getKey() function
@@ -85,24 +79,25 @@ function App() {
     localStorage.setItem("my-isSignedIn", JSON.stringify(isSignedIn));
   }, [isSignedIn]);
 
-  const [organization, setorganization] = useLocalStorage("my-organization","Set Organization");
-  const [User, setUser] = useLocalStorage("my-User",[]);
-  const [network, setnetwork] = useLocalStorage('my-networks',"Networks");
-  const [organizationID, setorganizationID] = useLocalStorage('my-organizationID',0);
-  const [networkID, setnetworkID] = useLocalStorage('my-networkID',0);
-  const [switchLoginAPI, setswitchLoginAPI] = useLocalStorage("my-switchLoginAPI",true);
-  const [getOrgStatusCode, setgetOrgStatusCode] = useLocalStorage("my-getOrgStatusCode",0);
-  const [collapseButton, setcollapseButton] = useLocalStorage("my-collapseButton",{ display: "none" });
-  const [isOrgSelected, setisOrgSelected] = useLocalStorage('my-isOrgSelected',false);
-  const [isNetSelected, setisNetSelected] = useLocalStorage('my-isNetSelected',false);
+  const [organization, setorganization] = useLocalStorage("my-organization", "Set Organization");
+  const [User, setUser] = useLocalStorage("my-User", []);
+  const [network, setnetwork] = useLocalStorage("my-networks", "Networks");
+  const [organizationID, setorganizationID] = useLocalStorage("my-organizationID", 0);
+  const [networkID, setnetworkID] = useLocalStorage("my-networkID", 0);
+  const [switchLoginAPI, setswitchLoginAPI] = useLocalStorage("my-switchLoginAPI", true);
+  const [getOrgStatusCode, setgetOrgStatusCode] = useLocalStorage("my-getOrgStatusCode", 0);
+  const [collapseButton, setcollapseButton] = useLocalStorage("my-collapseButton", {
+    display: "none",
+  });
+  const [isOrgSelected, setisOrgSelected] = useLocalStorage("my-isOrgSelected", false);
+  const [isNetSelected, setisNetSelected] = useLocalStorage("my-isNetSelected", false);
   const [isUsingADauth, setisUsingADauth] = useLocalStorage("my-isUsingADauth", false);
-  const [networkList, setnetworkList] = useLocalStorage("my-networkList",[]);
-  const [totalDevices, settotalDevices] = useLocalStorage("my-totalDevices",0);
-  const [timeZone, settimeZone] = useLocalStorage("my-timeZone",0);
+  const [networkList, setnetworkList] = useLocalStorage("my-networkList", []);
+  const [totalDevices, settotalDevices] = useLocalStorage("my-totalDevices", 0);
+  const [timeZone, settimeZone] = useLocalStorage("my-timeZone", 0);
 
-  
   // <================================================================================>
-  //                            END LOCAL STORAGE 
+  //                            END LOCAL STORAGE
   // <================================================================================>
 
   // automatic get key from server on-render and on-refresh
@@ -163,8 +158,7 @@ function App() {
             setflashMessages(
               <div className="form-input-error-msg alert alert-danger">
                 <span className="glyphicon glyphicon-exclamation-sign"></span>
-                Organization not found, please check your API key and your
-                internet connection
+                Organization not found, please check your API key and your internet connection
               </div>
             );
             setloadingOrg(false);

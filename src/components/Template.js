@@ -106,7 +106,7 @@ export default function Template(ac, dc) {
         <div>
           <div className="c-dropdown dropdown">
             <div className="c-avatar has-dropdown dropdown-toggle" id="dropdownMenuAvatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img src="https://img.icons8.com/ios-glyphs/30/000000/gear.png" alt='#' style={{marginTop:'10px'}}/>            </div>
+            <img src="https://img.icons8.com/ios/50/000000/down-squared--v1.png" alt='#' width="15" />                     </div>
                 <div className="c-dropdown__menu dropdown-menu pull-left " aria-labelledby="dropdownMenuAvatar">
                   <ul className="dropdown-menu pull-left"  role="menu" aria-labelledby="dropdownMenu" style={{display: 'block', position: 'static', marginBottom: '5px',width: '180px'}}>
                     <li>
@@ -124,18 +124,13 @@ export default function Template(ac, dc) {
                   <i className="fa fa-key" aria-hidden="true"></i> Change API key
                 </NavLink>
                   </li>
-
-
                 ):(
                   <li>
                   <NavLink exact to="change-apikey" href="#change-apikey">
                     <i className="fa fa-key" aria-hidden="true"></i> Change API key
                   </NavLink>
                     </li>
-
                 )}
-
-
                     <li>
                     <NavLink exact to="logout" href="#logout">
                   <i className="fas fa-sign-out-alt" aria-hidden="true"></i> Logout
@@ -180,15 +175,6 @@ export default function Template(ac, dc) {
       <nav className="navbar-default navbar-side" role="navigation">
         <div className="sidebar-collapse">
           <ul className="nav" id="main-menu">
-            {/* <li>
-              {ac.dc.isSignedIn ? (
-                <NavLink exact to="logout" href="#logout">
-                  <i className="fas fa-sign-out-alt" aria-hidden="true"></i> Logout
-                </NavLink>
-              ) : (
-                <div></div>
-              )}
-            </li> */}
             <li>
               <NavLink exact to="home" href="#home">
                 <i className="fa fa-home" aria-hidden="true"></i> Home

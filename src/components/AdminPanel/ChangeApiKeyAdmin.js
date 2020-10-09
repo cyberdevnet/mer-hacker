@@ -14,6 +14,7 @@ export default function ChangeApiKeyAdmin(ac) {
     if (inputApiKey.length < 1) {
       setbuttonDisabled(true);
     }
+    // eslint-disable-next-line
   }, []);
 
   const isFirstRunKey = useRef(true);

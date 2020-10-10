@@ -7,7 +7,7 @@ const MainContext = React.createContext(null);
 
 function App() {
   // eslint-disable-next-line
-  const [apiKey, setapiKey] = useState([]);
+  // const [apiKey, setapiKey] = useState([]);
   const [Password, setPassword] = useState([]);
   const [triggerGetOrg, settriggerGetOrg] = useState(0);
   const [triggerSelectOrg, settriggerSelectOrg] = useState(0);
@@ -95,6 +95,7 @@ function App() {
   const [networkList, setnetworkList] = useLocalStorage("my-networkList", []);
   const [totalDevices, settotalDevices] = useLocalStorage("my-totalDevices", 0);
   const [timeZone, settimeZone] = useLocalStorage("my-timeZone", 0);
+  const [apiKey, setapiKey] = useLocalStorage("my-apiKey", []);
 
   // <================================================================================>
   //                            END LOCAL STORAGE
@@ -142,6 +143,9 @@ function App() {
     }
     async function callOrganization() {
       setloadingOrg(true);
+      setnetworkID(0)
+      setnetwork('Networks')
+      setnetworkList([])
       fetch("/flask/organizations", {
         method: ["POST"],
         cache: "no-cache",
@@ -336,7 +340,6 @@ function App() {
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {
-            console.log("devices -> data.error", data.error);
           } else {
             setdeviceList(data.devices);
             let Dev1 = {};

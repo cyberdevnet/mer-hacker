@@ -105,7 +105,9 @@ def get_networks():
                 data['organizationId'])
             return {'networks': networks}
     except meraki.APIError as err:
-        flash(err)
+        # flash(err)
+        error = (err.message['errors'][0])
+        flash(error)
         return {'error': [render_template('flash_template.html'), err.status]}
 
 

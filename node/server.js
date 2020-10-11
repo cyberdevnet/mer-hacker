@@ -1,6 +1,5 @@
 const express = require("express");
 const app = express();
-const multer = require("multer");
 const fileUpload = require("express-fileupload");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -9,20 +8,16 @@ const Mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
 const session = require("express-session");
-const FileType = require("file-type");
-const assert = require("assert");
-var Stream = require("stream");
-var FormData = require("form-data");
+const crypto = require("crypto");
 const MongoStore = require("connect-mongo")(session);
-const axios = require("axios");
 
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/views"));
-let urlencodedParser = bodyParser.urlencoded({ extended: true });
-var jsonParser = bodyParser.json();
+// let urlencodedParser = bodyParser.urlencoded({ extended: true });
+// var jsonParser = bodyParser.json();
 
 const pino = require("pino");
 const expressPino = require("express-pino-logger");
@@ -36,10 +31,6 @@ app.use(
 );
 
 app.use(expressLogger);
-var crypto = require("crypto");
-
-
-
 
 
 
@@ -73,6 +64,9 @@ app.use(
     }),
     saveUninitialized: false,
     resave: false,
+    cookie: {
+      httpOnly: true,
+  }
   })
 );
 
@@ -261,37 +255,6 @@ let pass = req.body.password
 
 // store and retrieve API key
 
-const crypto = require('crypto');
-
-const algorithm = 'aes-256-ctr';
-const secretKey = 'vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3';
-const iv = crypto.randomBytes(16);
-
-const encrypt = (text) => {
-
-    const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
-
-    const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
-
-    // return(encrypted.toString('hex'))
-
-    return {
-        iv: iv.toString('hex'),
-        content: encrypted.toString('hex')
-    };
-};
-
-const decrypt = (hash) => {
-
-    const decipher = crypto.createDecipheriv(algorithm, secretKey, Buffer.from(hash.iv, 'hex'));
-
-    const decrpyted = Buffer.concat([decipher.update(Buffer.from(hash.content, 'hex')), decipher.final()]);
-
-    return decrpyted.toString();
-};
-
-
-
 
 var ApiKeyConnection = Mongoose.createConnection(
   "mongodb://localhost/apikeys",
@@ -314,7 +277,19 @@ const ApiKeyModel = ApiKeyConnection.model("apikey", ApiKeySchema);
 
 app.post("/node/post-api-key", async (req, res, next) => {
 
-  const hash = encrypt(req.body.apiKey);
+  const algorithm = "aes-256-ctr";
+  const iv = crypto.randomBytes(16);
+  const text = req.body.apiKey
+  const hide = '7i6Njz3zVstDgbZjprqtzONow3Meyxzv'
+  const cipher = crypto.createCipheriv(algorithm, hide, iv);
+  const encrypted = Buffer.concat([cipher.update(`${text}`), cipher.final()]);
+
+  let hash =  {
+    iv: iv.toString("hex"),
+    content: encrypted.toString("hex"),
+  };
+
+  // const hash = encrypt(req.body.apiKey);
   try {
     if (req.body.username !== "leer" && req.body.isSignedIn) {
       // UPDATE OR INSERT NEW USER + KEY
@@ -322,7 +297,7 @@ app.post("/node/post-api-key", async (req, res, next) => {
       const update = {
         username: req.body.username,
         realUsername: req.body.realUsername,
-        apiKey: hash
+        apiKey: hash,
       };
 
       await ApiKeyModel.countDocuments(filter); // 0
@@ -345,25 +320,36 @@ app.post("/node/post-api-key", async (req, res, next) => {
 });
 
 
-app.post("/node/get-api-key", async (req, res, next) => {
-  if (req.body.isSignedIn) {
-    try {
-      var hash = await ApiKeyModel.findOne({ username: req.body.username }, {}).exec();
-      const apiKey = decrypt(hash.apiKey)
-      res.send({username : "admin",
-                apiKey : apiKey,
-                realUsername : "admin"});
-    } catch (error) {
-      res.status(500).send(error);
-      return next(new Error(error));
+
+  // connection to the apikeys database to retrieve the key
+
+  app.post("/node/get-api-key", async (req, res, next) => {
+
+    const algorithm = "aes-256-ctr";
+    const hide = '7i6Njz3zVstDgbZjprqtzONow3Meyxzv'
+
+
+    if (req.body.isSignedIn) {
+      try {
+        var hash = await ApiKeyModel.findOne({ username: req.body.username }, {}).exec();
+        const decipher = crypto.createDecipheriv(algorithm, hide, Buffer.from(hash.apiKey.iv, "hex"));
+        const decrpyted = Buffer.concat([
+          decipher.update(Buffer.from(hash.apiKey.content, "hex")),
+          decipher.final(),
+        ]);
+
+        let apiKey =  decrpyted.toString();
+        res.send({ username: "admin", apiKey: apiKey, realUsername: "admin" });
+      } catch (error) {
+        res.status(500).send(error);
+        return next(new Error(error));
+      }
+    } else {
+      res.status(404).send();
     }
-  } else {
-    res.status(404).send();
-  }
-});
+  });
 
 
-// read-cookie function specific for AD Sessions
 
 app.post("/node/read-cookie", async (req, res, next) => {
   try {
@@ -395,309 +381,273 @@ app.post("/node/read-cookie", async (req, res, next) => {
 // <================================================================================>
 
 } else {
-// <================================================================================>
-//                 MONGODB AUTHENTICATION AND APIKEY MANAGEMENT
-// <================================================================================>
+  // <================================================================================>
+  //                 MONGODB AUTHENTICATION AND APIKEY MANAGEMENT
+  // <================================================================================>
 
-
-// eslint-disable-next-line
-var ApiKeyConnection = Mongoose.createConnection(
-  "mongodb://localhost/apikeys",
-  {
+  // eslint-disable-next-line
+  var ApiKeyConnection = Mongoose.createConnection("mongodb://localhost/apikeys", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
-  }
-);
+  });
 
-const ApiKeySchema = new Mongoose.Schema({
-  username: String,
-  realUsername: String,
-  apiKey: Object,
-});
+  const ApiKeySchema = new Mongoose.Schema({
+    username: String,
+    realUsername: String,
+    apiKey: Object,
+  });
 
-const ApiKeyModel = ApiKeyConnection.model("apikey", ApiKeySchema);
+  const ApiKeyModel = ApiKeyConnection.model("apikey", ApiKeySchema);
 
-// Mongodb initialization to users database
+  // Mongodb initialization to users database
 
-var mongooseConnection = Mongoose.createConnection(
-  "mongodb://localhost/users",
-  {
+  var mongooseConnection = Mongoose.createConnection("mongodb://localhost/users", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
-  }
-);
+  });
 
-const UserSchema = new Mongoose.Schema({
-  username: String,
-  email: String,
-  password: String,
-  apiKey: String,
-  signed: String,
-});
+  const UserSchema = new Mongoose.Schema({
+    username: String,
+    email: String,
+    password: String,
+    apiKey: String,
+    signed: String,
+  });
 
+  //check to see if the user is being created or changed.
+  //If the user is not being created or changed, we will skip over the hashing part.
 
+  UserSchema.pre("save", function (next) {
+    if (!this.isModified("password")) {
+      return next();
+    }
+    this.password = bcrypt.hashSync(this.password, 10);
+    next();
+  });
 
-//check to see if the user is being created or changed.
-//If the user is not being created or changed, we will skip over the hashing part.
+  //function take the provided user data, compare it against our hashed user data,
+  //and then return the boolean res within the callback.
 
-UserSchema.pre("save", function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
-  this.password = bcrypt.hashSync(this.password, 10);
-  next();
-});
+  UserSchema.methods.comparePassword = function (plaintext, callback) {
+    return callback(null, bcrypt.compareSync(plaintext, this.password));
+  };
 
-//function take the provided user data, compare it against our hashed user data,
-//and then return the boolean res within the callback.
+  // do NOT move the UserModel from here, it must be after the UserSchema.methods.comparePassword function!
+  const UserModel = mongooseConnection.model("user", UserSchema);
 
-UserSchema.methods.comparePassword = function (plaintext, callback) {
-  return callback(null, bcrypt.compareSync(plaintext, this.password));
-};
+  //create a new user on Mongodb + password and salt + hash
+  app.post("/node/hash-users", async (req, res) => {
+    let body = {
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password,
+      apiKey: "tzu",
+      signed: "false",
+    };
 
-// do NOT move the UserModel from here, it must be after the UserSchema.methods.comparePassword function!
-const UserModel = mongooseConnection.model("user", UserSchema);
+    if (req.body.adminUser === "admin" && req.body.isSignedIn) {
+      try {
+        const user = new UserModel(body);
 
+        const result = await user.save();
+        res.send(result);
+        res.status(201).send();
+      } catch (error) {
+        res.status(500).send(error);
+      }
+    } else {
+      console.log("Hacked Attempt");
+      res.status(404).send();
+    }
+  });
 
-
-
-//create a new user on Mongodb + password and salt + hash
-app.post("/node/hash-users", async (req, res) => {
-
-let body = {
-  username: req.body.username,
-  email: req.body.email,
-  password: req.body.password,
-  apiKey: "tzu",
-  signed: "false",
-}
-  
-  if (req.body.adminUser === 'admin' && req.body.isSignedIn) {
+  app.post("/node/read-cookie", async (req, res, next) => {
     try {
-      const user = new UserModel(body);
-  
-      const result = await user.save();
-      res.send(result);
+      if (req.body.username === req.session.user) {
+        console.log("LOGGED IN");
+        //set user status to signed
+        await UserModel.findOneAndUpdate(
+          { username: req.body.username },
+          { signed: true },
+          req.body
+        ).exec();
+        res.send({
+          signedIn: true,
+          sessionID: req.sessionID,
+          user: req.session.user,
+          signed: true,
+        });
+      } else {
+        console.log("LOGGED OUT");
+
+        //set user status to un-signed
+
+        await UserModel.findOneAndUpdate(
+          { username: req.body.username },
+          { signed: false },
+          req.body
+        ).exec();
+        res.send({
+          signedIn: false,
+          sessionID: req.sessionID,
+          user: req.session.user,
+          signed: false,
+        });
+      }
+    } catch (error) {
+      res.status(500).send(error);
+      return next(new Error(error));
+    }
+  });
+
+  //if user is signed id change signed status to true, otherwise false (called by read-cookie)
+  app.post("/node/set-user-status", async (req, res, next) => {
+    try {
+      const key = await UserModel.findOneAndUpdate(
+        { username: req.session.user },
+        { signed: req.body.signed },
+        req.body
+      ).exec();
+      res.json(key);
       res.status(201).send();
     } catch (error) {
       res.status(500).send(error);
-    }
-
-  } else {
-    console.log('Hacked Attempt');
-    res.status(404).send();
-  }
-
-});
-
-app.post("/node/read-cookie", async (req, res, next) => {
-  try {
-    if (req.body.username === req.session.user) {
-      console.log("LOGGED IN");
-      //set user status to signed
-      await UserModel.findOneAndUpdate(
-        { username: req.body.username },
-        { signed: true },
-        req.body
-      ).exec();
-      res.send({
-        signedIn: true,
-        sessionID: req.sessionID,
-        user: req.session.user,
-        signed: true,
-      });
-    } else {
-      console.log("LOGGED OUT");
-
-      //set user status to un-signed
-
-      await UserModel.findOneAndUpdate(
-        { username: req.body.username },
-        { signed: false },
-        req.body
-      ).exec();
-      res.send({
-        signedIn: false,
-        sessionID: req.sessionID,
-        user: req.session.user,
-        signed: false,
-      });
-    }
-  } catch (error) {
-    res.status(500).send(error);
-    return next(new Error(error));
-  }
-});
-
-//if user is signed id change signed status to true, otherwise false (called by read-cookie)
-app.post("/node/set-user-status", async (req, res, next) => {
-    try {
-        const key = await UserModel.findOneAndUpdate(
-          { username: req.session.user },
-          { signed: req.body.signed },
-          req.body
-        ).exec();
-        res.json(key);
-        res.status(201).send();
-
-    } catch (error) {
-      res.status(500).send(error);
       return next(new Error(error));
     }
-});
+  });
 
-app.post("/node/delete-user", async (req, res, next) => {
+  app.post("/node/delete-user", async (req, res, next) => {
+    if (req.body.isSignedIn) {
+      try {
+        await UserModel.findByIdAndDelete(req.body.ID, function (err, docs) {
+          if (err) {
+            console.log(err);
+          } else {
+            res.send(docs);
+          }
+        });
+      } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+      }
+    }
+  });
 
-  if (req.body.isSignedIn) {
+  //get all users in the database
+  app.post("/node/get-all-users", async (req, res) => {
+    if (req.body.isSignedIn) {
+      try {
+        var users = await UserModel.find({}).exec();
+        res.send(users);
+        res.status(200).send();
+      } catch (error) {
+        res.status(500).send(error);
+      }
+    }
+  });
+
+  // login from client checking if user match and password match with salt + hash
+  app.post("/node/authenticate", async (req, res, next) => {
     try {
-      await UserModel.findByIdAndDelete(req.body.ID, function (err, docs) {
-        if (err) {
-          console.log(err);
+      var user = await UserModel.findOne({ username: req.body.username }).exec();
+      if (!user) {
+        res.send("Not Allowed user or user not set ");
+      }
+      user.comparePassword(req.body.password, (error, match) => {
+        if (!match) {
+          res.send("Not Allowed password or password not set");
         } else {
-          res.send(docs);
+          let authResponse = {
+            isUsingADauth: false,
+            auth: match,
+          };
+          res.send(authResponse);
         }
       });
     } catch (error) {
-      console.log(error);
-      res.status(500).send(error);
+      console.log("error", error);
+      // return next(new Error("either user or password are not set"));
     }
-  }
+  });
 
-});
+  // store and retrieve API key
 
-//get all users in the database
-app.post("/node/get-all-users", async (req, res) => {
-  if (req.body.isSignedIn) {
-    try {
-      var users = await UserModel.find({}).exec();
-      res.send(users);
-      res.status(200).send();
-    } catch (error) {
-      res.status(500).send(error);
-    }
-  }
+  app.post("/node/post-api-key", async (req, res, next) => {
+    const algorithm = "aes-256-ctr";
+    const iv = crypto.randomBytes(16);
+    const text = req.body.apiKey
+    const hide = '7i6Njz3zVstDgbZjprqtzONow3Meyxzv'
+    const cipher = crypto.createCipheriv(algorithm, hide, iv);
+    const encrypted = Buffer.concat([cipher.update(`${text}`), cipher.final()]);
 
-});
-
-
-// login from client checking if user match and password match with salt + hash
-app.post("/node/authenticate", async (req, res, next) => {
-  try {
-    var user = await UserModel.findOne({ username: req.body.username }).exec();
-    if (!user) {
-      res.send("Not Allowed user or user not set ");
-    }
-    user.comparePassword(req.body.password,  (error, match) => {
-      if (!match) {
-        res.send("Not Allowed password or password not set");
-      } else {
-        let authResponse = {
-          isUsingADauth: false,
-          auth: match,
-        };
-        res.send(authResponse);
-
-      }
-    })
-
-  } catch (error) {
-    console.log("error", error);
-    // return next(new Error("either user or password are not set"));
-  }
-});
-
-// store and retrieve API key
-
-const crypto = require('crypto');
-
-const algorithm = 'aes-256-ctr';
-const secretKey = 'vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3';
-const iv = crypto.randomBytes(16);
-
-const encrypt = (text) => {
-
-    const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
-
-    const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
-
-    // return(encrypted.toString('hex'))
-
-    return {
-        iv: iv.toString('hex'),
-        content: encrypted.toString('hex')
+    let hash =  {
+      iv: iv.toString("hex"),
+      content: encrypted.toString("hex"),
     };
-};
 
-const decrypt = (hash) => {
-
-    const decipher = crypto.createDecipheriv(algorithm, secretKey, Buffer.from(hash.iv, 'hex'));
-
-    const decrpyted = Buffer.concat([decipher.update(Buffer.from(hash.content, 'hex')), decipher.final()]);
-
-    return decrpyted.toString();
-};
-
-
-
-
-app.post("/node/post-api-key", async (req, res, next) => {
-  const hash = encrypt(req.body.apiKey);
-  try {
-    if (req.body.username !== "leer" && req.body.isSignedIn) {
-      // UPDATE OR INSERT NEW USER + KEY
-      const filter = { username: req.body.username };
-      const update = {
-        username: req.body.username,
-        realUsername: req.body.realUsername,
-        apiKey: hash
-      };
-
-      await ApiKeyModel.countDocuments(filter); // 0
-
-      let apiKey = await ApiKeyModel.findOneAndUpdate(filter, update, {
-        new: true,
-        upsert: true, // Make this update into an upsert
-      });
-      res.status(201).send(apiKey);
-    } else {
-      // DELETE  USER + KEY
-      const filter = { realUsername: req.body.realUsername };
-      let apiKey = await ApiKeyModel.findOneAndDelete(filter, {});
-      res.status(201).send(apiKey);
-    }
-  } catch (error) {
-    res.status(500).send(error);
-    return next(new Error(error));
-  }
-});
-
-
-// connection to the apikeys database to retrieve the key
-
-app.post("/node/get-api-key", async (req, res, next) => {
-  if (req.body.isSignedIn) {
+    // const hash = encrypt(req.body.apiKey);
     try {
-      var hash = await ApiKeyModel.findOne({ username: req.body.username }, {}).exec();
-      const apiKey = decrypt(hash.apiKey)
-      res.send({username : "admin",
-                apiKey : apiKey,
-                realUsername : "admin"});
+      if (req.body.username !== "leer" && req.body.isSignedIn) {
+        // UPDATE OR INSERT NEW USER + KEY
+        const filter = { username: req.body.username };
+        const update = {
+          username: req.body.username,
+          realUsername: req.body.realUsername,
+          apiKey: hash,
+        };
+
+        await ApiKeyModel.countDocuments(filter); // 0
+
+        let apiKey = await ApiKeyModel.findOneAndUpdate(filter, update, {
+          new: true,
+          upsert: true, // Make this update into an upsert
+        });
+        res.status(201).send(apiKey);
+      } else {
+        // DELETE  USER + KEY
+        const filter = { realUsername: req.body.realUsername };
+        let apiKey = await ApiKeyModel.findOneAndDelete(filter, {});
+        res.status(201).send(apiKey);
+      }
     } catch (error) {
       res.status(500).send(error);
       return next(new Error(error));
     }
-  } else {
-    res.status(404).send();
-  }
-});
+  });
+
+  // connection to the apikeys database to retrieve the key
+
+  app.post("/node/get-api-key", async (req, res, next) => {
+
+    const algorithm = "aes-256-ctr";
+    const hide = '7i6Njz3zVstDgbZjprqtzONow3Meyxzv'
 
 
-// <================================================================================>
-//                           END MONGODB AUTHENTICATION AND APIKEY MANAMENT
-// <================================================================================>
+    if (req.body.isSignedIn) {
+      try {
+        var hash = await ApiKeyModel.findOne({ username: req.body.username }, {}).exec();
+        const decipher = crypto.createDecipheriv(algorithm, hide, Buffer.from(hash.apiKey.iv, "hex"));
+        const decrpyted = Buffer.concat([
+          decipher.update(Buffer.from(hash.apiKey.content, "hex")),
+          decipher.final(),
+        ]);
 
+        let apiKey =  decrpyted.toString();
+        res.send({ username: "admin", apiKey: apiKey, realUsername: "admin" });
+      } catch (error) {
+        res.status(500).send(error);
+        return next(new Error(error));
+      }
+    } else {
+      res.status(404).send();
+    }
+  });
+
+  // <================================================================================>
+  //                           END MONGODB AUTHENTICATION AND APIKEY MANAGEMENT
+  // <================================================================================>
 }
 
 
@@ -823,15 +773,6 @@ app.post("/node/upload", async (req, res) => {
   }
 });
 
-// download build_meraki_switchconfig script
-var storage2 = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./flask/cisco_meraki_migrate_tool/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
 
 // <================================================================================>
 //                            END BACKUP AND RESTORE 
@@ -1103,15 +1044,6 @@ app.get("/node/flask/logs", function (req, res) {
   express.static(path.join(__dirname, "/../flask/logs"))(req, res);
 });
 
-// download restore script
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./flask/backup_restore/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
 
 // <================================================================================>
 //                                  END UTILITIES

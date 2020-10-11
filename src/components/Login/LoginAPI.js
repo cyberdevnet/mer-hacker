@@ -66,7 +66,7 @@ export default function LoginAPI(ac) {
     }).then((res) => res.json());
   };
 
-  const setUser = (e) => {
+  const setUser = (e) => {    
     e.preventDefault();
     ac.setUser(e.target.value);
   };

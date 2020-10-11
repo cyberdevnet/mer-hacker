@@ -57,15 +57,24 @@ export default function Logout(ac, props) {
     setTimeout(() => {
       deleteCookie();
     history.push("/login");
+    ac.setUser([]);
     ac.setswitchLoginAPI(true);
     ac.setisSignedIn(false);
     ac.setgetOrgStatusCode(0);
     ac.setswitchDashboard(false);
     ac.setswitchLoggedout(false);
+    ac.setisOrgSelected(false);
+    ac.setisNetSelected(false);
+    ac.setisUsingADauth(false);
+    ac.setnetworkList([]);
+    ac.setdeviceList([]);
+    ac.settotalDevices(0);
+    ac.settimeZone(0);
     ac.setinputKey("");
     ac.setinputConfKey("");
     ac.setorganization("Set Organization");
     ac.setnetworkID(0);
+    ac.setorganizationID(0);
     ac.setnetwork("Networks");
     ac.setdeviceList([]);
     ac.setcollapseButton({ display: "none" });
@@ -78,8 +87,7 @@ export default function Logout(ac, props) {
     axios.post("/node/deletebackupRestoreFiles", {});
     axios.post("/node/deletebuild_meraki_switchconfigFiles", {});
     postKey();
-    setloading(false)
-    localStorage.clear()
+    setloading(false);
     }, 2300);
     
 

@@ -35,7 +35,7 @@ export default function ChangeApiKeyAdmin(ac) {
               apiKey: inputApiKey,
             })
             .then(() => {
-              ac.history.goBack();
+              // ac.history.goBack();
               ac.setorganization("Set Organization");
               ac.setnetworkID(0);
               ac.setorganizationID(0);
@@ -94,6 +94,7 @@ export default function ChangeApiKeyAdmin(ac) {
               required="required"
             />
           </form>
+          <h6 style={{ marginLeft: "78px", color: "#999" }}>Refresh the page after change</h6>
         </div>
         <div className="modal-footer" style={{ borderTop: "none" }}>
           <button

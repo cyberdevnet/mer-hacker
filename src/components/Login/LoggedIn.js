@@ -14,14 +14,20 @@ export default function LoggedIn(ac) {
 
   // post key to backend
 
+  axios.defaults.withCredentials = true;
+
+
   async function postKey() {
     try {
-      const rawResponse = await axios.post("/node/post-api-key", {
-        isSignedIn: ac.dc.isSignedIn,
-        username: `${ac.dc.User}`,
-        realUsername: `${ac.dc.User}`,
-        apiKey: `${inputKey}`,
-  })
+      const rawResponse = await axios.post(
+        "/node/post-api-key",
+        {
+          isSignedIn: ac.dc.isSignedIn,
+          username: `${ac.dc.User}`,
+          realUsername: `${ac.dc.User}`,
+          apiKey: `${inputKey}`,
+        }
+      );
   return await rawResponse.json();
       
     } catch (error) {
@@ -42,12 +48,8 @@ export default function LoggedIn(ac) {
     const handleLoginSuccess = () => {
       setloading(true);
       postKey()
-        // .then(() => getKey())
-
-        // Trigger getOrganization on-login
         .then(() => {
           setTimeout(() => {
-            ac.dc.settriggerGetOrg(ac.dc.triggerGetOrg + 1);
             ac.dc.setisSignedIn(true);
             ac.dc.setswitchLoggedIn(false);
             ac.dc.setswitchLoginAPI(false);
@@ -60,6 +62,12 @@ export default function LoggedIn(ac) {
             history.push("/home");
             setloading(false);
           }, 1500);
+        })
+        .then(() => {
+          // Trigger getOrganization on-login
+          setTimeout(() => {
+             ac.dc.settriggerGetOrg(ac.dc.triggerGetOrg + 1);
+          }, 3500);
         });
     };
     handleLoginSuccess();
@@ -140,4 +148,4 @@ export default function LoggedIn(ac) {
       </div>
     </div>
   );
-}
+}       

@@ -107,7 +107,6 @@ export default function SessionTimeout(ac) {
       ac.dc.setswitchLoginAPI(true);
       setsessionTimeout(false);
       setsessionTime(0);
-      ac.dc.setapiKey("");
       ac.dc.setisSignedIn(false);
       ac.dc.setgetOrgStatusCode(0);
       ac.dc.setswitchDashboard(false);
@@ -117,7 +116,15 @@ export default function SessionTimeout(ac) {
       ac.dc.setorganization("Set Organization");
       ac.dc.setnetworkID(0);
       ac.dc.setnetwork("Networks");
-      ac.setdeviceList([]);
+      ac.dc.setdeviceList([]);
+      ac.dc.setUser([]);
+      ac.dc.setisOrgSelected(false);
+      ac.dc.setisNetSelected(false);
+      ac.dc.setisUsingADauth(false);
+      ac.dc.setnetworkList([]);
+      ac.dc.settotalDevices(0);
+      ac.dc.settimeZone(0);
+      ac.dc.setorganizationID(0);
       ac.dc.setcollapseButton({ display: "none" });
       $(this).addClass("closed");
       $(".navbar-side").css({ left: "-260px" });
@@ -128,8 +135,6 @@ export default function SessionTimeout(ac) {
       axios.post("/node/deletebuild_meraki_switchconfigFiles", {});
       history.push("/login");
       postKey();
-      localStorage.clear();
-
     }
   };
 

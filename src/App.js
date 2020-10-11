@@ -3,6 +3,7 @@ import Template from "./components/Template";
 import { BrowserRouter as Router } from "react-router-dom";
 import { useLocalStorage } from "./useLocalStorage";
 import GetApiKey from "./GetApiKey";
+import axios from "axios";
 
 const MainContext = React.createContext(null);
 
@@ -102,14 +103,10 @@ function App() {
 
 
   let callApikey = GetApiKey(User, isSignedIn);
+  // eslint-disable-next-line
   let apiKey = callApikey.apikey.current
 
-  const APIbody = {
-    "X-Cisco-Meraki-API-Key": `${apiKey}`,
-    organizationId: `${organizationID}`,
-    NET_ID: `${networkID}`,
-    USER: `${User}`,
-  };
+
 
 
   const isFirstRunOrg = useRef(true);
@@ -127,43 +124,53 @@ function App() {
       setnetworkID(0);
       setnetwork("Networks");
       setnetworkList([]);
-      fetch("/flask/organizations", {
-        method: ["POST"],
-        cache: "no-cache",
-        headers: {
-          content_type: "application/json",
-        },
-        body: JSON.stringify(APIbody),
-      }).then((response) => {
-        return response.json;
-      });
-      fetch("/flask/organizations", { signal: signal })
-        .then((res) => {
-          if (res.status === 500) {
-            setflashMessages(
-              <div className="form-input-error-msg alert alert-danger">
-                <span className="glyphicon glyphicon-exclamation-sign"></span>
-                Organization not found, please check your API key and your internet connection
-              </div>
-            );
-            setloadingOrg(false);
-          }
-          setgetOrgStatusCode(res.status);
-          return res.json();
-        })
+      await axios
+        .post("/node/get-api-key",  { username: User, isSignedIn: isSignedIn })
         .then((data) => {
-          if (data.error) {
-            setflashMessages(
-              <div className="form-input-error-msg alert alert-danger">
-                <span className="glyphicon glyphicon-exclamation-sign"></span>
-                {data.error}
-              </div>
-            );
-            setloadingOrg(false);
-          } else {
-            setorganizationList(data.organizations);
-            setloadingOrg(false);
-          }
+            let key = data.data.apiKey;;
+            fetch("/flask/organizations", {
+              method: ["POST"],
+              cache: "no-cache",
+              headers: {
+                content_type: "application/json",
+              },
+              body: JSON.stringify({
+              "X-Cisco-Meraki-API-Key": `${key}`,
+              organizationId: `${organizationID}`,
+              NET_ID: `${networkID}`,
+              USER: `${User}`,
+                  }),
+            }).then((response) => {
+              return response.json;
+            });
+            fetch("/flask/organizations", { signal: signal })
+              .then((res) => {
+                if (res.status === 500) {
+                  setflashMessages(
+                    <div className="form-input-error-msg alert alert-danger">
+                      <span className="glyphicon glyphicon-exclamation-sign"></span>
+                      Organization not found, please check your API key and your internet connection
+                    </div>
+                  );
+                  setloadingOrg(false);
+                }
+                setgetOrgStatusCode(res.status);
+                return res.json();
+              })
+              .then((data) => {
+                if (data.error) {
+                  setflashMessages(
+                    <div className="form-input-error-msg alert alert-danger">
+                      <span className="glyphicon glyphicon-exclamation-sign"></span>
+                      {data.error}
+                    </div>
+                  );
+                  setloadingOrg(false);
+                } else {
+                  setorganizationList(data.organizations);
+                  setloadingOrg(false);
+                }
+              });
         });
     }
     callOrganization();
@@ -187,76 +194,86 @@ function App() {
       if (organization !== "Set Organization") {
         setflashMessages([]);
         setloadingNet(true);
-        fetch("/flask/networks", {
-          method: ["POST"],
-          cache: "no-cache",
-          headers: {
-            content_type: "application/json",
-          },
-          body: JSON.stringify(APIbody),
-        }).then((response) => {
-          return response.json;
-        });
-        fetch("/flask/networks", { signal: signal })
-          .then((res) => {
-            if (res.status === 500) {
-              setflashMessages(
-                <div className="form-input-error-msg alert alert-danger">
-                  <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  There was an error loading the networks, please try again.
-                </div>
-              );
-              setloadingNet(false);
-            }
-            setgetOrgStatusCode(res.status);
-            return res.json();
-          })
+        await axios
+          .post("/node/get-api-key",  { username: User, isSignedIn: isSignedIn })
           .then((data) => {
-            if (data.error) {
-              setflashMessages(
-                <div className="form-input-error-msg alert alert-danger">
-                  <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {data.error[0]}
-                </div>
-              );
-              setloadingNet(false);
-            } else {
-              const NET = Object.values(data.networks);
+          let key = data.data.apiKey
+          fetch("/flask/networks", {
+            method: ["POST"],
+            cache: "no-cache",
+            headers: {
+              content_type: "application/json",
+            },
+            body: JSON.stringify({
+              "X-Cisco-Meraki-API-Key": `${key}`,
+              organizationId: `${organizationID}`,
+              NET_ID: `${networkID}`,
+              USER: `${User}`,
+              }),
+                }).then((response) => {
+                  return response.json;
+                });
+                fetch("/flask/networks", { signal: signal })
+                  .then((res) => {
+                    if (res.status === 500) {
+                      setflashMessages(
+                        <div className="form-input-error-msg alert alert-danger">
+                          <span className="glyphicon glyphicon-exclamation-sign"></span>
+                          There was an error loading the networks, please try again.
+                        </div>
+                      );
+                      setloadingNet(false);
+                    }
+                    setgetOrgStatusCode(res.status);
+                    return res.json();
+                  })
+                  .then((data) => {
+                    if (data.error) {
+                      setflashMessages(
+                        <div className="form-input-error-msg alert alert-danger">
+                          <span className="glyphicon glyphicon-exclamation-sign"></span>
+                          {data.error[0]}
+                        </div>
+                      );
+                      setloadingNet(false);
+                    } else {
+                      const NET = Object.values(data.networks);
 
-              let networkIDList = [];
-              let combinedIDList = [];
-              // eslint-disable-next-line
-              NET.map((item) => {
-                var a = item.productTypes.indexOf("appliance");
-                if (
-                  (item.type === "combined" && a !== -1) ||
-                  (item.type === "appliance" && a !== -1)
-                ) {
-                  var IDcombinedListModel = [
-                    {
-                      id: item.id,
-                      name: item.name,
-                      type: item.type,
-                    },
-                  ];
-                  combinedIDList.push(...IDcombinedListModel);
-                  setcombindeNetworksIDList(combinedIDList);
-                }
+                      let networkIDList = [];
+                      let combinedIDList = [];
+                      // eslint-disable-next-line
+                      NET.map((item) => {
+                        var a = item.productTypes.indexOf("appliance");
+                        if (
+                          (item.type === "combined" && a !== -1) ||
+                          (item.type === "appliance" && a !== -1)
+                        ) {
+                          var IDcombinedListModel = [
+                            {
+                              id: item.id,
+                              name: item.name,
+                              type: item.type,
+                            },
+                          ];
+                          combinedIDList.push(...IDcombinedListModel);
+                          setcombindeNetworksIDList(combinedIDList);
+                        }
 
-                var IDListModel = [
-                  {
-                    id: item.id,
-                  },
-                ];
-                networkIDList.push(...IDListModel);
-                setallNetworksIDList(networkIDList);
-              });
-              setnetworkList(data.networks);
-              if (data.networks.length > 0) {
-                settimeZone(data.networks[0].timeZone);
-              }
-              setloadingNet(false);
-            }
+                        var IDListModel = [
+                          {
+                            id: item.id,
+                          },
+                        ];
+                        networkIDList.push(...IDListModel);
+                        setallNetworksIDList(networkIDList);
+                      });
+                      setnetworkList(data.networks);
+                      if (data.networks.length > 0) {
+                        settimeZone(data.networks[0].timeZone);
+                      }
+                      setloadingNet(false);
+                    }
+                  });
           });
       }
       return () => {
@@ -280,13 +297,22 @@ function App() {
     }
     async function callClients() {
       if (network !== "Networks") {
+        await axios
+        .post("/node/get-api-key",  { username: User, isSignedIn: isSignedIn })
+        .then((data) => {
+        let key = data.data.apiKey
         fetch("/flask/clients", {
           method: ["POST"],
           cache: "no-cache",
           headers: {
             content_type: "application/json",
           },
-          body: JSON.stringify(APIbody),
+          body: JSON.stringify({
+            "X-Cisco-Meraki-API-Key": `${key}`,
+            organizationId: `${organizationID}`,
+            NET_ID: `${networkID}`,
+            USER: `${User}`,
+            }),
         }).then((response) => {
           return response.json;
         });
@@ -299,7 +325,8 @@ function App() {
               sethostList(data.clients);
               settotalHosts(data.clients.length);
             }
-          });
+          })
+        })
       }
       return () => {
         abortController.abort();
@@ -318,7 +345,25 @@ function App() {
       isFirstDevices.current = false;
       return;
     }
+    async function callDevices() {
     if (isOrgSelected && isNetSelected === true) {
+      await axios
+      .post("/node/get-api-key",  { username: User, isSignedIn: isSignedIn })
+      .then((data) => {
+      let key = data.data.apiKey
+      fetch("/flask/devices", {
+        method: ["POST"],
+        cache: "no-cache",
+        headers: {
+          content_type: "application/json",
+        },
+        body: JSON.stringify({
+          "X-Cisco-Meraki-API-Key": `${key}`,
+          organizationId: `${organizationID}`,
+          NET_ID: `${networkID}`,
+          USER: `${User}`,
+          }),
+      })
       fetch("/flask/devices", { signal: signal })
         .then((res) => res.json())
         .then((data) => {
@@ -334,11 +379,14 @@ function App() {
               }
             }
           }
-        });
+        })
+        })
     }
     return () => {
       abortController.abort();
-    };
+    }
+  }
+  callDevices();
     // eslint-disable-next-line
   }, [networkID]);
 

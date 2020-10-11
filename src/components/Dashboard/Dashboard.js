@@ -23,7 +23,7 @@ export default function Dashboard(ac) {
                 <small>Organization</small>
               </div>
               <div className="icon">
-                <i className="fa fa-id-card-o fa-5x blue"></i>
+                <i className="fa fa-university fa-4x blue"></i>
               </div>
             </div>
           </div>

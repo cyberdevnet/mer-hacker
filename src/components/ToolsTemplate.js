@@ -32,7 +32,7 @@ export default function ToolsTemplate(ac) {
                 <small>Organization ID</small>
               </div>
               <div className="icon">
-                <i className="fa fa-id-card-o fa-5x blue"></i>
+                <i className="fa fa-university fa-4x blue"></i>
               </div>
             </div>
           </div>

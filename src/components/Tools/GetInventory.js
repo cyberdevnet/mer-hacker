@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
+import GetApiKey from "../../GetApiKey.js";
 import ToolkitProvider, {
   Search,
   CSVExport,
@@ -20,8 +21,11 @@ export default function SwitchPortTemplate(ac) {
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
 
+  let callApikey = GetApiKey(ac.dc.User, ac.dc.isSignedIn);
+  let apiKey = callApikey.apikey.current;
+
   const APIbody = {
-    "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
+    "X-Cisco-Meraki-API-Key": `${apiKey}`,
     organizationId: `${ac.dc.organizationID}`,
   };
 

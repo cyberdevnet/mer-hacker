@@ -6,6 +6,7 @@ import SwitchPortTemplateSummary from "./SwitchPortTemplateSummary";
 import SwitchPortConfig from "./SwitchPortConfig.js";
 import BootstrapTable from "react-bootstrap-table-next";
 import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
+import GetApiKey from "../../../GetApiKey.js";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 
 export default function SwitchPortTemplate(ac) {
@@ -52,6 +53,9 @@ export default function SwitchPortTemplate(ac) {
   const [allSwitchports, setallSwitchports] = useState([]);
   const [singleSwitchports, setsingleSwitchports] = useState([]);
   const [portListID, setportListID] = useState([]);
+
+  let callApikey = GetApiKey(ac.dc.User, ac.dc.isSignedIn);
+  let apiKey = callApikey.apikey.current;
 
   async function readTemplate() {
     try {
@@ -121,7 +125,7 @@ export default function SwitchPortTemplate(ac) {
   });
 
   const APIbody = {
-    "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
+    "X-Cisco-Meraki-API-Key": `${apiKey}`,
     organizationId: `${ac.dc.organizationID}`,
     SERIAL_NUM: `${switchSerial}`,
   };
@@ -414,7 +418,7 @@ export default function SwitchPortTemplate(ac) {
   };
 
   const APIbody2 = {
-    "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
+    "X-Cisco-Meraki-API-Key": `${apiKey}`,
     SERIAL_NUM: `${switchSerial}`,
     PAYLOAD: allSelectedPorts,
   };

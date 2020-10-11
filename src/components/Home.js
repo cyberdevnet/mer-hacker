@@ -1,6 +1,15 @@
 import React from "react";
+import GetApiKey from "../GetApiKey";
+
 
 export default function Home(ac) {
+
+  let callApikey = GetApiKey(ac.User, ac.isSignedIn);
+  // eslint-disable-next-line
+  let apiKey = callApikey.apikey.current;
+
+
+
   return (
     <div
       id="page-inner"

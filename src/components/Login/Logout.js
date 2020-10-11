@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { useHistory } from "react-router-dom";
 import Dialog from "@material-ui/core/Dialog";
 import axios from "axios";
@@ -7,6 +7,8 @@ import $ from "jquery";
 import "../../styles/Logout.css";
 
 export default function Logout(ac, props) {
+  const [loading, setloading] = useState(false);
+
   let history = useHistory();
 
   axios.defaults.withCredentials = true;
@@ -51,10 +53,11 @@ export default function Logout(ac, props) {
   }
 
   const ConfirmLogout = () => {
-    deleteCookie();
+    setloading(true)
+    setTimeout(() => {
+      deleteCookie();
     history.push("/login");
     ac.setswitchLoginAPI(true);
-    ac.setapiKey("");
     ac.setisSignedIn(false);
     ac.setgetOrgStatusCode(0);
     ac.setswitchDashboard(false);
@@ -64,6 +67,7 @@ export default function Logout(ac, props) {
     ac.setorganization("Set Organization");
     ac.setnetworkID(0);
     ac.setnetwork("Networks");
+    ac.setdeviceList([]);
     ac.setcollapseButton({ display: "none" });
     $(this).addClass("closed");
     $(".navbar-side").css({ left: "-260px" });
@@ -74,6 +78,10 @@ export default function Logout(ac, props) {
     axios.post("/node/deletebackupRestoreFiles", {});
     axios.post("/node/deletebuild_meraki_switchconfigFiles", {});
     postKey();
+    setloading(false)
+    localStorage.clear()
+    }, 2300);
+    
 
   };
 
@@ -114,11 +122,18 @@ export default function Logout(ac, props) {
                 Cancel
               </button>
               <button
-                onClick={ConfirmLogout}
-                type="button"
+                onClick={!loading ? ConfirmLogout : null}
+                disabled={loading}
                 className="btn btn-danger"
-              >
-                Logout
+                >
+                {loading && (
+                  <i
+                    className="fa fa-refresh fa-spin"
+                    style={{ marginRight: "5px" }}
+                  />
+                )}
+                {loading && <span>Logout</span>}
+                {!loading && <span>Logout</span>}
               </button>
             </div>
           </div>

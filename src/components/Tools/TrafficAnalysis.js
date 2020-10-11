@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
+import GetApiKey from "../../GetApiKey.js";
 import ToolkitProvider, {
   Search,
   CSVExport,
@@ -22,8 +23,11 @@ export default function TrafficAnalysis(ac) {
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
 
-  const APIbody2 = {
-    "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
+  let callApikey = GetApiKey(ac.dc.User, ac.dc.isSignedIn);
+  let apiKey = callApikey.apikey.current;
+
+  const APIbody = {
+    "X-Cisco-Meraki-API-Key": `${apiKey}`,
     DEV_TYPE: switchDeviceType,
     NET_ID: `${ac.dc.networkID}`,
     TIME_SPAN: switchTimeInterval,
@@ -110,7 +114,7 @@ export default function TrafficAnalysis(ac) {
               headers: {
                 content_type: "application/json",
               },
-              body: JSON.stringify(APIbody2),
+              body: JSON.stringify(APIbody),
             }).then((response) => {
               return response.json;
             });

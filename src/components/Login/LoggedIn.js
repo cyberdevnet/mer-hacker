@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import axios from 'axios'
 
+
 import $ from "jquery";
 import "../../styles/LoggedIn.css";
 
@@ -9,7 +10,6 @@ export default function LoggedIn(ac) {
   const [loading, setloading] = useState(false);
   const [inputKey, setinputKey] = useState("");
   const [triggerLogin, settriggerLogin] = useState(0);
-
 
 
   // post key to backend
@@ -29,31 +29,6 @@ export default function LoggedIn(ac) {
   }
 
 
-  async function getKey() {
-    try {
-      fetch("/node/get-api-key", {
-        method: "post",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: `${ac.dc.User}`,
-          isSignedIn: ac.dc.isSignedIn,
-        }),
-      })
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          ac.dc.setapiKey(data.apiKey);
-        })
-        .catch((error) => {
-        });
-    } catch (e) {
-    }
-  }
-
   let history = useHistory();
 
   const isFirstSetKey = useRef(true);
@@ -67,7 +42,7 @@ export default function LoggedIn(ac) {
     const handleLoginSuccess = () => {
       setloading(true);
       postKey()
-        .then(() => getKey())
+        // .then(() => getKey())
 
         // Trigger getOrganization on-login
         .then(() => {

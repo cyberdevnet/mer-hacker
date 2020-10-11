@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import GetAllClientsModal from "./GetAllClientsModal";
+import GetApiKey from "../../GetApiKey.js";
 import ClientsusageHistory from "./ClientCharts/ClientsusageHistory";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, {
@@ -30,8 +31,11 @@ export default function SwitchPortTemplate(ac) {
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
 
+  let callApikey = GetApiKey(ac.dc.User, ac.dc.isSignedIn);
+  let apiKey = callApikey.apikey.current;
+
   const APIbody = {
-    "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
+    "X-Cisco-Meraki-API-Key": `${apiKey}`,
     organizationId: `${ac.dc.organizationID}`,
     NET_ID: `${ac.dc.networkID}`,
     CLIENT_ID: `${clientID}`,
@@ -319,13 +323,14 @@ export default function SwitchPortTemplate(ac) {
     setshowUsageHistoryModal,
     clientName,
     setclientName,
-    APIbody,
     settriggerUsageHistory,
     triggerUsageHistory,
     flashMessages,
     setflashMessages,
     loadingUsage,
     setloadingUsage,
+    clientID,
+    setclientID,
   };
 
   return (

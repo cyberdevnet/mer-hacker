@@ -36,6 +36,8 @@ app.use(
 );
 
 app.use(expressLogger);
+var crypto = require("crypto");
+
 
 
 
@@ -257,8 +259,39 @@ let pass = req.body.password
 
 });
 
+// store and retrieve API key
 
-// with AD auth api keys are saved in separate apikeys database
+const crypto = require('crypto');
+
+const algorithm = 'aes-256-ctr';
+const secretKey = 'vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3';
+const iv = crypto.randomBytes(16);
+
+const encrypt = (text) => {
+
+    const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
+
+    const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
+
+    // return(encrypted.toString('hex'))
+
+    return {
+        iv: iv.toString('hex'),
+        content: encrypted.toString('hex')
+    };
+};
+
+const decrypt = (hash) => {
+
+    const decipher = crypto.createDecipheriv(algorithm, secretKey, Buffer.from(hash.iv, 'hex'));
+
+    const decrpyted = Buffer.concat([decipher.update(Buffer.from(hash.content, 'hex')), decipher.final()]);
+
+    return decrpyted.toString();
+};
+
+
+
 
 var ApiKeyConnection = Mongoose.createConnection(
   "mongodb://localhost/apikeys",
@@ -272,7 +305,7 @@ var ApiKeyConnection = Mongoose.createConnection(
 const ApiKeySchema = new Mongoose.Schema({
   username: String,
   realUsername: String,
-  apiKey: String,
+  apiKey: Object,
 });
 
 const ApiKeyModel = ApiKeyConnection.model("apikey", ApiKeySchema);
@@ -280,6 +313,8 @@ const ApiKeyModel = ApiKeyConnection.model("apikey", ApiKeySchema);
 //this route can be used to post and also update the api-key
 
 app.post("/node/post-api-key", async (req, res, next) => {
+
+  const hash = encrypt(req.body.apiKey);
   try {
     if (req.body.username !== "leer" && req.body.isSignedIn) {
       // UPDATE OR INSERT NEW USER + KEY
@@ -287,7 +322,7 @@ app.post("/node/post-api-key", async (req, res, next) => {
       const update = {
         username: req.body.username,
         realUsername: req.body.realUsername,
-        apiKey: req.body.apiKey,
+        apiKey: hash
       };
 
       await ApiKeyModel.countDocuments(filter); // 0
@@ -309,11 +344,15 @@ app.post("/node/post-api-key", async (req, res, next) => {
   }
 });
 
+
 app.post("/node/get-api-key", async (req, res, next) => {
   if (req.body.isSignedIn) {
     try {
-      var apiKey = await ApiKeyModel.findOne({ username: req.body.username }, {}).exec();
-      res.send(apiKey);
+      var hash = await ApiKeyModel.findOne({ username: req.body.username }, {}).exec();
+      const apiKey = decrypt(hash.apiKey)
+      res.send({username : "admin",
+                apiKey : apiKey,
+                realUsername : "admin"});
     } catch (error) {
       res.status(500).send(error);
       return next(new Error(error));
@@ -359,6 +398,25 @@ app.post("/node/read-cookie", async (req, res, next) => {
 // <================================================================================>
 //                 MONGODB AUTHENTICATION AND APIKEY MANAGEMENT
 // <================================================================================>
+
+
+// eslint-disable-next-line
+var ApiKeyConnection = Mongoose.createConnection(
+  "mongodb://localhost/apikeys",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  }
+);
+
+const ApiKeySchema = new Mongoose.Schema({
+  username: String,
+  realUsername: String,
+  apiKey: Object,
+});
+
+const ApiKeyModel = ApiKeyConnection.model("apikey", ApiKeySchema);
 
 // Mongodb initialization to users database
 
@@ -552,28 +610,62 @@ app.post("/node/authenticate", async (req, res, next) => {
 
 // store and retrieve API key
 
-app.post("/node/post-api-key", async (req, res, next) => {
-  console.log("req", req.body);
+const crypto = require('crypto');
 
+const algorithm = 'aes-256-ctr';
+const secretKey = 'vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3';
+const iv = crypto.randomBytes(16);
+
+const encrypt = (text) => {
+
+    const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
+
+    const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
+
+    // return(encrypted.toString('hex'))
+
+    return {
+        iv: iv.toString('hex'),
+        content: encrypted.toString('hex')
+    };
+};
+
+const decrypt = (hash) => {
+
+    const decipher = crypto.createDecipheriv(algorithm, secretKey, Buffer.from(hash.iv, 'hex'));
+
+    const decrpyted = Buffer.concat([decipher.update(Buffer.from(hash.content, 'hex')), decipher.final()]);
+
+    return decrpyted.toString();
+};
+
+
+
+
+app.post("/node/post-api-key", async (req, res, next) => {
+  const hash = encrypt(req.body.apiKey);
   try {
-    if (req.body.username !== "leer") {
-      //user is still logged
-      const key = await UserModel.findOneAndUpdate(
-        { username: req.body.username },
-        { apiKey: req.body.apiKey },
-        req.body
-      ).exec();
-      res.json(key);
-      res.status(201).send();
+    if (req.body.username !== "leer" && req.body.isSignedIn) {
+      // UPDATE OR INSERT NEW USER + KEY
+      const filter = { username: req.body.username };
+      const update = {
+        username: req.body.username,
+        realUsername: req.body.realUsername,
+        apiKey: hash
+      };
+
+      await ApiKeyModel.countDocuments(filter); // 0
+
+      let apiKey = await ApiKeyModel.findOneAndUpdate(filter, update, {
+        new: true,
+        upsert: true, // Make this update into an upsert
+      });
+      res.status(201).send(apiKey);
     } else {
-      const key = await UserModel.updateMany(
-        //user has already logged-out, remove api-key from database
-        {},
-        { apiKey: req.body.apiKey },
-        req.body
-      ).exec();
-      res.json(key);
-      res.status(201).send();
+      // DELETE  USER + KEY
+      const filter = { realUsername: req.body.realUsername };
+      let apiKey = await ApiKeyModel.findOneAndDelete(filter, {});
+      res.status(201).send(apiKey);
     }
   } catch (error) {
     res.status(500).send(error);
@@ -581,12 +673,17 @@ app.post("/node/post-api-key", async (req, res, next) => {
   }
 });
 
+
 // connection to the apikeys database to retrieve the key
+
 app.post("/node/get-api-key", async (req, res, next) => {
   if (req.body.isSignedIn) {
     try {
-      var apiKey = await UserModel.findOne({ username: req.body.username }, {}).exec();
-      res.send(apiKey);
+      var hash = await ApiKeyModel.findOne({ username: req.body.username }, {}).exec();
+      const apiKey = decrypt(hash.apiKey)
+      res.send({username : "admin",
+                apiKey : apiKey,
+                realUsername : "admin"});
     } catch (error) {
       res.status(500).send(error);
       return next(new Error(error));
@@ -595,6 +692,7 @@ app.post("/node/get-api-key", async (req, res, next) => {
     res.status(404).send();
   }
 });
+
 
 // <================================================================================>
 //                           END MONGODB AUTHENTICATION AND APIKEY MANAMENT

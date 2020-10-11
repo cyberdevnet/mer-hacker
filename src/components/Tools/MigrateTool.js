@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { LazyLog } from "react-lazylog";
 import "../../styles/MigrateTool.css";
+import GetApiKey from "../../GetApiKey.js";
 import axios from "axios";
 import "ace-builds";
 import AceEditor from "react-ace";
@@ -45,6 +46,9 @@ export default function MigrateTool(ac) {
   const [serialNumbers, setserialNumbers] = useState([]);
   const { register, handleSubmit } = useForm();
 
+  let callApikey = GetApiKey(ac.dc.User, ac.dc.isSignedIn);
+  let apiKey = callApikey.apikey.current;
+
   const APIbody1 = {
     serial_numbers: `${serialNumbers}`,
     "X-CSRFToken": "frollo",
@@ -52,7 +56,7 @@ export default function MigrateTool(ac) {
   };
 
   const APIbody2 = {
-    "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
+    "X-Cisco-Meraki-API-Key": `${apiKey}`,
     "X-CSRFToken": "frollo",
     USER: `${ac.dc.User}`,
   };

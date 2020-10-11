@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import Select from "react-select";
+import GetApiKey from "../../GetApiKey.js";
 import "../../styles/FindPorts.css";
 
 export default function NetworkTopUsers(ac) {
@@ -18,6 +19,11 @@ export default function NetworkTopUsers(ac) {
   // eslint-disable-next-line
   const [macAddressafterTransf, setmacAddressafterTransf] = useState("");
   const [switchTimeInterval, setswitchTimeInterval] = useState(15);
+
+  let callApikey = GetApiKey(ac.dc.User, ac.dc.isSignedIn);
+  let apiKey = callApikey.apikey.current;
+
+  
 
   const isFirstRunMAC = useRef(true);
   useEffect(() => {
@@ -56,7 +62,7 @@ export default function NetworkTopUsers(ac) {
                 content_type: "application/json",
               },
               body: JSON.stringify({
-                "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
+                "X-Cisco-Meraki-API-Key": `${apiKey}`,
                 "X-CSRFToken": "frollo",
                 ORG_ID: `${ac.dc.organizationID}`,
                 MAC_ADDR: macAddress,
@@ -137,7 +143,7 @@ export default function NetworkTopUsers(ac) {
                 content_type: "application/json",
               },
               body: JSON.stringify({
-                "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
+                "X-Cisco-Meraki-API-Key": `${apiKey}`,
                 "X-CSRFToken": "frollo",
                 ORG_ID: `${ac.dc.organizationID}`,
                 MAC_ADDR: "",

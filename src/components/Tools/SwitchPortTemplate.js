@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import GetApiKey from "../../GetApiKey.js";
 import Select from "react-select";
 import CreateTemplateModal from "./CreateTemplateModal";
 import ShowTemplateModal from "./ShowTemplateModal";
@@ -120,8 +121,12 @@ export default function SwitchPortTemplate(ac) {
     }
   });
 
+  
+  let callApikey = GetApiKey(ac.dc.User, ac.dc.isSignedIn);
+  let apiKey = callApikey.apikey.current;
+
   const APIbody = {
-    "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
+    "X-Cisco-Meraki-API-Key": `${apiKey}`,
     organizationId: `${ac.dc.organizationID}`,
     SERIAL_NUM: `${switchSerial}`,
   };
@@ -414,7 +419,7 @@ export default function SwitchPortTemplate(ac) {
   };
 
   const APIbody2 = {
-    "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
+    "X-Cisco-Meraki-API-Key": `${apiKey}`,
     SERIAL_NUM: `${switchSerial}`,
     PAYLOAD: allSelectedPorts,
   };

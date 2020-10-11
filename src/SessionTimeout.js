@@ -117,6 +117,7 @@ export default function SessionTimeout(ac) {
       ac.dc.setorganization("Set Organization");
       ac.dc.setnetworkID(0);
       ac.dc.setnetwork("Networks");
+      ac.setdeviceList([]);
       ac.dc.setcollapseButton({ display: "none" });
       $(this).addClass("closed");
       $(".navbar-side").css({ left: "-260px" });
@@ -127,6 +128,7 @@ export default function SessionTimeout(ac) {
       axios.post("/node/deletebuild_meraki_switchconfigFiles", {});
       history.push("/login");
       postKey();
+      localStorage.clear();
 
     }
   };

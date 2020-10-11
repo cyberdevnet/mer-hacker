@@ -1,8 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
 import Chart from "react-apexcharts";
+import GetApiKey from "../../../GetApiKey.js";
 
 export default function ClientsusageHistory(ac) {
   const [chart, setchart] = useState(false);
+
+  
+  let callApikey = GetApiKey(ac.cc.User, ac.cc.isSignedIn);
+  let apiKey = callApikey.apikey.current;
+
+  const APIbody = {
+    "X-Cisco-Meraki-API-Key": `${apiKey}`,
+    organizationId: `${ac.cc.organizationID}`,
+    NET_ID: `${ac.cc.networkID}`,
+    CLIENT_ID: `${ac.dc.clientID}`,
+  };
 
   const usageHistory = {
     options: {
@@ -134,7 +146,7 @@ export default function ClientsusageHistory(ac) {
         headers: {
           content_type: "application/json",
         },
-        body: JSON.stringify(ac.dc.APIbody),
+        body: JSON.stringify(APIbody),
       }).then((response) => {
         return response.json;
       });

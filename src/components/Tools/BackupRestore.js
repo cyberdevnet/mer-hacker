@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { LazyLog } from "react-lazylog";
+import GetApiKey from "../../GetApiKey.js";
 import "../../styles/BackupRestore.css";
 import axios from "axios";
 import "ace-builds";
@@ -40,8 +41,11 @@ export default function BackupRestore(ac) {
   const [showLiveLogs, setshowLiveLogs] = useState(false);
   const [lazyLog, setlazyLog] = useState([]);
 
-  const APIbody2 = {
-    "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
+  let callApikey = GetApiKey(ac.dc.User, ac.dc.isSignedIn);
+  let apiKey = callApikey.apikey.current;
+
+  const APIbody = {
+    "X-Cisco-Meraki-API-Key": `${apiKey}`,
     "X-CSRFToken": "frollo",
     ARG_ORGNAME: `${ac.dc.organization}`,
     SERIAL_NUM: `${ac.dc.SNtopUsers}`,
@@ -160,7 +164,7 @@ export default function BackupRestore(ac) {
           headers: {
             content_type: "application/json",
           },
-          body: JSON.stringify(APIbody2),
+          body: JSON.stringify(APIbody),
         })
           .then((res) => res.json())
           .then(() => {
@@ -242,7 +246,7 @@ export default function BackupRestore(ac) {
         headers: {
           content_type: "application/json",
         },
-        body: JSON.stringify(APIbody2),
+        body: JSON.stringify(APIbody),
       })
         .then((res) => {
           console.log("POST response: ");
@@ -284,7 +288,7 @@ export default function BackupRestore(ac) {
         headers: {
           content_type: "application/json",
         },
-        body: JSON.stringify(APIbody2),
+        body: JSON.stringify(APIbody),
       }).then(() => {
         setloadingButtonRestoreSwitch(false);
       });

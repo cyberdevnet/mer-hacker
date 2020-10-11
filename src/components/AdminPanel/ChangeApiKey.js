@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Dialog from "@material-ui/core/Dialog";
 
+
 export default function ChangeApiKey(ac) {
   const [inputApiKey, setinputApiKey] = useState([]);
   const [loadingButton, setloadingButton] = useState(false);
@@ -9,6 +10,7 @@ export default function ChangeApiKey(ac) {
   const [triggerKey, settriggerKey] = useState(0);
 
   axios.defaults.withCredentials = true;
+
 
   useEffect(() => {
     if (inputApiKey.length < 1) {
@@ -35,10 +37,15 @@ export default function ChangeApiKey(ac) {
               apiKey: inputApiKey,
             })
             .then(() => {
-              ac.history.goBack();
+              // ac.history.goBack();
+              ac.setorganization("Set Organization");
+              ac.setnetworkID(0);
+              ac.setorganizationID(0);
+              ac.setnetwork("Networks");
+              ac.history.push("/home");
               setloadingButton(false);
-              getKey();
-            });
+            })
+
 
           return await postRes.json();
         } catch (error) {}
@@ -53,28 +60,6 @@ export default function ChangeApiKey(ac) {
     // eslint-disable-next-line
   }, [triggerKey]);
 
-  async function getKey() {
-    try {
-      fetch("/node/get-api-key", {
-        method: "post",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: `${ac.User}`,
-          isSignedIn: ac.isSignedIn,
-        }),
-      })
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          ac.setapiKey(data.apiKey);
-        })
-        .catch((error) => {});
-    } catch (e) {}
-  }
 
   const HandleApiKey = () => {
     settriggerKey(triggerKey + 1);
@@ -113,6 +98,7 @@ export default function ChangeApiKey(ac) {
               required="required"
             />
           </form>
+              <h6 style={{marginLeft: '78px', color: '#999'}}>Refresh the page after change</h6>
         </div>
         <div className="modal-footer" style={{ borderTop: "none" }}>
           <button

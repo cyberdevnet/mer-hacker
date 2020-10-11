@@ -36,8 +36,12 @@ export default function ChangeApiKeyAdmin(ac) {
             })
             .then(() => {
               ac.history.goBack();
+              ac.setorganization("Set Organization");
+              ac.setnetworkID(0);
+              ac.setorganizationID(0);
+              ac.setnetwork("Networks");
+              ac.history.push("/home");
               setloadingButton(false);
-              getKey();
             });
 
           return await postRes.json();
@@ -52,29 +56,6 @@ export default function ChangeApiKeyAdmin(ac) {
 
     // eslint-disable-next-line
   }, [triggerKey]);
-
-  async function getKey() {
-    try {
-      fetch("/node/get-api-key", {
-        method: "post",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: `${ac.User}`,
-          isSignedIn: ac.isSignedIn,
-        }),
-      })
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          ac.setapiKey(data.apiKey);
-        })
-        .catch((error) => {});
-    } catch (e) {}
-  }
 
   const HandleApiKey = () => {
     settriggerKey(triggerKey + 1);

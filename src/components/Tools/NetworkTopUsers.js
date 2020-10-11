@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import GetApiKey from "../../GetApiKey.js";
 import { CSVLink } from "react-csv";
 import { MDBDataTableV5 } from "mdbreact";
 import "../../styles/NetworkTopUsers.css";
@@ -11,8 +12,11 @@ export default function NetworkTopUsers(ac) {
   const [mapROW3, setmapROW3] = useState([]);
   const [errorMessage, seterrorMessage] = useState(null);
 
-  const APIbody2 = {
-    "X-Cisco-Meraki-API-Key": `${ac.dc.apiKey}`,
+  let callApikey = GetApiKey(ac.dc.User, ac.dc.isSignedIn);
+  let apiKey = callApikey.apikey.current;
+
+  const APIbody = {
+    "X-Cisco-Meraki-API-Key": `${apiKey}`,
     "X-CSRFToken": "frollo",
     ARG_ORGNAME: `${ac.dc.organization}`,
     SERIAL_NUM: `${ac.dc.SNtopUsers}`,
@@ -54,7 +58,7 @@ export default function NetworkTopUsers(ac) {
                 headers: {
                   content_type: "application/json",
                 },
-                body: JSON.stringify(APIbody2),
+                body: JSON.stringify(APIbody),
               }).then((response) => {
                 return response.json;
               });
@@ -66,7 +70,7 @@ export default function NetworkTopUsers(ac) {
                 headers: {
                   content_type: "application/json",
                 },
-                body: JSON.stringify(APIbody2),
+                body: JSON.stringify(APIbody),
               })
                 .then((res) => res.json())
                 .then((data) => {
@@ -147,11 +151,7 @@ export default function NetworkTopUsers(ac) {
                   }
                 })
                 .then(() => {
-                  if (
-                    mapROW1.length === 0 ||
-                    mapROW2.length === 0 ||
-                    mapROW3.length === 0
-                  ) {
+                  if (mapROW1.length === 0 || mapROW2.length === 0 || mapROW3.length === 0) {
                     settrigger(trigger + 1);
                   }
                 })

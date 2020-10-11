@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ContentLoader from "react-content-loader";
+import GetApiKey from "../../GetApiKey.js";
+
 import {
   VictoryBar,
   VictoryChart,
@@ -12,6 +14,8 @@ import "../../styles/Dashboard.css";
 
 export default function TotalDevices(ac) {
   const [showTotDevChart, setshowTotDevChart] = useState(false);
+  const [trigger, settrigger] = useState(0);
+
 
   // eslint-disable-next-line
   let [deviceStatusData, setdeviceStatusData] = useState([
@@ -39,15 +43,33 @@ export default function TotalDevices(ac) {
     </ContentLoader>
   );
 
+  let callApikey = GetApiKey(ac.User, ac.isSignedIn);
+  let apiKey = callApikey.apikey.current;
+
   const APIbody = {
-    "X-Cisco-Meraki-API-Key": `${ac.apiKey}`,
+    "X-Cisco-Meraki-API-Key": `${apiKey}`,
     organizationId: `${ac.organizationID}`,
     NET_ID: `${ac.networkID}`,
   };
 
   useEffect(() => {
+    setTimeout(() => {
+      settrigger(trigger + 1);
+    }, 2000);
+    return () => {};
+    // eslint-disable-next-line
+  }, []);
+
+  const isFirstRun = useRef(true);
+
+
+  useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    }
     async function callDeviceStatus() {
       if (ac.organizationID !== 0) {
         try {
@@ -132,7 +154,7 @@ export default function TotalDevices(ac) {
       abortController.abort();
     };
     // eslint-disable-next-line
-  }, [ac.organizationID]);
+  }, [ac.organizationID, trigger]);
 
   return (
     <div>

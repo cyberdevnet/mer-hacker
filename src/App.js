@@ -2,12 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import Template from "./components/Template";
 import { BrowserRouter as Router } from "react-router-dom";
 import { useLocalStorage } from "./useLocalStorage";
+import GetApiKey from "./GetApiKey";
 
 const MainContext = React.createContext(null);
 
 function App() {
-  // eslint-disable-next-line
-  // const [apiKey, setapiKey] = useState([]);
   const [Password, setPassword] = useState([]);
   const [triggerGetOrg, settriggerGetOrg] = useState(0);
   const [triggerSelectOrg, settriggerSelectOrg] = useState(0);
@@ -17,7 +16,6 @@ function App() {
   const [totaldeviceStatusList, settotaldeviceStatusList] = useState(0);
   const [allNetworksIDList, setallNetworksIDList] = useState([]);
   const [combindeNetworksIDList, setcombindeNetworksIDList] = useState([]);
-  const [deviceList, setdeviceList] = useState([]);
   const [device, setdevice] = useState([]);
   const [hostList, sethostList] = useState([]);
   const [SNtopUsers, setSNtopUsers] = useState("");
@@ -95,35 +93,16 @@ function App() {
   const [networkList, setnetworkList] = useLocalStorage("my-networkList", []);
   const [totalDevices, settotalDevices] = useLocalStorage("my-totalDevices", 0);
   const [timeZone, settimeZone] = useLocalStorage("my-timeZone", 0);
-  const [apiKey, setapiKey] = useLocalStorage("my-apiKey", []);
+  const [deviceList, setdeviceList] = useLocalStorage("my-deviceList", []);
 
   // <================================================================================>
   //                            END LOCAL STORAGE
   // <================================================================================>
 
-  // automatic get key from server on-render and on-refresh
-  useEffect(() => {
-    async function getKey() {
-      fetch("/node/get-api-key", {
-        method: "post",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username: `${User}`, isSignedIn: isSignedIn }),
-      })
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          setapiKey(data.apiKey);
-        })
-        .catch((error) => {});
-    }
 
-    getKey();
-    // eslint-disable-next-line
-  }, []);
+
+  let callApikey = GetApiKey(User, isSignedIn);
+  let apiKey = callApikey.apikey.current
 
   const APIbody = {
     "X-Cisco-Meraki-API-Key": `${apiKey}`,
@@ -131,6 +110,7 @@ function App() {
     NET_ID: `${networkID}`,
     USER: `${User}`,
   };
+
 
   const isFirstRunOrg = useRef(true);
 
@@ -141,11 +121,12 @@ function App() {
       isFirstRunOrg.current = false;
       return;
     }
+
     async function callOrganization() {
       setloadingOrg(true);
-      setnetworkID(0)
-      setnetwork('Networks')
-      setnetworkList([])
+      setnetworkID(0);
+      setnetwork("Networks");
+      setnetworkList([]);
       fetch("/flask/organizations", {
         method: ["POST"],
         cache: "no-cache",
@@ -271,7 +252,9 @@ function App() {
                 setallNetworksIDList(networkIDList);
               });
               setnetworkList(data.networks);
-              settimeZone(data.networks[0].timeZone);
+              if (data.networks.length > 0) {
+                settimeZone(data.networks[0].timeZone);
+              }
               setloadingNet(false);
             }
           });
@@ -378,8 +361,6 @@ function App() {
     settimeZone,
     network,
     setnetwork,
-    apiKey,
-    setapiKey,
     inputKey,
     setinputKey,
     inputConfKey,

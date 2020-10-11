@@ -4,6 +4,7 @@ import TopologyModal from "./TopologyModal";
 import TopologyVPNModal from "./TopologyVPNModal";
 import Select from "react-select";
 import Tree from "react-d3-tree";
+import GetApiKey from "../../../GetApiKey.js";
 import "react-tree-graph/dist/style.css";
 import "../../../styles/Topology.css";
 
@@ -43,6 +44,9 @@ export default function Topology(ac) {
   const [myVPNTreeData, setmyVPNTreeData] = useState([]);
   const [nodeListID, setnodeListID] = useState([]);
   const [nodeVPNListID, setnodeVPNListID] = useState([]);
+
+  let callApikey = GetApiKey(ac.User, ac.isSignedIn);
+  let apiKey = callApikey.apikey.current;
 
   const firewallSVG = "https://img.icons8.com/office/52/000000/firewall.png";
   const switchSVG = "https://img.icons8.com/dusk/64/000000/switch.png";
@@ -130,7 +134,7 @@ export default function Topology(ac) {
                 content_type: "application/json",
               },
               body: JSON.stringify({
-                "X-Cisco-Meraki-API-Key": `${ac.apiKey}`,
+                "X-Cisco-Meraki-API-Key": `${apiKey}`,
                 NET_ID: `${ac.networkID}`,
                 SERIAL_NUM: `${deviceSerial}`,
               }),
@@ -327,7 +331,7 @@ export default function Topology(ac) {
                 content_type: "application/json",
               },
               body: JSON.stringify({
-                "X-Cisco-Meraki-API-Key": `${ac.apiKey}`,
+                "X-Cisco-Meraki-API-Key": `${apiKey}`,
                 NET_ID_LIST: NET_ID_LIST,
               }),
             }).then((response) => {
@@ -518,7 +522,7 @@ export default function Topology(ac) {
           content_type: "application/json",
         },
         body: JSON.stringify({
-          "X-Cisco-Meraki-API-Key": `${ac.apiKey}`,
+          "X-Cisco-Meraki-API-Key": `${apiKey}`,
           NET_ID: `${ac.networkID}`,
           CLIENT_ID: `${modalModel[index].id}`,
         }),

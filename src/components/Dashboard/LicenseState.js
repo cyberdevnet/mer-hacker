@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ContentLoader from "react-content-loader";
+import GetApiKey from "../../GetApiKey.js";
 
 import "../../styles/Dashboard.css";
 
@@ -8,12 +9,24 @@ export default function LicenseState(ac) {
   // eslint-disable-next-line
   const [LicenceDevices, setLicenceDevices] = useState([]);
   const [showLicense, setshowLicense] = useState(false);
+  const [trigger, settrigger] = useState(0);
+
+  let callApikey = GetApiKey(ac.User, ac.isSignedIn);
+  let apiKey = callApikey.apikey.current;
 
   const APIbody = {
-    "X-Cisco-Meraki-API-Key": `${ac.apiKey}`,
+    "X-Cisco-Meraki-API-Key": `${apiKey}`,
     organizationId: `${ac.organizationID}`,
     NET_ID: `${ac.networkID}`,
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      settrigger(trigger + 1);
+    }, 2000);
+    return () => {};
+    // eslint-disable-next-line
+  }, []);
 
   const MyLoader = (props) => (
     <ContentLoader
@@ -41,9 +54,15 @@ export default function LicenseState(ac) {
     </ContentLoader>
   );
 
+  const isFirstRun = useRef(true);
+
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    }
     async function LicenseStatus() {
       if (ac.organizationID !== 0) {
         try {
@@ -93,7 +112,7 @@ export default function LicenseState(ac) {
       abortController.abort();
     };
     // eslint-disable-next-line
-  }, [ac.organizationID]);
+  }, [ac.organizationID, trigger]);
 
   return (
     <div>

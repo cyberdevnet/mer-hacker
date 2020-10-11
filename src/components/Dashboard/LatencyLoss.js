@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import GetApiKey from "../../GetApiKey.js";
+
 import ContentLoader from "react-content-loader";
 import {
   VictoryChart,
@@ -16,6 +18,8 @@ export default function LatencyLoss(ac) {
   const [latencyLossText, setlatencyLossText] = useState("Latency/Loss");
   const [latencyLossColor, setlatencyLossColor] = useState(["#FABE28", "#1ABC9C"]);
   const [showChart, setshowChart] = useState(false);
+  const [trigger, settrigger] = useState(0);
+
 
   const MyLoader = (props) => (
     <ContentLoader
@@ -51,22 +55,34 @@ export default function LatencyLoss(ac) {
     { x: "5min", y: 15 },
   ]);
 
+  let callApikey = GetApiKey(ac.User, ac.isSignedIn);
+  let apiKey = callApikey.apikey.current;
+
   const APIbody = {
-    "X-Cisco-Meraki-API-Key": `${ac.apiKey}`,
+    "X-Cisco-Meraki-API-Key": `${apiKey}`,
     organizationId: `${ac.organizationID}`,
     NET_ID: `${ac.networkID}`,
   };
 
-  //   const isFirstRunuplink_loss = useRef(true);
+  
+  useEffect(() => {
+    setTimeout(() => {
+      settrigger(trigger + 1);
+    }, 2000);
+    return () => {};
+    // eslint-disable-next-line
+  }, []);
+
+  const isFirstRunuplink_loss = useRef(true);
 
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
     let interval = null;
-    // if (isFirstRunuplink_loss.current) {
-    //   isFirstRunuplink_loss.current = false;
-    //   return;
-    // }
+    if (isFirstRunuplink_loss.current) {
+      isFirstRunuplink_loss.current = false;
+      return;
+    }
     async function UplinkStatus() {
       if (ac.organizationID !== 0 && ac.networkID !== 0) {
         try {
@@ -170,7 +186,7 @@ export default function LatencyLoss(ac) {
       clearInterval(interval);
     };
     // eslint-disable-next-line
-  }, [ac.networkID]);
+  }, [ac.networkID, trigger]);
 
   return (
     <div>

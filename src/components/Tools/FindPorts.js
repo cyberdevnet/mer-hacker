@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Select from "react-select";
 import GetApiKey from "../../GetApiKey.js";
+import SkeletonTable from "../SkeletonTable";
 import "../../styles/FindPorts.css";
 
 export default function NetworkTopUsers(ac) {
@@ -19,6 +20,7 @@ export default function NetworkTopUsers(ac) {
   // eslint-disable-next-line
   const [macAddressafterTransf, setmacAddressafterTransf] = useState("");
   const [switchTimeInterval, setswitchTimeInterval] = useState(15);
+  const [loading, setloading] = useState(false);
 
   let callApikey = GetApiKey(ac.dc.User, ac.dc.isSignedIn);
   let apiKey = callApikey.apikey.current;
@@ -52,7 +54,9 @@ export default function NetworkTopUsers(ac) {
               .toUpperCase()
               .slice(0, -1);
 
-            ac.dc.setloadingButton(true);
+            setloading(true);
+            setshowError(false)
+            seterrorMessageMAC(null)
 
             fetch("/flask/find_ports", {
               signal: signal,
@@ -84,7 +88,7 @@ export default function NetworkTopUsers(ac) {
                 }
               })
               .then(() => setshowtable(true))
-              .then(() => ac.dc.setloadingButton(false));
+              .then(() => setloading(false));
           } else {
             seterrorMessageMAC(
               <div className="form-input-error-msg alert alert-danger">
@@ -133,7 +137,9 @@ export default function NetworkTopUsers(ac) {
             seterrorMessageMAC_IP(null);
             const validIP = IPAddress;
 
-            ac.dc.setloadingButton(true);
+            setloading(true);
+            setshowError(false)
+            seterrorMessageIP(null)
 
             fetch("/flask/find_ports", {
               signal: signal,
@@ -155,10 +161,10 @@ export default function NetworkTopUsers(ac) {
               .then((data) => setfindPort(data.data))
 
               .then(() => setshowtable(true))
-              .then(() => ac.dc.setloadingButton(false))
+              .then(() => setloading(false))
               .catch((err) => {
                 console.log("this is the err: ", err);
-                ac.dc.setloadingButton(false);
+                setloading(false);
               });
           } else {
             seterrorMessageIP(
@@ -344,17 +350,17 @@ export default function NetworkTopUsers(ac) {
                 id="runButton"
                 type="submit"
                 className="btn btn-primary"
-                onClick={!ac.dc.loadingButton ? handleTopUsers : null}
-                disabled={ac.dc.loadingButton}
+                onClick={!loading ? handleTopUsers : null}
+                disabled={loading}
               >
-                {ac.dc.loadingButton && (
+                {loading && (
                   <i
                     className="fa fa-refresh fa-spin"
                     style={{ marginRight: "5px" }}
                   />
                 )}
-                {ac.dc.loadingButton && <span>Loading Data</span>}
-                {!ac.dc.loadingButton && <span>RUN</span>}
+                {loading && <span>Loading</span>}
+                {!loading && <span>RUN</span>}
               </button>
             </div>
           </div>
@@ -411,7 +417,9 @@ export default function NetworkTopUsers(ac) {
                 </div>
               </div>
             ) : (
-              <div></div>
+              <div>
+                <div>{loading ? <SkeletonTable /> : <div></div>}</div>
+              </div>
             )}
           </div>
         </div>

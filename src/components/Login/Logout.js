@@ -77,6 +77,7 @@ export default function Logout(ac, props) {
     ac.setorganizationID(0);
     ac.setnetwork("Networks");
     ac.setdeviceList([]);
+    ac.setSNtopUsers("");
     ac.setcollapseButton({ display: "none" });
     $(this).addClass("closed");
     $(".navbar-side").css({ left: "-260px" });

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import GetAllClientsModal from "./GetAllClientsModal";
 import GetApiKey from "../../GetApiKey.js";
+import SkeletonTable from "../SkeletonTable";
 import ClientsusageHistory from "./ClientCharts/ClientsusageHistory";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, {
@@ -339,11 +340,7 @@ export default function SwitchPortTemplate(ac) {
         <div className="col-xs-12">
           <div className="panel panel-default">
             <div className="panel-body">
-              <div
-                className="panel-group"
-                style={{ marginBottom: "-5px" }}
-                id="accordion"
-              >
+              <div className="panel-group" style={{ marginBottom: "-5px" }} id="accordion">
                 <div className="panel panel-default">
                   <div className="panel-heading">
                     <h4 className="panel-title-description">
@@ -361,18 +358,13 @@ export default function SwitchPortTemplate(ac) {
                     <div className="panel-body">
                       <dl>
                         <dt>
-                          This scripts returns all the clients active in the
-                          last 1 hour on a network.
+                          This scripts returns all the clients active in the last 1 hour on a
+                          network.
                         </dt>
                       </dl>
                       <ul>
-                        <li>
-                          Click on a row to expand its content and display more
-                          informations
-                        </li>
-                        <li>
-                          Double Click on a row to display the client's details
-                        </li>
+                        <li>Click on a row to expand its content and display more informations</li>
+                        <li>Double Click on a row to display the client's details</li>
                         <li>The table is exportable in CSV format</li>
                       </ul>
                     </div>
@@ -385,12 +377,7 @@ export default function SwitchPortTemplate(ac) {
                 onClick={!loading ? handleClients : null}
                 disabled={loading}
               >
-                {loading && (
-                  <i
-                    className="fa fa-refresh fa-spin"
-                    style={{ marginRight: "5px" }}
-                  />
-                )}
+                {loading && <i className="fa fa-refresh fa-spin" style={{ marginRight: "5px" }} />}
                 {loading && <span>Loading Data</span>}
                 {!loading && <span>RUN</span>}
               </button>
@@ -403,22 +390,11 @@ export default function SwitchPortTemplate(ac) {
           <div className="panel panel-default">
             {showtable ? (
               <div className="bootstrap-table-panel">
-                <ToolkitProvider
-                  search
-                  keyField="mac"
-                  data={dataClients.rows}
-                  columns={columns}
-                >
+                <ToolkitProvider search keyField="mac" data={dataClients.rows} columns={columns}>
                   {(props) => (
                     <div>
-                      <SearchBar
-                        style={{ width: "299px" }}
-                        {...props.searchProps}
-                      />
-                      <ExportCSVButton
-                        className="export-csv"
-                        {...props.csvProps}
-                      >
+                      <SearchBar style={{ width: "299px" }} {...props.searchProps} />
+                      <ExportCSVButton className="export-csv" {...props.csvProps}>
                         Export CSV
                       </ExportCSVButton>
                       <BootstrapTable
@@ -433,16 +409,14 @@ export default function SwitchPortTemplate(ac) {
                 </ToolkitProvider>
               </div>
             ) : (
-              <div></div>
+              <div>
+                <div>{loading ? <SkeletonTable /> : <div></div>}</div>
+              </div>
             )}
           </div>
         </div>
       </div>
-      {showclientModal ? (
-        <GetAllClientsModal dc={dc} cc={ac.dc} />
-      ) : (
-        <div></div>
-      )}
+      {showclientModal ? <GetAllClientsModal dc={dc} cc={ac.dc} /> : <div></div>}
     </div>
   );
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { CSVLink } from "react-csv";
 import { MDBDataTableV5 } from "mdbreact";
 import GetApiKey from '../../GetApiKey.js'
+import SkeletonTable from "../SkeletonTable";
 
 import "../../styles/Dashboard.css";
 
@@ -238,7 +239,9 @@ export default function DeviceStatusTable(ac) {
           />
         </div>
       ) : (
-        <div></div>
+        <div>
+          <SkeletonTable />
+        </div>
       )}
     </div>
   );

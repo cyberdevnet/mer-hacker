@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import GetApiKey from "../../GetApiKey.js";
+import SkeletonTable from "../SkeletonTable";
 import ToolkitProvider, {
   Search,
   CSVExport,
@@ -336,7 +337,9 @@ export default function GetAllOrganizationSubnets(ac) {
                 </div>
               </div>
             ) : (
-              <div></div>
+              <div>
+                <div>{loading ? <SkeletonTable /> : <div></div>}</div>
+              </div>
             )}
           </div>
         </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import GetApiKey from "../../GetApiKey.js";
+import SkeletonTable from "../SkeletonTable";
 import { CSVLink } from "react-csv";
 import { MDBDataTableV5 } from "mdbreact";
 import "../../styles/NetworkTopUsers.css";
@@ -11,6 +12,8 @@ export default function NetworkTopUsers(ac) {
   const [mapROW2, setmapROW2] = useState([]);
   const [mapROW3, setmapROW3] = useState([]);
   const [errorMessage, seterrorMessage] = useState(null);
+  const [loading, setloading] = useState(false);
+  
 
   let callApikey = GetApiKey(ac.dc.User, ac.dc.isSignedIn);
   let apiKey = callApikey.apikey.current;
@@ -19,7 +22,7 @@ export default function NetworkTopUsers(ac) {
     "X-Cisco-Meraki-API-Key": `${apiKey}`,
     "X-CSRFToken": "frollo",
     ARG_ORGNAME: `${ac.dc.organization}`,
-    SERIAL_NUM: `${ac.dc.SNtopUsers}`,
+    SERIAL_NUM: `${ac.dc.SNtopUsers[0]}`,
     NET_ID: `${ac.dc.networkID}`,
     NET_NAME: `${ac.dc.network}`,
   };
@@ -45,9 +48,9 @@ export default function NetworkTopUsers(ac) {
     async function APIcall() {
       if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
         if (trigger < 4) {
-          if (ac.dc.SNtopUsers) {
+          if (ac.dc.SNtopUsers[0]) {
             try {
-              ac.dc.setloadingButton(true);
+              setloading(true);
               ac.dc.setflashMessages([]);
               seterrorMessage([]);
 
@@ -157,7 +160,7 @@ export default function NetworkTopUsers(ac) {
                 })
                 .then(() => {
                   if (mapROW1.length > 0) {
-                    ac.dc.setloadingButton(false);
+                    setloading(false);
                   }
                 })
                 .then(() => {
@@ -166,11 +169,11 @@ export default function NetworkTopUsers(ac) {
             } catch (err) {
               if (err) {
                 console.log("Error: ", err);
-                ac.dc.setloadingButton(false);
+                setloading(false);
               }
             }
           } else {
-            ac.dc.setloadingButton(false);
+            setloading(false);
             seterrorMessage(
               <div className="form-input-error-msg alert alert-danger">
                 <span className="glyphicon glyphicon-exclamation-sign"></span>
@@ -180,7 +183,7 @@ export default function NetworkTopUsers(ac) {
             );
           }
         } else {
-          ac.dc.setloadingButton(false);
+          setloading(false);
 
           seterrorMessage(
             <div className="form-input-error-msg alert alert-danger">
@@ -403,9 +406,8 @@ export default function NetworkTopUsers(ac) {
                     <div className="panel-body">
                       <dl>
                         <dt>
-                          This script finds the top 10 heaviest bandwidth users
-                          of an MX security appliance in the last 10, 30 and 60
-                          minutes.
+                          This script finds the top 10 heaviest bandwidth users of an MX security
+                          appliance in the last 10, 30 and 60 minutes.
                         </dt>
                       </dl>
                     </div>
@@ -419,7 +421,7 @@ export default function NetworkTopUsers(ac) {
                   <li>
                     <h5>Organization: {ac.dc.organization}</h5>
                     <h5>Network: {ac.dc.network}</h5>
-                    <h5>MX Serial Number: {ac.dc.SNtopUsers}</h5>
+                    <h5>MX Serial Number: {ac.dc.SNtopUsers[0]}</h5>
                   </li>
                 </ul>
               </div>
@@ -427,17 +429,14 @@ export default function NetworkTopUsers(ac) {
               <button
                 id="runButton"
                 className="btn btn-primary"
-                onClick={!ac.dc.loadingButton ? handleTopUsers : null}
-                disabled={ac.dc.loadingButton}
+                onClick={!loading ? handleTopUsers : null}
+                disabled={loading}
               >
-                {ac.dc.loadingButton && (
-                  <i
-                    className="fa fa-refresh fa-spin"
-                    style={{ marginRight: "5px" }}
-                  />
+                {loading && (
+                  <i className="fa fa-refresh fa-spin" style={{ marginRight: "5px" }} />
                 )}
-                {ac.dc.loadingButton && <span>Loading Data</span>}
-                {!ac.dc.loadingButton && <span>RUN</span>}
+                {loading && <span>Loading</span>}
+                {!loading && <span>RUN</span>}
               </button>
             </div>
           </div>
@@ -449,9 +448,7 @@ export default function NetworkTopUsers(ac) {
             {showtable ? (
               <div>
                 <div className="panel-body">
-                  <h4 className="topuser-description">
-                    Top 10 hosts in the last 10 minutes
-                  </h4>
+                  <h4 className="topuser-description">Top 10 hosts in the last 10 minutes</h4>
                   <CSVLink data={mapROW1} separator={","}>
                     <button className="btnCSV" color="primary">
                       Download CSV
@@ -460,7 +457,7 @@ export default function NetworkTopUsers(ac) {
 
                   <MDBDataTableV5
                     hover
-                    sorting={false}
+                    sorting="false"
                     searching={false}
                     bordered
                     striped
@@ -470,9 +467,7 @@ export default function NetworkTopUsers(ac) {
                   />
                 </div>
                 <div className="panel-body">
-                  <h4 className="topuser-description">
-                    Top 10 hosts in the last 30 minutes
-                  </h4>
+                  <h4 className="topuser-description">Top 10 hosts in the last 30 minutes</h4>
                   <CSVLink data={mapROW2} separator={","}>
                     <button className="btnCSV" color="primary">
                       Download CSV
@@ -481,7 +476,7 @@ export default function NetworkTopUsers(ac) {
 
                   <MDBDataTableV5
                     hover
-                    sorting={false}
+                    sorting="false"
                     searching={false}
                     bordered
                     striped
@@ -491,9 +486,7 @@ export default function NetworkTopUsers(ac) {
                   />
                 </div>
                 <div className="panel-body">
-                  <h4 className="topuser-description">
-                    Top 10 hosts in the last 60 minutes
-                  </h4>
+                  <h4 className="topuser-description">Top 10 hosts in the last 60 minutes</h4>
                   <CSVLink data={mapROW3} separator={","}>
                     <button className="btnCSV" color="primary">
                       Download CSV
@@ -502,7 +495,7 @@ export default function NetworkTopUsers(ac) {
 
                   <MDBDataTableV5
                     hover
-                    sorting={false}
+                    sorting="false"
                     searching={false}
                     bordered
                     striped
@@ -513,7 +506,9 @@ export default function NetworkTopUsers(ac) {
                 </div>
               </div>
             ) : (
-              <div></div>
+              <div>
+                <div>{loading ? <SkeletonTable /> : <div></div>}</div>
+              </div>
             )}
           </div>
         </div>

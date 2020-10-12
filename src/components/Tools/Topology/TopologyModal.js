@@ -13,6 +13,9 @@ export default function TopologyModal(ac) {
     if (IDList < ac.dc.nodeslist.length) {
       ac.dc.setnodeListID(IDList + 1);
       ac.dc.APIcallClient(IDList);
+      ac.dc.setswitchTopologyModal(false);
+      ac.dc.setshowSkeletonTopologyModal(true);
+
     }
   };
 
@@ -20,6 +23,9 @@ export default function TopologyModal(ac) {
     if (IDList > 0) {
       ac.dc.setnodeListID(IDList - 1);
       ac.dc.APIcallClient(IDList);
+      ac.dc.setswitchTopologyModal(false);
+      ac.dc.setshowSkeletonTopologyModal(true);
+
     }
   };
   return (

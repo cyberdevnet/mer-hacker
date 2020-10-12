@@ -118,6 +118,7 @@ export default function SessionTimeout(ac) {
       ac.dc.setnetwork("Networks");
       ac.dc.setdeviceList([]);
       ac.dc.setUser([]);
+      ac.dc.setSNtopUsers("");
       ac.dc.setisOrgSelected(false);
       ac.dc.setisNetSelected(false);
       ac.dc.setisUsingADauth(false);

@@ -3,6 +3,7 @@ import Select from "react-select";
 import GetApiKey from "../../GetApiKey.js";
 import SwitchPortConfig from "./SwitchPortTemplates/SwitchPortConfig";
 import BootstrapTable from "react-bootstrap-table-next";
+import SkeletonTable from "../SkeletonTable";
 import ToolkitProvider, {
   Search,
   CSVExport,
@@ -14,7 +15,6 @@ export default function GetAllSwitchPorts(ac) {
   const [showtable, setshowtable] = useState(false);
   const [trigger, settrigger] = useState(0);
   const [retryCounter, setretryCounter] = useState(0);
-  // eslint-disable-next-line
   const [loading, setloading] = useState(false);
   const [refreshDisabled, setrefreshDisabled] = useState(true);
   const [loadingDevices, setloadingDevices] = useState(false);
@@ -76,6 +76,8 @@ export default function GetAllSwitchPorts(ac) {
     async function APIcall() {
       if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
         setshowtable(false);
+        setloading(true);
+        setrefreshDisabled(true);
         fetch("/flask/device_switchports", {
           signal: signal,
           method: ["POST"],
@@ -173,6 +175,7 @@ export default function GetAllSwitchPorts(ac) {
           .then(() => {
             if (dataPorts.length !== 0) {
               setshowtable(true);
+              setloading(false);
               ac.dc.setflashMessages([]);
               setrefreshDisabled(false);
             } else {
@@ -203,6 +206,7 @@ export default function GetAllSwitchPorts(ac) {
       abortController.abort();
       setmapRows([]);
       setshowtable(false);
+      setloading(false);
     };
     // eslint-disable-next-line
   }, [trigger]);
@@ -324,17 +328,11 @@ export default function GetAllSwitchPorts(ac) {
                   <div id="collapseOne" className="panel-collapse collapse">
                     <div className="panel-body">
                       <dl>
-                        <dt>
-                          This scripts returns all the Switchports of a selected
-                          Switch.
-                        </dt>
+                        <dt>This scripts returns all the Switchports of a selected Switch.</dt>
                         <br />
                       </dl>
                       <ul>
-                        <li>
-                          Double Click on a row to display the switchport
-                          configuration
-                        </li>
+                        <li>Double Click on a row to display the switchport configuration</li>
                         <li>The table is exportable in CSV format</li>
                       </ul>
                     </div>
@@ -348,9 +346,7 @@ export default function GetAllSwitchPorts(ac) {
                   placeholder="Select Switch"
                   classNamePrefix="topology"
                   isLoading={loadingDevices}
-                  value={Switches.filter(
-                    ({ value }) => value === switchesSelectKey.mySelectKey
-                  )}
+                  value={Switches.filter(({ value }) => value === switchesSelectKey.mySelectKey)}
                   getOptionLabel={({ label }) => label}
                   getOptionValue={({ value }) => value}
                   onChange={HandleDevices}
@@ -376,12 +372,9 @@ export default function GetAllSwitchPorts(ac) {
                   onClick={HandleDevices}
                 >
                   {loading && (
-                    <i
-                      className="fa fa-refresh fa-spin"
-                      style={{ marginRight: "5px" }}
-                    />
+                    <i className="fa fa-refresh fa-spin" style={{ marginRight: "5px" }} />
                   )}
-                  {loading && <span>Refresh</span>}
+                  {loading && <span>Loading</span>}
                   {!loading && <span>Refresh</span>}
                 </button>
               </div>
@@ -394,37 +387,23 @@ export default function GetAllSwitchPorts(ac) {
           <div className="panel panel-default">
             {showtable ? (
               <div className="bootstrap-table-panel">
-                <ToolkitProvider
-                  search
-                  keyField="number"
-                  data={dataPorts.rows}
-                  columns={columns}
-                >
+                <ToolkitProvider search keyField="number" data={dataPorts.rows} columns={columns}>
                   {(props) => (
                     <div>
-                      <SearchBar
-                        style={{ width: "299px" }}
-                        {...props.searchProps}
-                      />
-                      <ExportCSVButton
-                        className="export-csv"
-                        {...props.csvProps}
-                      >
+                      <SearchBar style={{ width: "299px" }} {...props.searchProps} />
+                      <ExportCSVButton className="export-csv" {...props.csvProps}>
                         Export CSV
                       </ExportCSVButton>
 
-                      <BootstrapTable
-                        {...props.baseProps}
-                        rowEvents={rowEvents}
-                        striped
-                        hover
-                      />
+                      <BootstrapTable {...props.baseProps} rowEvents={rowEvents} striped hover />
                     </div>
                   )}
                 </ToolkitProvider>
               </div>
             ) : (
-              <div></div>
+              <div>
+                <div>{loading ? <SkeletonTable /> : <div></div>}</div>
+              </div>
             )}
           </div>
         </div>

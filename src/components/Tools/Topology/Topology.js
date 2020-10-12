@@ -5,12 +5,15 @@ import TopologyVPNModal from "./TopologyVPNModal";
 import Select from "react-select";
 import Tree from "react-d3-tree";
 import GetApiKey from "../../../GetApiKey.js";
+import SkeletonLoading from "./SkeletonLoading";
+import SkeletonTopologyModal from "./SkeletonTopologyModal";
 import "react-tree-graph/dist/style.css";
 import "../../../styles/Topology.css";
 
 export default function Topology(ac) {
   const [switchTopologyModal, setswitchTopologyModal] = useState(false);
   const [switchTopologyVPNModal, setswitchTopologyVPNModal] = useState(false);
+  const [showSkeletonTopologyModal, setshowSkeletonTopologyModal] = useState(false);
   const [trigger, settrigger] = useState(1);
   const [loading, setloading] = useState(false);
   const [loadingFilterNode, setloadingFilterNode] = useState(false);
@@ -22,6 +25,7 @@ export default function Topology(ac) {
   const [sourceDeviceModel, setsourceDeviceModel] = useState([]);
   const [graph, setgraph] = useState([]);
   const [tree, settree] = useState([]);
+  const [skeleton, setskeleton] = useState( <div></div> );
   const [showFilter, setshowFilter] = useState(false);
   const [showVPNFilter, setshowVPNFilter] = useState(false);
   const [modalModel, setmodalModel] = useState([]);
@@ -125,6 +129,9 @@ export default function Topology(ac) {
           setmyTreeData([]);
           setmodalModel([]);
           setloading(true);
+          setgraph([])
+          settree([])
+          setskeleton( <SkeletonLoading/> )
           let Device_Row = [];
           try {
             await fetch("/flask/device_clients", {
@@ -302,6 +309,7 @@ export default function Topology(ac) {
                 );
                 setshowFilter(true);
                 setloading(false);
+                setskeleton( <div></div> )
               });
           } catch (err) {
             console.log("This is the error:", err);
@@ -322,6 +330,9 @@ export default function Topology(ac) {
             NET_NAME_LIST.push(item.name);
           });
           setloading(true);
+          setgraph([])
+          settree([])
+          setskeleton( <SkeletonLoading/> )
 
           try {
             await fetch("/flask/site2site", {
@@ -471,9 +482,11 @@ export default function Topology(ac) {
                     </div>
                   );
                   setloading(false);
+                  setskeleton( <div></div> )
                   setshowVPNFilter(true);
                 } else {
                   setloading(false);
+                  setskeleton( <div></div> )
                   ac.setflashMessages(
                     <div className="form-input-error-msg alert alert-danger">
                       <span className="glyphicon glyphicon-exclamation-sign"></span>
@@ -502,6 +515,7 @@ export default function Topology(ac) {
     return function cleanup() {
       abortController.abort();
       setloading(false);
+      setskeleton( <div></div> )
       setdata({
         nodes: [],
         links: [],
@@ -536,7 +550,7 @@ export default function Topology(ac) {
         .then((client) => {
           if (client.error) {
             setloadingFilterNode(false);
-            setswitchTopologyModal(true);
+            setswitchTopologyModal(false);
             setmodel(modalModel[index]);
           } else {
             let newmodalModel = Object.assign({}, modalModel[index], {
@@ -562,6 +576,8 @@ export default function Topology(ac) {
         .then(() => {
           setloadingFilterNode(false);
           setswitchTopologyModal(true);
+          setshowSkeletonTopologyModal(false)
+
         });
     } catch (err) {
       console.log("This is the error:", err);
@@ -625,6 +641,7 @@ export default function Topology(ac) {
   const onClickNodeTree = (nodeData) => {
     let index = nodeData.nodeData.index;
     APIcallClient(index);
+    setshowSkeletonTopologyModal(true)
     ac.setflashMessages([]);
   };
 
@@ -640,6 +657,7 @@ export default function Topology(ac) {
     let index = nodeId;
     APIcallClient(index);
     setnodeListID(index);
+    setshowSkeletonTopologyModal(true)
     ac.setflashMessages([]);
   };
 
@@ -716,13 +734,12 @@ export default function Topology(ac) {
     nodeVPNListID,
     setnodeVPNListID,
     dataVpn,
+    showSkeletonTopologyModal, 
+    setshowSkeletonTopologyModal
   };
 
   return (
-    <div
-      id="page-inner-tool-templates"
-      style={{ margin: "-65px 20px 10px 0px" }}
-    >
+    <div id="page-inner-tool-templates" style={{ margin: "-65px 20px 10px 0px" }}>
       <div>{ac.flashMessages && <span>{ac.flashMessages}</span>}</div>
       <div className="row">
         <div>
@@ -730,10 +747,7 @@ export default function Topology(ac) {
             <div className="panel panel-default">
               <div className="panel-body" style={{ height: "85px" }}>
                 <div className="panel-group" id="accordion">
-                  <div
-                    className="panel-heading"
-                    style={{ padding: "0px 0px 0px" }}
-                  >
+                  <div className="panel-heading" style={{ padding: "0px 0px 0px" }}>
                     <a
                       data-toggle="collapse"
                       data-parent="#accordion"
@@ -862,7 +876,8 @@ export default function Topology(ac) {
                       </div>
                     </div>
                   ) : (
-                    <div></div>
+                    <div>
+                    </div>
                   )}
 
                   <button
@@ -871,22 +886,28 @@ export default function Topology(ac) {
                     disabled={loading}
                   >
                     {loading && (
-                      <i
-                        className="fa fa-refresh fa-spin"
-                        style={{ marginRight: "5px" }}
-                      />
+                      <i className="fa fa-refresh fa-spin" style={{ marginRight: "5px" }} />
                     )}
                     {loading && <span>Loading Topology</span>}
                     {!loading && <span>Load Topology</span>}
                   </button>
                 </div>
-                {/* </div> */}
               </div>
             </div>
           </div>
         </div>
+        {skeleton}
         {switchGraph === "Tree" ? tree : graph}
-        {switchTopologyModal ? <TopologyModal dc={dc} /> : <div></div>}
+        {switchTopologyModal ? (<TopologyModal dc={dc} />) 
+        : (<div>
+            <div>
+              <div className="modal-dialog modal-confirm">
+                <div>
+                  <SkeletonTopologyModal dc={dc}  />
+                </div>
+               </div>
+             </div>
+            </div>)}
         {switchTopologyVPNModal ? <TopologyVPNModal dc={dc} /> : <div></div>}
       </div>
     </div>

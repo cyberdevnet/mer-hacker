@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import GetApiKey from "../../GetApiKey.js";
+import SkeletonTable from "../SkeletonTable";
 import ToolkitProvider, {
   Search,
   CSVExport,
@@ -435,11 +436,7 @@ export default function ChangeLog(ac) {
         <div className="col-xs-12">
           <div className="panel panel-default">
             <div className="panel-body">
-              <div
-                className="panel-group"
-                style={{ marginBottom: "-5px" }}
-                id="accordion"
-              >
+              <div className="panel-group" style={{ marginBottom: "-5px" }} id="accordion">
                 <div className="panel panel-default">
                   <div className="panel-heading">
                     <h4 className="panel-title-description">
@@ -456,15 +453,12 @@ export default function ChangeLog(ac) {
                   <div id="collapseOne" className="panel-collapse collapse">
                     <div className="panel-body">
                       <dl>
-                        <dt>
-                          This scripts returns all changes have been made in an
-                          organization.
-                        </dt>
+                        <dt>This scripts returns all changes have been made in an organization.</dt>
                       </dl>
                       <ul>
                         <li>
-                          You can filter the result based on Administrator,
-                          specific network or time Interval (default 1 week)
+                          You can filter the result based on Administrator, specific network or time
+                          Interval (default 1 week)
                         </li>
                         <li>Click on a row to display the change details</li>
                         <li>The table is exportable in CSV format</li>
@@ -516,12 +510,7 @@ export default function ChangeLog(ac) {
                 onClick={!loading ? handleClients : null}
                 disabled={loading}
               >
-                {loading && (
-                  <i
-                    className="fa fa-refresh fa-spin"
-                    style={{ marginRight: "5px" }}
-                  />
-                )}
+                {loading && <i className="fa fa-refresh fa-spin" style={{ marginRight: "5px" }} />}
                 {loading && <span>Loading Data</span>}
                 {!loading && <span>RUN</span>}
               </button>
@@ -534,37 +523,23 @@ export default function ChangeLog(ac) {
           <div className="panel panel-default">
             {showtable ? (
               <div className="bootstrap-table-panel">
-                <ToolkitProvider
-                  search
-                  keyField="key"
-                  data={dataLogs.rows}
-                  columns={columns}
-                >
+                <ToolkitProvider search keyField="key" data={dataLogs.rows} columns={columns}>
                   {(props) => (
                     <div>
-                      <SearchBar
-                        style={{ width: "299px" }}
-                        {...props.searchProps}
-                      />
-                      <ExportCSVButton
-                        className="export-csv"
-                        {...props.csvProps}
-                      >
+                      <SearchBar style={{ width: "299px" }} {...props.searchProps} />
+                      <ExportCSVButton className="export-csv" {...props.csvProps}>
                         Export CSV
                       </ExportCSVButton>
                       {/* <hr /> */}
-                      <BootstrapTable
-                        {...props.baseProps}
-                        striped
-                        hover
-                        expandRow={expandRow}
-                      />
+                      <BootstrapTable {...props.baseProps} striped hover expandRow={expandRow} />
                     </div>
                   )}
                 </ToolkitProvider>
               </div>
             ) : (
-              <div></div>
+              <div>
+                <div>{loading ? <SkeletonTable /> : <div></div>}</div>
+              </div>
             )}
           </div>
         </div>

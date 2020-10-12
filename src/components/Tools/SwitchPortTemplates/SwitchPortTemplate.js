@@ -7,6 +7,7 @@ import SwitchPortConfig from "./SwitchPortConfig.js";
 import BootstrapTable from "react-bootstrap-table-next";
 import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
 import GetApiKey from "../../../GetApiKey.js";
+import SkeletonTable from "../../SkeletonTable";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 
 export default function SwitchPortTemplate(ac) {
@@ -18,6 +19,7 @@ export default function SwitchPortTemplate(ac) {
   const [retryCounter, setretryCounter] = useState(0);
   // eslint-disable-next-line
   const [loading, setloading] = useState(false);
+  const [loadingTable, setloadingTable] = useState(false);
   const [configureDisabled, setconfigureDisabled] = useState(true);
   const [loadingDevices, setloadingDevices] = useState(false);
   // eslint-disable-next-line
@@ -158,6 +160,7 @@ export default function SwitchPortTemplate(ac) {
     async function APIcall() {
       if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
         setshowtable(false);
+        setloadingTable(true);
         fetch("/flask/device_switchports", {
           signal: signal,
           method: ["POST"],
@@ -210,6 +213,7 @@ export default function SwitchPortTemplate(ac) {
           .then(() => {
             if (dataPorts.length !== 0) {
               setshowtable(true);
+              setloadingTable(false);
               ac.dc.setflashMessages([]);
             } else {
               if (retryCounter < 4) {
@@ -241,6 +245,7 @@ export default function SwitchPortTemplate(ac) {
       abortController.abort();
       setmapRows([]);
       setshowtable(false);
+      setloadingTable(false);
     };
     // eslint-disable-next-line
   }, [trigger]);
@@ -554,11 +559,7 @@ export default function SwitchPortTemplate(ac) {
         <div className="col-xs-12">
           <div className="panel panel-default">
             <div className="panel-body">
-              <div
-                className="panel-group"
-                style={{ marginBottom: "-5px" }}
-                id="accordion"
-              >
+              <div className="panel-group" style={{ marginBottom: "-5px" }} id="accordion">
                 <div className="panel panel-default">
                   <div className="panel-heading">
                     <h4 className="panel-title-description">
@@ -576,32 +577,24 @@ export default function SwitchPortTemplate(ac) {
                     <div className="panel-body">
                       <dl>
                         <dt>
-                          This tool is useful when no Meraki template are in use
-                          or you want to ovveride the switchport configuration.
+                          This tool is useful when no Meraki template are in use or you want to
+                          ovveride the switchport configuration.
                         </dt>
                         <dt>
-                          You can create a set of Switchport Templates and
-                          save/modify it for later use
+                          You can create a set of Switchport Templates and save/modify it for later
+                          use
                         </dt>
                         <br />
                       </dl>
                       <ul>
-                        <li>
-                          Click on Select Template to select one available
-                          template
-                        </li>
-                        <li>
-                          Click on the checkbox to select the ports to configure
-                        </li>
-                        <li>
-                          Double Click on a row to display the switchport
-                          configuration
-                        </li>
+                        <li>Click on Select Template to select one available template</li>
+                        <li>Click on the checkbox to select the ports to configure</li>
+                        <li>Double Click on a row to display the switchport configuration</li>
                       </ul>
                       <dl>
                         <dt>
-                          Please note: There's currently a bug in the APi
-                          preventing the StormControl configuration
+                          Please note: There's currently a bug in the APi preventing the
+                          StormControl configuration
                         </dt>
                       </dl>
                     </div>
@@ -609,10 +602,7 @@ export default function SwitchPortTemplate(ac) {
                 </div>
               </div>
               <div>
-                <button
-                  onClick={createTemplate}
-                  className="btn icon-btn-add btn-success-add"
-                >
+                <button onClick={createTemplate} className="btn icon-btn-add btn-success-add">
                   <span className="glyphicon-add btn-glyphicon-add glyphicon-plus img-circle text-success-add"></span>
                 </button>
                 <Select
@@ -634,9 +624,7 @@ export default function SwitchPortTemplate(ac) {
                   placeholder="Select Switch"
                   classNamePrefix="topology"
                   isLoading={loadingDevices}
-                  value={Switches.filter(
-                    ({ value }) => value === switchesSelectKey.mySelectKey
-                  )}
+                  value={Switches.filter(({ value }) => value === switchesSelectKey.mySelectKey)}
                   getOptionLabel={({ label }) => label}
                   getOptionValue={({ value }) => value}
                   onChange={HandleDevices}
@@ -663,10 +651,7 @@ export default function SwitchPortTemplate(ac) {
                   disabled={configureDisabled}
                 >
                   {loading && (
-                    <i
-                      className="fa fa-refresh fa-spin"
-                      style={{ marginRight: "5px" }}
-                    />
+                    <i className="fa fa-refresh fa-spin" style={{ marginRight: "5px" }} />
                   )}
                   {loading && <span>Configuring Ports</span>}
                   {!loading && <span>Configure</span>}
@@ -701,26 +686,16 @@ export default function SwitchPortTemplate(ac) {
                 </BootstrapTable>
               </div>
             ) : (
-              <div></div>
+              <div>
+                <div>{loadingTable ? <SkeletonTable /> : <div></div>}</div>
+              </div>
             )}
           </div>
         </div>
       </div>
-      {createTemplateModal ? (
-        <CreateTemplateModal dc={dc} cc={ac.dc} />
-      ) : (
-        <div></div>
-      )}
-      {showTemplateModal ? (
-        <ShowTemplateModal dc={dc} cc={ac.dc} />
-      ) : (
-        <div></div>
-      )}
-      {showSummary ? (
-        <SwitchPortTemplateSummary dc={dc} cc={ac.dc} />
-      ) : (
-        <div></div>
-      )}
+      {createTemplateModal ? <CreateTemplateModal dc={dc} cc={ac.dc} /> : <div></div>}
+      {showTemplateModal ? <ShowTemplateModal dc={dc} cc={ac.dc} /> : <div></div>}
+      {showSummary ? <SwitchPortTemplateSummary dc={dc} cc={ac.dc} /> : <div></div>}
       {showportConfig ? <SwitchPortConfig dc={dc} cc={ac.dc} /> : <div></div>}
     </div>
   );

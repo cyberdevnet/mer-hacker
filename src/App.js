@@ -19,7 +19,6 @@ function App() {
   const [combindeNetworksIDList, setcombindeNetworksIDList] = useState([]);
   const [device, setdevice] = useState([]);
   const [hostList, sethostList] = useState([]);
-  const [SNtopUsers, setSNtopUsers] = useState("");
   const [clientList, setclientList] = useState([]);
   const [vlanList, setvlanList] = useState([]);
   const [allVlanList, setallVlanList] = useState([]);
@@ -95,6 +94,7 @@ function App() {
   const [totalDevices, settotalDevices] = useLocalStorage("my-totalDevices", 0);
   const [timeZone, settimeZone] = useLocalStorage("my-timeZone", 0);
   const [deviceList, setdeviceList] = useLocalStorage("my-deviceList", []);
+  const [SNtopUsers, setSNtopUsers] = useLocalStorage("my-SNtopUsers", "");
 
   // <================================================================================>
   //                            END LOCAL STORAGE
@@ -346,49 +346,56 @@ function App() {
       return;
     }
     async function callDevices() {
-    if (isOrgSelected && isNetSelected === true) {
-      await axios
-      .post("/node/get-api-key",  { username: User, isSignedIn: isSignedIn })
-      .then((data) => {
-      let key = data.data.apiKey
-      fetch("/flask/devices", {
-        method: ["POST"],
-        cache: "no-cache",
-        headers: {
-          content_type: "application/json",
-        },
-        body: JSON.stringify({
-          "X-Cisco-Meraki-API-Key": `${key}`,
-          organizationId: `${organizationID}`,
-          NET_ID: `${networkID}`,
-          USER: `${User}`,
-          }),
-      })
-      fetch("/flask/devices", { signal: signal })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.error) {
-          } else {
-            setdeviceList(data.devices);
-            let Dev1 = {};
-            for (var device = 0; device < data.devices.length; device++) {
-              Dev1[device] = data.devices[device];
-              let model = Dev1[device].model;
-              if (model.startsWith("MX") || model.startsWith("Z")) {
-                setSNtopUsers(Dev1[device].serial);
-              }
-            }
-          }
-        })
-        })
+      if (isOrgSelected && isNetSelected === true) {
+        await axios
+          .post("/node/get-api-key", { username: User, isSignedIn: isSignedIn })
+          .then((data) => {
+            let key = data.data.apiKey;
+            fetch("/flask/devices", {
+              method: ["POST"],
+              cache: "no-cache",
+              headers: {
+                content_type: "application/json",
+              },
+              body: JSON.stringify({
+                "X-Cisco-Meraki-API-Key": `${key}`,
+                organizationId: `${organizationID}`,
+                NET_ID: `${networkID}`,
+                USER: `${User}`,
+              }),
+            });
+            fetch("/flask/devices", { signal: signal })
+              .then((res) => res.json())
+              .then((data) => {
+                if (data.error) {
+                } else {
+                  let SN = []
+                  setdeviceList(data.devices);
+                  let Dev1 = {};
+                  for (var device = 0; device < data.devices.length; device++) {
+                    Dev1[device] = data.devices[device];
+                    let model = Dev1[device].model;
+                    if (model.startsWith("MX") || model.startsWith("Z")) {
+                      SN.push(Dev1[device].serial)
+                      setSNtopUsers(SN);
+                    } else {
+                      if (SN.length === 0) {
+                        setSNtopUsers("");
+                      }
+
+                    }
+                  }
+                }
+              });
+          });
+      }
+      return () => {
+        abortController.abort();
+      };
     }
-    return () => {
-      abortController.abort();
-    }
-  }
-  callDevices();
+    callDevices();
     // eslint-disable-next-line
-  }, [networkID]);
+  }, [network]);
 
   const dc = {
     triggerGetOrg,

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import GetApiKey from "../../GetApiKey.js";
+import SkeletonTable from "../SkeletonTable";
 
 import ToolkitProvider, {
   Search,
@@ -260,9 +261,8 @@ export default function GetAllDevicesIP(ac) {
                     <div className="panel-body">
                       <dl>
                         <dt>
-                          This scripts returns all the IPs, serial-numbers and
-                          models of all devices assigned to the selected
-                          network.
+                          This scripts returns all the IPs, serial-numbers and models of all devices
+                          assigned to the selected network.
                         </dt>
                       </dl>
                     </div>
@@ -274,12 +274,7 @@ export default function GetAllDevicesIP(ac) {
                 onClick={!loading ? handleIPs : null}
                 disabled={loading}
               >
-                {loading && (
-                  <i
-                    className="fa fa-refresh fa-spin"
-                    style={{ marginRight: "5px" }}
-                  />
-                )}
+                {loading && <i className="fa fa-refresh fa-spin" style={{ marginRight: "5px" }} />}
                 {loading && <span>Loading Data</span>}
                 {!loading && <span>RUN</span>}
               </button>
@@ -301,14 +296,8 @@ export default function GetAllDevicesIP(ac) {
                   >
                     {(props) => (
                       <div>
-                        <SearchBar
-                          style={{ width: "299px" }}
-                          {...props.searchProps}
-                        />
-                        <ExportCSVButton
-                          className="export-csv"
-                          {...props.csvProps}
-                        >
+                        <SearchBar style={{ width: "299px" }} {...props.searchProps} />
+                        <ExportCSVButton className="export-csv" {...props.csvProps}>
                           Export CSV
                         </ExportCSVButton>
                         <BootstrapTable
@@ -323,7 +312,9 @@ export default function GetAllDevicesIP(ac) {
                 </div>
               </div>
             ) : (
-              <div></div>
+              <div>
+                {loading ? (<SkeletonTable />):( <div></div> )}
+              </div>
             )}
           </div>
         </div>

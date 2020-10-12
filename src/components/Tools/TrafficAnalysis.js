@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import GetApiKey from "../../GetApiKey.js";
+import SkeletonTable from "../SkeletonTable";
 import ToolkitProvider, {
   Search,
   CSVExport,
@@ -19,6 +20,7 @@ export default function TrafficAnalysis(ac) {
   // eslint-disable-next-line
   const [netwanalysis, setnetwanalysis] = useState([]);
   const [dataInventory, setdataInventory] = useState([]);
+  const [loading, setloading] = useState(false);
 
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
@@ -106,7 +108,7 @@ export default function TrafficAnalysis(ac) {
       if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
         if (trigger < 4) {
           try {
-            ac.dc.setloadingButton(true);
+            setloading(true);
 
             fetch("/flask/traffic_analysis/", {
               method: ["POST"],
@@ -133,7 +135,7 @@ export default function TrafficAnalysis(ac) {
                       {data.error[0]}
                     </div>
                   );
-                  ac.dc.setloadingButton(false);
+                  setloading(false);
                 } else {
                   setnetwanalysis(data.analysis);
 
@@ -166,16 +168,16 @@ export default function TrafficAnalysis(ac) {
                 if (dataInventory.length !== 0) {
                   setshowtable(true);
                 }
-                ac.dc.setloadingButton(false);
+                setloading(false);
               });
           } catch (err) {
             if (err) {
               console.log("This is the error:", err);
-              ac.dc.setloadingButton(false);
+              setloading(false);
             }
           }
         } else {
-          ac.dc.setloadingButton(false);
+          setloading(false);
         }
       } else {
         ac.dc.setswitchAlertModal(true);
@@ -189,7 +191,7 @@ export default function TrafficAnalysis(ac) {
       setnetwanalysis([]);
       setshowtable(false);
       ac.dc.setflashMessages(null);
-      ac.dc.setloadingButton(false);
+      setloading(false);
     };
     // eslint-disable-next-line
   }, [trigger]);
@@ -413,17 +415,17 @@ export default function TrafficAnalysis(ac) {
               <button
                 id="runButton"
                 className="btn btn-primary"
-                onClick={!ac.dc.loadingButton ? handleTopUsers : null}
-                disabled={ac.dc.loadingButton}
+                onClick={!loading ? handleTopUsers : null}
+                disabled={loading}
               >
-                {ac.dc.loadingButton && (
+                {loading && (
                   <i
                     className="fa fa-refresh fa-spin"
                     style={{ marginRight: "5px" }}
                   />
                 )}
-                {ac.dc.loadingButton && <span>Loading Data</span>}
-                {!ac.dc.loadingButton && <span>RUN</span>}
+                {loading && <span>Loading Data</span>}
+                {!loading && <span>RUN</span>}
               </button>
             </div>
           </div>
@@ -467,7 +469,9 @@ export default function TrafficAnalysis(ac) {
                 </div>
               </div>
             ) : (
-              <div></div>
+              <div>
+                <div>{loading ? <SkeletonTable /> : <div></div>}</div>
+              </div>
             )}
           </div>
         </div>

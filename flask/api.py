@@ -126,6 +126,7 @@ def get_devices():
             return {'devices': devices}
     except meraki.APIError as err:
         print('Error: ', err)
+        flash(err)
         return {'error': [render_template('flash_template.html'), err.status]}
 
 
@@ -670,6 +671,169 @@ def get_licenseState():
             return {'licenseState': licenseState}
     except meraki.APIError as err:
         print('Error: ', err)
+        return {'error': [render_template('flash_template.html'), err.status]}
+    
+    
+@app.route('/flask/getTemplates', methods=['GET', 'POST'])
+def getTemplates():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json(force=True, silent=True)
+            return data
+        else:
+            dashboard = meraki.DashboardAPI(
+                data['X-Cisco-Meraki-API-Key'], output_log=False)
+            getTemplates = dashboard.config_templates.getOrganizationConfigTemplates(
+                data['organizationId'])
+            return {'getTemplates': getTemplates}
+    except meraki.APIError as err:
+        print('Error: ', err)
+        return {'error': [render_template('flash_template.html'), err.status]}
+
+
+@app.route('/flask/getSwitchProfiles', methods=['GET', 'POST'])
+def getSwitchProfiles():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json(force=True, silent=True)
+            return data
+        else:
+            dashboard = meraki.DashboardAPI(
+                data['X-Cisco-Meraki-API-Key'], output_log=False)
+            getSwitchProfiles = dashboard.switch_profiles.getOrganizationConfigTemplateSwitchProfiles(
+                data['organizationId'], data['configTemplateId'])
+            return {'getSwitchProfiles': getSwitchProfiles}
+    except meraki.APIError as err:
+        print('Error: ', err)
+        return {'error': [render_template('flash_template.html'), err.status]}
+
+
+@app.route('/flask/createNetwork', methods=['GET', 'POST'])
+def createNetwork():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json(force=True, silent=True)
+            return data
+        else:
+            name = data['newNetworkName']
+            dashboard = meraki.DashboardAPI(
+                data['X-Cisco-Meraki-API-Key'], output_log=False)
+            type = 'appliance switch'
+            createNetwork = dashboard.networks.createOrganizationNetwork(
+                data['organizationId'], name, type)
+            return {'createNetwork': createNetwork}
+    except meraki.APIError as err:
+        print('Error: ', err)
+        error = (err.message['errors'][0])
+        flash(error)
+        return {'error': [render_template('flash_template.html'), err.status]}
+
+
+@app.route('/flask/claimDevices', methods=['GET', 'POST'])
+def claimDevices():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json(force=True, silent=True)
+            return data
+        else:
+            network_id = data['network_id']
+            serials = data['serials']
+            dashboard = meraki.DashboardAPI(
+                data['X-Cisco-Meraki-API-Key'], output_log=False)
+            claimDevices = dashboard.devices.claimNetworkDevices(
+                network_id, serials=serials)
+            return {'claimDevices': claimDevices}
+    except meraki.APIError as err:
+        print('Error: ', err)
+        error = (err.message['errors'][0])
+        flash(error)
+        return {'error': [render_template('flash_template.html'), err.status]}
+
+
+@app.route('/flask/bindTemplate', methods=['GET', 'POST'])
+def bindTemplate():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json(force=True, silent=True)
+            return data
+        else:
+            network_id = data['network_id']
+            config_template_id = data['config_template_id']
+            dashboard = meraki.DashboardAPI(
+                data['X-Cisco-Meraki-API-Key'], output_log=False)
+            bindTemplate = dashboard.networks.bindNetwork(
+                network_id, config_template_id, autoBind=False)
+            return {'bindTemplate': bindTemplate}
+    except meraki.APIError as err:
+        print('Error: ', err)
+        error = (err.message['errors'][0])
+        flash(error)
+        return {'error': [render_template('flash_template.html'), err.status]}
+
+
+@app.route('/flask/bindProfile', methods=['GET', 'POST'])
+def bindProfile():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json(force=True, silent=True)
+            return data
+        else:
+            network_id = data['network_id']
+            allSelectedSwitches = data['allSelectedSwitches']
+
+            bindProfileData = []
+            for switch in allSelectedSwitches:
+                switchProfileId = switch['switchProfileId']
+                serial = switch['serial']
+
+                dashboard = meraki.DashboardAPI(
+                    data['X-Cisco-Meraki-API-Key'], output_log=False)
+                bindProfile = dashboard.devices.updateNetworkDevice(
+                    network_id, serial, switchProfileId=switchProfileId)
+                bindProfileData.append(bindProfile)
+            return {'bindProfile': bindProfileData}
+    except meraki.APIError as err:
+        print('Error: ', err)
+        error = (err.message['errors'][0])
+        flash(error)
+        return {'error': [render_template('flash_template.html'), err.status]}
+
+
+@app.route('/flask/UpdateDevices', methods=['GET', 'POST'])
+def UpdateDevices():
+    try:
+        if request.method == 'POST':
+            global data
+            data = request.get_json(force=True, silent=True)
+            return data
+        else:
+            network_id = data['network_id']
+            allSelectedDevices = data['allSelectedDevices']
+
+            UpdateDevicesData = []
+            for device in allSelectedDevices:
+                serial = device['serial']
+                deviceName = device['deviceName']
+                address = device['address']
+
+
+                dashboard = meraki.DashboardAPI(
+                    data['X-Cisco-Meraki-API-Key'], output_log=False)
+                UpdateDevices = dashboard.devices.updateNetworkDevice(
+                    network_id, serial, name=deviceName, address=address)
+                UpdateDevicesData.append(UpdateDevices)
+                
+            return {'UpdateDevices': UpdateDevicesData}
+    except meraki.APIError as err:
+        print('Error: ', err)
+        error = (err.message['errors'][0])
+        flash(error)
         return {'error': [render_template('flash_template.html'), err.status]}
 
 

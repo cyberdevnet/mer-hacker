@@ -81,7 +81,7 @@ export default function Template(ac, dc) {
     { tool: "Switchport Templates" },
     { tool: "Change Log" },
     { tool: "Inventory" },
-    { tool: "DeployDevices" },
+    { tool: "Deploy Devices" },
   ];
 
   const ALLTOOLS = all_tools.map((opt, index) => ({

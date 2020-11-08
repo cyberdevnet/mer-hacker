@@ -65,3 +65,15 @@
 }
 
 /* SUMMARY */
+.btn.btn-success.btn-block.summary {
+  background: #1ABC9C;
+
+}
+.btn.btn-success.btn-block.summary:hover {
+  background: #1abc9c73;
+
+}
+.btn.btn-success.btn-block.summary:focus {
+  background: #1ABC9C;
+
+}

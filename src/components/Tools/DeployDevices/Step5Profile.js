@@ -135,8 +135,6 @@ export default function Step4Profile(ac) {
                       allFilteredDevices.push(filterDevices[0]);
                     }
                   });
-
-                  console.log("allFilteredDevices", allFilteredDevices);
                 }
                 // eslint-disable-next-line
                 allFilteredDevices.map((opt) => {

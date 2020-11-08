@@ -61,6 +61,7 @@ export default function DeployDevices(ac) {
     setswitchProfileId([]);
     setswitchProfileModel([]);
     setvalidationError([]);
+    setDevicesInfo([]);
     handleReset();
   }
 
@@ -325,9 +326,9 @@ export default function DeployDevices(ac) {
                   <div style={{ marginTop: "100px" }}>
                     <div id="myModal">
                       <div className="modal-dialog modal-confirm">
-                        <div className="modal-content">
+                        <div >
                           <div className="modal-header">
-                            <div className="icon-box-login">
+                            <div className="icon-box-login" style={{background:'#1ABC9C'}}>
                               <i className="material-icons">&#xE876;</i>
                             </div>
                             <h4 className="modal-title">Awesome!</h4>
@@ -340,8 +341,9 @@ export default function DeployDevices(ac) {
                           <div className="modal-footer-logged-in">
                             <button
                               onClick={CloseWizard}
-                              className="btn btn-success btn-block"
+                              className="btn btn-success btn-block summary"
                               data-dismiss="modal"
+                              
                             >
                               Exit
                             </button>

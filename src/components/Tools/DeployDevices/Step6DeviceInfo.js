@@ -7,6 +7,8 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 
 export default function Step6DeviceInfo(ac) {
   const [showtable, setshowtable] = useState(false);
+  const [showNoInformation, setshowNoInformation] = useState(false);
+
   const [triggerDevices, settriggerDevices] = useState(0);
   const [retryCounter, setretryCounter] = useState(0);
   const [loadingUpdateDevicesBtn, setloadingUpdateDevicesBtn] = useState(false);
@@ -22,6 +24,7 @@ export default function Step6DeviceInfo(ac) {
 
     async function APIcallDevices() {
       setshowtable(false);
+      setshowNoInformation(false)
       await axios
         .post("/node/get-api-key", { username: ac.User, isSignedIn: ac.isSignedIn })
         .then((data) => {
@@ -96,19 +99,32 @@ export default function Step6DeviceInfo(ac) {
                   });
                   setdataRows(row);
                 } else {
+                  ac.dc.setnextStepDisabled(false);
                 }
+
+                if (allFilteredDevices.length === 0) {
+                  setshowNoInformation(true)
+                  ac.dc.setnextStepDisabled(false);
+                }
+
               }
             })
             .then(() => {
+              if (showNoInformation === false) {
               if (dataRows.length > 0) {
                 setshowtable(true);
+                setshowNoInformation(false)
+                ac.dc.setnextStepDisabled(false);
               } else {
                 if (retryCounter < 4) {
                   settriggerDevices(triggerDevices + 1);
                   setretryCounter(retryCounter + 1);
                 } else {
+                  setshowNoInformation(true)
+                  ac.dc.setnextStepDisabled(false);
                 }
               }
+            }
             });
         });
     }
@@ -272,6 +288,7 @@ export default function Step6DeviceInfo(ac) {
     <div className="row">
       <div className="col-xs-12">
         <div className="panel panel-default">
+          {showNoInformation === false ? (
           <div className="panel-body" style={{ minHeight: "400px" }}>
             <div className="row">
               <div className="col-xs-12">
@@ -313,6 +330,16 @@ export default function Step6DeviceInfo(ac) {
               </button>
             </div>
           </div>
+          ) : (
+            <div className="panel-body" style={{ minHeight: "400px" }}>
+                  <div className="text-center" style={{ position: "relative", top: "115px" }}>
+                    <div className="display-1  mb-5">
+                      <i className="fas fa-network-wired" aria-hidden="true"></i>
+                    </div>
+                    <h1 className="h2 mb-3">No devices information available</h1>
+                  </div>
+                  </div>
+                )}
         </div>
         {alertError}
       </div>

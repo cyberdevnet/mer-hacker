@@ -1,0 +1,79 @@
+
+
+.btn-primary.next-stepzilla{
+    float: right;
+    font-size: 14px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px; 
+
+}
+
+.btn-primary.previous-stepzilla{
+    float: left;
+    font-size: 14px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px; 
+
+}
+
+.btn.btn-primary.add-network{
+    font-size: 14px;
+    float: none;
+
+}
+
+
+
+.select_network_stepzilla.css-2b097c-container{
+    width: 250px;
+}
+
+.form-control.networkname {
+  margin: 0px;
+  width: 250px
+
+}
+
+.modal-header.stepzilla {
+  min-height: 16.43px;
+    padding: 15px;
+  border-bottom: none;
+
+}
+
+
+.btn.btn-primary.back{
+  float: left;
+  margin-bottom: 10px;
+
+}
+.btn.btn-primary.skip{
+  margin-bottom: 10px;
+
+}
+.btn.btn-primary.next{
+  margin-bottom: 10px;
+
+}
+
+.btn-summary.btn-primary.switch-profile[disabled]{
+  background-color: #337ab7b3;
+  border-color: transparent;
+
+}
+
+/* SUMMARY */
+.btn.btn-success.btn-block.summary {
+  background: #1ABC9C;
+
+}
+.btn.btn-success.btn-block.summary:hover {
+  background: #1abc9c73;
+
+}
+.btn.btn-success.btn-block.summary:focus {
+  background: #1ABC9C;
+
+}

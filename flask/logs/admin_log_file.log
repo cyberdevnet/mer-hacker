@@ -1,0 +1,68 @@
+Writing script file admin_build_meraki_switchconfig.py
+Interface Port-channel3 ignored
+Interface Port-channel4 ignored
+Interface Port-channel5 ignored
+Interface FastEthernet0 ignored
+Writing Switchport GigabitEthernet1/0/1
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/2
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/3
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/4
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/5
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/6
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/7
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/8
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/9
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/10
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/11
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/12
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/13
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/14
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/15
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/16
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/17
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/18
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/19
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/20
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/21
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/22
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/23
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/24
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/25
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/26
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/27
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/28
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/29
+Switch GGGT-JJJT-KKKL
+Writing Switchport GigabitEthernet1/0/30
+Switch GGGT-JJJT-KKKL
+Interface Vlan1 ignored
+Interface Vlan100 ignored
+Writing complete, check the script before restore.

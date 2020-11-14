@@ -1,0 +1,91 @@
+
+
+.h3-dashboard {
+  font-size: 16px;
+  color: #676767;
+
+}
+
+.icon.dashboard{
+  float: right;
+  margin-top: -15px;
+
+}
+
+.board .panel .icon .fa {
+  font-size: 18px;
+  color: #ffffff;
+  background: #30a5ff;
+  padding: 19px;
+}
+
+#page-inner {
+  margin: -50px 20px 10px 0px;
+}
+
+.row-inventory {
+  margin-right: 0px;
+  margin-left: 0px;
+}
+
+.license-overflow {
+  height: 328px;
+  overflow-y: auto;
+}
+
+.license {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  /* margin: 8px 5px; */
+  display: inline-block;
+}
+
+.p-license {
+  font-size: 12px;
+  line-height: 14px;
+  padding-top: 0px;
+}
+
+.btnCSV {
+  float: right;
+  margin-top: 0px;
+  margin-bottom: 15px;
+}
+
+.form-control.form-control-sm.ml-0.my-1 {
+  margin-right: 0px;
+  margin-top: 0px;
+  height: 38px;
+  display: inline-block;
+  width: auto;
+  vertical-align: middle;
+}
+
+.custom-select.custom-select-sm.form-control.form-control-sm {
+  margin-left: 10px;
+  width: 78px;
+  height: 35px;
+}
+
+
+.fa-sitemap {
+  color: #f36a5a;
+}
+
+.fa-university {
+  color:#467fcf
+
+}
+
+.fa-clock-o  {
+  color: green
+}
+
+.fa-server  {
+  color: #fabe28
+}
+
+.fa-users {
+  color: #467fcf
+}

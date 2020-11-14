@@ -1,0 +1,35 @@
+.btn.btn-default.dropdown-toggle-tools-findports {
+  /* margin-bottom: 15px; */
+  width: 185px;
+  height: 34px;
+  margin-right: 10px;
+}
+
+.glyphicon.glyphicon-info-sign {
+  color: #31708f;
+  font-size: 16px;
+}
+
+.form-control {
+  margin-right: 0px;
+    height: 38px;
+}
+
+
+.time-interval__option.css-9gakcf-option {
+  background-color: transparent;
+  color: black;
+}
+.time-interval__option.css-9gakcf-option:hover {
+  background-color: #DEEBFF;
+  color: black;
+}
+
+.select_network_time-interval {
+  width: 184px;
+  margin-left: 4px;
+}
+
+.time-interval__control.css-yk16xz-control{
+  height: 29px;
+}

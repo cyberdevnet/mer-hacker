@@ -1,0 +1,67 @@
+div.custom-container {
+  background-color: #242424;
+}
+
+svg.custom .node circle {
+  fill: #f3f3ff;
+  stroke: #2593b8;
+  stroke-width: 1.5px;
+}
+
+svg.custom .node text {
+  font-size: 11px;
+  background-color: #444;
+  fill: #f4f4f4;
+  text-shadow: 0 1px 4px black;
+}
+
+svg.custom .node {
+  cursor: pointer;
+}
+
+svg.custom path.link {
+  fill: none;
+  stroke: #2593b8;
+  stroke-width: 1.5px;
+}
+
+.custom-tree {
+  font-family: "Open Sans", sans-serif;
+}
+
+.linkBase {
+  fill: none;
+  stroke: gray;
+}
+
+.nodeNameBase {
+  fill: #000;
+  stroke: none;
+  stroke-width: 1;
+}
+
+.graph-id {
+  height: 969px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.topology__option.css-9gakcf-option {
+  background-color: transparent;
+  color: black;
+}
+.topology__option.css-9gakcf-option:hover {
+  background-color: #deebff;
+  color: black;
+}
+
+
+.panel-collapse{
+  margin-right: 15px;
+  margin-bottom: 15px;
+  margin-left: 24px;
+}
+
+.radio-inline{
+  margin-right: 12px;
+}

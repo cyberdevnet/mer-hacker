@@ -1,15 +1,11 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
 import Dialog from "@material-ui/core/Dialog";
 import axios from "axios";
 
-import $ from "jquery";
 import "../../styles/Logout.css";
 
 export default function Logout(ac, props) {
   const [loading, setloading] = useState(false);
-
-  let history = useHistory();
 
   axios.defaults.withCredentials = true;
 

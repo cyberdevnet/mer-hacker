@@ -98,31 +98,36 @@
 
 @media (max-width: 2560px){
   .license-overflow {
+    max-height: 404px;
     min-height: 404px;
   }
   }
 
 @media (max-width: 1920px){
   .license-overflow {
+    max-height: 304px;
     min-height: 304px;
   }
   }
 
 @media (max-width: 1683px){
   .license-overflow {
+    max-height: 279px;
     min-height: 279px;
   }
   }
 
 @media (max-width: 1366px){
   .license-overflow {
-    min-height: 255px;
+    max-height: 205px;
+    min-height: 205px;
   }
   }
 
 
 @media (max-width: 992px){
   .license-overflow {
+    max-height: 314px;
     min-height: 314px;
   }
   }

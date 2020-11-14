@@ -73,6 +73,9 @@ export default function GetAllOrganizationSubnets(ac) {
                   {data.error[0]}
                 </div>
               );
+              setTimeout(() => {
+                ac.dc.setflashMessages([]);
+              }, 5000);
             } else {
               ac.dc.setallVlanList(data.result);
 
@@ -84,6 +87,9 @@ export default function GetAllOrganizationSubnets(ac) {
                     VLANs are not enabled in this Organization
                   </div>
                 );
+                setTimeout(() => {
+                  ac.dc.setflashMessages([]);
+                }, 5000);
               } else {
                 // Object is NOT empty
                 let Vlanobjects = {};

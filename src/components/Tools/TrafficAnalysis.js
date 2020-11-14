@@ -134,6 +134,9 @@ export default function TrafficAnalysis(ac) {
                       {data.error[0]}
                     </div>
                   );
+                  setTimeout(() => {
+                    setflashMessages([]);
+                  }, 5000);
                   setloading(false);
                 } else {
                   setnetwanalysis(data.analysis);

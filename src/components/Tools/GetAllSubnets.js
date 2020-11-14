@@ -61,6 +61,9 @@ export default function GetAllSubnets(ac) {
                   {data.error[0]}
                 </div>
               );
+              setTimeout(() => {
+                ac.dc.setflashMessages([]);
+              }, 5000);
             } else {
               ac.dc.setvlanList(data.vlans);
 

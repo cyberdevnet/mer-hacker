@@ -448,6 +448,9 @@ export default function ShowTemplateModal(ac) {
                         Template modified
                       </div>
                     );
+                    setTimeout(() => {
+                      ac.cc.setflashMessages([]);
+                    }, 5000);
                   }, 2000)
                 )
                 .then(() => {
@@ -592,6 +595,9 @@ export default function ShowTemplateModal(ac) {
                 Cannot delete template
               </div>
             );
+            setTimeout(() => {
+              ac.cc.setflashMessages([]);
+            }, 5000);
             setloading(false);
           }
         })

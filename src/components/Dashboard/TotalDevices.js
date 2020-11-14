@@ -92,6 +92,9 @@ export default function TotalDevices(ac) {
                     {data.error[0]}
                   </div>
                 );
+                setTimeout(() => {
+                  ac.setflashMessages([]);
+                }, 5000);
               } else {
                 // ac.setdeviceStatusList(data.deviceStatus);
                 // ac.settotaldeviceStatusList(data.deviceStatus.length);

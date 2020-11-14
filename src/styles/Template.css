@@ -118,7 +118,7 @@ a {
 
 .btn i {
   font-size: 1rem;
-  vertical-align: -1px;
+  vertical-align: 0px;
 }
 
 .col-md-3.register-left.home-logo{
@@ -158,14 +158,13 @@ a {
 }
 #sidebar ul li a:hover {
   color: #232e3c;
-  background: #fff;
+  text-decoration: none;
+}
+a:hover {
+  color: #232e3c;
   text-decoration: none;
 }
 
-/* #sidebar ul li.active > a, a[aria-expanded="true"] {
-  color: #fff;
-  background: #6d7fcc;
-} */
 ul ul a {
   font-size: 0.9em !important;
   padding-left: 30px !important;
@@ -199,12 +198,14 @@ ul ul a {
 }
 
 a {
-  color: #808080
+  color: #495057
 }
 .navbar-brand{
   margin: 10px;
   font-size: 27px;
   color: #295a9f;
+  position: relative;
+  bottom: 45px;
 }
 
 button:focus {
@@ -296,4 +297,24 @@ button:focus {
   100% {
     transform: translateY(-20px);
   }
+}
+
+
+
+.btn.btn-primary.sidebar.open{
+  left: 230px;
+  position: relative;
+  bottom: 14px;
+  -moz-transition: left .5s;
+  -ms-transition: left .5s;
+  -o-transition: left .5s;
+  -webkit-transition: left .5s;
+  transition: left .5s;
+  
+}
+
+.btn.btn-primary.sidebar.closed{
+  left: 0px;
+  position: relative;
+  bottom: 14px;
 }

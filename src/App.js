@@ -129,6 +129,9 @@ function App() {
                   Organization not found, please check your API key and your internet connection
                 </div>
               );
+              setTimeout(() => {
+                setflashMessages([]);
+              }, 5000);
               setloadingOrg(false);
             }
             setgetOrgStatusCode(res.status);
@@ -142,6 +145,9 @@ function App() {
                   {data.error}
                 </div>
               );
+              setTimeout(() => {
+                setflashMessages([]);
+              }, 5000);
               setloadingOrg(false);
             } else {
               setorganizationList(data.organizations);
@@ -197,6 +203,9 @@ function App() {
                     There was an error loading the networks, please try again.
                   </div>
                 );
+                setTimeout(() => {
+                  setflashMessages([]);
+                }, 5000);
                 setloadingNet(false);
               }
               setgetOrgStatusCode(res.status);
@@ -210,6 +219,9 @@ function App() {
                     {data.error[0]}
                   </div>
                 );
+                setTimeout(() => {
+                  setflashMessages([]);
+                }, 5000);
                 setloadingNet(false);
               } else {
                 const NET = Object.values(data.networks);

@@ -92,6 +92,9 @@ export default function NetworkDevices(ac) {
                     {data.error[0]}
                   </div>
                 );
+                setTimeout(() => {
+                  ac.setflashMessages([]);
+                }, 5000);
               } else {
                 ac.setdeviceList(data.devices);
                 ac.settotalDevices(data.devices.length);

@@ -156,6 +156,9 @@ export default function Topology(ac) {
                       {device_clients.error[0]}
                     </div>
                   );
+                  setTimeout(() => {
+                    ac.setflashMessages([]);
+                  }, 5000);
                 } else {
                   const DEVICE_OBJ = Object.values(device_clients.device_clients);
                   setnodeslist(device_clients.device_clients);
@@ -352,6 +355,9 @@ export default function Topology(ac) {
                       {site2site.error[0]}
                     </div>
                   );
+                  setTimeout(() => {
+                    ac.setflashMessages([]);
+                  }, 5000);
                   setloading(false);
                   return function cleanup() {
                     abortController.abort();
@@ -485,6 +491,9 @@ export default function Topology(ac) {
                       No available VPN nodes in this Organization
                     </div>
                   );
+                  setTimeout(() => {
+                    ac.setflashMessages([]);
+                  }, 5000);
                 }
               });
           } catch (err) {
@@ -579,6 +588,9 @@ export default function Topology(ac) {
           Not a valid Client
         </div>
       );
+      setTimeout(() => {
+        ac.setflashMessages([]);
+      }, 5000);
     }
   }
 

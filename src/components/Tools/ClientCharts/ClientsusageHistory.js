@@ -159,6 +159,9 @@ export default function ClientsusageHistory(ac) {
                 {data.error[0]}
               </div>
             );
+            setTimeout(() => {
+              ac.dc.setflashMessages([]);
+            }, 5000);
           } else {
             if (data.usageHistory.length > 30) {
               let range = data.usageHistory.length - 30;

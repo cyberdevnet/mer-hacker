@@ -81,6 +81,9 @@ export default function NetworkTopUsers(ac) {
                       {data.error[0]}
                     </div>
                   );
+                  setTimeout(() => {
+                    ac.dc.setflashMessages([]);
+                  }, 5000);
                 } else {
                   setfindPort(data.data);
                 }

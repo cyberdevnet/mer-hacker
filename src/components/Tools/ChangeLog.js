@@ -75,6 +75,9 @@ export default function ChangeLog(ac) {
                   {data.error[0]}
                 </div>
               );
+              setTimeout(() => {
+                setflashMessages([]);
+              }, 5000);
             } else {
               let change_log = [];
               let row = [];
@@ -133,6 +136,9 @@ export default function ChangeLog(ac) {
                     No change logs in selected time frame/network/administrator, please try again.
                   </div>
                 );
+                setTimeout(() => {
+                  setflashMessages([]);
+                }, 5000);
               }
             }
           })
@@ -187,6 +193,9 @@ export default function ChangeLog(ac) {
                   {data.error[0]}
                 </div>
               );
+              setTimeout(() => {
+                setflashMessages([]);
+              }, 5000);
             } else {
               if (data.admins.length !== 0) {
                 setallAdmins(data.admins);
@@ -199,6 +208,9 @@ export default function ChangeLog(ac) {
                     there was an error loading the administrators, please try again.
                   </div>
                 );
+                setTimeout(() => {
+                  setflashMessages([]);
+                }, 5000);
               }
             }
           });

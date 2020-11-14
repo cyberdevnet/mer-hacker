@@ -69,6 +69,9 @@ export default function SwitchPortTemplate(ac) {
                   {data.error[0]}
                 </div>
               );
+              setTimeout(() => {
+                setflashMessages([]);
+              }, 5000);
             } else {
               setinventory(data.inventory);
               let inventoryData = [];
@@ -130,6 +133,9 @@ export default function SwitchPortTemplate(ac) {
                     There was an error loading the data, please try again.
                   </div>
                 );
+                setTimeout(() => {
+                  setflashMessages([]);
+                }, 5000);
               }
             }
           })

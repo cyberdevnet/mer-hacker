@@ -80,6 +80,9 @@ export default function SwitchPortTemplate(ac) {
                   {data.error[0]}
                 </div>
               );
+              setTimeout(() => {
+                setflashMessages([]);
+              }, 5000);
             } else {
               setallClients(data.clients);
               let clients = [];
@@ -155,6 +158,9 @@ export default function SwitchPortTemplate(ac) {
                     No Clients active or there was an error loading the data, please try again.
                   </div>
                 );
+                setTimeout(() => {
+                  setflashMessages([]);
+                }, 5000);
               }
             }
           })

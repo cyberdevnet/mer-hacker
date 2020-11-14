@@ -13,12 +13,13 @@ import Topology from "../components/Tools/Topology/Topology";
 import ReactTooltip from "react-tooltip";
 import Avatar from "../../public/avatar.png";
 
-
 import "../styles/Template.css";
 
 export default function Template(ac, dc) {
   // eslint-disable-next-line
   const [navLinkStyle, setnavLinkStyle] = useState({ pointerEvents: "none" });
+
+  const [isNavCollapsed, setIsNavCollapsed] = useState(false);
 
   const ORGANIZATIONS = ac.dc.organizationList.map((opt, index) => ({
     label: opt.name,
@@ -80,6 +81,12 @@ export default function Template(ac, dc) {
     history.push("/tools");
   };
 
+
+  const handleNavCollapse = () => {
+    setIsNavCollapsed(!isNavCollapsed)
+  
+  }
+
   return (
     <div className="wrapper d-flex align-items-stretch">
       {ac.dc.showSetApiKey ? <SetApiKey {...ac.dc} dc={dc} /> : <div></div>}
@@ -87,16 +94,18 @@ export default function Template(ac, dc) {
         <div className="custom-menu">
           <button
             type="button"
-            data-toggle="collapse"
-            data-target=".sidebar-collapse"
-            className="btn btn-primary"
+            className={`${isNavCollapsed ? 'btn btn-primary sidebar closed' : 'btn btn-primary sidebar open'}`}
+            onClick={handleNavCollapse}
           >
-            <i className="fa fa-bars"></i>
+            <i 
+            // className="fa fa-bars"
+            className={`${isNavCollapsed ? 'fas fa-angle-double-right' : 'fas fa-angle-double-left'}`}
+            ></i>
             <span className="sr-only">Toggle Menu</span>
           </button>
         </div>
         <div className="p-4">
-          <div className="sidebar-collapse">
+          <div className={`${isNavCollapsed ? 'sidebar-collapse collapse' : 'sidebar-collapse collapse show'}`}>
             <a className="navbar-brand" href="/">
               <strong>MER-HACKER</strong>
             </a>
@@ -236,7 +245,7 @@ export default function Template(ac, dc) {
                 </li>
               )}
             </ul>
-            {ac.dc.flashMessages}
+            {/* {ac.dc.flashMessages} */}
           </div>
         </div>
       </nav>

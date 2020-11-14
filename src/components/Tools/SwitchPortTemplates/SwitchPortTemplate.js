@@ -180,6 +180,9 @@ export default function SwitchPortTemplate(ac) {
                   {data.error[0]}
                 </div>
               );
+              setTimeout(() => {
+                ac.dc.setflashMessages([]);
+              }, 5000);
             } else {
               setallSwitchports(data.switchports);
 
@@ -222,6 +225,9 @@ export default function SwitchPortTemplate(ac) {
                     There was an error loading the data, please try again.
                   </div>
                 );
+                setTimeout(() => {
+                  ac.dc.setflashMessages([]);
+                }, 5000);
               }
             }
           })

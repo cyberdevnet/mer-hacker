@@ -406,6 +406,9 @@ export default function CreateTemplateModal(ac) {
             Template already exists
           </div>
         );
+        setTimeout(() => {
+          setflashMessages([]);
+        }, 5000);
         setloadingSubmit(false);
       } else {
         e.formData.id = id;

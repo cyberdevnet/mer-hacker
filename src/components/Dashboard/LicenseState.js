@@ -87,6 +87,9 @@ export default function LicenseState(ac) {
                     {data.error[0]}
                   </div>
                 );
+                setTimeout(() => {
+                  ac.setflashMessages([]);
+                }, 5000);
               } else {
                 const DEVICES = Object.values(data.licenseState.licensedDeviceCounts);
                 setlicenseState(data.licenseState);

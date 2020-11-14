@@ -190,7 +190,7 @@ export default function SwitchPortTemplate(ac) {
               data.switchports.map((opt, index) => {
                 var portModel = {
                   name: opt.name,
-                  number: opt.number,
+                  number: opt.portId,
                   type: opt.type,
                   vlan: opt.vlan,
                   template: "Select Template",

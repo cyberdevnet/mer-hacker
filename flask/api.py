@@ -100,7 +100,7 @@ def get_networks():
         else:
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
-            networks = dashboard.networks.getOrganizationNetworks(
+            networks = dashboard.organizations.getOrganizationNetworks(
                 data['organizationId'])
             return {'networks': networks}
     except meraki.APIError as err:
@@ -120,7 +120,7 @@ def get_devices():
         else:
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
-            devices = dashboard.devices.getNetworkDevices(
+            devices = dashboard.networks.getNetworkDevices(
                 data['NET_ID'])
             return {'devices': devices}
     except meraki.APIError as err:
@@ -139,7 +139,7 @@ def get_subnets():
         else:
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
-            vlans = dashboard.vlans.getNetworkVlans(
+            vlans = dashboard.appliance.getNetworkApplianceVlans(
                 data['NET_ID'])
             return {'vlans': vlans}
     except meraki.APIError as err:
@@ -161,8 +161,8 @@ def clients():
         else:
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             NET_ID = data['NET_ID']
-            dashboard = meraki.DashboardAPI(ARG_APIKEY)
-            clients = dashboard.clients.getNetworkClients(
+            dashboard = meraki.DashboardAPI(ARG_APIKEY, output_log=False)
+            clients = dashboard.networks.getNetworkClients(
                 NET_ID, perPage=1000, timespan=3600)
             return {'clients': clients}
     except meraki.APIError as err:
@@ -180,7 +180,7 @@ def device_status():
         else:
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
-            deviceStatus = dashboard.organizations.getOrganizationDeviceStatuses(
+            deviceStatus = dashboard.organizations.getOrganizationDevicesStatuses(
                 data['organizationId'])
             return {'deviceStatus': deviceStatus}
     except meraki.APIError as err:
@@ -201,7 +201,7 @@ def inventory():
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
             organization_id = data['organizationId']
-            inventory = dashboard.organizations.getOrganizationInventory(
+            inventory = dashboard.organizations.getOrganizationInventoryDevices(
                 organization_id)
             return {'inventory': inventory}
     except meraki.APIError as err:
@@ -221,7 +221,7 @@ def uplink_loss():
         else:
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
-            uplinkLoss = dashboard.organizations.getOrganizationUplinksLossAndLatency(
+            uplinkLoss = dashboard.organizations.getOrganizationDevicesUplinksLossAndLatency(
                 data['organizationId'])
             return {'uplinkLoss': uplinkLoss}
     except meraki.APIError as err:
@@ -240,14 +240,15 @@ def get_all_networks_subnets():
             merakirequestthrottler()
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
-            networks = dashboard.networks.getOrganizationNetworks(
+            networks = dashboard.organizations.getOrganizationNetworks(
                 data['organizationId'])
             vlans = {}
             for x in networks:
                 try:
                     networkId = x['id']
                     networkName = x['name']
-                    allVlans = dashboard.vlans.getNetworkVlans(networkId)
+                    allVlans = dashboard.appliance.getNetworkApplianceVlans(
+                        networkId)
                     vlans.setdefault('result', [])
                     vlans['result'].append(
                         {'allVlans': allVlans, 'networkname': x['name']})
@@ -258,7 +259,6 @@ def get_all_networks_subnets():
                     error = (err.message['errors'][0])
                     print(error + ' ' + networkName)
                     continue
-            print('script end')
             return(vlans)
     except meraki.APIError as err:
         print('Error: ', err)
@@ -425,33 +425,6 @@ def migrate_switch_config():
         return {'error': [render_template('flash_template.html')]}
 
 
-@ app.route('/flask/lldp_cdp/', methods=['GET', 'POST'])
-def lldp_cdp():
-    try:
-        if request.method == 'POST':
-            global data
-            data = request.get_json(force=True, silent=True)
-            return {'data': 'ciao'}
-        else:
-            NET_ID = data['NET_ID']
-            ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
-            SERIAL_NUM = data['SERIAL_NUM']
-            TIME_SPAN = 7200
-            dashboard = meraki.DashboardAPI(ARG_APIKEY, output_log=False)
-
-            lldp_cdp = dashboard.devices.getNetworkDeviceLldp_cdp(
-                NET_ID, SERIAL_NUM, timespan=TIME_SPAN)
-            return {'lldp_cdp': lldp_cdp}
-    # except Exception as err:
-    #     print('Exception: ',err)
-    #     flash(err)
-    #     return {'error' : [render_template('flash_template.html')]}
-    except meraki.APIError as err:
-        print('Error: ', err)
-        error = (err.message['errors'][0])
-        flash(error)
-        return {'error': [render_template('flash_template.html'), err.status]}
-
 
 @ app.route('/flask/device_clients', methods=['GET', 'POST'])
 def device_clients():
@@ -463,8 +436,8 @@ def device_clients():
         else:
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             SERIAL_NUM = data['SERIAL_NUM']
-            dashboard = meraki.DashboardAPI(ARG_APIKEY)
-            device_clients = dashboard.clients.getDeviceClients(
+            dashboard = meraki.DashboardAPI(ARG_APIKEY, output_log=False)
+            device_clients = dashboard.devices.getDeviceClients(
                 SERIAL_NUM, timespan=1000)
             return {'device_clients': device_clients}
     except meraki.APIError as err:
@@ -485,8 +458,8 @@ def client():
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             NET_ID = data['NET_ID']
             CLIENT_ID = data['CLIENT_ID']
-            dashboard = meraki.DashboardAPI(ARG_APIKEY)
-            client = dashboard.clients.getNetworkClient(NET_ID, CLIENT_ID)
+            dashboard = meraki.DashboardAPI(ARG_APIKEY, output_log=False)
+            client = dashboard.networks.getNetworkClient(NET_ID, CLIENT_ID)
             return {'client': client}
     except Exception as err:
         print('Exception: ', err)
@@ -533,8 +506,8 @@ def device_switchports():
         else:
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             SERIAL_NUM = data['SERIAL_NUM']
-            dashboard = meraki.DashboardAPI(ARG_APIKEY)
-            switchports = dashboard.switch_ports.getDeviceSwitchPorts(
+            dashboard = meraki.DashboardAPI(ARG_APIKEY, output_log=False)
+            switchports = dashboard.switch.getDeviceSwitchPorts(
                 SERIAL_NUM)
             return {'switchports': switchports}
     except Exception as err:
@@ -575,18 +548,18 @@ def change_log():
             NET_ID = data['NET_ID']
             ADMIN_ID = data['ADMIN_ID']
             TIME_SPAN = data['TIME_SPAN']
-            dashboard = meraki.DashboardAPI(ARG_APIKEY)
+            dashboard = meraki.DashboardAPI(ARG_APIKEY, output_log=False)
             if len(NET_ID) > 0 and len(ADMIN_ID) > 0:
-                change_log = dashboard.change_log.getOrganizationConfigurationChanges(
+                change_log = dashboard.organizations.getOrganizationConfigurationChanges(
                     organizationId=ORG_ID, networkId=NET_ID, adminId=ADMIN_ID, timespan=TIME_SPAN)
             elif len(NET_ID) > 0 and len(ADMIN_ID) <= 0:
-                change_log = dashboard.change_log.getOrganizationConfigurationChanges(
+                change_log = dashboard.organizations.getOrganizationConfigurationChanges(
                     organizationId=ORG_ID, networkId=NET_ID, timespan=TIME_SPAN)
             elif len(ADMIN_ID) > 0 and len(NET_ID) <= 0:
-                change_log = dashboard.change_log.getOrganizationConfigurationChanges(
+                change_log = dashboard.organizations.getOrganizationConfigurationChanges(
                     organizationId=ORG_ID, adminId=ADMIN_ID, timespan=TIME_SPAN)
             elif len(ADMIN_ID) <= 0 and len(NET_ID) <= 0:
-                change_log = dashboard.change_log.getOrganizationConfigurationChanges(
+                change_log = dashboard.organizations.getOrganizationConfigurationChanges(
                     organizationId=ORG_ID, timespan=TIME_SPAN)
 
             return {'change_log': change_log}
@@ -606,8 +579,8 @@ def admins():
         else:
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             ORG_ID = data['organizationId']
-            dashboard = meraki.DashboardAPI(ARG_APIKEY)
-            admins = dashboard.admins.getOrganizationAdmins(ORG_ID)
+            dashboard = meraki.DashboardAPI(ARG_APIKEY, output_log=False)
+            admins = dashboard.organizations.getOrganizationAdmins(ORG_ID)
             return {'admins': admins}
     except Exception as err:
         print('Exception: ', err)
@@ -626,8 +599,8 @@ def usageHistory():
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             NET_ID = data['NET_ID']
             CLIENT_ID = data['CLIENT_ID']
-            dashboard = meraki.DashboardAPI(ARG_APIKEY)
-            usageHistory = dashboard.clients.getNetworkClientUsageHistory(
+            dashboard = meraki.DashboardAPI(ARG_APIKEY, output_log=False)
+            usageHistory = dashboard.networks.getNetworkClientUsageHistory(
                 NET_ID, CLIENT_ID)
             return {'usageHistory': usageHistory}
     except Exception as err:
@@ -646,7 +619,7 @@ def get_licenseState():
         else:
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
-            licenseState = dashboard.organizations.getOrganizationLicenseState(
+            licenseState = dashboard.organizations.getOrganizationLicensesOverview(
                 data['organizationId'])
             return {'licenseState': licenseState}
     except meraki.APIError as err:
@@ -664,7 +637,7 @@ def getTemplates():
         else:
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
-            getTemplates = dashboard.config_templates.getOrganizationConfigTemplates(
+            getTemplates = dashboard.organizations.getOrganizationConfigTemplates(
                 data['organizationId'])
             return {'getTemplates': getTemplates}
     except meraki.APIError as err:
@@ -682,7 +655,7 @@ def getSwitchProfiles():
         else:
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
-            getSwitchProfiles = dashboard.switch_profiles.getOrganizationConfigTemplateSwitchProfiles(
+            getSwitchProfiles = dashboard.switch.getOrganizationConfigTemplateSwitchProfiles(
                 data['organizationId'], data['configTemplateId'])
             return {'getSwitchProfiles': getSwitchProfiles}
     except meraki.APIError as err:
@@ -701,9 +674,9 @@ def createNetwork():
             name = data['newNetworkName']
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
-            type = 'appliance switch'
-            createNetwork = dashboard.networks.createOrganizationNetwork(
-                data['organizationId'], name, type)
+            product_types  = ['appliance', 'switch']
+            createNetwork = dashboard.organizations.createOrganizationNetwork(
+                data['organizationId'], name, product_types)
             return {'createNetwork': createNetwork}
     except meraki.APIError as err:
         print('Error: ', err)
@@ -724,7 +697,7 @@ def claimDevices():
             serials = data['serials']
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
-            claimDevices = dashboard.devices.claimNetworkDevices(
+            claimDevices = dashboard.networks.claimNetworkDevices(
                 network_id, serials=serials)
             return {'claimDevices': claimDevices}
     except meraki.APIError as err:
@@ -764,7 +737,6 @@ def bindProfile():
             data = request.get_json(force=True, silent=True)
             return data
         else:
-            network_id = data['network_id']
             allSelectedSwitches = data['allSelectedSwitches']
 
             bindProfileData = []
@@ -774,8 +746,8 @@ def bindProfile():
 
                 dashboard = meraki.DashboardAPI(
                     data['X-Cisco-Meraki-API-Key'], output_log=False)
-                bindProfile = dashboard.devices.updateNetworkDevice(
-                    network_id, serial, switchProfileId=switchProfileId)
+                bindProfile = dashboard.devices.updateDevice(
+                     serial, switchProfileId=switchProfileId)
                 bindProfileData.append(bindProfile)
             return {'bindProfile': bindProfileData}
     except meraki.APIError as err:
@@ -793,7 +765,6 @@ def UpdateDevices():
             data = request.get_json(force=True, silent=True)
             return data
         else:
-            network_id = data['network_id']
             allSelectedDevices = data['allSelectedDevices']
 
             UpdateDevicesData = []
@@ -805,8 +776,8 @@ def UpdateDevices():
 
                 dashboard = meraki.DashboardAPI(
                     data['X-Cisco-Meraki-API-Key'], output_log=False)
-                UpdateDevices = dashboard.devices.updateNetworkDevice(
-                    network_id, serial, name=deviceName, address=address)
+                UpdateDevices = dashboard.devices.updateDevice(
+                    serial, name=deviceName, address=address)
                 UpdateDevicesData.append(UpdateDevices)
                 
             return {'UpdateDevices': UpdateDevicesData}
@@ -818,4 +789,4 @@ def UpdateDevices():
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000)
+    app.run(host='127.0.0.1', port=5000, debug=True)

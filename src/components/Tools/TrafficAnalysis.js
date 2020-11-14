@@ -19,6 +19,7 @@ export default function TrafficAnalysis(ac) {
   const [dataInventory, setdataInventory] = useState([]);
   const [flashMessages, setflashMessages] = useState([]);
   const [loading, setloading] = useState(false);
+  const [retryCounter, setretryCounter] = useState(0);
 
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
@@ -158,13 +159,20 @@ export default function TrafficAnalysis(ac) {
 
                     R1.push(rowModel);
                     deviceData.push(rowModel);
-                    setdataInventory({ ...columns, rows: R1 });
                   });
+                  setdataInventory({ ...columns, rows: R1 });
                 }
               })
               .then(() => {
                 if (dataInventory.length !== 0) {
                   setshowtable(true);
+                  setloading(false);                } else {
+                  if (retryCounter < 4) {
+                    settrigger(trigger + 1);
+                    setretryCounter(retryCounter + 1);
+                  } else {
+                    setloading(false);
+                  }
                 }
                 setloading(false);
               });

@@ -282,6 +282,7 @@ export default function SwitchPortTemplate(ac) {
       <div>
         <button
           className="btn primary-usage-history"
+          style={{ marginTop: "-10px" }}
           onClick={() => callUsageHistory(row)}
           disabled={loadingUsage}
         >

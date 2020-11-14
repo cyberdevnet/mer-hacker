@@ -1,5 +1,15 @@
 
 
+
+.deploy-devices {
+  margin-left: 29px;
+    margin-right: 29px;
+    width: 900px;
+    text-align: center;
+    min-height: 600px;
+}
+
+
 .btn-primary.next-stepzilla{
     float: right;
     font-size: 14px;
@@ -77,3 +87,4 @@
   background: #1ABC9C;
 
 }
+

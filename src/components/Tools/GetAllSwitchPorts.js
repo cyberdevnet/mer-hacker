@@ -106,7 +106,7 @@ export default function GetAllSwitchPorts(ac) {
                 if (opt.enabled === true) {
                   var portModel = {
                     name: opt.name,
-                    number: opt.number,
+                    number: opt.portId,
                     type: opt.type,
                     vlan: opt.vlan,
                     accessPolicyNumber: opt.accessPolicyNumber,
@@ -134,7 +134,7 @@ export default function GetAllSwitchPorts(ac) {
                   // eslint-disable-next-line
                   var portModel = {
                     name: opt.name,
-                    number: opt.number,
+                    number: opt.portId,
                     type: opt.type,
                     vlan: opt.vlan,
                     accessPolicyNumber: opt.accessPolicyNumber,

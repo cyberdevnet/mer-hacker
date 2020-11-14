@@ -125,7 +125,7 @@ def write_mx_vpn_fw_rules(file, orgid, f, ARG_APIKEY):
     try:
         # myRules=meraki.mx_vpn_firewall.get_organization_vpn_firewall_rules(orgid)[0:-1]
         dashboard = merakiDashboard.DashboardAPI(ARG_APIKEY, output_log=False)
-        myRules = dashboard.mx_vpn_firewall.getOrganizationVpnFirewallRules(
+        myRules = dashboard.appliance.getOrganizationApplianceVpnVpnFirewallRules(
             orgid)
         file.write("# MX VPN firewall\n")
         file.write("# https://dashboard.meraki.com/api_docs#mx-vpn-firewall\n")
@@ -260,15 +260,15 @@ def write_devices_props(file, meraki, networkid):
 def write_mydevices(file, networkid, ARG_APIKEY, f):
 
     dashboard = merakiDashboard.DashboardAPI(ARG_APIKEY, output_log=False)
-    mydevice = dashboard.devices.getNetworkDevices(networkid)
+    mydevice = dashboard.networks.getNetworkDevices(networkid)
     try:
         if mydevice is None:
             return
         for row in mydevice:
             if 'switchProfileId' in row:
-                switchports = dashboard.switch_ports.getDeviceSwitchPorts(
+                switchports = dashboard.switch.getDeviceSwitchPorts(
                     row['serial'])
-
+                
                 for port in switchports:
                     if 'macWhitelist' in port:
                         del port['macWhitelist']
@@ -285,9 +285,9 @@ def write_mydevices(file, networkid, ARG_APIKEY, f):
                             port[key] = b
 
                     file.write("\t\tputurl = 'https://api.meraki.com/api/v0/devices/" +
-                               str(row['serial'])+"/switchPorts/"+str(port['number'])+"'\n")
+                               str(row['serial'])+"/switchPorts/"+str(port['portId'])+"'\n")
                     file.write("\t\tprint('Restoring configuration Port" +
-                               str(port['number'])+" switch "+str(row['serial'])+"',file=f)\n")
+                               str(port['portId'])+" switch "+str(row['serial'])+"',file=f)\n")
                     file.write("\t\tf.flush()\n")
                     file.write("\t\tpayload = '"+dumpsport+"'\n")
                     file.write(
@@ -295,8 +295,9 @@ def write_mydevices(file, networkid, ARG_APIKEY, f):
             else:
                 print("warning: device " +
                       str(row['serial'])+" is not a Switch, skipping.", file=f)
-                # print("warning: device is not a Switch, skipping.",file=f)
+
     except merakiDashboard.APIError as err:
+        print('err: ', err)
         print("No Switchs found or there was an error writing the configuration.", file=f)
         print(err, file=f)
         f.flush()

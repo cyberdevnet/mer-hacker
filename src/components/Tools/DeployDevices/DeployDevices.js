@@ -282,10 +282,7 @@ export default function DeployDevices(ac) {
   return (
     <div>
       <Dialog open={startWizard} fullWidth={true} maxWidth="md">
-        <div
-          className="container"
-          style={{ width: "900px", textAlign: "center", minHeight: "600px" }}
-        >
+        <div className="deploy-devices">
           <div className="modal-header stepzilla">
             <button
               onClick={CloseWizard}

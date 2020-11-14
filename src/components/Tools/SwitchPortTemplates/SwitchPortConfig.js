@@ -112,7 +112,7 @@ export default function SwitchPortConfig(ac) {
                       {" "}
                       Switchport{" "}
                     </th>
-                    <td> {ac.dc.singleSwitchports.number} </td>
+                    <td> {ac.dc.singleSwitchports.portId} </td>
                   </tr>
                   <tr>
                     <th scope="row" style={{ width: "100%", float: "left" }}>

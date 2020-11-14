@@ -165,16 +165,16 @@ export default function ClientsusageHistory(ac) {
               let dataCut = data.usageHistory.slice(range);
               // eslint-disable-next-line
               dataCut.map((opt, index) => {
-                let unix_timestamp = opt.ts;
-                var date = new Date(unix_timestamp * 1000);
+                // let unix_timestamp = opt.ts;
+                // var date = new Date(unix_timestamp * 1000);
                 let newArray = { ...usageHistory };
 
                 newArray.series[0].data[index] = {
-                  x: date,
+                  x: opt.ts,
                   y: opt.sent,
                 };
                 newArray.series[1].data[index] = {
-                  x: date,
+                  x: opt.ts,
                   y: opt.received,
                 };
               });
@@ -182,12 +182,12 @@ export default function ClientsusageHistory(ac) {
               let dataCut = data.usageHistory;
               // eslint-disable-next-line
               dataCut.map((opt, index) => {
-                let unix_timestamp = opt.ts;
-                var date = new Date(unix_timestamp * 1000);
+                // let unix_timestamp = opt.ts;
+                // var date = new Date(unix_timestamp * 1000);
                 let newArray = { ...usageHistory };
 
-                newArray.series[0].data[index] = { x: date, y: opt.sent };
-                newArray.series[1].data[index] = { x: date, y: opt.received };
+                newArray.series[0].data[index] = { x: opt.ts, y: opt.sent };
+                newArray.series[1].data[index] = { x: opt.ts, y: opt.received };
               });
             }
           }
@@ -229,9 +229,10 @@ export default function ClientsusageHistory(ac) {
               padding: 0,
             }}
           >
-            <div className="row">
               <div className="mixed-chart">{chart}</div>
-            </div>
+            {/* <div className="row">
+              <div className="mixed-chart">{chart}</div>
+            </div> */}
           </div>
         </div>
       </div>

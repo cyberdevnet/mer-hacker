@@ -28,8 +28,13 @@
   margin-left: 0px;
 }
 
+.card-body.license{
+  margin: -11px;
+
+}
+
 .license-overflow {
-  height: 328px;
+  min-height: 305px;
   overflow-y: auto;
 }
 
@@ -89,3 +94,35 @@
 .fa-users {
   color: #467fcf
 }
+
+
+@media (max-width: 2560px){
+  .license-overflow {
+    min-height: 404px;
+  }
+  }
+
+@media (max-width: 1920px){
+  .license-overflow {
+    min-height: 304px;
+  }
+  }
+
+@media (max-width: 1683px){
+  .license-overflow {
+    min-height: 279px;
+  }
+  }
+
+@media (max-width: 1366px){
+  .license-overflow {
+    min-height: 255px;
+  }
+  }
+
+
+@media (max-width: 992px){
+  .license-overflow {
+    min-height: 314px;
+  }
+  }

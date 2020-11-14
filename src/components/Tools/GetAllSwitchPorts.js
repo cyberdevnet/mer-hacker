@@ -111,12 +111,7 @@ export default function GetAllSwitchPorts(ac) {
                     vlan: opt.vlan,
                     accessPolicyNumber: opt.accessPolicyNumber,
                     allowedVlans: opt.allowedVlans,
-                    enabled: (
-                      <span
-                        className="glyphicon glyphicon-check"
-                        style={{ color: "#1ABC9C" }}
-                      ></span>
-                    ),
+                    enabled: <span className="fas fa-check" style={{ color: "#1ABC9C" }}></span>,
                     isolationEnabled: opt.isolationEnabled,
                     linkNegotiation: opt.linkNegotiation,
                     macWhitelist: opt.macWhitelist,
@@ -139,12 +134,7 @@ export default function GetAllSwitchPorts(ac) {
                     vlan: opt.vlan,
                     accessPolicyNumber: opt.accessPolicyNumber,
                     allowedVlans: opt.allowedVlans,
-                    enabled: (
-                      <span
-                        className="glyphicon glyphicon-check"
-                        style={{ color: "#f36a5a" }}
-                      ></span>
-                    ),
+                    enabled: <span className="fas fa-check" style={{ color: "#f36a5a" }}></span>,
                     isolationEnabled: opt.isolationEnabled,
                     linkNegotiation: opt.linkNegotiation,
                     macWhitelist: opt.macWhitelist,

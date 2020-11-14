@@ -28,13 +28,9 @@ export default function TopologyVPNModal(ac) {
   // eslint-disable-next-line
   ac.dc.modelVPN.subnets.map((item, index) => {
     if (item.useVpn) {
-      glyphicon.push(
-        <span className="glyphicon glyphicon-check" style={{ color: "#1ABC9C" }}></span>
-      );
+      glyphicon.push(<span className="fas fa-check" style={{ color: "#1ABC9C" }}></span>);
     } else {
-      glyphicon.push(
-        <span className="glyphicon glyphicon-check" style={{ color: "#f36a5a" }}></span>
-      );
+      glyphicon.push(<span className="fas fa-check" style={{ color: "#f36a5a" }}></span>);
     }
 
     subnets.push(
@@ -52,60 +48,55 @@ export default function TopologyVPNModal(ac) {
     <Dialog open={true} fullWidth>
       <div>
         <div className="modal-dialog modal-confirm">
-          <div>
+          <div className="modal-content">
             <div className="modal-header">
+              {/*eslint-disable-next-line */}
+              <a
+                onClick={handleVPNnodeDown}
+                type="button"
+                data-dismiss="modal"
+                aria-hidden="true"
+                style={{
+                  outline: "none",
+                  fontSize:'25px',
+                  position:'relative',
+                  left:'390px',
+                  marginRight:'10px'
+                }}
+              >
+                <span className="fas fa-arrow-circle-left"></span>
+              </a>
+              {/*eslint-disable-next-line */}
+              <a
+                onClick={handleVPNnodeUp}
+                type="button"
+                data-dismiss="modal"
+                aria-hidden="true"
+                style={{
+                  outline: "none",
+                  fontSize:'25px',
+                  position:'relative',
+                  left:'390px',
+                  marginRight:'10px'
+                }}
+              >
+                <span className="fas fa-arrow-circle-right"></span>
+              </a>
               <button
                 onClick={handleTopologyVPNModal}
                 type="button"
                 className="close"
                 data-dismiss="modal"
                 aria-hidden="true"
-                style={{ top: "0px", right: "-55px", outline: "none" }}
+                style={{ bottom: "45px", left: "95px", outline: "none",position:'relative' }}
               ></button>
-              <button
-                onClick={handleVPNnodeUp}
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-hidden="true"
-                style={{
-                  top: "65px",
-                  right: "-45px",
-                  fontSize: "23px",
-                  color: "black",
-                  outline: "none",
-                }}
-              >
-                <span className="glyphicon glyphicon-circle-arrow-right"></span>
-              </button>
-              <button
-                onClick={handleVPNnodeDown}
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-hidden="true"
-                style={{
-                  top: "65px",
-                  left: "-45px",
-                  fontSize: "23px",
-                  color: "black",
-                  outline: "none",
-                }}
-              >
-                <span className="glyphicon glyphicon-circle-arrow-left"></span>
-              </button>
             </div>
             <div
               className="modal-body text-center"
-              style={{ fontSize: "11px", color: "darkslategray" }}
+              style={{ margin:'-30px' }}
             >
               <h4>VPN Node Details</h4>
               <table className="table table-striped" id="table1">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                  </tr>
-                </thead>
                 <tbody>
                   <tr>
                     <th scope="row">Name</th>

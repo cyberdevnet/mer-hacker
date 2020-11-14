@@ -11,6 +11,8 @@ import ToolsTemplate from "./ToolsTemplate";
 import AlertModal from "./AlertsModal";
 import Topology from "../components/Tools/Topology/Topology";
 import ReactTooltip from "react-tooltip";
+import Avatar from "../../public/avatar.png";
+
 
 import "../styles/Template.css";
 
@@ -102,12 +104,16 @@ export default function Template(ac, dc) {
             <div className="d-flex order-lg-2 ml-auto">
               <div className="dropdown">
                 <a href="/#" className="nav-link pr-0 leading-none" data-toggle="dropdown">
-                  <span className="avatar"></span>
+                  <span
+                      style={{ backgroundImage: "url(" + Avatar + ")" }}
+                      className="avatar"
+                  
+                  ></span>
                   <span className="ml-2 d-none d-lg-block">
                     <span className="text-default">{ac.dc.User}</span>
                   </span>
                 </a>
-                <div className="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                <div className="dropdown-menu dropdown-menu-left dropdown-menu-arrow">
                   <div className="dropdown-item" href="/#">
                     <li>
                       {/*eslint-disable-next-line */}

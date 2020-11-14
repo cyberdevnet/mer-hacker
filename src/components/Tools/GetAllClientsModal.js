@@ -54,7 +54,7 @@ export default function GetAllClientsModal(ac) {
                   outline: "none",
                 }}
               >
-                <span className="glyphicon glyphicon-circle-arrow-right"></span>
+                <span className="fa fa-arrow-circle-right"></span>
               </button>
               <button
                 onClick={handleClientDown}
@@ -70,7 +70,7 @@ export default function GetAllClientsModal(ac) {
                   outline: "none",
                 }}
               >
-                <span className="glyphicon glyphicon-circle-arrow-left"></span>
+                <span className="fa fa-arrow-circle-left"></span>
               </button>
             </div>
             <div

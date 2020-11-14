@@ -11,38 +11,38 @@ a {
 }
 
 .select-organization {
-  padding: 0 0 0 15px;
+  padding: 0 0 0 10px;
   margin: 0 0 7px;
-  color: #bdbebf;
-  font-size: 11px;
-  font-weight: 200;
+  color: #495057;
+ font-size: 11px;
+  font-weight: 400;
 }
 .select-organization p {
-  font-size: 13px;
+  font-size: 15px;
   line-height: 25px;
   padding-top: 10px;
 }
 .select-network {
-  padding: 0 0 0 15px;
+  padding: 0 0 0 10px;
   margin: 0 0 7px;
-  color: #bdbebf;
+  color: #495057;
   font-size: 11px;
-  font-weight: 200;
+  font-weight: 400;
 }
 .select-network p {
-  font-size: 13px;
+  font-size: 15px;
   line-height: 25px;
   padding-top: 10px;
 }
 .select-tools {
-  padding: 0 0 0 15px;
+  padding: 0 0 0 10px;
   margin: 0 0 7px;
-  color: #bdbebf;
+  color: #495057;
   font-size: 11px;
-  font-weight: 200;
+  font-weight: 400;
 }
 .select-tools p {
-  font-size: 13px;
+  font-size: 15px;
   line-height: 25px;
   padding-top: 10px;
 }
@@ -246,7 +246,54 @@ button:focus {
 .container {
   min-width: 500px;
 }
+
 }
 
 
+.table th, .text-wrap table th, .table td, .text-wrap table td {
+  padding: 6px;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+}
 
+.avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-left: -13px;
+  background: #ffff no-repeat center/cover;
+}
+
+.dropdown-menu.dropdown-menu-left.dropdown-menu-arrow.show {
+
+  transform: translate3d(5px, 58px, 0px) !important;
+}
+
+.register-left {
+  text-align: center;
+  color: #fff;
+  margin-top: 4%;
+}
+
+.register-left img {
+  margin-top: 15%;
+  margin-bottom: 5%;
+  width: 25%;
+  animation: mover 1s infinite alternate;
+}
+
+@-webkit-keyframes mover {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-20px);
+  }
+}
+@keyframes mover {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-20px);
+  }
+}

@@ -108,12 +108,7 @@ export default function SwitchPortTemplate(ac) {
                       recentDeviceSerial: opt.recentDeviceSerial,
                       smInstalled: opt.smInstalled,
                       ssid: opt.ssid,
-                      status: (
-                        <span
-                          className="glyphicon glyphicon-check"
-                          style={{ color: "#1ABC9C" }}
-                        ></span>
-                      ),
+                      status: <span className="fas fa-check" style={{ color: "#1ABC9C" }}></span>,
                       switchport: opt.switchport,
                       usage: opt.usage,
                       user: opt.user,
@@ -140,12 +135,7 @@ export default function SwitchPortTemplate(ac) {
                       recentDeviceSerial: opt.recentDeviceSerial,
                       smInstalled: opt.smInstalled,
                       ssid: opt.ssid,
-                      status: (
-                        <span
-                          className="glyphicon glyphicon-check"
-                          style={{ color: "#f36a5a" }}
-                        ></span>
-                      ),
+                      status: <span className="fas fa-check" style={{ color: "#f36a5a" }}></span>,
                       switchport: opt.switchport,
                       usage: opt.usage,
                       user: opt.user,

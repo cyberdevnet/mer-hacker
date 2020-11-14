@@ -219,10 +219,11 @@ function App() {
                 // eslint-disable-next-line
                 NET.map((item) => {
                   var a = item.productTypes.indexOf("appliance");
-                  if (
-                    (item.type === "combined" && a !== -1) ||
-                    (item.type === "appliance" && a !== -1)
-                  ) {
+                  if (a !== -1) {
+                    // if (
+                    //   (item.type === "combined" && a !== -1) ||
+                    //   (item.type === "appliance" && a !== -1)
+                    // )
                     var IDcombinedListModel = [
                       {
                         id: item.id,

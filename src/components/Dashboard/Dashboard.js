@@ -96,7 +96,7 @@ export default function Dashboard(ac) {
         </div>
         <div className="col-sm-6 col-lg-3">
           <div className="card">
-            <div className="card-body">
+            <div className="card-body license">
               <Suspense fallback={renderLoader()}>
                 <LicenseState {...ac} />
               </Suspense>

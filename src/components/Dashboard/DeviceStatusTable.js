@@ -96,10 +96,7 @@ export default function DeviceStatusTable(ac) {
                       wan2Ip: item.wan2Ip,
                       serial: item.serial,
                       usingCellularFailover: (
-                        <span
-                          className="glyphicon glyphicon-check"
-                          style={{ color: "#1ABC9C" }}
-                        ></span>
+                        <span className="fas fa-check" style={{ color: "#1ABC9C" }}></span>
                       ),
                     });
                   } else {

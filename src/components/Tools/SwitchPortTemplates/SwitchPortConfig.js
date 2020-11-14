@@ -32,50 +32,49 @@ export default function SwitchPortConfig(ac) {
         <div className="modal-dialog-summary modal-confirm-summary">
           <div>
             <div className="modal-header" style={{ borderBottom: "none" }}>
+            {/*eslint-disable-next-line */}
+              <a
+                onClick={handleClientDown}
+                type="button"
+                data-dismiss="modal"
+                aria-hidden="true"
+                style={{
+                  outline: "none",
+                  fontSize:'25px',
+                  position:'relative',
+                  left:'440px',
+                  marginRight:'10px'
+                }}
+              >
+                <span className="fas fa-arrow-circle-left"></span>
+              </a>
+              {/*eslint-disable-next-line */}
+              <a
+                onClick={handleClientUp}
+                type="button"
+                data-dismiss="modal"
+                aria-hidden="true"
+                style={{
+                  outline: "none",
+                  fontSize:'25px',
+                  position:'relative',
+                  left:'440px',
+                  marginRight:'10px'
+                }}
+              >
+                <span className="fas fa-arrow-circle-right"></span>
+              </a>
               <button
                 onClick={Cancel}
                 type="button"
                 className="close"
                 data-dismiss="modal"
                 aria-hidden="true"
-                style={{ top: "0px", right: "-55px", outline: "none" }}
+                style={{ bottom: "10px", left: "24px", outline: "none",position:'relative' }}
               ></button>
-              <button
-                onClick={handleClientUp}
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-hidden="true"
-                style={{
-                  top: "65px",
-                  right: "-45px",
-                  fontSize: "23px",
-                  color: "black",
-                  outline: "none",
-                }}
-              >
-                <span className="glyphicon glyphicon-circle-arrow-right"></span>
-              </button>
-              <button
-                onClick={handleClientDown}
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-hidden="true"
-                style={{
-                  top: "65px",
-                  left: "-45px",
-                  fontSize: "23px",
-                  color: "black",
-                  outline: "none",
-                }}
-              >
-                <span className="glyphicon glyphicon-circle-arrow-left"></span>
-              </button>
             </div>
             <div
               className="modal-body text-center"
-              style={{ fontSize: "11px", color: "darkslategray" }}
             >
               <h4>Switchport Configuration</h4>
               <table className="table table-striped" id="table2">
@@ -103,147 +102,146 @@ export default function SwitchPortConfig(ac) {
             </div>
             <div
               className="modal-body text-center"
-              style={{ fontSize: "11px", color: "darkslategray" }}
             >
               <table className="table table-striped table-bordered" id="table1">
                 <tbody key="1">
                   <tr>
                     <th scope="row" style={{ width: "100%", float: "left" }}>
-                      {" "}
-                      Switchport{" "}
+                      
+                      Switchport
                     </th>
                     <td> {ac.dc.singleSwitchports.portId} </td>
                   </tr>
                   <tr>
                     <th scope="row" style={{ width: "100%", float: "left" }}>
-                      {" "}
-                      Name{" "}
+                      
+                      Name
                     </th>
                     <td> {ac.dc.singleSwitchports.name} </td>
                   </tr>
                   <tr>
                     <th scope="row" style={{ width: "100%", float: "left" }}>
-                      {" "}
-                      Tags{" "}
+                      
+                      Tags
                     </th>
                     <td> {ac.dc.singleSwitchports.tags} </td>
                   </tr>
                   <tr>
                     <th scope="row" style={{ width: "100%", float: "left" }}>
-                      {" "}
-                      Port enabled{" "}
+                      
+                      Port enabled
                     </th>
                     <td> {`${ac.dc.singleSwitchports.enabled}`} </td>
                   </tr>
                   <tr>
                     <th scope="row" style={{ width: "100%", float: "left" }}>
-                      {" "}
-                      PoE{" "}
+                      
+                      PoE
                     </th>
                     <td> {`${ac.dc.singleSwitchports.poeEnabled}`} </td>
                   </tr>
                   <tr>
                     <th scope="row" style={{ width: "100%", float: "left" }}>
-                      {" "}
-                      Type{" "}
+                      
+                      Type
                     </th>
                     <td> {ac.dc.singleSwitchports.type} </td>
                   </tr>
                   <tr>
                     <th scope="row" style={{ width: "100%", float: "left" }}>
-                      {" "}
-                      Native VLAN{" "}
+                      
+                      Native VLAN
                     </th>
                     <td> {ac.dc.singleSwitchports.vlan} </td>
                   </tr>
                   <tr>
                     <th scope="row" style={{ width: "100%", float: "left" }}>
-                      {" "}
-                      Allowed VLANs{" "}
+                      
+                      Allowed VLANs
                     </th>
                     <td> {ac.dc.singleSwitchports.allowedVlans} </td>
                   </tr>
                   <tr>
                     <th scope="row" style={{ width: "100%", float: "left" }}>
-                      {" "}
-                      Access policy{" "}
+                      
+                      Access policy
                     </th>
                     <td> {ac.dc.singleSwitchports.accessPolicyNumber} </td>
                   </tr>
                   <tr>
                     <th scope="row" style={{ width: "100%", float: "left" }}>
-                      {" "}
-                      Whitelisted MACs{" "}
+                      
+                      Whitelisted MACs
                     </th>
                     <td> {ac.dc.singleSwitchports.stickyMacWhitelist} </td>
                   </tr>
                   <tr>
                     <th scope="row" style={{ width: "100%", float: "left" }}>
-                      {" "}
-                      Whitelist size limit{" "}
+                      
+                      Whitelist size limit
                     </th>
                     <td> {ac.dc.singleSwitchports.stickyMacWhitelistLimit} </td>
                   </tr>
                   <tr>
                     <th scope="row" style={{ width: "100%", float: "left" }}>
-                      {" "}
-                      VLAN{" "}
+                      
+                      VLAN
                     </th>
                     <td> {ac.dc.singleSwitchports.vlan} </td>
                   </tr>
                   <tr>
                     <th scope="row" style={{ width: "100%", float: "left" }}>
-                      {" "}
-                      Voice VLAN{" "}
+                      
+                      Voice VLAN
                     </th>
                     <td> {ac.dc.singleSwitchports.voiceVlan} </td>
                   </tr>
                   <tr>
                     <th scope="row" style={{ width: "100%", float: "left" }}>
-                      {" "}
-                      Link{" "}
+                      
+                      Link
                     </th>
                     <td> {ac.dc.singleSwitchports.linkNegotiation} </td>
                   </tr>
                   <tr>
                     <th scope="row" style={{ width: "100%", float: "left" }}>
-                      {" "}
-                      RSTP{" "}
+                      
+                      RSTP
                     </th>
                     <td> {`${ac.dc.singleSwitchports.rstpEnabled}`} </td>
                   </tr>
                   <tr>
                     <th scope="row" style={{ width: "100%", float: "left" }}>
-                      {" "}
-                      STP guard{" "}
+                      
+                      STP guard
                     </th>
                     <td> {ac.dc.singleSwitchports.stpGuard} </td>
                   </tr>
                   <tr>
                     <th scope="row" style={{ width: "100%", float: "left" }}>
-                      {" "}
-                      Port schedule{" "}
+                      
+                      Port schedule
                     </th>
                     <td> {ac.dc.singleSwitchports.portScheduleId} </td>
                   </tr>
                   <tr>
                     <th scope="row" style={{ width: "100%", float: "left" }}>
-                      {" "}
-                      Port isolation{" "}
+                      
+                      Port isolation
                     </th>
                     <td> {`${ac.dc.singleSwitchports.isolationEnabled}`} </td>
                   </tr>
                   <tr>
                     <th scope="row" style={{ width: "100%", float: "left" }}>
-                      {" "}
-                      Storm Control{" "}
+                      
+                      Storm Control
                     </th>
                     <td> {ac.dc.singleSwitchports.stormControlEnabled} </td>
                   </tr>
                   <tr>
                     <th scope="row" style={{ width: "100%", float: "left" }}>
-                      {" "}
-                      UDLD{" "}
+                      
+                      UDLD
                     </th>
                     <td> {ac.dc.singleSwitchports.udld} </td>
                   </tr>

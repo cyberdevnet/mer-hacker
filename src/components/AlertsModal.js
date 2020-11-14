@@ -9,30 +9,37 @@ export default function AlertsModal(ac) {
   };
   return (
     <Dialog open={true}>
-      <div>
-        <div className="modal-dialog modal-confirm">
-          <div>
-            <div className="modal-header">
-              <div className="icon-box">
-                <i className="material-icons">&#xE86B;</i>
-                <i className="material-icons">&#xE86B;</i>
-                <i className="material-icons">&#xE645;</i>
-              </div>
-              <button
-                onClick={handleAlertsModal}
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-hidden="true"
-              ></button>
-            </div>
-            <div className="modal-body text-center">
-              <h4>Something went wrong</h4>
-              <span>{ac.dc.AlertModalError}</span>
-            </div>
-          </div>
-        </div>
+
+  
+  
+<div className="modal-dialog modal-confirm">
+  <div className="modal-content">
+    <div style={{marginTop:'-45px'}} className="modal-header text-center">
+      <button
+        onClick={handleAlertsModal}
+        type="button"
+        className="close"
+        data-dismiss="modal"
+        aria-hidden="true"
+      ></button>
+    </div>
+    <div style={{marginTop:'-25px'}} className="modal-body text-center">
+    <div className="icon-box">
+        <i className="material-icons">&#xE86B;</i>
+        <i className="material-icons">&#xE86B;</i>
+        <i className="material-icons">&#xE645;</i>
       </div>
+    </div>
+    <div className="modal-body text-center">
+      <h4>Something went wrong</h4>
+      <span>{ac.dc.AlertModalError}</span>
+    </div>
+  </div>
+</div>
+
+
+
     </Dialog>
   );
 }
+

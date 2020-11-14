@@ -344,6 +344,7 @@ export default function Topology(ac) {
                 return res.json();
               })
               .then((site2site) => {
+              console.log("APIcall -> site2site", site2site);
                 if (site2site.error) {
                   ac.setflashMessages(
                     <div className="form-input-error-msg alert alert-danger">
@@ -730,7 +731,6 @@ export default function Topology(ac) {
 
   return (
     <div id="page-inner-tool-templates" style={{ margin: "-65px 20px 10px 0px" }}>
-      <div>{ac.flashMessages && <span>{ac.flashMessages}</span>}</div>
       <div className="row-inventory tools">
         <div className="col-xs-12">
           <div className="card">
@@ -879,6 +879,7 @@ export default function Topology(ac) {
             </div>
           </div>
         </div>
+        <div>{ac.flashMessages && <span>{ac.flashMessages}</span>}</div>
         {skeleton}
         {switchGraph === "Tree" ? tree : graph}
         {switchTopologyModal ? (

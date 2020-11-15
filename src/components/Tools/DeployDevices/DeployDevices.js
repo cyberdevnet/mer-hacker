@@ -318,17 +318,13 @@ export default function DeployDevices(ac) {
               </Stepper>
               <div>
                 {activeStep === steps.length ? (
-                  <div style={{ marginTop: "100px" }}>
+                  <div style={{ marginTop: "1px" }}>
                     <div id="myModal">
                       <div className="modal-dialog modal-confirm">
-                        <div>
-                          <div className="modal-header">
-                            <div className="icon-box-login" style={{ background: "#1ABC9C" }}>
-                              <i className="material-icons">&#xE876;</i>
-                            </div>
-                            <h4 className="modal-title">Awesome!</h4>
-                          </div>
+                        <div className="modal-content">
                           <div className="modal-body">
+                          <div className="fa fa-check-circle" style={{ color: "#1ABC9C", fontSize:'60px' }}></div>
+                            <h4 className="modal-title">Awesome!</h4>
                             <div>
                               <p>Your devices have been claimed and updated.</p>
                             </div>

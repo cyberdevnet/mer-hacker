@@ -296,13 +296,6 @@ module.exports = function (app) {
     })
   );
   app.use(
-    "/flask/delete_debugfile",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:5000",
-      changeOrigin: true,
-    })
-  );
-  app.use(
     "/flask/site2site",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",

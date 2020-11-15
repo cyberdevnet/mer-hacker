@@ -47,7 +47,6 @@ export default function Logout(ac, props) {
       ac.setcollapseButton({ display: "none" });
       ac.sethideLogin({ display: "block" });
       axios.post("/node/delete_backupfile", {});
-      axios.post("/flask/delete_debugfile", {});
       axios.post("/node/deletebackupRestoreFiles", {});
       axios.post("/node/deletebuild_meraki_switchconfigFiles", {});
       postKey();

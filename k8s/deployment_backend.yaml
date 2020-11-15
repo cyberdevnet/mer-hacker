@@ -2,11 +2,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: rqb
-  namespace: jerry
+  name: flask
+  namespace: mer-hacker
 spec:
   selector:
-    app: jerry
+    app: mer-hacker
     tier: backend
   ports:
     - protocol: TCP
@@ -16,14 +16,14 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jerry-backend
-  namespace: jerry
+  name: mer-hacker-backend
+  namespace: mer-hacker
 spec:
   minReadySeconds: 10
   replicas: 3
   selector:
     matchLabels:
-      app: jerry
+      app: mer-hacker
       tier: backend
       track: stable
   strategy:
@@ -34,46 +34,13 @@ spec:
   template:
     metadata:
       labels:
-        app: jerry
+        app: mer-hacker
         tier: backend
         track: stable
     spec:
-      imagePullSecrets:
-        - name: nts-artifacts-soc
       containers:
-        - name: rqb
-          image: docker.soc.artifacts.nts.at/rqb:latest
+        - name: mer-hacker-backend-flask
+          image: python:3.7-slim
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
-          env:
-            - name: DB_HOST
-              value: "172.21.40.168"
-            - name: DB_NAME
-              value: "postgres"
-            - name: DB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: jerry-db-secret
-                  key: DB_USER
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: jerry-db-secret
-                  key: DB_PASSWORD
-            - name: GITLAB_URL
-              value: "https://gitlab.nts.at/"
-            - name: GITLAB_PROJECT
-              value: "socinternal/configparser/readiness-check-sql-queries"
-            - name: GITLAB_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: jerry-gitlab-secret
-                  key: GITLAB_TOKEN
-          volumeMounts:
-            - name: jerry-nfs
-              mountPath: "/jerry/templates"
-      volumes:
-        - name: jerry-nfs
-          persistentVolumeClaim:
-            claimName: jerry-nfs-pvc

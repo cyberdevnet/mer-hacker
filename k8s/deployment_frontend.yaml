@@ -1,0 +1,131 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: jerry
+spec:
+  selector:
+    app: jerry
+    tier: frontend
+  ports:
+    - protocol: "TCP"
+      port: 80
+      targetPort: 80
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-nginx-cg
+  namespace: jerry
+data:
+  jerry.conf: |
+    server {
+      listen 80;
+      server_name jerry.nts.at;
+    
+      location / {
+        root /usr/share/nginx/jerry/build;
+        index index.html index.htm;
+        try_files $uri $uri/ /index.html =404;
+      }
+
+      location /flask {
+            proxy_redirect                      off;
+            proxy_set_header Host               $host;
+            proxy_set_header X-Real-IP          $remote_addr;
+            proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto  $scheme;
+            proxy_read_timeout          3m;
+            proxy_connect_timeout       3m;
+            proxy_pass http://rqb:5000;
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jerry-frontend
+  namespace: jerry
+spec:
+  minReadySeconds: 10
+  replicas: 3
+  selector:
+    matchLabels:
+      app: jerry
+      tier: frontend
+      track: stable
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 2
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: jerry
+        tier: frontend
+        track: stable
+    spec:
+      containers:
+        - name: jerry-sidecar
+          image: docker.soc.artifacts.nts.at/jerry:latest
+          imagePullPolicy: Always
+          command: ["/bin/sh", "-c", "tail -f /dev/null"]
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/sh","-c", "cp -a /deploy/jerry /jerry-app/ && exit 0"]
+          volumeMounts:
+            - name: jerry-app
+              mountPath: /jerry-app
+        - name: jerry-frontend
+          image: repo.nts.eu:8083/repository/nts_docker_repo/nts-nginx-distroless:1.18.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: 200m
+              memory: 400Mi
+            requests:
+              cpu: 200m
+              memory: 400Mi
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+              scheme: HTTP
+              httpHeaders:
+              - name: Host
+                value: jerry.nts.at
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+              scheme: HTTP
+              httpHeaders:
+              - name: Host
+                value: jerry.nts.at
+            initialDelaySeconds: 15
+            timeoutSeconds: 20
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/sites-enabled/
+            - name: jerry-app
+              mountPath: /usr/share/nginx
+      imagePullSecrets:
+        - name: nts-ext-repo
+        - name: nts-artifacts-soc
+      volumes:
+        - name: jerry-app
+          emptyDir: {}
+        - name: nginx-config
+          configMap:
+            name: frontend-nginx-cg
+            items:
+              - key: jerry.conf
+                path: keys

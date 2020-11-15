@@ -1,0 +1,21 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/auth-url: https://int_vs_auth.nts.at/logon/LogonPoint/tmindex.html
+  name: jerry-ingress
+  namespace: jerry
+spec:
+  rules:
+  - host: jerry.nts.at
+    http:
+      paths:
+      - path: /  
+        backend:
+          serviceName: frontend 
+          servicePort: 80
+  tls:
+  - hosts:
+    - jerry.nts.at
+    secretName: jerry-tls-secret

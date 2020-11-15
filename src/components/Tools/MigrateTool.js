@@ -11,8 +11,6 @@ import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/theme-twilight";
 import "ace-builds/src-min-noconflict/ext-language_tools";
-// eslint-disable-next-line
-const fs = require("browserify-fs");
 
 export default function MigrateTool(ac) {
   const [loadingButtonConvertConfig, setloadingButtonConvertConfig] = useState(false);

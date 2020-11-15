@@ -1,0 +1,25 @@
+# Stage 0 "build-stage", based on Node.js, to build and compile the frontend
+FROM python:3.7-slim as build-stage
+
+ADD ./flask/requirements.txt /tmp/requirements.txt
+
+RUN pip install -r /tmp/requirements.txt
+
+#Stage 1, Distroless Image
+FROM gcr.io/distroless/python3-debian10:nonroot
+
+COPY --from=build-stage /usr/local/lib/python3.7/ /usr/local/lib/python3.7/
+
+ADD ./flask /flask
+ADD ./misc/gunicorn /usr/local/bin/gunicorn
+ADD ./misc/gunicorn_config.py /gunicorn_config.py
+
+#WORKDIR /flask
+ENV LC_ALL C.UTF-8
+ENV PYTHONPATH="/usr/local/lib/python3.7/site-packages:/api"
+ENV PATH="/usr/local/bin/:$PATH"
+ENV GUNICORN_BIND="0.0.0.0:5000"
+ENV GUNICORN_WORKERS="4"
+
+EXPOSE 5000
+CMD ["/usr/local/bin/gunicorn", "--config", "/gunicorn_config.py", "wsgi:app"]

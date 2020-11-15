@@ -1,0 +1,50 @@
+version: '3'
+services:
+  rqb:
+    image: rqb:1.0.0
+    hostname: rqb
+    environment:
+      - DB_NAME=''
+      - DB_USER=''
+      - DB_HOST=''
+      - DB_PASSWORD=''
+      - GITLAB_TOKEN=''
+      - GITLAB_URL=''
+      - GITLAB_PROJECT=''
+    expose:
+      - 5000
+    restart: on-failure
+    stop_grace_period: 120s
+    networks:
+      - nts_jerry_network
+
+  nginx:
+    image: jerry:1.0.0
+    hostname: jerry
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - type: volume
+        source: nginxconfig
+        target: /etc/nginx/sites-enabled
+    stop_grace_period: 30s
+    restart: on-failure
+    depends_on:
+      - rqb
+    networks:
+      - nts_jerry_network 
+
+volumes:
+  nginxconfig:
+
+networks:
+  nts_jerry_network:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: docker1
+      com.docker.network.enable_ipv6: "false"
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.99.0/24

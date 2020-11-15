@@ -3,7 +3,6 @@ const app = express();
 const fileUpload = require("express-fileupload");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const bcrypt = require("bcrypt");
 const Mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");

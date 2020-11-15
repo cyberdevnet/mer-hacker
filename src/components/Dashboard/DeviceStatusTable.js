@@ -1,20 +1,24 @@
 import React, { useState, useEffect, useRef } from "react";
-import { CSVLink } from "react-csv";
-import { MDBDataTableV5 } from "mdbreact";
+import BootstrapTable from "react-bootstrap-table-next";
+import ToolkitProvider, { Search, CSVExport } from "react-bootstrap-table2-toolkit";
 import GetApiKey from "../../GetApiKey.js";
 import SkeletonTable from "../SkeletonTable";
-
+import paginationFactory from "react-bootstrap-table2-paginator";
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css";
+import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
 import "../../styles/Dashboard.css";
 
 export default function DeviceStatusTable(ac) {
   const [mapRows, setmapRows] = useState([]);
-  const [pagination, setpagination] = useState(false);
-  const [fullPagination, setfullPagination] = useState(false);
   const [showtable, setshowtable] = useState(false);
   const [trigger, settrigger] = useState(0);
 
   let callApikey = GetApiKey(ac.User);
   let apiKey = callApikey.apikey.current;
+
+  const { SearchBar } = Search;
+  const { ExportCSVButton } = CSVExport;
 
   const APIbody = {
     "X-Cisco-Meraki-API-Key": `${apiKey}`,
@@ -41,8 +45,6 @@ export default function DeviceStatusTable(ac) {
     }
     async function callDeviceStatus() {
       if (ac.organizationID !== 0 && ac.networkID !== 0) {
-        setpagination(false);
-        setfullPagination(false);
         try {
           fetch("/flask/device_status", {
             method: ["POST"],
@@ -70,11 +72,6 @@ export default function DeviceStatusTable(ac) {
               } else {
                 ac.setdeviceStatusList(data.deviceStatus);
                 ac.settotaldeviceStatusList(data.deviceStatus.length);
-
-                if (data.deviceStatus.length > 25) {
-                  setpagination(true);
-                  setfullPagination(true);
-                }
 
                 //devices list table
 
@@ -142,93 +139,173 @@ export default function DeviceStatusTable(ac) {
     // eslint-disable-next-line
   }, [trigger, ac.organizationID, ac.networkID]);
 
-  const datatable = {
-    columns: [
+  const columns = [
+    {
+      dataField: "name",
+      text: "Name",
+      editable: false,
+      key: "name",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "status",
+      text: "Status",
+      editable: false,
+      key: "status",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "networkId",
+      text: "Network",
+      editable: false,
+      key: "networkId",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "lanIp",
+      text: "Lan IP",
+      editable: false,
+      key: "lanIp",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "publicIp",
+      text: "Public IP",
+      editable: false,
+      key: "publicIp",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "wan1Ip",
+      text: "WAN 1",
+      editable: false,
+      key: "wan1Ip",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "wan2Ip",
+      text: "WAN 2",
+      editable: false,
+      key: "wan2Ip",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "usingCellularFailover",
+      text: "Cellular",
+      editable: false,
+      key: "usingCellularFailover",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "serial",
+      text: "Serial",
+      editable: false,
+      key: "serial",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+  ];
+
+
+  const Paginationoptions = {
+    paginationSize: 4,
+    pageStartIndex: 0,
+    // alwaysShowAllBtns: true, // Always show next and previous button
+    // withFirstAndLast: false, // Hide the going to First and Last page button
+    // hideSizePerPage: true, // Hide the sizePerPage dropdown always
+    // hidePageListOnlyOnePage: true, // Hide the pagination list when only one page
+    firstPageText: "First",
+    prePageText: "Back",
+    nextPageText: "Next",
+    lastPageText: "Last",
+    nextPageTitle: "First page",
+    prePageTitle: "Pre page",
+    firstPageTitle: "Next page",
+    lastPageTitle: "Last page",
+    showTotal: true,
+    disablePageTitle: true,
+    sizePerPageList: [
       {
-        label: "Name",
-        field: "name",
-        width: 150,
-        attributes: {
-          "aria-controls": "DataTable",
-          "aria-label": "Description",
-        },
+        text: "25",
+        value: 25,
       },
       {
-        label: "Status",
-        field: "status",
-        sort: "asc",
-        width: 270,
+        text: "50",
+        value: 50,
       },
       {
-        label: "Network",
-        field: "networkId",
-        sort: "asc",
-        width: 270,
+        text: "100",
+        value: 100,
       },
       {
-        label: "Lan IP",
-        field: "lanIp",
-        sort: "asc",
-        width: 100,
+        text: "250",
+        value: 250,
       },
       {
-        label: "Public IP",
-        field: "publicIp",
-        sort: "asc",
-        width: 100,
+        text: "500",
+        value: 500,
       },
       {
-        label: "WAN 1",
-        field: "wan1Ip",
-        sort: "asc",
-        width: 100,
-      },
-      {
-        label: "WAN 2",
-        field: "wan2Ip",
-        sort: "asc",
-        width: 100,
-      },
-      {
-        label: "Cellular",
-        field: "usingCellularFailover",
-        sort: "asc",
-        width: 50,
-      },
-      {
-        label: "Serial",
-        field: "serial",
-        sort: "asc",
-        width: 100,
+        text: "All",
+        ...(showtable ? { value: 500 } : { value: 100 }),
       },
     ],
-    rows: mapRows,
   };
 
   return (
     <div>
       {showtable ? (
-        <div className="panel-body">
-          <CSVLink data={mapRows} separator={","}>
-            <button className="btnCSV" color="primary">
-              Download CSV
-            </button>
-          </CSVLink>
-          <MDBDataTableV5
-            hover
-            striped
-            bordered
-            small
-            data={datatable}
-            paging={pagination}
-            searchTop
-            searchBottom={false}
-            exportToCSV={true}
-            entriesOptions={[25, 100, 250, 500]}
-            entries={25}
-            fullPagination={fullPagination}
-          />
-        </div>
+                    <div>
+                    <div className="bootstrap-table-panel">
+                      <ToolkitProvider
+                        search
+                        keyField="serial"
+                        data={mapRows}
+                        columns={columns}
+                      >
+                        {(props) => (
+                          <div>
+                            <SearchBar style={{ width: "299px" }} {...props.searchProps} />
+                            <ExportCSVButton className="export-csv" {...props.csvProps}>
+                              Export CSV
+                            </ExportCSVButton>
+                            <BootstrapTable
+                              {...props.baseProps}
+                              striped
+                              hover
+                              pagination={paginationFactory(Paginationoptions)}
+                            />
+                          </div>
+                        )}
+                      </ToolkitProvider>
+                    </div>
+                  </div>
       ) : (
         <div>
           <SkeletonTable />

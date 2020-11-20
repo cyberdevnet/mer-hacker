@@ -57,7 +57,7 @@ export default function SwitchPortTemplate(ac) {
 
   async function readTemplate() {
     try {
-      fetch("/node/read_templateFile", {
+      fetch("/flask/read_templateFile", {
         method: "POST",
         headers: {
           Accept: "application/json",

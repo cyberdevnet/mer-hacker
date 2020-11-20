@@ -59,11 +59,11 @@ export default function MigrateTool(ac) {
     const formData = new FormData();
     formData.append("backup", data.backup[0]);
 
-    const res = await fetch("/node/upload_backupfile", {
+    const res = await fetch("/flask/upload_backupfile", {
       method: "POST",
       body: formData,
     }).then((res) => res.json());
-    if (res.status === true) {
+    if (res.status === 200) {
       setbackupFileUploaded(true);
       setmessageFileUpload(
         <div className="form-input-error-msg alert alert-success">
@@ -83,7 +83,7 @@ export default function MigrateTool(ac) {
           {res.message}
         </div>
       );
-      axios.post("/node/delete_backupfile", {});
+      axios.post("/flask/delete_backupfile", {});
       setshowLiveLogs(false);
 
       setdisplayDownloadButtons({ display: "none" });
@@ -98,7 +98,7 @@ export default function MigrateTool(ac) {
     const data = new FormData();
     const file = new Blob([value], { type: "text/plain" });
     data.append("file", file, `${ac.dc.User}_build_meraki_switchconfig.py`);
-    axios.post("/node/upload_build_meraki_switchconfig", data);
+    axios.post("/flask/upload_build_meraki_switchconfig", data);
   };
 
   const handleConvertConfig = (e) => {
@@ -256,16 +256,21 @@ export default function MigrateTool(ac) {
       return;
     }
     async function OpenFile() {
-      fetch(
-        `/node/flask/cisco_meraki_migrate_tool/${ac.dc.User}_build_meraki_switchconfig.py`,
-
-        { signal: signal }
-      )
-        .then((response) => {
-          return response.text();
-        })
+      axios
+        .post("/flask/read_cisco_meraki_migrate_tool", { User: ac.dc.User, signal: signal })
         .then((data) => {
-          setswitchPortScript(data);
+          if (data.error) {
+            ac.dc.setflashMessages(
+              <div className="form-input-error-msg alert alert-danger">
+                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                {data.error[0]}
+              </div>
+            );
+            setTimeout(() => {
+              ac.dc.setflashMessages([]);
+            }, 5000);
+          } else {
+            setswitchPortScript(data.data);          }
         })
         .then(() => {
           setshowswitchPortScript(true);
@@ -333,24 +338,32 @@ export default function MigrateTool(ac) {
     if (showLiveLogs) {
       interval = setInterval(() => {
         try {
-          fetch(`/node/flask/logs/${ac.dc.User}_log_file.log`, {
-            signal: signal,
-          })
-            .then((response) => {
-              return response.text();
-            })
-            .then((data) => {
+          axios
+          .post("/flask/read_live_logs", { User: ac.dc.User, signal: signal })
+          .then((data) => {
+            if (data.error) {
+              ac.dc.setflashMessages(
+                <div className="form-input-error-msg alert alert-danger">
+                  <span className="glyphicon glyphicon-exclamation-sign"></span>
+                  {data.error[0]}
+                </div>
+              );
+              setTimeout(() => {
+                ac.dc.setflashMessages([]);
+              }, 5000);
+            } else {
               setlazyLog(
                 <LazyLog
                   extraLines={1}
                   enableSearch={true}
-                  text={data}
+                  text={data.data}
                   stream={true}
                   caseInsensitive={true}
                   selectableLines={true}
                 />
-              );
-            });
+              )
+            }
+          })
         } catch (err) {
           if (err) {
             console.log(err);

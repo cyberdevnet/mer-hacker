@@ -8,16 +8,24 @@ import importlib
 from flask import Flask, request, jsonify, abort, flash, render_template
 from flask_socketio import SocketIO
 from werkzeug.exceptions import BadRequest, HTTPException
+from werkzeug.utils import secure_filename
 import meraki
 import find_ports
 import switchporttemplate
 from backup_restore import meraki_backup_network
-# from backup_restore import meraki_restore_network
 from cisco_meraki_migrate_tool import ios_to_meraki
-# from cisco_meraki_migrate_tool import build_meraki_switchconfig
 import logging
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
+from flask import Response
+from pathlib import Path
+import shutil
+import os.path
+from os import path
+import pymongo
+from cryptography.fernet import Fernet
+from bson.objectid import ObjectId
+
 
 # dirname = os.path.dirname(__file__)
 dirname = os.path.dirname(os.path.abspath(__file__))
@@ -57,6 +65,9 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 app.config['SECRET_KEY'] = 'meraki'
 socketio = SocketIO(app)
 CORS(app)
+
+# Initializing MONGODB DataBase
+DBclient = pymongo.MongoClient("mongodb://localhost:27017/")
 
 
 #  CLEAR debug_file after user has been logged out
@@ -786,6 +797,401 @@ def UpdateDevices():
         error = (err.message['errors'][0])
         flash(error)
         return {'error': [render_template('flash_template.html'), err.status]}
+    
+    
+    
+    
+# <---------------------------------------------UTILITIES----------------------------------------------->
+# <----------------------------------------------------------------------------------------------------->
+
+
+#upload backupfile for build_meraki_switchconfig
+
+@app.route('/flask/upload_backupfile', methods=['GET', 'POST'])
+def upload_backupfile():
+    if request.method == 'POST':
+        try:
+            uploads_dir = "./cisco_meraki_migrate_tool/config_backups/backups/"
+            file = request.files.get('backup')
+            mimetype = file.content_type
+            if not file:
+                return Response('{"message": "No file uploaded", "status": 400}')
+            else:
+                if mimetype == "text/plain":
+                    backupFile = request.files['backup']
+                    backupFile.save(os.path.join(uploads_dir, secure_filename('backup.txt')))
+                    result = {"message" :"Backupfile uploaded"}
+                    return Response('{"message": "Backupfile uploaded", "status": 200}')
+
+                else:
+                    return Response('{"message": "Invalid File, please upload a valid .txt file containing the configuration", "status": 400}')
+
+        except Exception as err:
+            print('err: ', err)
+            error = {'error': err}
+            flash(error['error'])
+            return {'error': [render_template('flash_template.html')]}
+        
+        
+# DELETE backupfile for build_meraki_switchconfig(if exists)
+      
+@app.route('/flask/delete_backupfile', methods=['GET', 'POST'])
+def delete_backupfile():
+    if request.method == 'POST':
+        try:
+            path = Path('./cisco_meraki_migrate_tool/config_backups/backups/backup.txt')
+            if path.is_file():
+                Path.unlink(path)
+            else:
+                print ("File not exist")
+            return 'Backupfile deleted'
+
+        except Exception as err:
+            print('err: ', err)
+            error = {'error': err}
+            flash(error['error'])
+            return {'error': [render_template('flash_template.html')]}
+        
+
+# edit/update build_meraki_switchconfig script if modified by the AceEditor GUI
+    
+@app.route('/flask/upload_build_meraki_switchconfig', methods=['GET', 'POST'])
+def upload_build_meraki_switchconfig():
+    if request.method == 'POST':
+        try:
+            uploads_dir = "./cisco_meraki_migrate_tool/"
+            file = request.files['file']
+            file.save(os.path.join(uploads_dir, secure_filename(file.filename)))
+            return 'file changed'
+
+        except Exception as err:
+            print('err: ', err)
+            error = {'error': err}
+            flash(error['error'])
+            return {'error': [render_template('flash_template.html')]}
+        
+        
+        
+@app.route('/flask/read_cisco_meraki_migrate_tool', methods=['GET', 'POST'])
+def read_cisco_meraki_migrate_tool():
+    if request.method == 'POST':
+        try:
+            global data
+            data = request.get_json(force=True, silent=True)
+            User = data['User']
+            uploads_dir = "./cisco_meraki_migrate_tool"
+            with open(f"{uploads_dir}/{User}_build_meraki_switchconfig.py", "r") as f:
+                content = f.read() 
+
+            return content
+
+        except Exception as err:
+            print('err: ', err)
+            error = {'error': err}
+            flash(error['error'])
+            return {'error': [render_template('flash_template.html')]}
+        
+        
+@app.route('/flask/read_live_logs', methods=['GET', 'POST'])
+def read_live_logs():
+    if request.method == 'POST':
+        try:
+            global data
+            data = request.get_json(force=True, silent=True)
+            User = data['User']
+            uploads_dir = "./logs"
+            with open(f"{uploads_dir}/{User}_log_file.log", "r") as f:
+                content = f.read() 
+
+            return content
+
+        except Exception as err:
+            print('err: ', err)
+            error = {'error': err}
+            flash(error['error'])
+            return {'error': [render_template('flash_template.html')]}
+        
+        
+@app.route('/flask/read_backup_restore_file', methods=['GET', 'POST'])
+def read_backup_restore_file():
+    if request.method == 'POST':
+        try:
+            global data
+            data = request.get_json(force=True, silent=True)
+            User = data['User']
+            uploads_dir = "./backup_restore"
+            with open(f"{uploads_dir}/{User}_meraki_restore_network.py", "r") as f:
+                content = f.read() 
+
+            return content
+
+        except Exception as err:
+            print('err: ', err)
+            error = {'error': err}
+            flash(error['error'])
+            return {'error': [render_template('flash_template.html')]}
+    
+
+# edit/update meraki_restore_network script if modified by the AceEditor GUI
+    
+@app.route('/flask/edit_backup_restore_file', methods=['GET', 'POST'])
+def edit_backup_restore_file():
+    if request.method == 'POST':
+        try:
+            uploads_dir = "./backup_restore/"
+            file = request.files['file']
+            file.save(os.path.join(uploads_dir, secure_filename(file.filename)))
+            return 'file changed'
+
+        except Exception as err:
+            print('err: ', err)
+            error = {'error': err}
+            flash(error['error'])
+            return {'error': [render_template('flash_template.html')]}
+        
+
+# DELETE  backup_restore script(if exists)
+      
+@app.route('/flask/deletebackupRestoreFiles', methods=['GET', 'POST'])
+def deletebackupRestoreFiles():
+    if request.method == 'POST':
+        try:
+            global data
+            data = request.get_json(force=True, silent=True)
+            User = data['User']
+            
+            path = Path(f'./backup_restore/{User}_meraki_restore_network.py')
+            if path.is_file():
+                Path.unlink(path)
+            else:
+                print ("File not exist")
+            return 'Backupfile deleted'
+
+        except Exception as err:
+            print('err: ', err)
+            error = {'error': err}
+            flash(error['error'])
+            return {'error': [render_template('flash_template.html')]}
+        
+        
+        
+# DELETE  build_meraki_switchconfig script(if exists)
+      
+@app.route('/flask/deletebuild_meraki_switchconfigFiles', methods=['GET', 'POST'])
+def deletebuild_meraki_switchconfigFiles():
+    if request.method == 'POST':
+        try:
+            global data
+            data = request.get_json(force=True, silent=True)
+            User = data['User']
+            path = Path(f'./cisco_meraki_migrate_tool/{User}_build_meraki_switchconfig.py')
+            if path.is_file():
+                Path.unlink(path)
+            else:
+                print ("File not exist")
+            return 'Backupfile deleted'
+
+        except Exception as err:
+            print('err: ', err)
+            error = {'error': err}
+            flash(error['error'])
+            return {'error': [render_template('flash_template.html')]}
+
+
+# <---------------------------------------------END UTILITIES------------------------------------------->
+# <----------------------------------------------------------------------------------------------------->
+
+
+
+
+
+
+
+# <-------------------------------------APIKEY MANAGEMENT----------------------------------------------->
+# <----------------------------------------------------------------------------------------------------->
+
+# Initializing MONGODB apykeys Collection
+#DBclient = pymongo.MongoClient("mongodb://localhost:27017/")
+apykeysDB = DBclient["apykeys"]
+apykeysCollection = apykeysDB['apykeys']
+
+def write_key():
+    """
+    Generates a key and save it into a file
+    """
+    key = Fernet.generate_key()
+    with open("secret.key", "wb") as key_file:
+        key_file.write(key)
+
+def load_key():
+    """
+    Loads the key from the current directory named `key.key`
+    """
+    return open("secret.key", "rb").read()
+
+write_key()
+# load the previously generated key
+# key = load_key()
+key = 'Nkmiqog5Hp3xoyUPLNpic38qvN43dH9muRp2Tjm6DQU='
+f = Fernet(key)
+
+
+@app.route('/flask/post-api-key', methods=['GET', 'POST'])
+def post_api_key():
+    if request.method == 'POST':
+        try:
+            global data
+            data = request.get_json(force=True, silent=True)
+            username = data['username']
+            realUsername = data['realUsername']
+            apiKey = data['apiKey']
+            
+            apiKeyencrypted = f.encrypt(apiKey.encode('utf-8'))
+
+            if username != "leer":
+                query = { "username": username }
+                payload = {'username': username, 'realUsername': realUsername, 'apiKey': apiKeyencrypted}
+                newvalues = {"$set": payload}
+                apykeysCollection.update_one(query, newvalues, upsert=True)
+                return 'apikey updated'
+            else:
+                query = { "realUsername": realUsername }
+                apykeysCollection.delete_one(query)
+                return 'apikey deleted'
+        except Exception as err:
+            print('err: ', err)
+            error = {'error': err}
+            flash(error['error'])
+            return {'error': [render_template('flash_template.html')]}
+        
+        
+        
+@app.route('/flask/get-api-key', methods=['GET', 'POST'])
+def get_api_key():
+    if request.method == 'POST':
+        try:
+            global data
+            data = request.get_json(force=True, silent=True)
+            username = data['username']            
+            query = { "username": username }
+            x = apykeysCollection.find_one(query)
+            apiKeyencrypted =  x['apiKey']
+            
+            apiKeyDecrypted = f.decrypt(apiKeyencrypted)
+
+            return {"apiKey": apiKeyDecrypted.decode('utf-8')}
+        except Exception as err:
+            print('err: ', err)
+            error = {'error': err}
+            flash(error['error'])
+            return {'error': [render_template('flash_template.html')]}
+
+
+# <------------------------------------END APIKEY MANAGEMENT-------------------------------------------->
+# <----------------------------------------------------------------------------------------------------->
+
+
+
+# <------------------------------------SWITCHPORT TEMPLATES--------------------------------------------->
+# <----------------------------------------------------------------------------------------------------->
+# Initializing MONGODB templates Collection
+templatesDB = DBclient["templates"]
+templatesCollection = templatesDB['templates']
+
+@app.route('/flask/write_templateFile', methods=['GET', 'POST'])
+def write_templateFile():
+    if request.method == 'POST':
+        try:
+            global data
+            data = request.get_json(force=True, silent=True)
+            user = data['user']           
+            templates = data['template']           
+            payload = {'user': user, 'templates': templates}
+            x = templatesCollection.insert_one(payload)
+            
+            return {'insertedID': 'template written'}
+        except Exception as err:
+            print('err: ', err)
+            error = {'error': err}
+            flash(error['error'])
+            return {'error': [render_template('flash_template.html')]}
+        
+@app.route('/flask/read_templateFile', methods=['GET', 'POST'])
+def read_templateFile():
+    if request.method == 'POST':
+        try:
+            templates = []
+            global data
+            data = request.get_json(force=True, silent=True)
+            user = data['user']           
+            query = {'user': user}     
+            findAll = templatesCollection.find(query)
+            for x in findAll:
+                _id = str(x['_id'])
+                payload = {'_id': _id, 'user': user, 'templates' : x['templates']}
+                templates.append(payload)
+            
+            return jsonify( templates)
+        except Exception as err:
+            print('err: ', err)
+            error = {'error': err}
+            flash(error['error'])
+            return {'error': [render_template('flash_template.html')]}
+        
+        
+@app.route('/flask/update_templateFile', methods=['GET', 'POST'])
+def update_templateFile():
+    if request.method == 'POST':
+        try:
+            global data
+            data = request.get_json(force=True, silent=True)
+            _id = data['_id']   
+            user = data['user']       
+            templates = data['template']  
+            print('templates: ', templates)
+                   
+            query = {'_id': _id} 
+            payload = {'user': user, 'templates': templates}  
+            #newvalues=  {"$set": payload}
+            findOneUpdate = templatesCollection.replace_one(query, payload,upsert=True)
+            print('findOneUpdate: ', findOneUpdate)
+            
+            return {'updated': 'updated'}
+        except Exception as err:
+            print('err: ', err)
+            error = {'error': err}
+            flash(error['error'])
+            return {'error': [render_template('flash_template.html')]}
+        
+        
+        
+@app.route('/flask/delete_templateFile', methods=['GET', 'POST'])
+def delete_templateFile():
+    if request.method == 'POST':
+        try:
+            templates = []
+            global data
+            data = request.get_json(force=True, silent=True)
+            _id = data['_id']             
+                   
+            templatesCollection.delete_one({'_id': ObjectId(_id)})
+            
+            return {'deleted': 'deleted'}
+        except Exception as err:
+            print('err: ', err)
+            error = {'error': err}
+            flash(error['error'])
+            return {'error': [render_template('flash_template.html')]}
+
+
+
+
+
+
+# <------------------------------------END SWITCHPORT TEMPLATES----------------------------------------->
+# <----------------------------------------------------------------------------------------------------->
+
+
 
 
 if __name__ == '__main__':

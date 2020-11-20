@@ -257,7 +257,7 @@ export default function CreateTemplateModal(ac) {
     Port: {
       type: {
         "ui:widget": "radio",
-        classNames: "radio radio-inline",
+        classNames: "radio ",
       },
       allowedVlans: {
         classNames: "inputs-template",
@@ -286,37 +286,37 @@ export default function CreateTemplateModal(ac) {
     },
     enabled: {
       "ui:widget": "radio",
-      classNames: "radio radio-inline",
+      classNames: "radio port-enabled ",
     },
     stacking: {
       "ui:widget": "radio",
-      classNames: "radio radio-inline",
+      classNames: "radio stacking",
     },
     poeEnabled: {
       "ui:widget": "radio",
-      classNames: "radio radio-inline",
+      classNames: "radio poeEnabled",
     },
     rstpEnabled: {
       "ui:widget": "radio",
-      classNames: "radio radio-inline",
+      classNames: "radio rstpEnabled",
     },
     isolationEnabled: {
       "ui:widget": "radio",
-      classNames: "radio radio-inline",
+      classNames: "radio isolationEnabled",
     },
     trusted: {
       "ui:widget": "radio",
-      classNames: "radio radio-inline",
+      classNames: "radio trusted",
     },
     // "stormControlEnabled": {
     //     "ui:widget": "radio",
     //     "ui:disabled": true,
     //     "ui:help": "Storm Control not available",
-    //     classNames: "radio radio-inline"
+    //     classNames: "radio "
     // },
     udld: {
       "ui:widget": "radio",
-      classNames: "radio radio-inline",
+      classNames: "radio udld",
     },
     templateName: {
       classNames: "inputs-template",
@@ -415,7 +415,7 @@ export default function CreateTemplateModal(ac) {
         //Object does NOT exist
         newArr.push(e.formData);
         try {
-          fetch("/node/write_templateFile", {
+          fetch("/flask/write_templateFile", {
             method: "POST",
             headers: {
               Accept: "application/json",

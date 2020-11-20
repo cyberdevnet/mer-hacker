@@ -25,7 +25,7 @@ export default function Step6DeviceInfo(ac) {
     async function APIcallDevices() {
       setshowtable(false);
       setshowNoInformation(false);
-      await axios.post("/node/get-api-key", { username: ac.User }).then((data) => {
+      await axios.post("/flask/get-api-key", { username: ac.User }).then((data) => {
         let key = data.data.apiKey;
         fetch("/flask/devices", {
           method: ["POST"],
@@ -144,7 +144,7 @@ export default function Step6DeviceInfo(ac) {
     }
     async function UpdateDevices() {
       setloadingUpdateDevicesBtn(true);
-      await axios.post("/node/get-api-key", { username: ac.User }).then((data) => {
+      await axios.post("/flask/get-api-key", { username: ac.User }).then((data) => {
         let key = data.data.apiKey;
         fetch("/flask/UpdateDevices", {
           method: ["POST"],

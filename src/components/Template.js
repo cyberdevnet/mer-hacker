@@ -11,7 +11,11 @@ import ToolsTemplate from "./ToolsTemplate";
 import AlertModal from "./AlertsModal";
 import Topology from "../components/Tools/Topology/Topology";
 import ReactTooltip from "react-tooltip";
-import Avatar from "../../public/avatar.png";
+// import Avatar from "../../public/avatar.png";
+// import axios from "axios";
+import UserAvatar from "react-user-avatar";
+
+
 
 import "../styles/Template.css";
 
@@ -81,10 +85,17 @@ export default function Template(ac, dc) {
     history.push("/tools");
   };
 
-
   const handleNavCollapse = () => {
-    setIsNavCollapsed(!isNavCollapsed)
-  
+    setIsNavCollapsed(!isNavCollapsed);
+  };
+
+  let avatar = <UserAvatar size="45" className="avatar-name" name="UNDEFINED" />;
+
+  if (ac.dc.userEmail) {
+    const userNameAvatar = ac.dc.userEmail.toUpperCase();
+    avatar = <UserAvatar size="45" className="avatar-name" name={userNameAvatar} />;
+  } else {
+    ac.dc.setuserEmail("undefined");;
   }
 
   return (
@@ -94,18 +105,26 @@ export default function Template(ac, dc) {
         <div className="custom-menu">
           <button
             type="button"
-            className={`${isNavCollapsed ? 'btn btn-primary sidebar closed' : 'btn btn-primary sidebar open'}`}
+            className={`${
+              isNavCollapsed ? "btn btn-primary sidebar closed" : "btn btn-primary sidebar open"
+            }`}
             onClick={handleNavCollapse}
           >
-            <i 
-            // className="fa fa-bars"
-            className={`${isNavCollapsed ? 'fas fa-angle-double-right' : 'fas fa-angle-double-left'}`}
+            <i
+              // className="fa fa-bars"
+              className={`${
+                isNavCollapsed ? "fas fa-angle-double-right" : "fas fa-angle-double-left"
+              }`}
             ></i>
             <span className="sr-only">Toggle Menu</span>
           </button>
         </div>
         <div className="p-4">
-          <div className={`${isNavCollapsed ? 'sidebar-collapse collapse' : 'sidebar-collapse collapse show'}`}>
+          <div
+            className={`${
+              isNavCollapsed ? "sidebar-collapse collapse" : "sidebar-collapse collapse show"
+            }`}
+          >
             <a className="navbar-brand" href="/">
               <strong>MER-HACKER</strong>
             </a>
@@ -113,16 +132,24 @@ export default function Template(ac, dc) {
             <div className="d-flex order-lg-2 ml-auto">
               <div className="dropdown">
                 <a href="/#" className="nav-link pr-0 leading-none" data-toggle="dropdown">
-                  <span
-                      style={{ backgroundImage: "url(" + Avatar + ")" }}
-                      className="avatar"
-                  
-                  ></span>
+                  {avatar}
+                  {/* <span
+                    style={{ backgroundImage: "url(" + Avatar + ")" }}
+                    className="avatar"
+                  ></span> */}
                   <span className="ml-2 d-none d-lg-block">
                     <span className="text-default">{ac.dc.User}</span>
                   </span>
                 </a>
                 <div className="dropdown-menu dropdown-menu-left dropdown-menu-arrow">
+                  <div className="dropdown-item" href="/#">
+                    <li>
+                    <a style={{paddingLeft :'0px'}}disabled className="dropdown-item" href="/#">
+                    <i className="fa fa-user" aria-hidden="true"></i> {ac.dc.userEmail}
+                    </a>
+                    </li>
+                  </div>
+                  <div className="dropdown-divider"></div>
                   <div className="dropdown-item" href="/#">
                     <li>
                       {/*eslint-disable-next-line */}

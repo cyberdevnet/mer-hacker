@@ -11,7 +11,7 @@ export default function LoginAPI(ac) {
     const blob = new Blob(["this is\na mock file"], { type: "text/plain" });
     formData.append("backup", blob, "backup.txt");
 
-    await fetch("/node/upload_backupfile", {
+    await fetch("/flask/upload_backupfile", {
       method: "POST",
       body: formData,
     }).then((res) => res.json());

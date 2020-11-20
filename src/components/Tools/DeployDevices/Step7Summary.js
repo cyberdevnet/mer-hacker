@@ -19,7 +19,7 @@ export default function Step7Summary(ac) {
     async function APIcallDevices() {
       setshowtable(false);
       setshowNoInformation(false);
-      await axios.post("/node/get-api-key", { username: ac.User }).then((data) => {
+      await axios.post("/flask/get-api-key", { username: ac.User }).then((data) => {
         let key = data.data.apiKey;
         fetch("/flask/devices", {
           method: ["POST"],

@@ -20,7 +20,7 @@ export default function Step3Deploy(ac) {
       setloadingDeployBtn(true);
       setalertError([]);
       if (ac.dc.newNetwork === true) {
-        await axios.post("/node/get-api-key", { username: ac.User }).then((data) => {
+        await axios.post("/flask/get-api-key", { username: ac.User }).then((data) => {
           let key = data.data.apiKey;
           fetch("/flask/createNetwork", {
             method: ["POST"],
@@ -116,7 +116,7 @@ export default function Step3Deploy(ac) {
       setloadingDeployBtn(true);
       setalertError([]);
       let FormattedSN = ac.dc.serialNumbers.split(",");
-      await axios.post("/node/get-api-key", { username: ac.User }).then((data) => {
+      await axios.post("/flask/get-api-key", { username: ac.User }).then((data) => {
         let key = data.data.apiKey;
         fetch("/flask/claimDevices", {
           method: ["POST"],

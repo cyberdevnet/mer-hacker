@@ -160,3 +160,70 @@ th {
   table-layout: fixed;
   word-wrap: break-word;
 }
+
+
+.radio.port-enabled{
+  margin: 10px 110px 10px 110px;
+  position: relative;
+  float: left;
+  display: block;
+
+}
+.radio.stacking{
+  margin: 10px 110px 10px 110px;
+  position: relative;
+  float: left;
+  display: block;
+
+}
+.radio.poeEnabled{
+  margin: 10px 110px 10px 110px;
+  position: relative;
+  float: left;
+  display: block;
+
+}
+
+#root_Port{
+  margin-top: 130px;
+
+}
+
+.radio.rstpEnabled{
+  margin: 10px 50px 10px 90px;
+  position: relative;
+  float: left;
+  display: block;
+
+}
+.radio.isolationEnabled{
+  margin: 10px 50px 10px 90px;
+  position: relative;
+  float: left;
+  display: block;
+
+}
+.radio.trusted{
+  margin: 10px 50px 10px 90px;
+  position: relative;
+  float: left;
+  display: block;
+
+}
+.radio.udld{
+  margin: 10px 50px 10px 90px;
+  position: relative;
+  float: left;
+  display: block;
+
+}
+
+#root_StormControl {
+  margin-top: 130px;
+}
+
+.form-group.field.field-object {
+  background: #f8f9fa;
+  text-align: -webkit-center;
+  text-align: -moz-center;
+}

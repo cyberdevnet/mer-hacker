@@ -28,7 +28,7 @@ export default function SetApiKey(ac) {
       async function PostNewKey() {
         try {
           const postRes = await axios
-            .post("/node/post-api-key", {
+            .post("/flask/post-api-key", {
               username: ac.User,
               realUsername: ac.User,
               apiKey: inputApiKey,
@@ -81,7 +81,7 @@ export default function SetApiKey(ac) {
         <div className="modal-body" style={{ margin: "5px 15px 5px -2px" }}>
           <form>
             <input
-              type="text"
+              type="password"
               className="form-control"
               placeholder="API key"
               onChange={(e) => setinputApiKey(e.target.value)}

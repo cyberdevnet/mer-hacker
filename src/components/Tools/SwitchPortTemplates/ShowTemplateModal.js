@@ -257,7 +257,7 @@ export default function ShowTemplateModal(ac) {
     Port: {
       type: {
         "ui:widget": "radio",
-        classNames: "radio radio-inline",
+        classNames: "radio ",
       },
       allowedVlans: {
         classNames: "inputs-template",
@@ -286,37 +286,37 @@ export default function ShowTemplateModal(ac) {
     },
     enabled: {
       "ui:widget": "radio",
-      classNames: "radio radio-inline",
+      classNames: "radio port-enabled ",
     },
     stacking: {
       "ui:widget": "radio",
-      classNames: "radio radio-inline",
+      classNames: "radio stacking",
     },
     poeEnabled: {
       "ui:widget": "radio",
-      classNames: "radio radio-inline",
+      classNames: "radio poeEnabled",
     },
     rstpEnabled: {
       "ui:widget": "radio",
-      classNames: "radio radio-inline",
+      classNames: "radio rstpEnabled",
     },
     isolationEnabled: {
       "ui:widget": "radio",
-      classNames: "radio radio-inline",
+      classNames: "radio isolationEnabled",
     },
     trusted: {
       "ui:widget": "radio",
-      classNames: "radio radio-inline",
+      classNames: "radio trusted",
     },
     // "stormControlEnabled": {
     //     "ui:widget": "radio",
     //     "ui:disabled": true,
     //     "ui:help": "Storm Control not available",
-    //     classNames: "radio radio-inline"
+    //     classNames: "radio "
     // },
     udld: {
       "ui:widget": "radio",
-      classNames: "radio radio-inline",
+      classNames: "radio udld",
     },
     templateName: {
       classNames: "inputs-template",
@@ -393,7 +393,7 @@ export default function ShowTemplateModal(ac) {
   async function updateTemplate(e) {
     setloadingSubmit(true);
     try {
-      fetch("/node/read_templateFile", {
+      fetch("/flask/read_templateFile", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -414,7 +414,7 @@ export default function ShowTemplateModal(ac) {
             let _id = existingObj._id;
             singleArr.push(modified);
             try {
-              fetch("/node/update_templateFile", {
+              fetch("/flask/update_templateFile", {
                 method: "POST",
                 headers: {
                   Accept: "application/json",
@@ -464,7 +464,7 @@ export default function ShowTemplateModal(ac) {
             e.formData.id = Math.floor(Math.random() * 5000) + 1000;
 
             try {
-              fetch("/node/write_templateFile", {
+              fetch("/flask/write_templateFile", {
                 method: "POST",
                 headers: {
                   Accept: "application/json",
@@ -523,7 +523,7 @@ export default function ShowTemplateModal(ac) {
   async function deleteTemplate(e) {
     setloading(true);
     try {
-      fetch("/node/read_templateFile", {
+      fetch("/flask/read_templateFile", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -545,13 +545,16 @@ export default function ShowTemplateModal(ac) {
           if (existingObj) {
             //Object does exist
             try {
-              fetch("/node/delete_templateFile", {
+              fetch("/flask/delete_templateFile", {
                 method: "POST",
                 headers: {
                   Accept: "application/json",
                   "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ _id: _id, user: ac.cc.User }),
+                body: JSON.stringify({
+                          _id: _id,
+                          user: ac.cc.User,
+                          }),
               })
                 .then((res) => {
                   return res.json();

@@ -25,7 +25,7 @@ export default function Step4Profile(ac) {
     const signal = abortController.signal;
     async function getSwitchProfiles() {
       if (ac.dc.isTemplateSelected === true) {
-        await axios.post("/node/get-api-key", { username: ac.User }).then((data) => {
+        await axios.post("/flask/get-api-key", { username: ac.User }).then((data) => {
           let key = data.data.apiKey;
           fetch("/flask/getSwitchProfiles", {
             method: ["POST"],
@@ -85,7 +85,7 @@ export default function Step4Profile(ac) {
     async function APIcallDevices() {
       setshowtable(false);
       setstopLoading(false);
-      await axios.post("/node/get-api-key", { username: ac.User }).then((data) => {
+      await axios.post("/flask/get-api-key", { username: ac.User }).then((data) => {
         let key = data.data.apiKey;
         fetch("/flask/devices", {
           method: ["POST"],
@@ -202,7 +202,7 @@ export default function Step4Profile(ac) {
     }
     async function bindProfile() {
       setloadingSetProfileBtn(true);
-      await axios.post("/node/get-api-key", { username: ac.User }).then((data) => {
+      await axios.post("/flask/get-api-key", { username: ac.User }).then((data) => {
         let key = data.data.apiKey;
         fetch("/flask/bindProfile", {
           method: ["POST"],

@@ -9,7 +9,7 @@ export default function GetApiKey(User) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("/node/get-api-key", {
+        const res = await fetch("/flask/get-api-key", {
           method: "post",
           headers: {
             Accept: "application/json",

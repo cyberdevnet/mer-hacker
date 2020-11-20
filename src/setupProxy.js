@@ -1,167 +1,7 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
 
 module.exports = function (app) {
-  // START Express-Server Part
-  app.use(
-    "/node/backupRestoreFiles/",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:3001",
-      changeOrigin: true,
-    })
-  );
-  app.use(
-    "/node/deletebackupRestoreFiles/",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:3001",
-      changeOrigin: true,
-    })
-  );
-  app.use(
-    "/node/deletebuild_meraki_switchconfigFiles/",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:3001",
-      changeOrigin: true,
-    })
-  );
-  app.use(
-    "/node/flask/cisco_meraki_migrate_tool/",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:3001",
-      changeOrigin: true,
-    })
-  );
-  app.use(
-    "/node/flask/logs/",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:3001",
-      changeOrigin: true,
-    })
-  );
-  app.use(
-    "/node/read_templateFile",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:3001",
-      changeOrigin: true,
-    })
-  );
-  app.use(
-    "/node/write_templateFile",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:3001",
-      changeOrigin: true,
-    })
-  );
-  app.use(
-    "/node/update_templateFile",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:3001",
-      changeOrigin: true,
-    })
-  );
-  app.use(
-    "/node/delete_templateFile",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:3001",
-      changeOrigin: true,
-    })
-  );
-  app.use(
-    "/node/delete_backupfile",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:3001",
-      changeOrigin: true,
-    })
-  );
-  app.use(
-    "/node/upload",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:3001",
-      changeOrigin: true,
-    })
-  );
-  app.use(
-    "/node/readBackupRestore",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:3001",
-      changeOrigin: true,
-    })
-  );
-  app.use(
-    "/node/downloadBackupRestore",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:3001",
-      changeOrigin: true,
-    })
-  );
-  app.use(
-    "/node/upload_build_meraki_switchconfig",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:3001",
-      changeOrigin: true,
-    })
-  );
-  app.use(
-    "/node/upload_backupfile",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:3001",
-      changeOrigin: true,
-    })
-  );
 
-  app.use(
-    "/node/post-api-key",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:3001",
-      changeOrigin: true,
-    })
-  );
-  app.use(
-    "/node/test",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:3001",
-      changeOrigin: true,
-    })
-  );
-  app.use(
-    "/node/edit-api-key",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:3001",
-      changeOrigin: true,
-    })
-  );
-  app.use(
-    "/node/get-api-key",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:3001",
-      changeOrigin: true,
-    })
-  );
-  // END Express-Server Part
-
-  // START Mongodb Part
-  app.use(
-    "/dump",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:5000",
-      changeOrigin: true,
-    })
-  );
-  // END Mongodb Part
-
-  app.use(
-    "/flask/error_handling",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:5000",
-      changeOrigin: true,
-    })
-  );
-  app.use(
-    "/flask/flash",
-    createProxyMiddleware({
-      target: "http://127.0.0.1:5000",
-      changeOrigin: true,
-    })
-  );
   app.use(
     "/flask/organizations",
     createProxyMiddleware({
@@ -388,6 +228,112 @@ module.exports = function (app) {
   );
   app.use(
     "/flask/UpdateDevices",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/flask/delete_backupfile",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/flask/upload_backupfile",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/flask/upload_build_meraki_switchconfig",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/flask/read_cisco_meraki_migrate_tool",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/flask/read_live_logs",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/flask/read_backup_restore_file",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/flask/edit_backup_restore_file",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/flask/deletebackupRestoreFiles",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/flask/deletebuild_meraki_switchconfigFiles",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/flask/post-api-key",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/flask/get-api-key",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/flask/write_templateFile",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/flask/read_templateFile",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  
+  app.use(
+    "/flask/update_templateFile",
+    createProxyMiddleware({
+      target: "http://127.0.0.1:5000",
+      changeOrigin: true,
+    })
+  );
+  app.use(
+    "/flask/delete_templateFile",
     createProxyMiddleware({
       target: "http://127.0.0.1:5000",
       changeOrigin: true,

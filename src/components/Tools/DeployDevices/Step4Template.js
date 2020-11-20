@@ -33,7 +33,7 @@ export default function Step3Template(ac) {
 
     async function getTemplates() {
       setloadingTemplates(true);
-      await axios.post("/node/get-api-key", { username: ac.User }).then((data) => {
+      await axios.post("/flask/get-api-key", { username: ac.User }).then((data) => {
         let key = data.data.apiKey;
         fetch("/flask/getTemplates", {
           method: ["POST"],
@@ -91,7 +91,7 @@ export default function Step3Template(ac) {
 
     async function bindTemplate() {
       setloadingBindBtn(true);
-      await axios.post("/node/get-api-key", { username: ac.User }).then((data) => {
+      await axios.post("/flask/get-api-key", { username: ac.User }).then((data) => {
         let key = data.data.apiKey;
         fetch("/flask/bindTemplate", {
           method: ["POST"],

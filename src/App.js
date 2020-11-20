@@ -4,6 +4,9 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { useLocalStorage } from "./useLocalStorage";
 import GetApiKey from "./GetApiKey";
 import axios from "axios";
+import Cookies from "js-cookie";
+
+
 
 const MainContext = React.createContext(null);
 
@@ -62,7 +65,7 @@ function App() {
   // <================================================================================>
 
   const [organization, setorganization] = useLocalStorage("my-organization", "Set Organization");
-  const [User, setUser] = useLocalStorage("my-User", "admin");
+  const [userEmail, setuserEmail] = useLocalStorage("my-userEmail", Cookies.get("USER_NAME"));
   const [network, setnetwork] = useLocalStorage("my-networks", "Networks");
   const [organizationID, setorganizationID] = useLocalStorage("my-organizationID", 0);
   const [networkID, setnetworkID] = useLocalStorage("my-networkID", 0);
@@ -84,6 +87,21 @@ function App() {
   //                            END LOCAL STORAGE
   // <================================================================================>
 
+  Cookies.set("USER_NAME", "john.doe@nts.eu");
+
+  var name = userEmail.replace(/@[^@]+$/, "");
+  let username = "foo";
+
+  let splitName = name.split(".");
+
+  if (splitName[1] === undefined) {
+    username = splitName[0];
+  } else {
+    username = splitName[0][0] + splitName[1];
+  }
+
+  const [User, setUser] = useLocalStorage("my-User", username);
+
   let callApikey = GetApiKey(User);
   // eslint-disable-next-line
   let apiKey = callApikey.apikey.current;
@@ -103,7 +121,7 @@ function App() {
       setnetworkID(0);
       setnetwork("Networks");
       setnetworkList([]);
-      await axios.post("/node/get-api-key", { username: User }).then((data) => {
+      await axios.post("/flask/get-api-key", { username: User }).then((data) => {
         let key = data.data.apiKey;
         fetch("/flask/organizations", {
           method: ["POST"],
@@ -177,7 +195,7 @@ function App() {
       if (organization !== "Set Organization") {
         setflashMessages([]);
         setloadingNet(true);
-        await axios.post("/node/get-api-key", { username: User }).then((data) => {
+        await axios.post("/flask/get-api-key", { username: User }).then((data) => {
           let key = data.data.apiKey;
           fetch("/flask/networks", {
             method: ["POST"],
@@ -285,7 +303,7 @@ function App() {
     }
     async function callClients() {
       if (network !== "Networks") {
-        await axios.post("/node/get-api-key", { username: User }).then((data) => {
+        await axios.post("/flask/get-api-key", { username: User }).then((data) => {
           let key = data.data.apiKey;
           fetch("/flask/clients", {
             method: ["POST"],
@@ -333,7 +351,7 @@ function App() {
     }
     async function callDevices() {
       if (isOrgSelected && isNetSelected === true) {
-        await axios.post("/node/get-api-key", { username: User }).then((data) => {
+        await axios.post("/flask/get-api-key", { username: User }).then((data) => {
           let key = data.data.apiKey;
           fetch("/flask/devices", {
             method: ["POST"],
@@ -491,6 +509,8 @@ function App() {
     settoolSelected,
     showSetApiKey,
     setshowSetApiKey,
+    userEmail,
+    setuserEmail,
   };
 
   return (

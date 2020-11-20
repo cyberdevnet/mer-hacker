@@ -5,6 +5,7 @@ import axios from "axios";
 import "../../styles/Logout.css";
 
 export default function Logout(ac, props) {
+  console.log("Logout -> ac", ac.User);
   const [loading, setloading] = useState(false);
 
   axios.defaults.withCredentials = true;
@@ -13,7 +14,7 @@ export default function Logout(ac, props) {
 
   async function postKey() {
     try {
-      const rawResponse = await axios.post("/node/post-api-key", {
+      const rawResponse = await axios.post("/flask/post-api-key", {
         username: "leer",
         realUsername: ac.User,
         apiKey: "leer",
@@ -25,7 +26,6 @@ export default function Logout(ac, props) {
   const ConfirmLogout = () => {
     setloading(true);
     setTimeout(() => {
-      ac.setUser([]);
       ac.setswitchLoginAPI(true);
       ac.setgetOrgStatusCode(0);
       ac.setswitchDashboard(false);
@@ -46,10 +46,11 @@ export default function Logout(ac, props) {
       ac.setSNtopUsers("");
       ac.setcollapseButton({ display: "none" });
       ac.sethideLogin({ display: "block" });
-      axios.post("/node/delete_backupfile", {});
-      axios.post("/node/deletebackupRestoreFiles", {});
-      axios.post("/node/deletebuild_meraki_switchconfigFiles", {});
+      axios.post("/flask/delete_backupfile", { User: ac.User });
+      axios.post("/flask/deletebackupRestoreFiles", { User: ac.User });
+      axios.post("/flask/deletebuild_meraki_switchconfigFiles", { User: ac.User });
       postKey();
+      ac.setUser([]);
       setloading(false);
     }, 2300);
   };

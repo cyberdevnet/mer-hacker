@@ -133,7 +133,7 @@ export default function BackupRestore(ac) {
     const data = new FormData();
     const file = new Blob([value], { type: "text/plain" });
     data.append("file", file, `${ac.dc.User}_meraki_restore_network.py`);
-    axios.post("/node/upload", data);
+    axios.post("/flask/edit_backup_restore_file", data);
   };
 
   const isFirstRun = useRef(true);
@@ -191,21 +191,29 @@ export default function BackupRestore(ac) {
       return;
     }
     async function OpenFile() {
-      fetch(`/node/backupRestoreFiles/${ac.dc.User}_meraki_restore_network.py`, {
-        signal: signal,
+
+      axios
+      .post("/flask/read_backup_restore_file", { User: ac.dc.User, signal: signal })
+      .then((data) => {
+        if (data.error) {
+          seterrorMessage(
+            <div className="form-input-error-msg alert alert-danger">
+              <span className="glyphicon glyphicon-exclamation-sign"></span>
+              {data.error[0]}
+            </div>
+          );
+          setTimeout(() => {
+            seterrorMessage([]);
+          }, 5000);
+        } else {
+          ac.dc.setrestoreScript(data.data);
+        }
       })
-        .then((response) => {
-          return response.text();
-        })
-        .then((data) => {
-          ac.dc.setrestoreScript(data);
-        })
         .then(() => {
           ac.dc.setshowRestorescript(true);
           setdisplayRestoreButtons({ display: "inline-block" });
           setdisplayDownloadButton({ display: "inline-block" });
         })
-
         .catch((err) => {
           console.log("APIcall -> err", err);
         });
@@ -307,24 +315,32 @@ export default function BackupRestore(ac) {
     if (showLiveLogs) {
       interval = setInterval(() => {
         try {
-          fetch(`/node/flask/logs/${ac.dc.User}_log_file.log`, {
-            signal: signal,
-          })
-            .then((response) => {
-              return response.text();
-            })
-            .then((data) => {
-              setlazyLog(
-                <LazyLog
-                  extraLines={1}
-                  enableSearch
-                  text={data}
-                  stream
-                  caseInsensitive
-                  selectableLines
-                />
-              );
-            });
+          axios
+              .post("/flask/read_live_logs", { User: ac.dc.User, signal: signal })
+              .then((data) => {
+                if (data.error) {
+                  seterrorMessage(
+                    <div className="form-input-error-msg alert alert-danger">
+                      <span className="glyphicon glyphicon-exclamation-sign"></span>
+                      {data.error[0]}
+                    </div>
+                  );
+                  setTimeout(() => {
+                    seterrorMessage([]);
+                  }, 5000);
+                } else {
+                  setlazyLog(
+                    <LazyLog
+                      extraLines={1}
+                      enableSearch={true}
+                      text={data.data}
+                      stream={true}
+                      caseInsensitive={true}
+                      selectableLines={true}
+                    />
+                  )
+                }
+              })
         } catch (err) {
           if (err) {
             console.log(err);

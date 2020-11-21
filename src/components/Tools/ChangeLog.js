@@ -500,7 +500,7 @@ export default function ChangeLog(ac) {
         </div>
       </div>
       <div className="row-inventory">
-        <div className="card">
+        <div className="card" style={{ border: "none" }}>
           {showtable ? (
             <div className="bootstrap-table-panel">
               <ToolkitProvider search keyField="key" data={dataLogs.rows} columns={columns}>

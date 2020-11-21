@@ -169,7 +169,8 @@ export default function TrafficAnalysis(ac) {
               .then(() => {
                 if (dataInventory.length !== 0) {
                   setshowtable(true);
-                  setloading(false);                } else {
+                  setloading(false);
+                } else {
                   if (retryCounter < 4) {
                     settrigger(trigger + 1);
                     setretryCounter(retryCounter + 1);
@@ -199,7 +200,6 @@ export default function TrafficAnalysis(ac) {
       abortController.abort();
       setnetwanalysis([]);
       setshowtable(false);
-      setflashMessages(null);
       setloading(false);
     };
     // eslint-disable-next-line

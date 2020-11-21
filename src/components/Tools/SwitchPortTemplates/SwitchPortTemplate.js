@@ -659,7 +659,7 @@ export default function SwitchPortTemplate(ac) {
         </div>
       </div>
       <div className="row-inventory">
-        <div className="card">
+        <div className="card" style={{ border: "none" }}>
           {showtable ? (
             <div className="bootstrap-table-panel">
               <BootstrapTable

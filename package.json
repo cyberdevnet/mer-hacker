@@ -62,7 +62,6 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "start-server": "cd node && npx nodemon server.js",
     "start-api": "cd flask && python api.py",
     "start-venv": "cd venv/Scripts/ & activate",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",

@@ -63,7 +63,7 @@ export default function SwitchPortTemplate(ac) {
           .then((res) => res.json())
           .then((data) => {
             if (data.error) {
-              ac.setflashMessages(
+              setflashMessages(
                 <div className="form-input-error-msg alert alert-danger">
                   <span className="glyphicon glyphicon-exclamation-sign"></span>
                   {data.error[0]}
@@ -80,8 +80,12 @@ export default function SwitchPortTemplate(ac) {
               if (data.inventory.length !== 0) {
                 // eslint-disable-next-line
                 data.inventory.map((opt, index) => {
-                  var TruncatedDate = Math.trunc(opt.claimedAt);
-                  var d = new Date(TruncatedDate * 1000);
+                  const ISOtoUnixclaimedAt = Date.parse(opt.claimedAt);
+                  var d = new Date(ISOtoUnixclaimedAt);
+                  const ISOtoUnixclaimedAtlicenseExpirationDate = Date.parse(
+                    opt.licenseExpirationDate
+                  );
+                  var f = new Date(ISOtoUnixclaimedAtlicenseExpirationDate);
                   var months = [
                     "Jan",
                     "Feb",
@@ -96,12 +100,41 @@ export default function SwitchPortTemplate(ac) {
                     "Nov",
                     "Dec",
                   ];
-                  var year = d.getFullYear();
-                  var month = months[d.getMonth()];
-                  var date = d.getDate();
-                  var hour = d.getHours();
-                  var min = d.getMinutes();
-                  var time = date + "/" + month + "/" + year + " " + hour + ":" + min;
+                  var yearclaimedAt = d.getFullYear();
+                  var monthclaimedAt = months[d.getMonth()];
+                  var dateclaimedAt = d.getDate();
+                  var hourclaimedAt = d.getHours();
+                  var minclaimedAt = d.getMinutes();
+                  var timeclaimedAt =
+                    dateclaimedAt +
+                    "/" +
+                    monthclaimedAt +
+                    "/" +
+                    yearclaimedAt +
+                    " " +
+                    hourclaimedAt +
+                    ":" +
+                    minclaimedAt;
+
+                  var yearlicenseExpirationDate = f.getFullYear();
+                  var monthlicenseExpirationDate = months[f.getMonth()];
+                  var datelicenseExpirationDate = f.getDate();
+                  var hourlicenseExpirationDate = f.getHours();
+                  var minlicenseExpirationDate = f.getMinutes();
+                  if (opt.licenseExpirationDate && opt.licenseExpirationDate !== null) {
+                    var timelicenseExpirationDate =
+                      datelicenseExpirationDate +
+                      "/" +
+                      monthlicenseExpirationDate +
+                      "/" +
+                      yearlicenseExpirationDate +
+                      " " +
+                      hourlicenseExpirationDate +
+                      ":" +
+                      minlicenseExpirationDate;
+                  } else {
+                    timelicenseExpirationDate = [];
+                  }
 
                   const name = [];
                   // eslint-disable-next-line
@@ -112,12 +145,14 @@ export default function SwitchPortTemplate(ac) {
                   });
 
                   var InventoryModel = {
-                    claimedAt: time,
+                    claimedAt: timeclaimedAt,
                     mac: opt.mac,
                     model: opt.model,
                     name: opt.name,
                     networkId: name,
                     serial: opt.serial,
+                    orderNumber: opt.orderNumber,
+                    licenseExpirationDate: timelicenseExpirationDate,
                     publicIp: opt.publicIp,
                   };
 
@@ -221,6 +256,26 @@ export default function SwitchPortTemplate(ac) {
       },
     },
     {
+      dataField: "orderNumber",
+      text: "Order",
+      editable: false,
+      key: "orderNumber",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
+      dataField: "licenseExpirationDate",
+      text: "License expiration",
+      editable: false,
+      key: "licenseExpirationDate",
+      sort: true,
+      headerStyle: (colum, colIndex) => {
+        return { textAlign: "center" };
+      },
+    },
+    {
       dataField: "claimedAt",
       text: "Claimed",
       editable: false,
@@ -276,7 +331,7 @@ export default function SwitchPortTemplate(ac) {
         </div>
       </div>
       <div className="row-inventory">
-        <div className="card">
+        <div className="card" style={{ border: "none" }}>
           {showtable ? (
             <div className="bootstrap-table-panel">
               <ToolkitProvider search keyField="mac" data={dataInventory.rows} columns={columns}>

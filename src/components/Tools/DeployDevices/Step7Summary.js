@@ -166,7 +166,7 @@ export default function Step7Summary(ac) {
       <div className="card">
         <div className="card-body" style={{ minHeight: "400px" }}>
           <div className="row">
-            <div className="card">
+            <div className="card" style={{ border: "none" }}>
               {showNoInformation === false ? (
                 <div>
                   {showtable ? (

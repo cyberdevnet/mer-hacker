@@ -142,11 +142,14 @@ export default function Template(ac, dc) {
                   </span>
                 </a>
                 <div className="dropdown-menu dropdown-menu-left dropdown-menu-arrow">
-                  <div className="dropdown-item" href="/#">
+                  <div className="dropdown-item userEmail" href="/#">
                     <li>
-                    <a style={{paddingLeft :'0px'}}disabled className="dropdown-item" href="/#">
-                    <i className="fa fa-user" aria-hidden="true"></i> {ac.dc.userEmail}
-                    </a>
+                      <p
+                        style={{ paddingLeft: "0px", cursor: 'unset' }}
+                        className="dropdown-item userEmail"
+                      >
+                        <i className="fa fa-user" aria-hidden="true"></i> {ac.dc.userEmail}
+                      </p>
                     </li>
                   </div>
                   <div className="dropdown-divider"></div>

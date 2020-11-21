@@ -552,7 +552,7 @@ export default function MigrateTool(ac) {
       </div>
 
       <div className="row-inventory">
-        <div className="card">
+        <div className="card" style={{ border: "none" }}>
           {showLiveLogs ? (
             <div className="card-body" style={{ height: 700 }}>
               {lazyLog}

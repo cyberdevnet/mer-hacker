@@ -351,7 +351,7 @@ export default function NetworkTopUsers(ac) {
         </div>
       </div>
       <div className="row-inventory">
-        <div className="card">
+        <div className="card" style={{ border: "none" }}>
           {showError ? (
             <div className="table-responsive table-bordered">
               <div className="form-input-error-msg alert alert-danger">

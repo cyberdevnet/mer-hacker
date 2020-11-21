@@ -369,7 +369,7 @@ export default function GetAllSwitchPorts(ac) {
         </div>
       </div>
       <div className="row-inventory">
-        <div className="card">
+        <div className="card" style={{ border: "none" }}>
           {showtable ? (
             <div className="bootstrap-table-panel">
               <ToolkitProvider search keyField="number" data={dataPorts.rows} columns={columns}>

@@ -285,7 +285,7 @@ export default function GetAllDevicesIP(ac) {
         </div>
       </div>
       <div className="row-inventory">
-        <div className="card">
+        <div className="card" style={{ border: "none" }}>
           {showtable ? (
             <div>
               <div className="bootstrap-table-panel">

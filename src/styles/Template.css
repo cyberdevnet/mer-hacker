@@ -1,3 +1,65 @@
+
+
+a {
+font-size: 13px;
+}
+
+p {
+  font-size: 13px;
+
+}
+
+.nav-link-title {
+  font-size: 13px;
+
+}
+
+.foo__single-value {
+  font-size: 13px;
+}
+.foo__placeholder {
+  font-size: 13px;
+
+}
+.change-log__placeholder {
+  font-size: 13px;
+
+}
+.topology__placeholder {
+  font-size: 13px;
+
+}
+.time-interval__placeholder {
+  font-size: 13px;
+}
+.form-control.networkname{
+  font-size: 13px;
+
+}
+
+.time-interval__placeholder.css-1wa3eu0-placeholder{
+  font-size: 13px;
+}
+.form-control {
+  font-size: 13px;
+}
+
+
+.dropdown-item.userEmail:hover{
+  background-color: unset;
+}
+.dropdown-item.userEmail:active{
+  background-color: unset;
+}
+
+
+
+
+
+
+
+
+
 .css-1uccc91-singleValue {
   color: #ababab;
 }
@@ -18,7 +80,7 @@ a {
   font-weight: 400;
 }
 .select-organization p {
-  font-size: 15px;
+  /* font-size: 15px; */
   line-height: 25px;
   padding-top: 10px;
 }
@@ -30,7 +92,7 @@ a {
   font-weight: 400;
 }
 .select-network p {
-  font-size: 15px;
+  /* font-size: 15px; */
   line-height: 25px;
   padding-top: 10px;
 }
@@ -42,7 +104,7 @@ a {
   font-weight: 400;
 }
 .select-tools p {
-  font-size: 15px;
+  /* font-size: 15px; */
   line-height: 25px;
   padding-top: 10px;
 }

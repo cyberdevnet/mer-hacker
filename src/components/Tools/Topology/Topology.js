@@ -347,7 +347,6 @@ export default function Topology(ac) {
                 return res.json();
               })
               .then((site2site) => {
-              console.log("APIcall -> site2site", site2site);
                 if (site2site.error) {
                   ac.setflashMessages(
                     <div className="form-input-error-msg alert alert-danger">

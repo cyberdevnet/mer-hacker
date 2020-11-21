@@ -17,6 +17,9 @@ p {
 .foo__single-value {
   font-size: 13px;
 }
+.topology__single-value {
+  font-size: 13px;
+}
 .foo__placeholder {
   font-size: 13px;
 

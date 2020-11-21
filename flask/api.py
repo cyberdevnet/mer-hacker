@@ -852,8 +852,11 @@ def delete_backupfile():
 def upload_build_meraki_switchconfig():
     if request.method == 'POST':
         try:
-            uploads_dir = "./cisco_meraki_migrate_tool/"
             file = request.files['file']
+            fileName = request.files['User']
+            User = fileName.filename
+            uploads_dir = f"./cisco_meraki_migrate_tool/{User}/"
+
             file.save(os.path.join(uploads_dir, secure_filename(file.filename)))
             return 'file changed'
 
@@ -872,8 +875,9 @@ def read_cisco_meraki_migrate_tool():
             global data
             data = request.get_json(force=True, silent=True)
             User = data['User']
-            uploads_dir = "./cisco_meraki_migrate_tool"
-            with open(f"{uploads_dir}/{User}_build_meraki_switchconfig.py", "r") as f:
+            uploads_dir = f"./cisco_meraki_migrate_tool/{User}"
+            filename = f"{uploads_dir}/build_meraki_switchconfig.py"
+            with open(filename, "r") as f:
                 content = f.read() 
 
             return content
@@ -892,8 +896,8 @@ def read_live_logs():
             global data
             data = request.get_json(force=True, silent=True)
             User = data['User']
-            uploads_dir = "./logs"
-            with open(f"{uploads_dir}/{User}_log_file.log", "r") as f:
+            uploads_dir = f"./logs/{User}"
+            with open(f"{uploads_dir}/log_file.log", "r") as f:
                 content = f.read() 
 
             return content
@@ -912,8 +916,8 @@ def read_backup_restore_file():
             global data
             data = request.get_json(force=True, silent=True)
             User = data['User']
-            uploads_dir = "./backup_restore"
-            with open(f"{uploads_dir}/{User}_meraki_restore_network.py", "r") as f:
+            uploads_dir = f"./backup_restore/{User}"
+            with open(f"{uploads_dir}/meraki_restore_network.py", "r") as f:
                 content = f.read() 
 
             return content
@@ -931,8 +935,12 @@ def read_backup_restore_file():
 def edit_backup_restore_file():
     if request.method == 'POST':
         try:
-            uploads_dir = "./backup_restore/"
+            global data
             file = request.files['file']
+            fileName = request.files['User']
+            User = fileName.filename
+            uploads_dir = f"./backup_restore/{User}/"
+
             file.save(os.path.join(uploads_dir, secure_filename(file.filename)))
             return 'file changed'
 
@@ -952,8 +960,8 @@ def deletebackupRestoreFiles():
             global data
             data = request.get_json(force=True, silent=True)
             User = data['User']
-            
-            path = Path(f'./backup_restore/{User}_meraki_restore_network.py')
+            uploads_dir = f"./backup_restore/{User}"
+            path = Path(f'{uploads_dir}/meraki_restore_network.py')
             if path.is_file():
                 Path.unlink(path)
             else:
@@ -977,7 +985,8 @@ def deletebuild_meraki_switchconfigFiles():
             global data
             data = request.get_json(force=True, silent=True)
             User = data['User']
-            path = Path(f'./cisco_meraki_migrate_tool/{User}_build_meraki_switchconfig.py')
+            uploads_dir = f"./cisco_meraki_migrate_tool/{User}"
+            path = Path(f'{uploads_dir}/build_meraki_switchconfig.py')
             if path.is_file():
                 Path.unlink(path)
             else:

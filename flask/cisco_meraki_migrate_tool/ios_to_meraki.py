@@ -15,14 +15,17 @@ def ios_to_meraki(serial_numbers, USER):
     dirname = os.path.dirname(__file__)
     abspath = os.path.abspath(__file__)
     log_file = os.path.abspath(
-        __file__ + "/../../logs/{}_log_file.log".format(USER))
+        __file__ + "/../../logs/{}/log_file.log".format(USER))
+    os.makedirs(os.path.dirname(log_file), exist_ok=True)
     backup_path = os.path.abspath(__file__ + "/../config_backups/backups")
     for filename in os.listdir(backup_path):
         try:
             backup_file = (backup_path + '/{}'.format(filename))
             dirname = os.path.dirname(__file__)
-            filename = os.path.join(
-                dirname, '{}_build_meraki_switchconfig.py'.format(USER))
+            name = 'build_meraki_switchconfig.py'
+            
+            filename = dirname + '\{}\{}'.format(USER,name)
+            os.makedirs(os.path.dirname(filename), exist_ok=True)
 
             template_file = dirname+'/ttp/interfaces.j2'
 
@@ -53,8 +56,7 @@ def ios_to_meraki(serial_numbers, USER):
 
             with io.open(filename, 'w', encoding='utf-8', errors='ignore') as file:
                 f = open(log_file, 'w')
-                print('Writing script file {}_build_meraki_switchconfig.py'.format(
-                    USER), file=f)
+                print('Writing script file build_meraki_switchconfig.py', file=f)
                 f.flush()
 
                 # Start writing Function block
@@ -70,7 +72,7 @@ def ios_to_meraki(serial_numbers, USER):
                 file.write("def build_switchports(ARG_APIKEY,USER):\n")
                 file.write("\tabspath = os.path.abspath(__file__)\n")
                 file.write(
-                    "\tlog_file = os.path.abspath(__file__  + ""'/../../logs/{}_log_file.log'.format(USER)"")\n")
+                    "\tlog_file = os.path.abspath(__file__  + ""'/../../logs/{}/log_file.log'.format(USER)"")\n")
                 file.write("\tf = open(log_file, 'w')\n")
                 file.write("\n")
                 file.write("\theaders = {\n")
@@ -386,7 +388,6 @@ def ios_to_meraki(serial_numbers, USER):
                 f.flush()
                 # f.close()
         except Exception as err:
-            print('ciao')
             print(
                 'No interfaces found,invalid file or serial-number not in list.', file=f)
             print('Exception: ', err)
@@ -407,7 +408,7 @@ def ios_to_meraki(serial_numbers, USER):
                 file.write("def build_switchports(ARG_APIKEY):\n")
                 file.write("\tabspath = os.path.abspath(__file__)\n")
                 file.write(
-                    "\tlog_file = os.path.abspath(__file__  + ""'/../../logs/{}_log_file.log'.format(USER)"")\n")
+                    "\tlog_file = os.path.abspath(__file__  + ""'/../../logs/{}/log_file.log'.format(USER)"")\n")
                 file.write("\tf = open(log_file, 'w')\n")
                 file.write("\n")
                 file.write("\theaders = {\n")

@@ -89,13 +89,13 @@ export default function Template(ac, dc) {
     setIsNavCollapsed(!isNavCollapsed);
   };
 
-  let avatar = <UserAvatar size="45" className="avatar-name" name="UNDEFINED" />;
 
-  if (ac.dc.userEmail) {
-    const userNameAvatar = ac.dc.userEmail.toUpperCase();
+  let avatar = <UserAvatar size="45" className="avatar-name" name="john.doe@foo.eu" />;
+  if (ac.dc.User) {
+    const userNameAvatar = ac.dc.User.toUpperCase();
     avatar = <UserAvatar size="45" className="avatar-name" name={userNameAvatar} />;
   } else {
-    ac.dc.setuserEmail("undefined");;
+    ac.dc.User = "john.doe@foo.eu";
   }
 
   return (
@@ -148,7 +148,7 @@ export default function Template(ac, dc) {
                         style={{ paddingLeft: "0px", cursor: 'unset' }}
                         className="dropdown-item userEmail"
                       >
-                        <i className="fa fa-user" aria-hidden="true"></i> {ac.dc.userEmail}
+                        <i className="fa fa-user" aria-hidden="true"></i> {ac.dc.User}
                       </p>
                     </li>
                   </div>

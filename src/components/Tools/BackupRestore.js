@@ -122,7 +122,7 @@ export default function BackupRestore(ac) {
     const element = document.createElement("a");
     const file = new Blob([ac.dc.restoreScript], { type: "text/plain" });
     element.href = URL.createObjectURL(file);
-    element.download = `${ac.dc.User}_meraki_restore_network.py`;
+    element.download = `${ac.dc.User}/meraki_restore_network.py`;
     document.body.appendChild(element); // Required for this to work in FireFox
     element.click();
   };
@@ -132,9 +132,16 @@ export default function BackupRestore(ac) {
   const UploadModifiedScript = (value) => {
     const data = new FormData();
     const file = new Blob([value], { type: "text/plain" });
-    data.append("file", file, `${ac.dc.User}_meraki_restore_network.py`);
-    axios.post("/flask/edit_backup_restore_file", data);
-  };
+    data.append("file", file, `meraki_restore_network.py`);
+    data.append("User", file, `${ac.dc.User}`);
+    axios({
+      method: "post",
+      url: "/flask/edit_backup_restore_file",
+      data: data,
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    // axios.post("/flask/edit_backup_restore_file", data);
+  };;
 
   const isFirstRun = useRef(true);
   useEffect(() => {
@@ -191,24 +198,23 @@ export default function BackupRestore(ac) {
       return;
     }
     async function OpenFile() {
-
       axios
-      .post("/flask/read_backup_restore_file", { User: ac.dc.User, signal: signal })
-      .then((data) => {
-        if (data.error) {
-          seterrorMessage(
-            <div className="form-input-error-msg alert alert-danger">
-              <span className="glyphicon glyphicon-exclamation-sign"></span>
-              {data.error[0]}
-            </div>
-          );
-          setTimeout(() => {
-            seterrorMessage([]);
-          }, 5000);
-        } else {
-          ac.dc.setrestoreScript(data.data);
-        }
-      })
+        .post("/flask/read_backup_restore_file", { User: ac.dc.User, signal: signal })
+        .then((data) => {
+          if (data.error) {
+            seterrorMessage(
+              <div className="form-input-error-msg alert alert-danger">
+                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                {data.error[0]}
+              </div>
+            );
+            setTimeout(() => {
+              seterrorMessage([]);
+            }, 5000);
+          } else {
+            ac.dc.setrestoreScript(data.data);
+          }
+        })
         .then(() => {
           ac.dc.setshowRestorescript(true);
           setdisplayRestoreButtons({ display: "inline-block" });
@@ -315,32 +321,30 @@ export default function BackupRestore(ac) {
     if (showLiveLogs) {
       interval = setInterval(() => {
         try {
-          axios
-              .post("/flask/read_live_logs", { User: ac.dc.User, signal: signal })
-              .then((data) => {
-                if (data.error) {
-                  seterrorMessage(
-                    <div className="form-input-error-msg alert alert-danger">
-                      <span className="glyphicon glyphicon-exclamation-sign"></span>
-                      {data.error[0]}
-                    </div>
-                  );
-                  setTimeout(() => {
-                    seterrorMessage([]);
-                  }, 5000);
-                } else {
-                  setlazyLog(
-                    <LazyLog
-                      extraLines={1}
-                      enableSearch={true}
-                      text={data.data}
-                      stream={true}
-                      caseInsensitive={true}
-                      selectableLines={true}
-                    />
-                  )
-                }
-              })
+          axios.post("/flask/read_live_logs", { User: ac.dc.User, signal: signal }).then((data) => {
+            if (data.error) {
+              seterrorMessage(
+                <div className="form-input-error-msg alert alert-danger">
+                  <span className="glyphicon glyphicon-exclamation-sign"></span>
+                  {data.error[0]}
+                </div>
+              );
+              setTimeout(() => {
+                seterrorMessage([]);
+              }, 5000);
+            } else {
+              setlazyLog(
+                <LazyLog
+                  extraLines={1}
+                  enableSearch={true}
+                  text={data.data}
+                  stream={true}
+                  caseInsensitive={true}
+                  selectableLines={true}
+                />
+              );
+            }
+          });
         } catch (err) {
           if (err) {
             console.log(err);

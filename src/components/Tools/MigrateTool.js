@@ -97,8 +97,15 @@ export default function MigrateTool(ac) {
   const UploadModifiedScript = (value) => {
     const data = new FormData();
     const file = new Blob([value], { type: "text/plain" });
-    data.append("file", file, `${ac.dc.User}_build_meraki_switchconfig.py`);
-    axios.post("/flask/upload_build_meraki_switchconfig", data);
+    data.append("file", file, `build_meraki_switchconfig.py`);
+    data.append("User", file, `${ac.dc.User}`);
+    axios({
+      method: "post",
+      url: "/flask/upload_build_meraki_switchconfig",
+      data: data,
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    // axios.post("/flask/upload_build_meraki_switchconfig", data);
   };
 
   const handleConvertConfig = (e) => {
@@ -152,7 +159,7 @@ export default function MigrateTool(ac) {
     const element = document.createElement("a");
     const file = new Blob([switchPortScript], { type: "text/plain" });
     element.href = URL.createObjectURL(file);
-    element.download = `${ac.dc.User}_build_meraki_switchconfig.py`;
+    element.download = `build_meraki_switchconfig.py`;
     document.body.appendChild(element); // Required for this to work in FireFox
     element.click();
   };
@@ -270,7 +277,8 @@ export default function MigrateTool(ac) {
               ac.dc.setflashMessages([]);
             }, 5000);
           } else {
-            setswitchPortScript(data.data);          }
+            setswitchPortScript(data.data);
+          }
         })
         .then(() => {
           setshowswitchPortScript(true);
@@ -338,9 +346,7 @@ export default function MigrateTool(ac) {
     if (showLiveLogs) {
       interval = setInterval(() => {
         try {
-          axios
-          .post("/flask/read_live_logs", { User: ac.dc.User, signal: signal })
-          .then((data) => {
+          axios.post("/flask/read_live_logs", { User: ac.dc.User, signal: signal }).then((data) => {
             if (data.error) {
               ac.dc.setflashMessages(
                 <div className="form-input-error-msg alert alert-danger">
@@ -361,9 +367,9 @@ export default function MigrateTool(ac) {
                   caseInsensitive={true}
                   selectableLines={true}
                 />
-              )
+              );
             }
-          })
+          });
         } catch (err) {
           if (err) {
             console.log(err);

@@ -83,6 +83,15 @@ export default function SwitchPortTemplateSummary(ac) {
               </table>
             </div>
             <div className="modal-footer text-center">
+            <button
+                style={{ float: "left" }}
+                type="button"
+                onClick={Cancel}
+                className="btn-summary btn-danger"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
               <button
                 onClick={() => ac.dc.settriggerDeploy(ac.dc.triggerDeploy + 1)}
                 className="btn-summary btn-primary"
@@ -96,15 +105,6 @@ export default function SwitchPortTemplateSummary(ac) {
                 )}
                 {ac.dc.loadingSummaryBtn && <span>Deploy</span>}
                 {!ac.dc.loadingSummaryBtn && <span>Deploy</span>}
-              </button>
-              <button
-                style={{ float: "left" }}
-                type="button"
-                onClick={Cancel}
-                className="btn-summary btn-danger"
-                data-dismiss="modal"
-              >
-                Close
               </button>
             </div>
           </div>

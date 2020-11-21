@@ -60,12 +60,16 @@ function App() {
     8: false,
   });
 
+  // fake cookie to be removed!
+  Cookies.set("USER_NAME", "john.doe@mer-hacker.com");
+
+
   // <================================================================================>
   //                             LOCAL STORAGE
   // <================================================================================>
 
   const [organization, setorganization] = useLocalStorage("my-organization", "Set Organization");
-  const [userEmail, setuserEmail] = useLocalStorage("my-userEmail", Cookies.get("USER_NAME"));
+  const [User, setUser] = useLocalStorage("my-userEmail", Cookies.get("USER_NAME") || "john.doe@foo.eu");
   const [network, setnetwork] = useLocalStorage("my-networks", "Networks");
   const [organizationID, setorganizationID] = useLocalStorage("my-organizationID", 0);
   const [networkID, setnetworkID] = useLocalStorage("my-networkID", 0);
@@ -87,20 +91,6 @@ function App() {
   //                            END LOCAL STORAGE
   // <================================================================================>
 
-  Cookies.set("USER_NAME", "john.doe@nts.eu");
-
-  var name = userEmail.replace(/@[^@]+$/, "");
-  let username = "foo";
-
-  let splitName = name.split(".");
-
-  if (splitName[1] === undefined) {
-    username = splitName[0];
-  } else {
-    username = splitName[0][0] + splitName[1];
-  }
-
-  const [User, setUser] = useLocalStorage("my-User", username);
 
   let callApikey = GetApiKey(User);
   // eslint-disable-next-line
@@ -509,8 +499,6 @@ function App() {
     settoolSelected,
     showSetApiKey,
     setshowSetApiKey,
-    userEmail,
-    setuserEmail,
   };
 
   return (

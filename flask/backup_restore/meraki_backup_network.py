@@ -33,7 +33,7 @@ def write_restore_header(file):
     file.write("def restore_network(ARG_ORGID, ARG_APIKEY,USER):\n")
     file.write("\tabspath = os.path.abspath(__file__)\n")
     file.write(
-        "\tlog_file = os.path.abspath(__file__  + ""'/../../logs/{}_log_file.log'.format(USER)"")\n")
+        "\tlog_file = os.path.abspath(__file__  + ""'/../../logs/{}/log_file.log'.format(USER)"")\n")
     file.write("\tf = open(log_file, 'w')\n")
     file.write("\n")
     file.write("\theaders = {\n")
@@ -309,16 +309,19 @@ def backup_network(ARG_ORGID, NET_ID, ARG_APIKEY, USER):
     dirname = os.path.dirname(__file__)
     abspath = os.path.abspath(__file__)
     log_file = os.path.abspath(
-        __file__ + "/../../logs/{}_log_file.log".format(USER))
-    filename = os.path.join(
-        dirname, '{}_meraki_restore_network.py'.format(USER))
+        __file__ + "/../../logs/{}/log_file.log".format(USER))
+    os.makedirs(os.path.dirname(log_file), exist_ok=True)
+    
+    filename = dirname + '\{}\meraki_restore_network.py'.format(USER)
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+
 
     with io.open(filename, 'w', encoding='utf-8', errors='ignore') as file:
         write_restore_header(file)
         f = open(log_file, 'w')
         print('Starting Backup', file=f)
         f.flush()
-        print('Writing script file {}_meraki_restore_network.py'.format(USER), file=f)
+        print('Writing script file meraki_restore_network.py', file=f)
         f.flush()
         file.write(
             "# Edit script below this line to control what is #restored.\n")
@@ -440,7 +443,7 @@ def backup_network(ARG_ORGID, NET_ID, ARG_APIKEY, USER):
         file.write("def restore_switchports(ARG_APIKEY,USER):\n")
         file.write("\tabspath = os.path.abspath(__file__)\n")
         file.write(
-            "\tlog_file = os.path.abspath(__file__  + ""'/../../logs/{}_log_file.log'.format(USER)"")\n")
+            "\tlog_file = os.path.abspath(__file__  + ""'/../../logs/{}/log_file.log'.format(USER)"")\n")
         file.write("\tf = open(log_file, 'w')\n")
         file.write("\n")
         file.write("\theaders = {\n")

@@ -62,7 +62,9 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "start-api": "cd flask && python api.py",
+    "start-flask-win-dev": "set \"FLASK_ENV=development\" && cd flask && python api.py",
+    "start-flask-dev": "export FLASK_ENV='development' && cd flask && python api.py",
+    "start-flask-prod": "cd flask && python api.py",
     "start-venv": "cd venv/Scripts/ & activate",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "build-rewired": "GENERATE_SOURCEMAP=false react-app-rewired build",

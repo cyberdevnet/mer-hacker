@@ -11,7 +11,7 @@ from werkzeug.exceptions import BadRequest, HTTPException
 from werkzeug.utils import secure_filename
 import meraki
 import find_ports
-import switchporttemplate
+from switchporttemplate import switchporttemplate
 from backup_restore import meraki_backup_network
 from cisco_meraki_migrate_tool import ios_to_meraki
 import logging
@@ -25,26 +25,14 @@ from os import path
 import pymongo
 from cryptography.fernet import Fernet
 from bson.objectid import ObjectId
+from dotenv import load_dotenv
 
 
-# dirname = os.path.dirname(__file__)
-dirname = os.path.dirname(os.path.abspath(__file__))
-debug_file = dirname + '/logs/debug_file.log'
-log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-logging.basicConfig(filename=debug_file, level=logging.DEBUG,
-                    format=log_format, filemode='w')
-logger = logging.getLogger()
-
-
-# SECTION: GLOBAL VARIABLES: MODIFY TO CHANGE SCRIPT BEHAVIOUR
 
 # Used in merakirequestthrottler() to avoid hitting dashboard API max request rate
 API_EXEC_DELAY = 0.21
-
-# connect and read timeouts for the Requests module in seconds
 REQUESTS_CONNECT_TIMEOUT = 90
 REQUESTS_READ_TIMEOUT = 90
-
 LAST_MERAKI_REQUEST = datetime.datetime.now()  # used by merakirequestthrottler()
 
 
@@ -58,27 +46,32 @@ def merakirequestthrottler():
     LAST_MERAKI_REQUEST = datetime.datetime.now()
     return
 
-
+load_dotenv()
 app = Flask(__name__)
-# app.debug = True
-app.config['PROPAGATE_EXCEPTIONS'] = True
-app.config['SECRET_KEY'] = 'meraki'
 socketio = SocketIO(app)
 CORS(app)
+FLASK_ENV_DEFAULT = 'production'
+
+try:
+    if os.getenv('FLASK_ENV',    FLASK_ENV_DEFAULT) == 'development':
+        # Using a production configuration
+        print("Environment is development")
+        app.config.from_object('config.DevelopmentConfig')
+    else:
+        # Using a development configuration
+        print("Environment is production")
+        app.config.from_object('config.ProductionConfig')
+except Exception as error:
+    print('error: ', error)
+    pass
+
+DB_APIKEY_SECRET_KEY = app.config["DB_APIKEY_SECRET_KEY"]
+
+
 
 # Initializing MONGODB DataBase
 DBclient = pymongo.MongoClient("mongodb://localhost:27017/")
 
-
-#  CLEAR debug_file after user has been logged out
-@app.route('/flask/delete_debugfile', methods=['POST'])
-def delete_debugfile():
-    try:
-        with open(debug_file, 'w'):
-            pass
-    except Exception as error:
-        print(error)
-    return {'delete_debugfile': 'Debugfile cleared!'}
 
 
 @app.route('/flask/organizations', methods=['GET', 'POST'])
@@ -1015,24 +1008,7 @@ def deletebuild_meraki_switchconfigFiles():
 apykeysDB = DBclient["apykeys"]
 apykeysCollection = apykeysDB['apykeys']
 
-def write_key():
-    """
-    Generates a key and save it into a file
-    """
-    key = Fernet.generate_key()
-    with open("secret.key", "wb") as key_file:
-        key_file.write(key)
-
-def load_key():
-    """
-    Loads the key from the current directory named `key.key`
-    """
-    return open("secret.key", "rb").read()
-
-write_key()
-# load the previously generated key
-# key = load_key()
-key = 'Nkmiqog5Hp3xoyUPLNpic38qvN43dH9muRp2Tjm6DQU='
+key = DB_APIKEY_SECRET_KEY
 f = Fernet(key)
 
 
@@ -1195,4 +1171,4 @@ def delete_templateFile():
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    app.run(host='127.0.0.1', port=5000)

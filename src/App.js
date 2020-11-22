@@ -61,15 +61,20 @@ function App() {
   });
 
   // fake cookie to be removed!
-  Cookies.set("USER_NAME", "john.doe@mer-hacker.com");
-
+  //Cookies.set("USER_NAME", "john.doe@mer-hacker.com");
 
   // <================================================================================>
   //                             LOCAL STORAGE
   // <================================================================================>
 
   const [organization, setorganization] = useLocalStorage("my-organization", "Set Organization");
-  const [User, setUser] = useLocalStorage("my-userEmail", Cookies.get("USER_NAME") || "john.doe@foo.eu");
+  const [User, setUser] = useLocalStorage(
+    
+    "my-userEmail",
+   
+    Cookies.get("USER_NAME") || "john.doe@mer-hacker.com"
+  
+  );
   const [network, setnetwork] = useLocalStorage("my-networks", "Networks");
   const [organizationID, setorganizationID] = useLocalStorage("my-organizationID", 0);
   const [networkID, setnetworkID] = useLocalStorage("my-networkID", 0);
@@ -90,7 +95,6 @@ function App() {
   // <================================================================================>
   //                            END LOCAL STORAGE
   // <================================================================================>
-
 
   let callApikey = GetApiKey(User);
   // eslint-disable-next-line

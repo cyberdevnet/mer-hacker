@@ -90,12 +90,12 @@ export default function Template(ac, dc) {
   };
 
 
-  let avatar = <UserAvatar size="45" className="avatar-name" name="john.doe@foo.eu" />;
+  let avatar = <UserAvatar size="45" className="avatar-name" name="john.doe@mer-hacker.com" />;
   if (ac.dc.User) {
     const userNameAvatar = ac.dc.User.toUpperCase();
     avatar = <UserAvatar size="45" className="avatar-name" name={userNameAvatar} />;
   } else {
-    ac.dc.User = "john.doe@foo.eu";
+    ac.dc.User = "john.doe@mer-hacker.com";
   }
 
   return (

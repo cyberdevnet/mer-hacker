@@ -66,7 +66,7 @@
     "start-flask-dev": "export FLASK_ENV='development' && cd flask && python api.py",
     "start-flask-prod": "cd flask && python api.py",
     "start-venv": "cd venv/Scripts/ & activate",
-    "build": "GENERATE_SOURCEMAP=false react-scripts build",
+    "build": "GENERATE_SOURCEMAP=false react-app-rewired build",
     "build-rewired": "GENERATE_SOURCEMAP=false react-app-rewired build",
     "winBuild": "set \"GENERATE_SOURCEMAP=false\" && react-app-rewired build",
     "test": "react-app-rewired test",

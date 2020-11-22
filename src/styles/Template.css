@@ -4,6 +4,10 @@ a {
 font-size: 13px;
 }
 
+.UserAvatar--inner {
+color: white !important;
+}
+
 p {
   font-size: 13px;
 
@@ -382,4 +386,9 @@ button:focus {
   left: 0px;
   position: relative;
   bottom: 14px;
+}
+
+
+.dropdown-menu.dropdown-menu-left.dropdown-menu-arrow{
+left: 10px;
 }

@@ -1,31 +1,48 @@
 # Stage 0, "build-stage", based on Node.js, to build and compile the frontend
-FROM cyberfrollo/jerry-node:latest as build-stage
+FROM node:latest as build-stage
 
-# FROM cyberfrollo/jerry-node as build-stage
 
-WORKDIR /jerry
+WORKDIR /mer-hacker
 
-COPY package*.json /jerry/
-COPY rqb/ /jerry/rqb/
-ADD templates/ /jerry/templates/
+COPY package*.json /mer-hacker/
+COPY config-overrides.js /mer-hacker/
+COPY k8s/default.conf /mer-hacker/
+COPY public/ /mer-hacker/public/
+COPY src/ /mer-hacker/src/
+COPY build/ /mer-hacker/build/
+COPY flask/ /mer-hacker/flask/
 
-RUN npm install
+COPY ./misc/gunicorn /usr/local/bin/gunicorn
+COPY ./misc/gunicorn_config.py /gunicorn_config.py
 
-RUN npm run build
+# RUN npm install
+
+# RUN npm run build
 
 
 # Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
-FROM cyberfrollo/jerry:latest
+FROM node:latest
 
-COPY --from=build-stage /jerry/build/ /usr/share/nginx/jerry/build
-COPY --from=build-stage /jerry/rqb/ /usr/share/nginx/jerry/rqb
-COPY --from=build-stage /jerry/templates/ /usr/share/nginx/jerry/templates
+COPY --from=build-stage /mer-hacker/build/ /usr/share/nginx/mer-hacker/build
+COPY --from=build-stage /mer-hacker/flask/ /flask
+COPY --from=build-stage /gunicorn_config.py /gunicorn_config.py
 
-RUN pip3 install -r /usr/share/nginx/jerry/rqb/requirements.txt
 
-RUN pip uninstall --yes python-gitlab
-RUN pip install python-gitlab
+RUN apt update
+RUN apt install -y python3-pip
 
-# Copy the default nginx.conf provided by cyberfrollo/jerry-node
+RUN pip3 install -r /flask/requirements.txt
 
-COPY --from=build-stage /nginx.conf /etc/nginx/conf.d/default.conf
+#WORKDIR /flask
+ENV LC_ALL C.UTF-8
+ENV PYTHONPATH="/usr/local/lib/python3.7/site-packages:/flask"
+ENV PATH="/usr/local/bin/:$PATH"
+ENV GUNICORN_BIND="0.0.0.0:5000"
+ENV GUNICORN_WORKERS="4"
+
+EXPOSE 5000
+ENTRYPOINT ["gunicorn", "--config", "gunicorn_config.py", "wsgi:app"]
+
+
+# Copy the default nginx.conf 
+COPY --from=build-stage /mer-hacker/default.conf /etc/nginx/conf.d/default.conf

@@ -5,7 +5,6 @@ import axios from "axios";
 import "../../styles/Logout.css";
 
 export default function Logout(ac, props) {
-  console.log("Logout -> ac", ac.User);
   const [loading, setloading] = useState(false);
 
   axios.defaults.withCredentials = true;
@@ -49,8 +48,9 @@ export default function Logout(ac, props) {
       axios.post("/flask/delete_backupfile", { User: ac.User });
       axios.post("/flask/deletebackupRestoreFiles", { User: ac.User });
       axios.post("/flask/deletebuild_meraki_switchconfigFiles", { User: ac.User });
+      axios.post("/logout", {});
       postKey();
-      ac.setUser([]);
+      ac.setUser("john.doe@mer-hacker.com");
       setloading(false);
     }, 2300);
   };

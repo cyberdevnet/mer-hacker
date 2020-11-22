@@ -14,6 +14,8 @@ class BaseConfig:
     SECRET_KEY = os.getenv("SECRET_KEY")
     PROPAGATE_EXCEPTIONS = os.getenv("PROPAGATE_EXCEPTIONS")
     DB_APIKEY_SECRET_KEY = os.getenv("DB_APIKEY_SECRET_KEY")
+    MONGODB_USER = os.getenv("MONGODB_USER")
+    MONGODB_PWD = os.getenv("MONGODB_PWD")
 
 
 

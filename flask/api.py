@@ -66,12 +66,22 @@ except Exception as error:
     pass
 
 DB_APIKEY_SECRET_KEY = app.config["DB_APIKEY_SECRET_KEY"]
+MONGODB_USER = app.config["MONGODB_USER"]
+MONGODB_PWD = app.config["MONGODB_PWD"]
 
 
 
 # Initializing MONGODB DataBase
-DBclient = pymongo.MongoClient("mongodb://localhost:27017/")
+try:
+    DBClient = pymongo.MongoClient("mongodb://localhost:27017/",username=MONGODB_USER,password=MONGODB_PWD,authSource='admin',authMechanism='SCRAM-SHA-256')
+    MerHackerDB = DBClient["MerHackerDB"]
+    DBClient.admin.authenticate(MONGODB_USER, MONGODB_PWD,mechanism='SCRAM-SHA-256')
 
+    print("[+] Database connected!")
+except Exception as error:
+    print('DB error: ', error)
+    print("[+] Database connection error!")
+    # raise e
 
 
 @app.route('/flask/organizations', methods=['GET', 'POST'])
@@ -1012,10 +1022,9 @@ def deletebuild_meraki_switchconfigFiles():
 # <-------------------------------------APIKEY MANAGEMENT----------------------------------------------->
 # <----------------------------------------------------------------------------------------------------->
 
-# Initializing MONGODB apykeys Collection
-#DBclient = pymongo.MongoClient("mongodb://localhost:27017/")
-apykeysDB = DBclient["apykeys"]
-apykeysCollection = apykeysDB['apykeys']
+# Initializing MONGODB apikeys Collection
+#DBClient = pymongo.MongoClient("mongodb://localhost:27017/")
+apikeysCollection = MerHackerDB['apikeys']
 
 key = DB_APIKEY_SECRET_KEY
 f = Fernet(key)
@@ -1037,11 +1046,11 @@ def post_api_key():
                 query = { "username": username }
                 payload = {'username': username, 'realUsername': realUsername, 'apiKey': apiKeyencrypted}
                 newvalues = {"$set": payload}
-                apykeysCollection.update_one(query, newvalues, upsert=True)
+                apikeysCollection.update_one(query, newvalues, upsert=True)
                 return 'apikey updated'
             else:
                 query = { "realUsername": realUsername }
-                apykeysCollection.delete_one(query)
+                apikeysCollection.delete_one(query)
                 return 'apikey deleted'
         except Exception as err:
             print('err: ', err)
@@ -1059,7 +1068,7 @@ def get_api_key():
             data = request.get_json(force=True, silent=True)
             username = data['username']            
             query = { "username": username }
-            x = apykeysCollection.find_one(query)
+            x = apikeysCollection.find_one(query)
             apiKeyencrypted =  x['apiKey']
             
             apiKeyDecrypted = f.decrypt(apiKeyencrypted)
@@ -1080,8 +1089,7 @@ def get_api_key():
 # <------------------------------------SWITCHPORT TEMPLATES--------------------------------------------->
 # <----------------------------------------------------------------------------------------------------->
 # Initializing MONGODB templates Collection
-templatesDB = DBclient["templates"]
-templatesCollection = templatesDB['templates']
+templatesCollection = MerHackerDB['SwitchPortTemplates']
 
 @app.route('/flask/write_templateFile', methods=['GET', 'POST'])
 def write_templateFile():

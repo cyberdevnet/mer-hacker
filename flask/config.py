@@ -23,8 +23,11 @@ class BaseConfig:
 class DevelopmentConfig(BaseConfig):
     FLASK_ENV = 'development'
     DEBUG = True
+    MONGODB_URL = os.getenv("MONGODB_URL_DEV")
+
 
 
 class ProductionConfig(BaseConfig):
     FLASK_ENV = 'production'
     DEBUG = False
+    MONGODB_URL = os.getenv("MONGODB_URL_PROD")

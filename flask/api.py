@@ -68,12 +68,13 @@ except Exception as error:
 DB_APIKEY_SECRET_KEY = app.config["DB_APIKEY_SECRET_KEY"]
 MONGODB_USER = app.config["MONGODB_USER"]
 MONGODB_PWD = app.config["MONGODB_PWD"]
+MONGODB_URL = app.config["MONGODB_URL"]
 
 
 
 # Initializing MONGODB DataBase
 try:
-    DBClient = pymongo.MongoClient("mongodb://localhost:27017/",username=MONGODB_USER,password=MONGODB_PWD,authSource='admin',authMechanism='SCRAM-SHA-256')
+    DBClient = pymongo.MongoClient(MONGODB_URL,username=MONGODB_USER,password=MONGODB_PWD,authSource='admin',authMechanism='SCRAM-SHA-256')
     MerHackerDB = DBClient["MerHackerDB"]
     DBClient.admin.authenticate(MONGODB_USER, MONGODB_PWD,mechanism='SCRAM-SHA-256')
 
@@ -1023,7 +1024,6 @@ def deletebuild_meraki_switchconfigFiles():
 # <----------------------------------------------------------------------------------------------------->
 
 # Initializing MONGODB apikeys Collection
-#DBClient = pymongo.MongoClient("mongodb://localhost:27017/")
 apikeysCollection = MerHackerDB['apikeys']
 
 key = DB_APIKEY_SECRET_KEY

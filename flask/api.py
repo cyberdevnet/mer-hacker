@@ -798,8 +798,8 @@ def UpdateDevices():
             return {'UpdateDevices': UpdateDevicesData}
     except meraki.APIError as err:
         print('Error: ', err)
-        error = (err.message['errors'][0])
-        flash(error)
+        # error = (err.message['errors'][0])
+        flash(err)
         return {'error': [render_template('flash_template.html'), err.status]}
     
     

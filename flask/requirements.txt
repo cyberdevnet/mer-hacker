@@ -15,7 +15,7 @@ chardet==3.0.4
 Click==7.0
 colorama==0.4.3
 crayons==0.3.0
-cryptography==3.2
+cryptography==3.3.2
 ctypes-callable==1.0.0
 cursor==1.3.4
 DateTime==4.3

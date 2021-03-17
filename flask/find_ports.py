@@ -47,39 +47,40 @@ def merakirequestthrottler():
 
 def list_networks(api_key, org_id):
     e = open(error_file, 'w')
-    url = 'https://dashboard.meraki.com/api/v0/organizations/{}/networks'.format(
-        org_id)
+    merakirequestthrottler()
     try:
-        response = requests.get(url=url, headers={
-                                'X-Cisco-Meraki-API-Key': api_key, 'Content-Type': 'application/json'})
-        return json.loads(response.text)
-    except requests.exceptions.RequestException as e:
+        dashboard = meraki.DashboardAPI(api_key, output_log=False)
+        response = dashboard.organizations.getOrganizationNetworks(org_id, total_pages='all')        
+        
+        return response
+    except meraki.APIError as e:
         print('Error calling list_networks: {}'.format(e), file=e)
     e.close()
 
 
 def get_inventory(api_key, org_id):
     e = open(error_file, 'w')
-    url = 'https://dashboard.meraki.com/api/v0/organizations/{}/inventory'.format(
-        org_id)
+    merakirequestthrottler()
     try:
-        response = requests.get(url=url, headers={
-                                'X-Cisco-Meraki-API-Key': api_key, 'Content-Type': 'application/json'})
-        return json.loads(response.text)
-    except requests.exceptions.RequestException as e:
+        dashboard = meraki.DashboardAPI(api_key, output_log=False)
+        response = dashboard.organizations.getOrganizationInventoryDevices(org_id, total_pages='all')
+        
+        return response
+    except meraki.APIError as e:
         print('Error calling get_inventory: {}'.format(e), file=e)
     e.close()
 
 
 def list_switch_ports(api_key, serial):
     e = open(error_file, 'w')
-    url = 'https://dashboard.meraki.com/api/v0/devices/{}/switchPorts'.format(
-        serial)
+    merakirequestthrottler()
     try:
-        response = requests.get(url=url, headers={
-                                'X-Cisco-Meraki-API-Key': api_key, 'Content-Type': 'application/json'})
-        return json.loads(response.text)
-    except requests.exceptions.RequestException as e:
+        dashboard = meraki.DashboardAPI(api_key, output_log=False)
+        response = dashboard.switch.getDeviceSwitchPorts(serial)
+        
+        return response
+
+    except meraki.APIError as e:
         print('Error calling list_switch_ports with serial number {}: {}'.format(
             serial, e), file=e)
     e.close()
@@ -87,41 +88,28 @@ def list_switch_ports(api_key, serial):
 
 def get_port_details(api_key, serial, number):
     e = open(error_file, 'w')
-    url = 'https://dashboard.meraki.com/api/v0/devices/{}/switchPorts/{}'.format(
-        serial, number)
+    merakirequestthrottler()
     try:
-        response = requests.get(url=url, headers={
-                                'X-Cisco-Meraki-API-Key': api_key, 'Content-Type': 'application/json'})
-        return json.loads(response.text)
-    except requests.exceptions.RequestException as e:
+        dashboard = meraki.DashboardAPI(api_key, output_log=False)
+        response = dashboard.switch.getDeviceSwitchPort(serial, number)
+
+        return response
+    except meraki.APIError as e:
         print('Error calling get_port_details with serial {} and port {}: {}'.format(
             serial, number, e), file=e)
     e.close()
 
 
-def update_switch_port(api_key, serial, number, data):
-    e = open(error_file, 'w')
-    url = 'https://dashboard.meraki.com/api/v0/devices/{}/switchPorts/{}'.format(
-        serial, number)
-    try:
-        response = requests.put(url=url, data=data, headers={
-                                'X-Cisco-Meraki-API-Key': api_key, 'Content-Type': 'application/json'})
-        return json.loads(response.text)
-    except requests.exceptions.RequestException as e:
-        print('Error calling update_switch_port with serial {}, port {}, and data {}: {}'.format(
-            serial, number, data, e), file=e)
-    e.close()
-
 
 def list_clients(api_key, serial, TIME_SPAN):  # timestamp in seconds
     e = open(error_file, 'w')
-    url = 'https://dashboard.meraki.com/api/v0/devices/{}/clients?timespan={}'.format(
-        serial, TIME_SPAN)
+
     try:
-        response = requests.get(url=url, headers={
-                                'X-Cisco-Meraki-API-Key': api_key, 'Content-Type': 'application/json'})
-        return json.loads(response.text)
-    except requests.exceptions.RequestException as e:
+        dashboard = meraki.DashboardAPI(api_key, output_log=False)
+        response = dashboard.devices.getDeviceClients(serial, timespan=TIME_SPAN)
+
+        return response
+    except meraki.APIError as e:
         print('Error calling list_clients with serial {}: {}'.format(
             serial, e), file=e)
     e.close()

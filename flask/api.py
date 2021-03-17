@@ -492,7 +492,7 @@ def site2site():
         else:
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             NET_ID_LIST = data['NET_ID_LIST']
-            site2site = []
+            site2siteV1 = []
             for ID in NET_ID_LIST:
                 headers = {
                     "Content-Type": "application/json",
@@ -500,10 +500,13 @@ def site2site():
                     "X-Cisco-Meraki-API-Key": ARG_APIKEY
                 }
                 NET_ID = ID
-                url = f"https://api.meraki.com/api/v0/networks/{NET_ID}/siteToSiteVpn"
-                response = requests.request('GET', url, headers=headers)
-                site2site.append(json.loads(response.text))
-            return {'site2site': site2site}
+                
+                dashboard = meraki.DashboardAPI(ARG_APIKEY, output_log=False)
+                urlV1 = dashboard.appliance.getNetworkApplianceVpnSiteToSiteVpn(NET_ID)
+                site2siteV1.append(urlV1)
+                
+                
+            return {'site2site': site2siteV1}
     except meraki.APIError as err:
         print('Error: ', err)
         error = (err.message['errors'][0])
@@ -1180,7 +1183,6 @@ def delete_templateFile():
 
 
 
-
 # <------------------------------------END SWITCHPORT TEMPLATES----------------------------------------->
 # <----------------------------------------------------------------------------------------------------->
 
@@ -1188,4 +1190,4 @@ def delete_templateFile():
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000)
+    app.run(host='127.0.0.1', port=5000, debug=True)

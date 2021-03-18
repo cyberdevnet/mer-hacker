@@ -184,17 +184,8 @@ export default function MigrateTool(ac) {
 
               setloadingButtonConvertConfig(true);
               setshowLiveLogs(true);
-
-              fetch("/flask/ios_to_meraki/", {
-                signal: signal,
-                method: ["POST"],
-                cache: "no-cache",
-                headers: {
-                  content_type: "application/json",
-                },
-                body: JSON.stringify(APIbody1),
-              }).then((res) => {
-                if (res.status !== 200) {
+              axios.post("/flask/ios_to_meraki/", APIbody1).then((data) => {
+                if (data.data.status !== 200) {
                   ac.dc.setswitchAlertModal(true);
                   ac.dc.setAlertModalError(
                     "Pleas check your configuration file or serial-numbers. If the switch configuration has multiple stack interfaces, insert a list of comma-separated serial-numbers (I2TN-B63E-SB6F,I2TN-B63E-SB6F,I2TN-B63E-SB6F...) "
@@ -206,7 +197,6 @@ export default function MigrateTool(ac) {
                   setdisplayPushButtons({ display: "none" });
                   setloadingButtonConvertConfig(false);
                 } else {
-                  res.json();
                   setloadingButtonConvertConfig(false);
                   setdisplayButtons({ display: "inline-block" });
                 }
@@ -310,16 +300,7 @@ export default function MigrateTool(ac) {
     async function MigrateSwitchConfig() {
       setloadingButtonMigrateSwitchConfig(true);
       setshowswitchPortScript(false);
-
-      fetch("/flask/run_migrate_switch_config/", {
-        signal: signal,
-        method: ["POST"],
-        cache: "no-cache",
-        headers: {
-          content_type: "application/json",
-        },
-        body: JSON.stringify(APIbody2),
-      }).then(() => {
+      axios.post("/flask/run_migrate_switch_config/", APIbody2).then(() => {
         //   setdisplayDownloadButtons({ display: "none" });
         setloadingButtonMigrateSwitchConfig(false);
       });

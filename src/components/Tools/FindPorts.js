@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Select from "react-select";
 import GetApiKey from "../../GetApiKey.js";
+import axios from "axios";
 import SkeletonTable from "../SkeletonTable";
 import "../../styles/FindPorts.css";
 
@@ -56,36 +57,30 @@ export default function NetworkTopUsers(ac) {
             setshowError(false);
             seterrorMessageMAC(null);
 
-            fetch("/flask/find_ports", {
-              signal: signal,
-              method: ["POST"],
-              cache: "no-cache",
-              headers: {
-                content_type: "application/json",
-              },
-              body: JSON.stringify({
-                "X-Cisco-Meraki-API-Key": `${apiKey}`,
-                "X-CSRFToken": "frollo",
-                ORG_ID: `${ac.dc.organizationID}`,
-                MAC_ADDR: macAddress,
-                IP_ADDR: "",
-                TIME_SPAN: switchTimeInterval,
-              }),
-            })
-              .then((response) => response.json())
+            axios
+              
+              
+              .post("/flask/find_ports", {
+                    "X-Cisco-Meraki-API-Key": `${apiKey}`,
+                    "X-CSRFToken": "frollo",
+                    ORG_ID: `${ac.dc.organizationID}`,
+                    MAC_ADDR: macAddress,
+                    IP_ADDR: "",
+                    TIME_SPAN: switchTimeInterval,
+                  })
               .then((data) => {
-                if (data.error) {
+                if (data.data.error) {
                   ac.dc.setflashMessages(
                     <div className="form-input-error-msg alert alert-danger">
                       <span className="glyphicon glyphicon-exclamation-sign"></span>
-                      {data.error[0]}
+                      {data.data.error[0]}
                     </div>
                   );
                   setTimeout(() => {
                     ac.dc.setflashMessages([]);
                   }, 5000);
                 } else {
-                  setfindPort(data.data);
+                  setfindPort(data.data.data);
                 }
               })
               .then(() => setshowtable(true))
@@ -141,24 +136,18 @@ export default function NetworkTopUsers(ac) {
             setshowError(false);
             seterrorMessageIP(null);
 
-            fetch("/flask/find_ports", {
-              signal: signal,
-              method: ["POST"],
-              cache: "no-cache",
-              headers: {
-                content_type: "application/json",
-              },
-              body: JSON.stringify({
-                "X-Cisco-Meraki-API-Key": `${apiKey}`,
-                "X-CSRFToken": "frollo",
-                ORG_ID: `${ac.dc.organizationID}`,
-                MAC_ADDR: "",
-                IP_ADDR: validIP,
-                TIME_SPAN: switchTimeInterval,
-              }),
-            })
-              .then((response) => response.json())
-              .then((data) => setfindPort(data.data))
+            axios
+              
+              
+              .post("/flask/find_ports", {
+                    "X-Cisco-Meraki-API-Key": `${apiKey}`,
+                    "X-CSRFToken": "frollo",
+                    ORG_ID: `${ac.dc.organizationID}`,
+                    MAC_ADDR: "",
+                    IP_ADDR: validIP,
+                    TIME_SPAN: switchTimeInterval,
+                  })
+              .then((data) => setfindPort(data.data.data))
 
               .then(() => setshowtable(true))
               .then(() => setloading(false))

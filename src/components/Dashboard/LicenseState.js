@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import ContentLoader from "react-content-loader";
 import GetApiKey from "../../GetApiKey.js";
+import axios from "axios";
 
 import "../../styles/Dashboard.css";
 
@@ -67,32 +68,22 @@ export default function LicenseState(ac) {
       if (ac.organizationID !== 0) {
         try {
           setshowLicense(false);
-          fetch("/flask/licenseState", {
-            method: ["POST"],
-            cache: "no-cache",
-            headers: {
-              content_type: "application/json",
-            },
-            body: JSON.stringify(APIbody),
-          }).then((response) => {
-            return response.json;
-          });
-          fetch("/flask/licenseState", { signal: signal })
-            .then((res) => res.json())
+          axios
+            .post("/flask/licenseState", APIbody)
             .then((data) => {
-              if (data.error) {
+              if (data.data.error) {
                 ac.setflashMessages(
                   <div className="form-input-error-msg alert alert-danger">
                     <span className="glyphicon glyphicon-exclamation-sign"></span>
-                    {data.error[0]}
+                    {data.data.error[0]}
                   </div>
                 );
                 setTimeout(() => {
                   ac.setflashMessages([]);
                 }, 5000);
               } else {
-                const DEVICES = Object.values(data.licenseState.licensedDeviceCounts);
-                setlicenseState(data.licenseState);
+                const DEVICES = Object.values(data.data.licenseState.licensedDeviceCounts);
+                setlicenseState(data.data.licenseState);
                 setLicenceDevices(DEVICES);
               }
             })

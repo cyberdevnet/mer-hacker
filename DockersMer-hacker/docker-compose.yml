@@ -1,0 +1,86 @@
+version: '3'
+services:
+  mongodbMer-hacker:
+    image: mongo:4.4.2
+    container_name: mongodbMer-hacker
+    hostname: mongodbMer-hacker
+    env_file:
+      - ./.env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME='$MONGO_INITDB_ROOT_USERNAME'
+      - MONGO_INITDB_ROOT_PASSWORD='$MONGO_INITDB_ROOT_PASSWORD'
+      - MONGO_INITDB_DATABASE= '$MONGO_INITDB_DATABASE'
+      - "TZ=Europe/Vienna"
+    ports:
+      - 27017:27017
+    restart: on-failure
+    stop_grace_period: 120s
+    volumes:
+      - mongo:/data/db
+
+  ### mongo-express can be used to extract database datas easly  ###
+  # mongo-express:
+  #   image: mongo-express
+  #   container_name: mongo-express
+  #   hostname: mongo-express
+  #   restart: always
+  #   env_file:
+  #     - ./.env
+  #   ports:
+  #   - "8081:8081"
+  #   environment:
+  #     - ME_CONFIG_MONGODB_SERVER=mongodb
+  #     - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+  #     - ME_CONFIG_MONGODB_ADMINUSERNAME='$MONGO_INITDB_ROOT_USERNAME'
+  #     - ME_CONFIG_MONGODB_ADMINPASSWORD='$MONGO_INITDB_ROOT_PASSWORD'
+  #     - ME_CONFIG_BASICAUTH_USERNAME=admin
+  #     - ME_CONFIG_BASICAUTH_PASSWORD=admin123
+  #     - "TZ=Europe/Vienna"
+  #   volumes:
+  #     - mongo:/data/db
+  #   depends_on:
+  #     - mongodb
+
+  api:
+    build:
+      context: ../
+      dockerfile: DockersMer-hacker/Dockerfile_api
+    container_name: api
+    hostname: api
+    ports:
+      - 5000:5000
+    env_file:
+      - ./.env
+    environment:
+      - MONGODB_USER='$MONGODB_USER'
+      - MONGODB_PWD='$MONGODB_PWD'
+      - MONGODB_URL='$MONGODB_URL_PROD'
+      - "TZ=Europe/Vienna"
+    volumes:
+      - output:/outputs
+    restart: always
+    stop_grace_period: 120s
+    
+    
+
+  ngnixmerhacker:
+    build:
+      context: ../
+      dockerfile: DockersMer-hacker/Dockerfile_ngnix
+
+    container_name: ngnixmerhacker
+    hostname: ngnixmerhacker
+    environment: 
+      - "TZ=Europe/Vienna"
+    restart: on-failure
+    ports: 
+      - 80:80
+    depends_on:
+      - api     
+
+
+volumes:
+  mongo:
+    driver: local
+  output:
+    driver: local

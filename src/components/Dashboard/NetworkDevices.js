@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import ContentLoader from "react-content-loader";
 import GetApiKey from "../../GetApiKey.js";
+import axios from "axios";
 
 import {
   VictoryBar,
@@ -72,43 +73,33 @@ export default function NetworkDevices(ac) {
       if (ac.organizationID !== 0 && ac.networkID !== 0) {
         try {
           setshowNetDevChart(false);
-          fetch("/flask/devices", {
-            method: ["POST"],
-            cache: "no-cache",
-            headers: {
-              content_type: "application/json",
-            },
-            body: JSON.stringify(APIbody),
-          }).then((response) => {
-            return response.json;
-          });
-          fetch("/flask/devices", { signal: signal })
-            .then((res) => res.json())
+          axios
+            .post("/flask/devices", APIbody)
             .then((data) => {
-              if (data.error) {
+              if (data.data.error) {
                 ac.setflashMessages(
                   <div className="form-input-error-msg alert alert-danger">
                     <span className="glyphicon glyphicon-exclamation-sign"></span>
-                    {data.error[0]}
+                    {data.data.error[0]}
                   </div>
                 );
                 setTimeout(() => {
                   ac.setflashMessages([]);
                 }, 5000);
               } else {
-                ac.setdeviceList(data.devices);
-                ac.settotalDevices(data.devices.length);
+                ac.setdeviceList(data.data.devices);
+                ac.settotalDevices(data.data.devices.length);
 
                 let ModelObj = {};
-                for (var x = 0; x < data.devices.length; x++) {
-                  ModelObj[x] = data.devices[x].model;
+                for (var x = 0; x < data.data.devices.length; x++) {
+                  ModelObj[x] = data.data.devices[x].model;
                 }
 
                 const MODELOBJ = Object.values(ModelObj);
                 let Firewalls = [];
                 let Switches = [];
                 let AccessPoint = [];
-                for (var z = 0; z < data.devices.length; z++) {
+                for (var z = 0; z < data.data.devices.length; z++) {
                   if (MODELOBJ[z].startsWith("MX") || MODELOBJ[z].startsWith("Z")) {
                     Firewalls.push(MODELOBJ[z]);
                   } else if (MODELOBJ[z].startsWith("MS")) {
@@ -134,7 +125,8 @@ export default function NetworkDevices(ac) {
             })
             .then(() => {
               setshowNetDevChart(true);
-            });
+            })
+            .catch((err) => console.log(err));
         } catch (err) {
           if (err) {
             console.log(err);

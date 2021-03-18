@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, { Search, CSVExport } from "react-bootstrap-table2-toolkit";
 import GetApiKey from "../../GetApiKey.js";
+import axios from "axios";
 import SkeletonTable from "../SkeletonTable";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
@@ -46,38 +47,28 @@ export default function DeviceStatusTable(ac) {
     async function callDeviceStatus() {
       if (ac.organizationID !== 0 && ac.networkID !== 0) {
         try {
-          fetch("/flask/device_status", {
-            method: ["POST"],
-            cache: "no-cache",
-            headers: {
-              content_type: "application/json",
-            },
-            body: JSON.stringify(APIbody),
-          }).then((response) => {
-            return response.json;
-          });
-          fetch("/flask/device_status", { signal: signal })
-            .then((res) => res.json())
+          axios
+            .post("/flask/device_status", APIbody)
             .then((data) => {
-              if (data.error) {
+              if (data.data.error) {
                 ac.setflashMessages(
                   <div className="form-input-error-msg alert alert-danger">
                     <span className="glyphicon glyphicon-exclamation-sign"></span>
-                    {data.error[0]}
+                    {data.data.error[0]}
                   </div>
                 );
                 setTimeout(() => {
                   ac.setflashMessages([]);
                 }, 5000);
               } else {
-                ac.setdeviceStatusList(data.deviceStatus);
-                ac.settotaldeviceStatusList(data.deviceStatus.length);
+                ac.setdeviceStatusList(data.data.deviceStatus);
+                ac.settotaldeviceStatusList(data.data.deviceStatus.length);
 
                 //devices list table
 
                 let row = [];
                 // eslint-disable-next-line
-                data.deviceStatus.map((item) => {
+                data.data.deviceStatus.map((item) => {
                   const name = [];
                   // eslint-disable-next-line
                   ac.networkList.map((network) => {
@@ -117,7 +108,8 @@ export default function DeviceStatusTable(ac) {
             })
             .then(() => {
               setshowtable(true);
-            });
+            })
+            .catch((err) => console.log(err));
         } catch (err) {
           if (err) {
             console.log(err);

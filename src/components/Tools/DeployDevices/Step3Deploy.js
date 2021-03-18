@@ -22,44 +22,29 @@ export default function Step3Deploy(ac) {
       if (ac.dc.newNetwork === true) {
         await axios.post("/flask/get-api-key", { username: ac.User }).then((data) => {
           let key = data.data.apiKey;
-          fetch("/flask/createNetwork", {
-            method: ["POST"],
-            cache: "no-cache",
-            headers: {
-              content_type: "application/json",
-            },
-            body: JSON.stringify({
-              "X-Cisco-Meraki-API-Key": `${key}`,
-              organizationId: `${ac.organizationID}`,
-              newNetworkName: `${ac.dc.newNetworkName}`,
-            }),
-          }).then((response) => {
-            return response.json;
-          });
-          fetch("/flask/createNetwork", { signal: signal })
-            .then((res) => {
-              if (res.status === 500) {
+          axios.post("/flask/createNetwork", {
+            "X-Cisco-Meraki-API-Key": `${key}`,
+            organizationId: `${ac.organizationID}`,
+            newNetworkName: `${ac.dc.newNetworkName}`,
+          })
+            .then((data) => {
+              if (data.status === 500) {
                 setloadingDeployBtn(false);
                 setalertError(
                   <div className="form-input-error-msg alert alert-danger">
                     <span className="glyphicon glyphicon-exclamation-sign"></span>
-                    {`${res.statusText} please try again.`}
+                    {`${data.statusText} please try again.`}
                   </div>
                 );
                 setTimeout(() => {
                   setalertError([]);
                 }, 6000);
-                return res.json();
-              } else {
-                return res.json();
-              }
-            })
-            .then((data) => {
-              if (data.error) {
+                
+              } else if (data.data.error) {
                 setalertError(
                   <div className="form-input-error-msg alert alert-danger">
                     <span className="glyphicon glyphicon-exclamation-sign"></span>
-                    {data.error[0]}
+                    {data.data.error[0]}
                   </div>
                 );
                 setTimeout(() => {
@@ -68,7 +53,7 @@ export default function Step3Deploy(ac) {
                 setloadingDeployBtn(false);
                 ac.dc.setnextStepDisabled(true);
               } else {
-                ac.dc.setnetworkIDSelected(data.createNetwork.id);
+                ac.dc.setnetworkIDSelected(data.data.createNetwork.id);
                 ac.dc.setnewNetworkCreated(true);
                 // ac.dc.setnextStepDisabled(false);
                 setloadingDeployBtn(false);
@@ -118,44 +103,29 @@ export default function Step3Deploy(ac) {
       let FormattedSN = ac.dc.serialNumbers.split(",");
       await axios.post("/flask/get-api-key", { username: ac.User }).then((data) => {
         let key = data.data.apiKey;
-        fetch("/flask/claimDevices", {
-          method: ["POST"],
-          cache: "no-cache",
-          headers: {
-            content_type: "application/json",
-          },
-          body: JSON.stringify({
-            "X-Cisco-Meraki-API-Key": `${key}`,
-            serials: FormattedSN,
-            network_id: `${ac.dc.networkIDSelected}`,
-          }),
-        }).then((response) => {
-          return response.json;
-        });
-        fetch("/flask/claimDevices", { signal: signal })
-          .then((res) => {
-            if (res.status === 500) {
+        axios.post("/flask/claimDevices", {
+          "X-Cisco-Meraki-API-Key": `${key}`,
+          serials: FormattedSN,
+          network_id: `${ac.dc.networkIDSelected}`,
+        })
+          .then((data) => {
+            if (data.status === 500) {
               setloadingDeployBtn(false);
               setalertError(
                 <div className="form-input-error-msg alert alert-danger">
                   <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {`${res.statusText} please try again.`}
+                  {`${data.statusText} please try again.`}
                 </div>
               );
               setTimeout(() => {
                 setalertError([]);
               }, 6000);
-              return res.json();
-            } else {
-              return res.json();
-            }
-          })
-          .then((data) => {
-            if (data.error) {
+
+            } else if (data.data.error) {
               setalertError(
                 <div className="form-input-error-msg alert alert-danger">
                   <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {data.error[0]}
+                  {data.data.error[0]}
                 </div>
               );
               setTimeout(() => {

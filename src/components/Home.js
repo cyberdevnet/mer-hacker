@@ -1,6 +1,6 @@
 import React from "react";
 import GetApiKey from "../GetApiKey";
-import MerHackerLogo from "../../public/Mer-Hacker.png";
+import MerHackerLogo from "../Mer-Hacker.png";
 
 export default function Home(ac) {
   let callApikey = GetApiKey(ac.User);

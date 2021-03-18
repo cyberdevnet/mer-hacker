@@ -91,12 +91,15 @@ def get_organizations():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
             dashboard = meraki.DashboardAPI(data['X-Cisco-Meraki-API-Key'],
                                             output_log=False)
+            
             organizations = dashboard.organizations.getOrganizations()
             return {'organizations': organizations}
+            
+        else:
+            return {'organizations': "organizations"}
+              
     except meraki.APIError as err:
         print('Error: ', err)
         flash(
@@ -111,13 +114,14 @@ def get_networks():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
+        
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
             networks = dashboard.organizations.getOrganizationNetworks(
                 data['organizationId'])
             return {'networks': networks}
+        else:
+            return {'networks': 'networks'}
     except meraki.APIError as err:
         # flash(err)
         error = (err.message['errors'][0])
@@ -131,13 +135,14 @@ def get_devices():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
+       
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
             devices = dashboard.networks.getNetworkDevices(
                 data['NET_ID'])
             return {'devices': devices}
+        else:
+            return {'devices': 'devices'}
     except meraki.APIError as err:
         print('Error: ', err)
         flash(err)
@@ -150,13 +155,13 @@ def get_subnets():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
             vlans = dashboard.appliance.getNetworkApplianceVlans(
                 data['NET_ID'])
             return {'vlans': vlans}
+        else:
+            return {'vlans': 'vlans'}
     except meraki.APIError as err:
         print('Error: ', err)
         error = (err.message['errors'][0])
@@ -170,16 +175,15 @@ def clients():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
-            NET_ID = data['NET_ID']
-            return data
-        else:
+            
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             NET_ID = data['NET_ID']
             dashboard = meraki.DashboardAPI(ARG_APIKEY, output_log=False)
             clients = dashboard.networks.getNetworkClients(
                 NET_ID, perPage=1000, timespan=3600)
             return {'clients': clients}
+        else:
+            return {'clients': 'clients'}
     except meraki.APIError as err:
         print('Error: ', err)
         return {'error': [render_template('flash_template.html'), err.status]}
@@ -191,13 +195,13 @@ def device_status():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
             deviceStatus = dashboard.organizations.getOrganizationDevicesStatuses(
                 data['organizationId'])
             return {'deviceStatus': deviceStatus}
+        else:
+            return {'deviceStatus': 'deviceStatus'}
     except meraki.APIError as err:
         print('Error: ', err)
         error = (err.message['errors'][0])
@@ -211,14 +215,15 @@ def inventory():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
+        
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
             organization_id = data['organizationId']
             inventory = dashboard.organizations.getOrganizationInventoryDevices(
                 organization_id)
             return {'inventory': inventory}
+        else:
+            return {'inventory': 'inventory'}
     except meraki.APIError as err:
         print('Error: ', err)
         error = (err.message['errors'][0])
@@ -232,13 +237,14 @@ def uplink_loss():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
+        
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
             uplinkLoss = dashboard.organizations.getOrganizationDevicesUplinksLossAndLatency(
                 data['organizationId'])
             return {'uplinkLoss': uplinkLoss}
+        else:
+            return {'uplinkLoss': 'uplinkLoss'}
     except meraki.APIError as err:
         print('Error: ', err)
         return {'error': [render_template('flash_template.html'), err.status]}
@@ -250,8 +256,7 @@ def get_all_networks_subnets():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
+        
             merakirequestthrottler()
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
@@ -275,6 +280,8 @@ def get_all_networks_subnets():
                     print(error + ' ' + networkName)
                     continue
             return(vlans)
+        else:
+            return 'vlans'
     except meraki.APIError as err:
         print('Error: ', err)
         error = (err.message['errors'][0])
@@ -308,8 +315,7 @@ def traffic_analysis():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return {'data': 'ciao'}
-        else:
+        
             NET_ID = data['NET_ID']
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             TIME_SPAN = data['TIME_SPAN']
@@ -318,6 +324,8 @@ def traffic_analysis():
             analysis = dashboard.networks.getNetworkTraffic(
                 NET_ID, timespan=TIME_SPAN, deviceType=DEV_TYPE)
             return {'analysis': analysis}
+        else:
+            return {'analysis': 'analysis'}
     except meraki.APIError as err:
         print('Error: ', err)
         error = (err.message['errors'][0])
@@ -447,14 +455,15 @@ def device_clients():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
+        
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             SERIAL_NUM = data['SERIAL_NUM']
             dashboard = meraki.DashboardAPI(ARG_APIKEY, output_log=False)
             device_clients = dashboard.devices.getDeviceClients(
                 SERIAL_NUM, timespan=1000)
             return {'device_clients': device_clients}
+        else:
+            return {'device_clients': 'device_clients'}
     except meraki.APIError as err:
         print('Error: ', err)
         error = (err.message['errors'][0])
@@ -468,14 +477,15 @@ def client():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
+        
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             NET_ID = data['NET_ID']
             CLIENT_ID = data['CLIENT_ID']
             dashboard = meraki.DashboardAPI(ARG_APIKEY, output_log=False)
             client = dashboard.networks.getNetworkClient(NET_ID, CLIENT_ID)
             return {'client': client}
+        else:
+            return {'client': 'client'}
     except Exception as err:
         print('Exception: ', err)
         flash(err)
@@ -488,8 +498,7 @@ def site2site():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
+        
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             NET_ID_LIST = data['NET_ID_LIST']
             site2siteV1 = []
@@ -507,6 +516,8 @@ def site2site():
                 
                 
             return {'site2site': site2siteV1}
+        else:
+            return {'site2site': 'site2siteV1'}
     except meraki.APIError as err:
         print('Error: ', err)
         error = (err.message['errors'][0])
@@ -520,14 +531,15 @@ def device_switchports():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
+        
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             SERIAL_NUM = data['SERIAL_NUM']
             dashboard = meraki.DashboardAPI(ARG_APIKEY, output_log=False)
             switchports = dashboard.switch.getDeviceSwitchPorts(
                 SERIAL_NUM)
             return {'switchports': switchports}
+        else:
+            return {'switchports': 'switchports'}
     except Exception as err:
         print('Exception: ', err)
         flash(err)
@@ -559,8 +571,6 @@ def change_log():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             ORG_ID = data['organizationId']
             NET_ID = data['NET_ID']
@@ -581,6 +591,9 @@ def change_log():
                     organizationId=ORG_ID, timespan=TIME_SPAN)
 
             return {'change_log': change_log}
+        else:
+            return {'change_log': 'change_log'}
+
     except Exception as err:
         print('Exception: ', err)
         flash(err)
@@ -593,13 +606,14 @@ def admins():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
+        
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             ORG_ID = data['organizationId']
             dashboard = meraki.DashboardAPI(ARG_APIKEY, output_log=False)
             admins = dashboard.organizations.getOrganizationAdmins(ORG_ID)
             return {'admins': admins}
+        else:
+            return {'admins': 'admins'}
     except Exception as err:
         print('Exception: ', err)
         flash(err)
@@ -612,8 +626,7 @@ def usageHistory():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
+        
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             NET_ID = data['NET_ID']
             CLIENT_ID = data['CLIENT_ID']
@@ -621,6 +634,8 @@ def usageHistory():
             usageHistory = dashboard.networks.getNetworkClientUsageHistory(
                 NET_ID, CLIENT_ID)
             return {'usageHistory': usageHistory}
+        else:
+            return {'usageHistory': 'usageHistory'}
     except Exception as err:
         print('Exception: ', err)
         flash(err)
@@ -633,13 +648,14 @@ def get_licenseState():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
+        
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
             licenseState = dashboard.organizations.getOrganizationLicensesOverview(
                 data['organizationId'])
             return {'licenseState': licenseState}
+        else:
+            return {'licenseState': 'licenseState'}
     except meraki.APIError as err:
         print('Error: ', err)
         return {'error': [render_template('flash_template.html'), err.status]}
@@ -651,13 +667,13 @@ def getTemplates():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
             getTemplates = dashboard.organizations.getOrganizationConfigTemplates(
                 data['organizationId'])
             return {'getTemplates': getTemplates}
+        else:
+            return {'getTemplates': 'getTemplates'}
     except meraki.APIError as err:
         print('Error: ', err)
         return {'error': [render_template('flash_template.html'), err.status]}
@@ -669,13 +685,14 @@ def getSwitchProfiles():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
+        
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
             getSwitchProfiles = dashboard.switch.getOrganizationConfigTemplateSwitchProfiles(
                 data['organizationId'], data['configTemplateId'])
             return {'getSwitchProfiles': getSwitchProfiles}
+        else:
+            return {'getSwitchProfiles': 'getSwitchProfiles'}
     except meraki.APIError as err:
         print('Error: ', err)
         return {'error': [render_template('flash_template.html'), err.status]}
@@ -687,8 +704,7 @@ def createNetwork():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
+        
             name = data['newNetworkName']
             dashboard = meraki.DashboardAPI(
                 data['X-Cisco-Meraki-API-Key'], output_log=False)
@@ -696,6 +712,8 @@ def createNetwork():
             createNetwork = dashboard.organizations.createOrganizationNetwork(
                 data['organizationId'], name, product_types)
             return {'createNetwork': createNetwork}
+        else:
+            return {'createNetwork': 'createNetwork'}
     except meraki.APIError as err:
         print('Error: ', err)
         error = (err.message['errors'][0])
@@ -709,8 +727,7 @@ def claimDevices():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
+        
             network_id = data['network_id']
             serials = data['serials']
             dashboard = meraki.DashboardAPI(
@@ -718,6 +735,8 @@ def claimDevices():
             claimDevices = dashboard.networks.claimNetworkDevices(
                 network_id, serials=serials)
             return {'claimDevices': claimDevices}
+        else:
+            return {'claimDevices': 'claimDevices'}
     except meraki.APIError as err:
         print('Error: ', err)
         error = (err.message['errors'][0])
@@ -731,8 +750,7 @@ def bindTemplate():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
+        
             network_id = data['network_id']
             config_template_id = data['config_template_id']
             dashboard = meraki.DashboardAPI(
@@ -740,6 +758,8 @@ def bindTemplate():
             bindTemplate = dashboard.networks.bindNetwork(
                 network_id, config_template_id, autoBind=False)
             return {'bindTemplate': bindTemplate}
+        else:
+            return {'bindTemplate': 'bindTemplate'}
     except meraki.APIError as err:
         print('Error: ', err)
         error = (err.message['errors'][0])
@@ -753,8 +773,7 @@ def bindProfile():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
+        
             allSelectedSwitches = data['allSelectedSwitches']
 
             bindProfileData = []
@@ -768,6 +787,8 @@ def bindProfile():
                      serial, switchProfileId=switchProfileId)
                 bindProfileData.append(bindProfile)
             return {'bindProfile': bindProfileData}
+        else:
+            return {'bindProfile': 'bindProfileData'}
     except meraki.APIError as err:
         print('Error: ', err)
         error = (err.message['errors'][0])
@@ -781,8 +802,7 @@ def UpdateDevices():
         if request.method == 'POST':
             global data
             data = request.get_json(force=True, silent=True)
-            return data
-        else:
+        
             allSelectedDevices = data['allSelectedDevices']
 
             UpdateDevicesData = []
@@ -799,6 +819,8 @@ def UpdateDevices():
                 UpdateDevicesData.append(UpdateDevices)
                 
             return {'UpdateDevices': UpdateDevicesData}
+        else:
+            return {'UpdateDevices': 'UpdateDevicesData'}
     except meraki.APIError as err:
         print('Error: ', err)
         # error = (err.message['errors'][0])
@@ -1190,4 +1212,4 @@ def delete_templateFile():
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    app.run(host='127.0.0.1', port=5000)

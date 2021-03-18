@@ -3,6 +3,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import GetApiKey from "../../GetApiKey.js";
 import SkeletonTable from "../SkeletonTable";
 import ToolkitProvider, { Search, CSVExport } from "react-bootstrap-table2-toolkit";
+import axios from "axios";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css";
@@ -41,36 +42,26 @@ export default function GetAllSubnets(ac) {
         setshowtable(false);
         setdataInventory(false);
 
-        fetch("/flask/vlans", {
-          method: ["POST"],
-          cache: "no-cache",
-          headers: {
-            content_type: "application/json",
-          },
-          body: JSON.stringify(APIbody),
-        }).then((response) => {
-          return response.json;
-        });
-        fetch("/flask/vlans", { signal: signal })
-          .then((res) => res.json())
+        axios
+          .post("/flask/vlans", APIbody)
           .then((data) => {
-            if (data.error) {
+            if (data.data.error) {
               ac.dc.setflashMessages(
                 <div className="form-input-error-msg alert alert-danger">
                   <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {data.error[0]}
+                  {data.data.error[0]}
                 </div>
               );
               setTimeout(() => {
                 ac.dc.setflashMessages([]);
               }, 5000);
             } else {
-              ac.dc.setvlanList(data.vlans);
+              ac.dc.setvlanList(data.data.vlans);
 
               let row = [];
               let deviceData = [];
               // eslint-disable-next-line
-              data.vlans.map((item) => {
+              data.data.vlans.map((item) => {
                 var rowModel = {
                   subnet: item.subnet,
                   id: item.id,

@@ -1,0 +1,29 @@
+1: Clone the branch standAloneDockers from the mer-hacker repository:
+    
+    - git clone -b standAloneDockers git@gitlab.nts.at:frollo/mer-hacker.git
+
+2: change directory into mer-hacker:
+
+    - cd mer-hacker/
+
+3: create the environment variable file:
+
+    -  touch flask/.env
+
+4: populate the .env variable file (z.b. nano flask/.env) with the following content:
+
+    ## Replace the content when needed ###
+
+
+
+5: copy the environment variable file flask/.env to DockersMer-hacker:
+
+   - cp flask/.env DockersMer-hacker/.env
+
+6: make sure scripts are unix line ending UTF-8 LF: 
+
+   - dos2unix DockersMer-hacker/gunicorn_starter.sh
+
+7: spin-up containers: 
+
+   - docker-compose -f DockersMer-hacker/docker-compose.yml up --build

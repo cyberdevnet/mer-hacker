@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Select from "react-select";
 import GetApiKey from "../../GetApiKey.js";
+import axios from "axios";
 import SwitchPortConfig from "./SwitchPortTemplates/SwitchPortConfig";
 import BootstrapTable from "react-bootstrap-table-next";
 import SkeletonTable from "../SkeletonTable";
@@ -73,39 +74,28 @@ export default function GetAllSwitchPorts(ac) {
         setshowtable(false);
         setloading(true);
         setrefreshDisabled(true);
-        fetch("/flask/device_switchports", {
-          signal: signal,
-          method: ["POST"],
-          cache: "no-cache",
-          headers: {
-            content_type: "application/json",
-          },
-          body: JSON.stringify(APIbody),
-        }).then((response) => {
-          return response.json;
-        });
-        fetch("/flask/device_switchports", { signal: signal })
-          .then((res) => res.json())
+        axios
+          .post("/flask/device_switchports", APIbody)
           .then((data) => {
             // setloadingDevices(true)
-            if (data.error) {
+            if (data.data.error) {
               ac.dc.setflashMessages(
                 <div className="form-input-error-msg alert alert-danger">
                   <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {data.error[0]}
+                  {data.data.error[0]}
                 </div>
               );
               setTimeout(() => {
                 ac.dc.setflashMessages([]);
               }, 5000);
             } else {
-              setallSwitchports(data.switchports);
+              setallSwitchports(data.data.switchports);
 
               let switchports = [];
               let row = [];
 
               // eslint-disable-next-line
-              data.switchports.map((opt, index) => {
+              data.data.switchports.map((opt, index) => {
                 if (opt.enabled === true) {
                   var portModel = {
                     name: opt.name,

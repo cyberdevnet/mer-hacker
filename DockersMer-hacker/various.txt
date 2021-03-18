@@ -1,0 +1,28 @@
+build NGNIX: docker build --no-cache --pull -t jerry_ngnix -f DockersMer-hacker/Dockerfile_ngnix .
+
+build Python: docker build -t jerry_python -f DockersMer-hacker/Dockerfile_python .
+
+docker-compose -f DockersMer-hacker/docker-compose.yml up --build
+docker-compose -f DockersMer-hacker/docker-compose.yml up --force-recreate
+docker-compose -f DockersMer-hacker/docker-compose.yml up --force-recreate --renew-anon-volumes
+
+####TOM####
+
+docker build -f DockersMer-hacker/Dockerfile_tom --tag tom .
+docker run -it tom bash
+
+
+K8s
+kubectl apply -f DockersMer-hacker/deployment.yaml
+
+kubectl get deployments
+kubectl get pods
+kubectl get all
+kubectl delete pods <pod-name>
+kubectl delete deploy <deployment-name>
+
+
+
+kubectl expose deployment nginx --type=NodePort
+
+minikube service nginx --url

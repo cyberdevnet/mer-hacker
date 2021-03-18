@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Select from "react-select";
 import CreateTemplateModal from "./CreateTemplateModal";
+import axios from "axios";
 import ShowTemplateModal from "./ShowTemplateModal";
 import SwitchPortTemplateSummary from "./SwitchPortTemplateSummary";
 import SwitchPortConfig from "./SwitchPortConfig.js";
@@ -157,40 +158,29 @@ export default function SwitchPortTemplate(ac) {
       if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
         setshowtable(false);
         setloadingTable(true);
-        fetch("/flask/device_switchports", {
-          signal: signal,
-          method: ["POST"],
-          cache: "no-cache",
-          headers: {
-            content_type: "application/json",
-          },
-          body: JSON.stringify(APIbody),
-        }).then((response) => {
-          return response.json;
-        });
-        fetch("/flask/device_switchports", { signal: signal })
-          .then((res) => res.json())
+        axios
+          .post("/flask/device_switchports", APIbody)
           .then(readTemplate())
           .then((data) => {
             // setloadingDevices(true)
-            if (data.error) {
+            if (data.data.error) {
               ac.dc.setflashMessages(
                 <div className="form-input-error-msg alert alert-danger">
                   <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {data.error[0]}
+                  {data.data.error[0]}
                 </div>
               );
               setTimeout(() => {
                 ac.dc.setflashMessages([]);
               }, 5000);
             } else {
-              setallSwitchports(data.switchports);
+              setallSwitchports(data.data.switchports);
 
               let switchports = [];
               let row = [];
 
               // eslint-disable-next-line
-              data.switchports.map((opt, index) => {
+              data.data.switchports.map((opt, index) => {
                 var portModel = {
                   name: opt.name,
                   number: opt.portId,
@@ -437,19 +427,10 @@ export default function SwitchPortTemplate(ac) {
     async function Deploy() {
       setloadingSummaryBtn(true);
       setresponseMessage([]);
-      fetch("/flask/deploy_device_switchports", {
-        signal: signal,
-        method: ["POST"],
-        cache: "no-cache",
-        headers: {
-          content_type: "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(APIbody2),
-      })
-        .then((response) => response.json())
+      axios
+        .post("/flask/deploy_device_switchports", APIbody2)
         .then((data) => {
-          if (data.switchporttemplate === null) {
+          if (data.data.switchporttemplate === null) {
             setresponseMessage(
               <div className="form-input-error-msg alert alert-danger">
                 <span className="glyphicon glyphicon-exclamation-sign"></span>
@@ -457,20 +438,20 @@ export default function SwitchPortTemplate(ac) {
               </div>
             );
           } else {
-            if (data.switchporttemplate.errors) {
+            if (data.data.switchporttemplate.errors) {
               setresponseMessage(
                 <div className="form-input-error-msg alert alert-danger">
                   <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {data.switchporttemplate.errors} please check your Template and try again.
+                  {data.data.switchporttemplate.errors} please check your Template and try again.
                 </div>
               );
             } else {
-              if (data.switchporttemplate[1].length > 0) {
+              if (data.data.switchporttemplate[1].length > 0) {
                 setresponseMessage(
                   <div>
                     <div className="form-input-error-msg alert alert-danger">
                       <span className="glyphicon glyphicon-exclamation-sign"></span>
-                      {data.switchporttemplate[1]}
+                      {data.data.switchporttemplate[1]}
                     </div>
                     <div className="form-input-error-msg alert alert-success">
                       <span className="glyphicon glyphicon-exclamation-sign"></span>

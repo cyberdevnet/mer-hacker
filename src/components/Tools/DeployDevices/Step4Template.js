@@ -35,29 +35,18 @@ export default function Step3Template(ac) {
       setloadingTemplates(true);
       await axios.post("/flask/get-api-key", { username: ac.User }).then((data) => {
         let key = data.data.apiKey;
-        fetch("/flask/getTemplates", {
-          method: ["POST"],
-          cache: "no-cache",
-          headers: {
-            content_type: "application/json",
-          },
-          body: JSON.stringify({
-            "X-Cisco-Meraki-API-Key": `${key}`,
-            organizationId: `${ac.organizationID}`,
-          }),
-        }).then((response) => {
-          return response.json;
-        });
-        fetch("/flask/getTemplates", { signal: signal })
-          .then((res) => {
-            return res.json();
-          })
+        axios
+          
+          .post("/flask/getTemplates", {
+              "X-Cisco-Meraki-API-Key": `${key}`,
+              organizationId: `${ac.organizationID}`,
+            })
           .then((data) => {
-            if (data.error) {
+            if (data.data.error) {
               setalertError(
                 <div className="form-input-error-msg alert alert-danger">
                   <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {data.error}
+                  {data.data.error}
                 </div>
               );
               setTimeout(() => {
@@ -65,7 +54,7 @@ export default function Step3Template(ac) {
               }, 6000);
               setloadingTemplates(false);
             } else {
-              ac.dc.settemplatesList(data.getTemplates);
+              ac.dc.settemplatesList(data.data.getTemplates);
               setloadingTemplates(false);
             }
           });
@@ -93,44 +82,29 @@ export default function Step3Template(ac) {
       setloadingBindBtn(true);
       await axios.post("/flask/get-api-key", { username: ac.User }).then((data) => {
         let key = data.data.apiKey;
-        fetch("/flask/bindTemplate", {
-          method: ["POST"],
-          cache: "no-cache",
-          headers: {
-            content_type: "application/json",
-          },
-          body: JSON.stringify({
-            "X-Cisco-Meraki-API-Key": `${key}`,
-            network_id: `${ac.dc.networkIDSelected}`,
-            config_template_id: `${ac.dc.configTemplateId}`,
-          }),
-        }).then((response) => {
-          return response.json;
-        });
-        fetch("/flask/bindTemplate", { signal: signal })
-          .then((res) => {
-            if (res.status === 500) {
+        axios.post("/flask/bindTemplate", {
+          "X-Cisco-Meraki-API-Key": `${key}`,
+          network_id: `${ac.dc.networkIDSelected}`,
+          config_template_id: `${ac.dc.configTemplateId}`,
+        })
+          .then((data) => {
+            if (data.status === 500) {
               setloadingBindBtn(false);
               setalertError(
                 <div className="form-input-error-msg alert alert-danger">
                   <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {`${res.statusText} please try again.`}
+                  {`${data.statusText} please try again.`}
                 </div>
               );
               setTimeout(() => {
                 setalertError([]);
               }, 6000);
-              return res.json();
-            } else {
-              return res.json();
-            }
-          })
-          .then((data) => {
-            if (data.error) {
+              
+            } else if (data.data.error) {
               setalertError(
                 <div className="form-input-error-msg alert alert-danger">
                   <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {data.error}
+                  {data.data.error}
                 </div>
               );
               setTimeout(() => {

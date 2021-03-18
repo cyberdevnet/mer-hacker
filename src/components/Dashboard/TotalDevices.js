@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import ContentLoader from "react-content-loader";
 import GetApiKey from "../../GetApiKey.js";
+import axios from "axios";
 
 import {
   VictoryBar,
@@ -72,24 +73,14 @@ export default function TotalDevices(ac) {
       if (ac.organizationID !== 0) {
         try {
           setshowTotDevChart(false);
-          fetch("/flask/device_status", {
-            method: ["POST"],
-            cache: "no-cache",
-            headers: {
-              content_type: "application/json",
-            },
-            body: JSON.stringify(APIbody),
-          }).then((response) => {
-            return response.json;
-          });
-          fetch("/flask/device_status", { signal: signal })
-            .then((res) => res.json())
+          axios
+            .post("/flask/device_status", APIbody)
             .then((data) => {
-              if (data.error) {
+              if (data.data.error) {
                 ac.setflashMessages(
                   <div className="form-input-error-msg alert alert-danger">
                     <span className="glyphicon glyphicon-exclamation-sign"></span>
-                    {data.error[0]}
+                    {data.data.error[0]}
                   </div>
                 );
                 setTimeout(() => {
@@ -101,16 +92,16 @@ export default function TotalDevices(ac) {
 
                 let DeviceStatusobjects = {};
                 let DeviceListobjects = {};
-                for (var x = 0; x < data.deviceStatus.length; x++) {
-                  DeviceStatusobjects[x] = data.deviceStatus[x].status;
-                  DeviceListobjects[x] = data.deviceStatus[x];
+                for (var x = 0; x < data.data.deviceStatus.length; x++) {
+                  DeviceStatusobjects[x] = data.data.deviceStatus[x].status;
+                  DeviceListobjects[x] = data.data.deviceStatus[x];
                 }
                 const DEVICEOBJ = Object.values(DeviceStatusobjects);
 
                 let OnlineObj = [];
                 let OfflineObj = [];
                 let AlertingObj = [];
-                for (var y = 0; y < data.deviceStatus.length; y++) {
+                for (var y = 0; y < data.data.deviceStatus.length; y++) {
                   if (DEVICEOBJ[y] === "online") {
                     OnlineObj.push(DEVICEOBJ[y]);
                   } else if (DEVICEOBJ[y] === "offline") {
@@ -136,7 +127,8 @@ export default function TotalDevices(ac) {
             })
             .then(() => {
               setshowTotDevChart(true);
-            });
+            })
+            .catch((err) => console.log(err));
         } catch (err) {
           if (err) {
             console.log(err);

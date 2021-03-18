@@ -1,0 +1,18 @@
+
+# Stage 0 based on python:3.8-slim
+FROM python:3.8-slim 
+
+ADD ./flask/requirements.txt /tmp/requirements.txt
+
+RUN pip install -r /tmp/requirements.txt
+
+ADD DockersMer-hacker/script/gunicorn_starter.sh /tmp/gunicorn_starter.sh
+
+RUN ln -s /tmp/gunicorn_starter.sh
+
+RUN chmod +x /tmp/gunicorn_starter.sh
+
+
+ADD ./flask /flask
+
+ENTRYPOINT ["/tmp/gunicorn_starter.sh"]

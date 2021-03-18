@@ -4,6 +4,7 @@ import GetApiKey from "../../GetApiKey.js";
 import SkeletonTable from "../SkeletonTable";
 import ToolkitProvider, { Search, CSVExport } from "react-bootstrap-table2-toolkit";
 import Select from "react-select";
+import axios from "axios";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css";
 import "../../styles/GetAllClients.css";
@@ -54,25 +55,15 @@ export default function ChangeLog(ac) {
         setdataLogs({ ...columns, rows: [] });
         setshowtable(false);
         setloading(true);
-        fetch("/flask/change_log", {
-          method: ["POST"],
-          cache: "no-cache",
-          headers: {
-            content_type: "application/json",
-          },
-          body: JSON.stringify(APIbody),
-        }).then((response) => {
-          return response.json;
-        });
-        fetch("/flask/change_log", { signal: signal })
-          .then((res) => res.json())
+        axios
+          .post("/flask/change_log", APIbody)
           .then((data) => {
-            if (data.error) {
+            if (data.data.error) {
               setloading(false);
               setflashMessages(
                 <div className="form-input-error-msg alert alert-danger">
                   <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {data.error[0]}
+                  {data.data.error[0]}
                 </div>
               );
               setTimeout(() => {
@@ -82,9 +73,9 @@ export default function ChangeLog(ac) {
               let change_log = [];
               let row = [];
 
-              if (data.change_log.length !== 0) {
+              if (data.data.change_log.length !== 0) {
                 // eslint-disable-next-line
-                data.change_log.map((opt, index) => {
+                data.data.change_log.map((opt, index) => {
                   var d = new Date(opt.ts);
                   var months = [
                     "Jan",
@@ -172,48 +163,36 @@ export default function ChangeLog(ac) {
     async function callClients() {
       if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
         setloadingAdmins(true);
-        fetch("/flask/admins", {
-          method: ["POST"],
-          cache: "no-cache",
-          headers: {
-            content_type: "application/json",
-          },
-          body: JSON.stringify(APIbody),
-        }).then((response) => {
-          return response.json;
-        });
-        fetch("/flask/admins", { signal: signal })
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.error) {
+        axios.post("/flask/admins", APIbody).then((data) => {
+          if (data.data.error) {
+            setloadingAdmins(false);
+            setflashMessages(
+              <div className="form-input-error-msg alert alert-danger">
+                <span className="glyphicon glyphicon-exclamation-sign"></span>
+                {data.data.error[0]}
+              </div>
+            );
+            setTimeout(() => {
+              setflashMessages([]);
+            }, 5000);
+          } else {
+            if (data.data.admins.length !== 0) {
+              setallAdmins(data.data.admins);
+              setloadingAdmins(false);
+            } else {
               setloadingAdmins(false);
               setflashMessages(
                 <div className="form-input-error-msg alert alert-danger">
                   <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {data.error[0]}
+                  there was an error loading the administrators, please try again.
                 </div>
               );
               setTimeout(() => {
                 setflashMessages([]);
               }, 5000);
-            } else {
-              if (data.admins.length !== 0) {
-                setallAdmins(data.admins);
-                setloadingAdmins(false);
-              } else {
-                setloadingAdmins(false);
-                setflashMessages(
-                  <div className="form-input-error-msg alert alert-danger">
-                    <span className="glyphicon glyphicon-exclamation-sign"></span>
-                    there was an error loading the administrators, please try again.
-                  </div>
-                );
-                setTimeout(() => {
-                  setflashMessages([]);
-                }, 5000);
-              }
             }
-          });
+          }
+        });
       } else {
         setloadingAdmins(false);
         ac.dc.setswitchAlertModal(true);

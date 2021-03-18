@@ -159,22 +159,10 @@ export default function BackupRestore(ac) {
 
         setloadingButtonBackup(true);
 
-        fetch("/flask/run_backup/", {
-          signal: signal,
-          method: ["POST"],
-          cache: "no-cache",
-          headers: {
-            content_type: "application/json",
-          },
-          body: JSON.stringify(APIbody),
-        })
-          .then((res) => res.json())
-          .then(() => {
-            setloadingButtonBackup(false);
-            setdisplayButtons({ display: "inline-block" });
-          });
-
-        // });
+        axios.post("/flask/run_backup/", APIbody).then(() => {
+          setloadingButtonBackup(false);
+          setdisplayButtons({ display: "inline-block" });
+        });
       } else {
         ac.dc.setswitchAlertModal(true);
         ac.dc.setAlertModalError("Please set Organization and Network.");
@@ -244,25 +232,11 @@ export default function BackupRestore(ac) {
     async function Restore() {
       setloadingButtonRestore(true);
       ac.dc.setshowRestorescript(false);
-
-      fetch("/flask/run_restore/", {
-        signal: signal,
-        method: ["POST"],
-        cache: "no-cache",
-        headers: {
-          content_type: "application/json",
-        },
-        body: JSON.stringify(APIbody),
-      })
-        .then((res) => {
-          console.log("POST response: ");
-        })
-
-        .then(() => {
-          setdisplayRestoreSwitchButtons({ display: "inline-block" });
-          setdisplayRestoreButtons({ display: "none" });
-          setloadingButtonRestore(false);
-        });
+      axios.post("/flask/run_restore/", APIbody).then(() => {
+        setdisplayRestoreSwitchButtons({ display: "inline-block" });
+        setdisplayRestoreButtons({ display: "none" });
+        setloadingButtonRestore(false);
+      });
     }
     Restore();
     return () => {
@@ -286,16 +260,7 @@ export default function BackupRestore(ac) {
 
       setloadingButtonRestoreSwitch(true);
       ac.dc.setshowRestorescript(false);
-
-      fetch("/flask/run_restore_switch/", {
-        signal: signal,
-        method: ["POST"],
-        cache: "no-cache",
-        headers: {
-          content_type: "application/json",
-        },
-        body: JSON.stringify(APIbody),
-      }).then(() => {
+      axios.post("/flask/run_restore_switch/", APIbody).then(() => {
         setloadingButtonRestoreSwitch(false);
       });
     }

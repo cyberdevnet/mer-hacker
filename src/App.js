@@ -117,24 +117,16 @@ function App() {
       setnetworkList([]);
       await axios.post("/flask/get-api-key", { username: User }).then((data) => {
         let key = data.data.apiKey;
-        fetch("/flask/organizations", {
-          method: ["POST"],
-          cache: "no-cache",
-          headers: {
-            content_type: "application/json",
-          },
-          body: JSON.stringify({
-            "X-Cisco-Meraki-API-Key": `${key}`,
-            organizationId: `${organizationID}`,
-            NET_ID: `${networkID}`,
-            USER: `${User}`,
-          }),
-        }).then((response) => {
-          return response.json;
-        });
-        fetch("/flask/organizations", { signal: signal })
-          .then((res) => {
-            if (res.status === 500) {
+
+        axios.post("/flask/organizations",  {
+          "X-Cisco-Meraki-API-Key": `${key}`,
+          organizationId: `${organizationID}`,
+          NET_ID: `${networkID}`,
+          USER: `${User}`,
+        })
+          .then((data) => {
+
+            if (data.status === 500) {
               setflashMessages(
                 <div className="form-input-error-msg alert alert-danger">
                   <span className="glyphicon glyphicon-exclamation-sign"></span>
@@ -145,16 +137,11 @@ function App() {
                 setflashMessages([]);
               }, 5000);
               setloadingOrg(false);
-            }
-            setgetOrgStatusCode(res.status);
-            return res.json();
-          })
-          .then((data) => {
-            if (data.error) {
+            } else if (data.data.error) {
               setflashMessages(
                 <div className="form-input-error-msg alert alert-danger">
                   <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {data.error}
+                  {data.data.error}
                 </div>
               );
               setTimeout(() => {
@@ -162,7 +149,7 @@ function App() {
               }, 5000);
               setloadingOrg(false);
             } else {
-              setorganizationList(data.organizations);
+              setorganizationList(data.data.organizations);
               setloadingOrg(false);
             }
           });
@@ -191,24 +178,15 @@ function App() {
         setloadingNet(true);
         await axios.post("/flask/get-api-key", { username: User }).then((data) => {
           let key = data.data.apiKey;
-          fetch("/flask/networks", {
-            method: ["POST"],
-            cache: "no-cache",
-            headers: {
-              content_type: "application/json",
-            },
-            body: JSON.stringify({
-              "X-Cisco-Meraki-API-Key": `${key}`,
-              organizationId: `${organizationID}`,
-              NET_ID: `${networkID}`,
-              USER: `${User}`,
-            }),
-          }).then((response) => {
-            return response.json;
-          });
-          fetch("/flask/networks", { signal: signal })
-            .then((res) => {
-              if (res.status === 500) {
+
+          axios.post("/flask/networks",{
+            "X-Cisco-Meraki-API-Key": `${key}`,
+            organizationId: `${organizationID}`,
+            NET_ID: `${networkID}`,
+            USER: `${User}`,
+          })
+            .then((data) => {
+              if (data.status === 500) {
                 setflashMessages(
                   <div className="form-input-error-msg alert alert-danger">
                     <span className="glyphicon glyphicon-exclamation-sign"></span>
@@ -220,15 +198,11 @@ function App() {
                 }, 5000);
                 setloadingNet(false);
               }
-              setgetOrgStatusCode(res.status);
-              return res.json();
-            })
-            .then((data) => {
-              if (data.error) {
+              else if (data.data.error) {
                 setflashMessages(
                   <div className="form-input-error-msg alert alert-danger">
                     <span className="glyphicon glyphicon-exclamation-sign"></span>
-                    {data.error[0]}
+                    {data.data.error[0]}
                   </div>
                 );
                 setTimeout(() => {
@@ -236,7 +210,7 @@ function App() {
                 }, 5000);
                 setloadingNet(false);
               } else {
-                const NET = Object.values(data.networks);
+                const NET = Object.values(data.data.networks);
 
                 let networkIDList = [];
                 let combinedIDList = [];
@@ -267,9 +241,9 @@ function App() {
                   networkIDList.push(...IDListModel);
                   setallNetworksIDList(networkIDList);
                 });
-                setnetworkList(data.networks);
-                if (data.networks.length > 0) {
-                  settimeZone(data.networks[0].timeZone);
+                setnetworkList(data.data.networks);
+                if (data.data.networks.length > 0) {
+                  settimeZone(data.data.networks[0].timeZone);
                 }
                 setloadingNet(false);
               }
@@ -299,29 +273,18 @@ function App() {
       if (network !== "Networks") {
         await axios.post("/flask/get-api-key", { username: User }).then((data) => {
           let key = data.data.apiKey;
-          fetch("/flask/clients", {
-            method: ["POST"],
-            cache: "no-cache",
-            headers: {
-              content_type: "application/json",
-            },
-            body: JSON.stringify({
-              "X-Cisco-Meraki-API-Key": `${key}`,
-              organizationId: `${organizationID}`,
-              NET_ID: `${networkID}`,
-              USER: `${User}`,
-            }),
-          }).then((response) => {
-            return response.json;
-          });
-          fetch("/flask/clients", { signal: signal })
-            .then((res) => res.json())
+          axios.post("/flask/clients",{
+            "X-Cisco-Meraki-API-Key": `${key}`,
+            organizationId: `${organizationID}`,
+            NET_ID: `${networkID}`,
+            USER: `${User}`,
+          })
             .then((data) => {
-              if (data.error) {
-                console.log("callClients -> data.error", data.error);
+              if (data.data.error) {
+                console.log("callClients -> data.error", data.data.error);
               } else {
-                sethostList(data.clients);
-                settotalHosts(data.clients.length);
+                sethostList(data.data.clients);
+                settotalHosts(data.data.clients.length);
               }
             });
         });
@@ -347,29 +310,20 @@ function App() {
       if (isOrgSelected && isNetSelected === true) {
         await axios.post("/flask/get-api-key", { username: User }).then((data) => {
           let key = data.data.apiKey;
-          fetch("/flask/devices", {
-            method: ["POST"],
-            cache: "no-cache",
-            headers: {
-              content_type: "application/json",
-            },
-            body: JSON.stringify({
-              "X-Cisco-Meraki-API-Key": `${key}`,
-              organizationId: `${organizationID}`,
-              NET_ID: `${networkID}`,
-              USER: `${User}`,
-            }),
-          });
-          fetch("/flask/devices", { signal: signal })
-            .then((res) => res.json())
+          axios.post("/flask/devices",{
+            "X-Cisco-Meraki-API-Key": `${key}`,
+            organizationId: `${organizationID}`,
+            NET_ID: `${networkID}`,
+            USER: `${User}`,
+          })
             .then((data) => {
-              if (data.error) {
+              if (data.data.error) {
               } else {
                 let SN = [];
-                setdeviceList(data.devices);
+                setdeviceList(data.data.devices);
                 let Dev1 = {};
-                for (var device = 0; device < data.devices.length; device++) {
-                  Dev1[device] = data.devices[device];
+                for (var device = 0; device < data.data.devices.length; device++) {
+                  Dev1[device] = data.data.devices[device];
                   let model = Dev1[device].model;
                   if (model.startsWith("MX") || model.startsWith("Z")) {
                     SN.push(Dev1[device].serial);

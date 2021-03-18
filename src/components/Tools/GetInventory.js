@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import GetApiKey from "../../GetApiKey.js";
 import SkeletonTable from "../SkeletonTable";
+import axios from "axios";
 import ToolkitProvider, { Search, CSVExport } from "react-bootstrap-table2-toolkit";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css";
@@ -48,38 +49,27 @@ export default function SwitchPortTemplate(ac) {
         setloading(true);
 
         // hier starts the inventory
-
-        fetch("/flask/inventory", {
-          method: ["POST"],
-          cache: "no-cache",
-          headers: {
-            content_type: "application/json",
-          },
-          body: JSON.stringify(APIbody),
-        }).then((response) => {
-          return response.json;
-        });
-        fetch("/flask/inventory", { signal: signal })
-          .then((res) => res.json())
+        axios
+          .post("/flask/inventory", APIbody)
           .then((data) => {
-            if (data.error) {
+            if (data.data.error) {
               setflashMessages(
                 <div className="form-input-error-msg alert alert-danger">
                   <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {data.error[0]}
+                  {data.data.error[0]}
                 </div>
               );
               setTimeout(() => {
                 setflashMessages([]);
               }, 5000);
             } else {
-              setinventory(data.inventory);
+              setinventory(data.data.inventory);
               let inventoryData = [];
               let row = [];
 
-              if (data.inventory.length !== 0) {
+              if (data.data.inventory.length !== 0) {
                 // eslint-disable-next-line
-                data.inventory.map((opt, index) => {
+                data.data.inventory.map((opt, index) => {
                   const ISOtoUnixclaimedAt = Date.parse(opt.claimedAt);
                   var d = new Date(ISOtoUnixclaimedAt);
                   const ISOtoUnixclaimedAtlicenseExpirationDate = Date.parse(

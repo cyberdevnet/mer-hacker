@@ -3,6 +3,7 @@ import { Graph } from "react-d3-graph";
 import TopologyModal from "./TopologyModal";
 import TopologyVPNModal from "./TopologyVPNModal";
 import Select from "react-select";
+import axios from "axios";
 import Tree from "react-d3-tree";
 import GetApiKey from "../../../GetApiKey.js";
 import SkeletonLoading from "./SkeletonLoading";
@@ -130,38 +131,29 @@ export default function Topology(ac) {
           setskeleton(<SkeletonLoading />);
           let Device_Row = [];
           try {
-            await fetch("/flask/device_clients", {
-              method: ["POST"],
-              cache: "no-cache",
-              headers: {
-                content_type: "application/json",
-              },
-              body: JSON.stringify({
-                "X-Cisco-Meraki-API-Key": `${apiKey}`,
-                NET_ID: `${ac.networkID}`,
-                SERIAL_NUM: `${deviceSerial}`,
-              }),
-            }).then((response) => {
-              return response.json;
-            });
-            await fetch("/flask/device_clients", { signal: signal })
+            axios
+              
+              
+              .post("/flask/device_clients", {
+                    "X-Cisco-Meraki-API-Key": `${apiKey}`,
+                    NET_ID: `${ac.networkID}`,
+                    SERIAL_NUM: `${deviceSerial}`,
+                  })
               .then((res) => {
-                return res.json();
-              })
-              .then((device_clients) => {
-                if (device_clients.error) {
+                console.log("TCL ~ file: Topology.js ~ line 143 ~ .then ~ res", res)
+                if (res.data.error) {
                   ac.setflashMessages(
                     <div className="form-input-error-msg alert alert-danger">
                       <span className="glyphicon glyphicon-exclamation-sign"></span>
-                      {device_clients.error[0]}
+                      {res.data.error[0]}
                     </div>
                   );
                   setTimeout(() => {
                     ac.setflashMessages([]);
                   }, 5000);
                 } else {
-                  const DEVICE_OBJ = Object.values(device_clients.device_clients);
-                  setnodeslist(device_clients.device_clients);
+                  const DEVICE_OBJ = Object.values(res.data.device_clients);
+                  setnodeslist(res.data.device_clients);
                   Device_Row.push(DEVICE_OBJ);
 
                   //push source nodes
@@ -329,29 +321,16 @@ export default function Topology(ac) {
           setskeleton(<SkeletonLoading />);
 
           try {
-            await fetch("/flask/site2site", {
-              method: ["POST"],
-              cache: "no-cache",
-              headers: {
-                content_type: "application/json",
-              },
-              body: JSON.stringify({
-                "X-Cisco-Meraki-API-Key": `${apiKey}`,
-                NET_ID_LIST: NET_ID_LIST,
-              }),
-            }).then((response) => {
-              return response.json;
-            });
-            await fetch("/flask/site2site", { signal: signal })
-              .then((res) => {
-                return res.json();
-              })
+            axios.post("/flask/site2site", {
+              "X-Cisco-Meraki-API-Key": `${apiKey}`,
+              NET_ID_LIST: NET_ID_LIST,
+            })
               .then((site2site) => {
-                if (site2site.error) {
+                if (site2site.data.error) {
                   ac.setflashMessages(
                     <div className="form-input-error-msg alert alert-danger">
                       <span className="glyphicon glyphicon-exclamation-sign"></span>
-                      {site2site.error[0]}
+                      {site2site.data.error[0]}
                     </div>
                   );
                   setTimeout(() => {
@@ -362,7 +341,7 @@ export default function Topology(ac) {
                     abortController.abort();
                   };
                 } else {
-                  const VPN_OBJ = Object.values(site2site.site2site);
+                  const VPN_OBJ = Object.values(site2site.data.site2site);
                   VPN_Row.push(VPN_OBJ);
 
                   //initialize tree array
@@ -529,45 +508,32 @@ export default function Topology(ac) {
     //clearing the ClientModel array to avoid duplicate
     setclientID(modalModel[index].id);
     try {
-      await fetch("/flask/client", {
-        method: ["POST"],
-        cache: "no-cache",
-        headers: {
-          content_type: "application/json",
-        },
-        body: JSON.stringify({
-          "X-Cisco-Meraki-API-Key": `${apiKey}`,
-          NET_ID: `${ac.networkID}`,
-          CLIENT_ID: `${modalModel[index].id}`,
-        }),
-      }).then((response) => {
-        return response.json;
-      });
-      await fetch("/flask/client")
-        .then((res) => {
-          return res.json();
-        })
-        .then((client) => {
-          if (client.error) {
+      axios.post("/flask/client", {
+        "X-Cisco-Meraki-API-Key": `${apiKey}`,
+        NET_ID: `${ac.networkID}`,
+        CLIENT_ID: `${modalModel[index].id}`,
+      })
+        .then((data) => {
+          if (data.data.error) {
             setloadingFilterNode(false);
             setswitchTopologyModal(false);
             setmodel(modalModel[index]);
           } else {
             let newmodalModel = Object.assign({}, modalModel[index], {
-              cdp: client.client.cdp,
-              clientVpnConnections: client.client.clientVpnConnections,
-              firstSeen: client.client.firstSeen,
-              ip6: client.client.ip6,
-              lastSeen: client.client.lastSeen,
-              lldp: client.client.lldp,
-              manufacturer: client.client.manufacturer,
-              os: client.client.os,
-              recentDeviceMac: client.client.recentDeviceMac,
-              smInstalled: client.client.smInstalled,
-              ssid: client.client.ssid,
-              status: client.client.status,
-              user: client.client.user,
-              wirelessCapabilities: client.client.wirelessCapabilities,
+              cdp: data.data.client.cdp,
+              clientVpnConnections: data.data.client.clientVpnConnections,
+              firstSeen: data.data.client.firstSeen,
+              ip6: data.data.client.ip6,
+              lastSeen: data.data.client.lastSeen,
+              lldp: data.data.client.lldp,
+              manufacturer: data.data.client.manufacturer,
+              os: data.data.client.os,
+              recentDeviceMac: data.data.client.recentDeviceMac,
+              smInstalled: data.data.client.smInstalled,
+              ssid: data.data.client.ssid,
+              status: data.data.client.status,
+              user: data.data.client.user,
+              wirelessCapabilities: data.data.client.wirelessCapabilities,
             });
             setClientModel(newmodalModel);
             setmodel(newmodalModel);

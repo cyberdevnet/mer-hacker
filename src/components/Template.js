@@ -11,7 +11,6 @@ import ToolsTemplate from "./ToolsTemplate";
 import AlertModal from "./AlertsModal";
 import Topology from "../components/Tools/Topology/Topology";
 import ReactTooltip from "react-tooltip";
-// import Avatar from "../../public/avatar.png";
 // import axios from "axios";
 import UserAvatar from "react-user-avatar";
 

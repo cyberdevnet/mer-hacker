@@ -27,38 +27,25 @@ export default function Step4Profile(ac) {
       if (ac.dc.isTemplateSelected === true) {
         await axios.post("/flask/get-api-key", { username: ac.User }).then((data) => {
           let key = data.data.apiKey;
-          fetch("/flask/getSwitchProfiles", {
-            method: ["POST"],
-            cache: "no-cache",
-            headers: {
-              content_type: "application/json",
-            },
-            body: JSON.stringify({
-              "X-Cisco-Meraki-API-Key": `${key}`,
-              organizationId: `${ac.organizationID}`,
-              configTemplateId: `${ac.dc.configTemplateId}`,
-            }),
-          }).then((response) => {
-            return response.json;
-          });
-          fetch("/flask/getSwitchProfiles", { signal: signal })
-            .then((res) => {
-              return res.json();
-            })
+          axios.post("/flask/getSwitchProfiles", {
+            "X-Cisco-Meraki-API-Key": `${key}`,
+            organizationId: `${ac.organizationID}`,
+            configTemplateId: `${ac.dc.configTemplateId}`,
+          })
             .then((data) => {
-              if (data.error) {
+              if (data.data.error) {
                 setstopLoading(true);
                 setalertError(
                   <div className="form-input-error-msg alert alert-danger">
                     <span className="glyphicon glyphicon-exclamation-sign"></span>
-                    {data.error}
+                    {data.data.error}
                   </div>
                 );
                 setTimeout(() => {
                   setalertError([]);
                 }, 6000);
               } else {
-                ac.dc.setprofilesList(data.getSwitchProfiles);
+                ac.dc.setprofilesList(data.data.getSwitchProfiles);
                 settriggerDevices(triggerDevices + 1);
               }
             });
@@ -87,28 +74,18 @@ export default function Step4Profile(ac) {
       setstopLoading(false);
       await axios.post("/flask/get-api-key", { username: ac.User }).then((data) => {
         let key = data.data.apiKey;
-        fetch("/flask/devices", {
-          method: ["POST"],
-          cache: "no-cache",
-          headers: {
-            content_type: "application/json",
-          },
-          body: JSON.stringify({
-            "X-Cisco-Meraki-API-Key": `${key}`,
-            NET_ID: `${ac.dc.networkIDSelected}`,
-          }),
-        }).then((response) => {
-          return response.json;
-        });
-        fetch("/flask/devices", { signal: signal })
-          .then((res) => res.json())
+        axios
+            .post("/flask/devices", {
+              "X-Cisco-Meraki-API-Key": `${key}`,
+              NET_ID: `${ac.dc.networkIDSelected}`,
+            })
           .then((data) => {
-            if (data.error) {
+            if (data.data.error) {
               setstopLoading(true);
               setalertError(
                 <div className="form-input-error-msg alert alert-danger">
                   <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {data.error[0]}
+                  {data.data.error[0]}
                 </div>
               );
               setTimeout(() => {
@@ -125,7 +102,7 @@ export default function Step4Profile(ac) {
                 ListSN = ac.dc.serialNumbers.split(",");
                 // eslint-disable-next-line
                 ListSN.map((SN) => {
-                  let filterDevices = data.devices.filter((obj) => obj.serial === SN);
+                  let filterDevices = data.data.devices.filter((obj) => obj.serial === SN);
 
                   if (filterDevices.length > 0) {
                     allFilteredDevices.push(filterDevices[0]);
@@ -179,7 +156,8 @@ export default function Step4Profile(ac) {
                 setstopLoading(true);
               }
             }
-          });
+          })
+          .catch((err) => console.log(err));
       });
     }
 
@@ -204,45 +182,30 @@ export default function Step4Profile(ac) {
       setloadingSetProfileBtn(true);
       await axios.post("/flask/get-api-key", { username: ac.User }).then((data) => {
         let key = data.data.apiKey;
-        fetch("/flask/bindProfile", {
-          method: ["POST"],
-          cache: "no-cache",
-          headers: {
-            content_type: "application/json",
-          },
-          body: JSON.stringify({
-            "X-Cisco-Meraki-API-Key": `${key}`,
-            network_id: `${ac.dc.networkIDSelected}`,
-            switchProfileId: `${ac.dc.switchProfileId}`,
-            allSelectedSwitches: allSelectedSwitches,
-          }),
-        }).then((response) => {
-          return response.json;
-        });
-        fetch("/flask/bindProfile", { signal: signal })
-          .then((res) => {
-            if (res.status === 500) {
+        axios.post("/flask/bindProfile", {
+          "X-Cisco-Meraki-API-Key": `${key}`,
+          network_id: `${ac.dc.networkIDSelected}`,
+          switchProfileId: `${ac.dc.switchProfileId}`,
+          allSelectedSwitches: allSelectedSwitches,
+        })
+          .then((data) => {
+            if (data.status === 500) {
               setloadingSetProfileBtn(false);
               setalertError(
                 <div className="form-input-error-msg alert alert-danger">
                   <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {`${res.statusText} please try again.`}
+                  {`${data.statusText} please try again.`}
                 </div>
               );
               setTimeout(() => {
                 setalertError([]);
               }, 6000);
-              return res.json();
-            } else {
-              return res.json();
-            }
-          })
-          .then((data) => {
-            if (data.error) {
+              
+            } else if (data.data.error) {
               setalertError(
                 <div className="form-input-error-msg alert alert-danger">
                   <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {data.error}
+                  {data.data.error}
                 </div>
               );
               setTimeout(() => {

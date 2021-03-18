@@ -8,6 +8,7 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css";
 import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
 import Select from "react-select";
+import axios from "axios";
 
 export default function TrafficAnalysis(ac) {
   const [showtable, setshowtable] = useState(false);
@@ -108,30 +109,17 @@ export default function TrafficAnalysis(ac) {
         if (trigger < 4) {
           try {
             setloading(true);
-
-            fetch("/flask/traffic_analysis/", {
-              method: ["POST"],
-              cache: "no-cache",
-              headers: {
-                content_type: "application/json",
-              },
-              body: JSON.stringify(APIbody),
-            }).then((response) => {
-              return response.json;
-            });
-
-            fetch("/flask/traffic_analysis/", { signal: signal })
-              .then((res) => {
-                return res.json();
-              })
+            axios
+              
+              .post("/flask/traffic_analysis/",  APIbody)
 
               .then((data) => {
-                if (data.error) {
+                if (data.data.error) {
                   setshowtable(false);
                   setflashMessages(
                     <div className="form-input-error-msg alert alert-danger">
                       <span className="glyphicon glyphicon-exclamation-sign"></span>
-                      {data.error[0]}
+                      {data.data.error[0]}
                     </div>
                   );
                   setTimeout(() => {
@@ -139,12 +127,12 @@ export default function TrafficAnalysis(ac) {
                   }, 5000);
                   setloading(false);
                 } else {
-                  setnetwanalysis(data.analysis);
+                  setnetwanalysis(data.data.analysis);
 
                   let R1 = [];
                   let deviceData = [];
                   // eslint-disable-next-line
-                  data.analysis.map((item) => {
+                  data.data.analysis.map((item) => {
                     let randomKey = Math.random().toString(36).substring(2, 15);
 
                     var rowModel = {

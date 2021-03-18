@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import GetApiKey from "../../GetApiKey.js";
+import axios from "axios";
 
 import ContentLoader from "react-content-loader";
 import {
@@ -85,23 +86,13 @@ export default function LatencyLoss(ac) {
       if (ac.organizationID !== 0 && ac.networkID !== 0) {
         try {
           setshowChart(false);
-          fetch("/flask/uplink_loss", {
-            method: ["POST"],
-            cache: "no-cache",
-            headers: {
-              content_type: "application/json",
-            },
-            body: JSON.stringify(APIbody),
-          }).then((response) => {
-            return response.json;
-          });
-          fetch("/flask/uplink_loss", { signal: signal })
-            .then((res) => res.json())
+          axios
+            .post("/flask/uplink_loss", APIbody)
             .then((data) => {
-              if (data.error) {
+              if (data.data.error) {
               } else {
                 try {
-                  var UplinkLossNetObj = data.uplinkLoss.filter(function (obj) {
+                  var UplinkLossNetObj = data.data.uplinkLoss.filter(function (obj) {
                     return obj.networkId === ac.networkID;
                   })[0];
 
@@ -159,6 +150,7 @@ export default function LatencyLoss(ac) {
               setshowChart(true);
             })
             .catch((err) => {
+              console.log(err);;
               if (err.name === "AbortError") return;
               throw err.name;
             });

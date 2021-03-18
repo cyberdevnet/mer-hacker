@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import GetApiKey from "../../GetApiKey.js";
 import SkeletonTable from "../SkeletonTable";
+import axios from "axios";
 
 import ToolkitProvider, { Search, CSVExport } from "react-bootstrap-table2-toolkit";
 import paginationFactory from "react-bootstrap-table2-paginator";
@@ -41,36 +42,26 @@ export default function GetAllDevicesIP(ac) {
     async function APIcall() {
       if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
         setloading(true);
-        fetch("/flask/devices", {
-          method: ["POST"],
-          cache: "no-cache",
-          headers: {
-            content_type: "application/json",
-          },
-          body: JSON.stringify(APIbody),
-        }).then((response) => {
-          return response.json;
-        });
-        fetch("/flask/devices", { signal: signal })
-          .then((res) => res.json())
+        axios
+          .post("/flask/devices", APIbody)
           .then((data) => {
-            if (data.error) {
+            if (data.data.error) {
               ac.dc.setflashMessages(
                 <div className="form-input-error-msg alert alert-danger">
                   <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {data.error[0]}
+                  {data.data.error[0]}
                 </div>
               );
               setTimeout(() => {
                 ac.dc.setflashMessages([]);
               }, 5000);
             } else {
-              ac.dc.setclientList(data.devices);
+              ac.dc.setclientList(data.data.devices);
 
               let deviceData = [];
               let row = [];
               // eslint-disable-next-line
-              data.devices.map((item) => {
+              data.data.devices.map((item) => {
                 var rowModel = {
                   name: item.name,
                   model: item.model,
@@ -89,7 +80,8 @@ export default function GetAllDevicesIP(ac) {
             }
           })
           .then(() => setloading(false))
-          .then(() => setshowtable(true));
+          .then(() => setshowtable(true))
+          .catch((err) => console.log(err));
       } else {
         ac.dc.setswitchAlertModal(true);
         ac.dc.setAlertModalError("Please set Organization and Network.");

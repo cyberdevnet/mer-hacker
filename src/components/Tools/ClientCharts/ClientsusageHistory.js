@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Chart from "react-apexcharts";
 import GetApiKey from "../../../GetApiKey.js";
+import axios from "axios";
 
 export default function ClientsusageHistory(ac) {
   const [chart, setchart] = useState(false);
@@ -138,34 +139,24 @@ export default function ClientsusageHistory(ac) {
     async function UsageHistory() {
       ac.dc.setflashMessages([]);
       ac.dc.setloadingUsage(true);
-      fetch("/flask/usageHistory", {
-        method: ["POST"],
-        cache: "no-cache",
-        headers: {
-          content_type: "application/json",
-        },
-        body: JSON.stringify(APIbody),
-      }).then((response) => {
-        return response.json;
-      });
-      fetch("/flask/usageHistory", { signal: signal })
-        .then((res) => res.json())
+      axios
+        .post("/flask/usageHistory", APIbody)
         .then((data) => {
-          if (data.error) {
+          if (data.data.error) {
             ac.dc.setloadingUsage(false);
             ac.dc.setflashMessages(
               <div className="form-input-error-msg alert alert-danger">
                 <span className="glyphicon glyphicon-exclamation-sign"></span>
-                {data.error[0]}
+                {data.data.error[0]}
               </div>
             );
             setTimeout(() => {
               ac.dc.setflashMessages([]);
             }, 5000);
           } else {
-            if (data.usageHistory.length > 30) {
-              let range = data.usageHistory.length - 30;
-              let dataCut = data.usageHistory.slice(range);
+            if (data.data.usageHistory.length > 30) {
+              let range = data.data.usageHistory.length - 30;
+              let dataCut = data.data.usageHistory.slice(range);
               // eslint-disable-next-line
               dataCut.map((opt, index) => {
                 // let unix_timestamp = opt.ts;
@@ -182,7 +173,7 @@ export default function ClientsusageHistory(ac) {
                 };
               });
             } else {
-              let dataCut = data.usageHistory;
+              let dataCut = data.data.usageHistory;
               // eslint-disable-next-line
               dataCut.map((opt, index) => {
                 // let unix_timestamp = opt.ts;

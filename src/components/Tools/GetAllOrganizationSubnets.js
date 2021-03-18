@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import GetApiKey from "../../GetApiKey.js";
 import SkeletonTable from "../SkeletonTable";
+import axios from "axios";
 import ToolkitProvider, { Search, CSVExport } from "react-bootstrap-table2-toolkit";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
@@ -52,34 +53,23 @@ export default function GetAllOrganizationSubnets(ac) {
     async function APIcall() {
       if (ac.dc.isOrgSelected && ac.dc.isNetSelected === true) {
         setloading(true);
-        fetch("/flask/allVlans", {
-          method: ["POST"],
-          cache: "no-cache",
-          headers: {
-            content_type: "application/json",
-          },
-          body: JSON.stringify(APIbody),
-        }).then((response) => {
-          return response.json;
-        });
-
-        fetch("/flask/allVlans", { signal: signal })
-          .then((res) => res.json())
+        axios
+          .post("/flask/allVlans", APIbody)
           .then((data) => {
-            if (data.error) {
+            if (data.data.error) {
               ac.dc.setflashMessages(
                 <div className="form-input-error-msg alert alert-danger">
                   <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {data.error[0]}
+                  {data.data.error[0]}
                 </div>
               );
               setTimeout(() => {
                 ac.dc.setflashMessages([]);
               }, 5000);
             } else {
-              ac.dc.setallVlanList(data.result);
+              ac.dc.setallVlanList(data.data.result);
 
-              if (isEmpty(data)) {
+              if (isEmpty(data.data)) {
                 // Object is empty (Would return true in this example)
                 ac.dc.setflashMessages(
                   <div className="form-input-error-msg alert alert-danger">
@@ -95,9 +85,9 @@ export default function GetAllOrganizationSubnets(ac) {
                 let Vlanobjects = {};
                 let Nameobjects = {};
 
-                for (var x = 0; x < data.result.length; x++) {
-                  Vlanobjects[x] = data.result[x].allVlans;
-                  Nameobjects[x] = data.result[x].networkname;
+                for (var x = 0; x < data.data.result.length; x++) {
+                  Vlanobjects[x] = data.data.result[x].allVlans;
+                  Nameobjects[x] = data.data.result[x].networkname;
                 }
                 const VLANS = Object.values(Vlanobjects);
 

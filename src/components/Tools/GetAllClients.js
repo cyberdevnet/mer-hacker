@@ -4,6 +4,7 @@ import GetApiKey from "../../GetApiKey.js";
 import SkeletonTable from "../SkeletonTable";
 import ClientsusageHistory from "./ClientCharts/ClientsusageHistory";
 import BootstrapTable from "react-bootstrap-table-next";
+import axios from "axios";
 import ToolkitProvider, { Search, CSVExport } from "react-bootstrap-table2-toolkit";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import "react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css";
@@ -59,38 +60,28 @@ export default function SwitchPortTemplate(ac) {
         setdataClients({ ...columns, rows: [] });
         setshowtable(false);
         setloading(true);
-        fetch("/flask/clients", {
-          method: ["POST"],
-          cache: "no-cache",
-          headers: {
-            content_type: "application/json",
-          },
-          body: JSON.stringify(APIbody),
-        }).then((response) => {
-          return response.json;
-        });
-        fetch("/flask/clients", { signal: signal })
-          .then((res) => res.json())
+        axios
+          .post("/flask/clients", APIbody)
           .then((data) => {
-            if (data.error) {
+            if (data.data.error) {
               setloading(false);
               setflashMessages(
                 <div className="form-input-error-msg alert alert-danger">
                   <span className="glyphicon glyphicon-exclamation-sign"></span>
-                  {data.error[0]}
+                  {data.data.error[0]}
                 </div>
               );
               setTimeout(() => {
                 setflashMessages([]);
               }, 5000);
             } else {
-              setallClients(data.clients);
+              setallClients(data.data.clients);
               let clients = [];
               let row = [];
 
-              if (data.clients.length !== 0) {
+              if (data.data.clients.length !== 0) {
                 // eslint-disable-next-line
-                data.clients.map((opt, index) => {
+                data.data.clients.map((opt, index) => {
                   if (opt.status === "Online") {
                     var portModel = {
                       key: opt.index,

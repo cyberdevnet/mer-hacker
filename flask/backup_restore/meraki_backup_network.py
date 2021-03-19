@@ -33,7 +33,7 @@ def write_restore_header(file):
     file.write("def restore_network(ARG_ORGID, ARG_APIKEY,USER):\n")
     file.write("\tabspath = os.path.abspath(__file__)\n")
     file.write(
-        "\tlog_file = os.path.abspath(__file__  + ""'/../../logs/{}/log_file.log'.format(USER)"")\n")
+        "\tlog_file = os.path.abspath(__file__  + ""'/../../../logs/{}/log_file.log'.format(USER)"")\n")
     file.write("\tf = open(log_file, 'w')\n")
     file.write("\n")
     file.write("\theaders = {\n")
@@ -443,7 +443,7 @@ def backup_network(ARG_ORGID, NET_ID, ARG_APIKEY, USER):
         file.write("def restore_switchports(ARG_APIKEY,USER):\n")
         file.write("\tabspath = os.path.abspath(__file__)\n")
         file.write(
-            "\tlog_file = os.path.abspath(__file__  + ""'/../../logs/{}/log_file.log'.format(USER)"")\n")
+            "\tlog_file = os.path.abspath(__file__  + ""'/../../../logs/{}/log_file.log'.format(USER)"")\n")
         file.write("\tf = open(log_file, 'w')\n")
         file.write("\n")
         file.write("\theaders = {\n")

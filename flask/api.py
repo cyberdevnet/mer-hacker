@@ -342,7 +342,12 @@ def run_backup():
             NET_ID = data['NET_ID']
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             ARG_ORGID = data['ARG_ORGID']
-            USER = data['USER']
+            # USER = data['USER']
+            
+            preUSER = data['USER']
+            sep = '@'
+            stripped = preUSER.split(sep, 1)[0]
+            USER = stripped.replace(".", "_")
 
             return {'backup': meraki_backup_network.backup_network(ARG_ORGID, NET_ID, ARG_APIKEY, USER)}
         else:
@@ -364,10 +369,13 @@ def run_restore():
             data = request.get_json(force=True, silent=True)
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
             ARG_ORGID = data['ARG_ORGID']
-            USER = data['USER']
+            # USER = data['USER']
+            preUSER = data['USER']
+            sep = '@'
+            stripped = preUSER.split(sep, 1)[0]
+            USER = stripped.replace(".", "_")
 
-            modulename = "backup_restore.{}_meraki_restore_network".format(
-                USER)
+            modulename = f"backup_restore.{USER}.meraki_restore_network"
             module = importlib.import_module(modulename, ".")
             importlib.reload(module)
 
@@ -388,10 +396,13 @@ def run_restore_switch():
             global data
             data = request.get_json(force=True, silent=True)
             ARG_APIKEY = data['X-Cisco-Meraki-API-Key']
-            USER = data['USER']
+            # USER = data['USER']
+            preUSER = data['USER']
+            sep = '@'
+            stripped = preUSER.split(sep, 1)[0]
+            USER = stripped.replace(".", "_")
 
-            modulename = "backup_restore.{}_meraki_restore_network".format(
-                USER)
+            modulename = f"backup_restore.{USER}.meraki_restore_network"
             module = importlib.import_module(modulename, ".")
             importlib.reload(module)
 
@@ -931,7 +942,11 @@ def read_live_logs():
         try:
             global data
             data = request.get_json(force=True, silent=True)
-            User = data['User']
+            # User = data['User']
+            preUSER = data['User']
+            sep = '@'
+            stripped = preUSER.split(sep, 1)[0]
+            User = stripped.replace(".", "_")
             uploads_dir = f"./logs/{User}"
             with open(f"{uploads_dir}/log_file.log", "r") as f:
                 content = f.read() 
@@ -951,8 +966,16 @@ def read_backup_restore_file():
         try:
             global data
             data = request.get_json(force=True, silent=True)
-            User = data['User']
+            # User = data['User']
+            preUSER = data['User']
+            sep = '@'
+            stripped = preUSER.split(sep, 1)[0]
+            User = stripped.replace(".", "_")
             uploads_dir = f"./backup_restore/{User}"
+            if not os.path.exists(uploads_dir):
+                print(f"creating directory ./backup_restore/{User}")
+                os.makedirs(f"./backup_restore/{User}", exist_ok=True)
+
             with open(f"{uploads_dir}/meraki_restore_network.py", "r") as f:
                 content = f.read() 
 

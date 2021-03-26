@@ -111,7 +111,7 @@ python-jsonrpc-server==0.3.4
 python-language-server==0.31.8
 python-socketio==4.6.0
 pytz==2019.3
-PyYAML==5.3.1
+PyYAML==5.4
 regex==2020.2.20
 requests==2.23.0
 requests-toolbelt==0.9.1

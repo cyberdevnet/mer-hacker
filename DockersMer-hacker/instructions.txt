@@ -14,6 +14,17 @@
 
     ## Replace the content when needed ###
 
+    export SECRET_KEY='&z2W6783V&y$5h'
+	export PROPAGATE_EXCEPTIONS=True
+	export MONGODB_USER='MongoDbUser'
+	export MONGODB_PWD='blablabla'
+	export MONGODB_URL_DEV='mongodb://localhost:27017/'
+	export MONGODB_URL_PROD='mongodb://localhost:27017/'
+	export DB_APIKEY_SECRET_KEY='Nkmiqog5Hp3xoyUPLNpic38qvN43dH9muRp2Tjm6DQU='
+	export MONGO_INITDB_ROOT_USERNAME='MongoDbUser'
+	export MONGO_INITDB_ROOT_PASSWORD='blablabla' # <== the same password used for MONGODB_USER
+	export MONGO_INITDB_DATABASE= 'MerHackerDB'
+
 
 
 5: copy the environment variable file flask/.env to DockersMer-hacker:
@@ -22,7 +33,7 @@
 
 6: make sure scripts are unix line ending UTF-8 LF: 
 
-   - dos2unix DockersMer-hacker/gunicorn_starter.sh
+   - dos2unix DockersMer-hacker/script/gunicorn_starter.sh
 
 7: spin-up containers: 
 

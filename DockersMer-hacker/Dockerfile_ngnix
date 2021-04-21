@@ -1,6 +1,6 @@
 
 # Stage 0, "build-stage", based on Node.js, to build and compile the frontend
-FROM node:latest as build-stage
+FROM node:14.16.1 as build-stage
 
 ADD ./package.json /mer-hacker/
 ADD ./public /mer-hacker/public

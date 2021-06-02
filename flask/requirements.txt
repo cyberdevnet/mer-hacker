@@ -127,7 +127,7 @@ toml==0.10.1
 ttp==0.3.0
 ufw==0.36
 ujson==1.35
-urllib3==1.25.8
+urllib3==1.26.5
 virlutils==0.8.8
 virtualenv==20.0.21
 virtualenv-clone==0.5.4

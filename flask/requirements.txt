@@ -79,7 +79,7 @@ packaging==20.1
 paramiko==2.7.1
 parso==0.6.2
 pathlib2==2.3.5
-pipenv==2020.6.2
+pipenv==2022.1.8
 pluggy==0.13.1
 ply==3.11
 prettytable==0.7.2

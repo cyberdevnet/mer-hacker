@@ -1,9 +1,9 @@
-version: '3'
+version: "3"
 services:
-  mongodbMer-hacker:
+  mongodb:
     image: mongo:4.4.2
-    container_name: mongodbMer-hacker
-    hostname: mongodbMer-hacker
+    container_name: mongodb
+    hostname: mongodb
     env_file:
       - ./.env
     environment:
@@ -12,11 +12,11 @@ services:
       - MONGO_INITDB_DATABASE= '$MONGO_INITDB_DATABASE'
       - "TZ=Europe/Vienna"
     ports:
-      - 27017:27017
+      - 27019:27017
     restart: on-failure
     stop_grace_period: 120s
     volumes:
-      - mongo:/data/db
+      - mer-hacker-mongo:/data/db
 
   ### mongo-express can be used to extract database datas easly  ###
   # mongo-express:
@@ -48,7 +48,7 @@ services:
     container_name: api
     hostname: api
     ports:
-      - 5000:5000
+      - 5016:5000
     env_file:
       - ./.env
     environment:
@@ -60,27 +60,24 @@ services:
       - output:/outputs
     restart: always
     stop_grace_period: 120s
-    
-    
 
-  ngnixmerhacker:
+  ngnix:
     build:
       context: ../
       dockerfile: DockersMer-hacker/Dockerfile_ngnix
 
-    container_name: ngnixmerhacker
-    hostname: ngnixmerhacker
-    environment: 
+    container_name: ngnix
+    hostname: ngnix
+    environment:
       - "TZ=Europe/Vienna"
     restart: on-failure
-    ports: 
-      - 80:80
+    ports:
+      - 82:80
     depends_on:
-      - api     
-
+      - api
 
 volumes:
-  mongo:
+  mer-hacker-mongo:
     driver: local
   output:
     driver: local
